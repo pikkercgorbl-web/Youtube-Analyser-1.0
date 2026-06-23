@@ -1,0 +1,24 @@
+# Секреты и ключи (Самое важное)
+.env
+.env.*
+!.env.example
+
+# Python / FastAPI
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+build/
+npm-debug.log*
+yarn-error.log*
+.pnp.*
+
+# Системные файлы
+.DS_Store
+Thumbs.db
