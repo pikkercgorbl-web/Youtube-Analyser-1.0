@@ -132,12 +132,12 @@ export function FiltersModal({ open, filters, onClose, onApply }: FiltersModalPr
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 sm:items-center sm:p-4">
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="filters-modal-title"
-        className="flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-border/60 bg-card shadow-2xl"
+        className="flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-xl border border-border/60 bg-card shadow-2xl sm:max-h-[90vh] sm:max-w-xl sm:rounded-xl"
       >
         <div className="flex items-center justify-between border-b border-border/60 px-5 py-4">
           <div className="flex items-center gap-2">
@@ -306,15 +306,15 @@ export function FiltersModal({ open, filters, onClose, onApply }: FiltersModalPr
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-border/60 px-5 py-4">
-          <Button type="button" variant="outline" onClick={handleReset}>
+        <div className="flex flex-col gap-3 border-t border-border/60 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={handleReset}>
             Сбросить
           </Button>
-          <div className="flex gap-2">
-            <Button type="button" variant="ghost" onClick={onClose}>
+          <div className="flex flex-col-reverse gap-2 sm:flex-row">
+            <Button type="button" variant="ghost" className="w-full sm:w-auto" onClick={onClose}>
               Отмена
             </Button>
-            <Button type="button" onClick={handleApply}>
+            <Button type="button" className="w-full sm:w-auto" onClick={handleApply}>
               Применить
             </Button>
           </div>

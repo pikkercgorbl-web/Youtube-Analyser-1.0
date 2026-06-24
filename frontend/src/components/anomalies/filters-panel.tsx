@@ -50,7 +50,7 @@ export function AnomalyFiltersPanel({ filters, loading, onChange, onSubmit }: An
             label="Период загрузки"
             value={filters.period}
             onChange={(e) => update({ period: e.target.value as UploadPeriod })}
-            className="min-w-[160px]"
+            className="w-full lg:min-w-[160px]"
           >
             <option value="24h">Последние 24 часа</option>
             <option value="week">Последняя неделя</option>

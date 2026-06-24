@@ -47,7 +47,7 @@ export function TrendsTable({ data }: TrendsTableProps) {
         </Card>
       )}
 
-      <Card>
+      <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>Трендовые темы конкурентов</CardTitle>
         </CardHeader>
@@ -73,7 +73,44 @@ export function TrendsTable({ data }: TrendsTableProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <div className="space-y-3 md:hidden">
+        <h3 className="text-base font-semibold">Трендовые темы конкурентов</h3>
+        {topRows.map((row, index) => (
+          <Card key={`${row.dimension_type}-${row.dimension_value}-mobile`}>
+            <CardContent className="space-y-3 p-4">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">#{index + 1}</span>
+                    <Badge variant="secondary">{dimensionLabels[row.dimension_type] ?? row.dimension_type}</Badge>
+                  </div>
+                  <p className="font-medium leading-snug">{row.dimension_value}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="rounded-md bg-muted/30 px-3 py-2">
+                  <p className="text-[10px] uppercase text-muted-foreground">Видео</p>
+                  <p className="mt-1 font-semibold">{row.video_count}</p>
+                </div>
+                <div className="rounded-md bg-muted/30 px-3 py-2">
+                  <p className="text-[10px] uppercase text-muted-foreground">Ср. VPH</p>
+                  <p className="mt-1 font-semibold text-emerald-400">{formatNumber(Math.round(row.avg_vph))}</p>
+                </div>
+                <div className="rounded-md bg-muted/30 px-3 py-2">
+                  <p className="text-[10px] uppercase text-muted-foreground">Ср. просмотры</p>
+                  <p className="mt-1 font-semibold">{formatNumber(Math.round(row.avg_views))}</p>
+                </div>
+                <div className="rounded-md bg-muted/30 px-3 py-2">
+                  <p className="text-[10px] uppercase text-muted-foreground">Всего</p>
+                  <p className="mt-1 font-semibold">{formatNumber(row.total_views)}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>Каналы по эффективности (VPH)</CardTitle>
         </CardHeader>
@@ -100,6 +137,31 @@ export function TrendsTable({ data }: TrendsTableProps) {
           </table>
         </CardContent>
       </Card>
+
+      <div className="space-y-3 md:hidden">
+        <h3 className="text-base font-semibold">Каналы по эффективности (VPH)</h3>
+        {data.channels.map((channel) => (
+          <Card key={`${channel.channel_id}-mobile`}>
+            <CardContent className="space-y-3 p-4">
+              <p className="font-medium leading-snug">{channel.channel_title}</p>
+              <div className="grid grid-cols-3 gap-2 text-sm">
+                <div className="rounded-md bg-muted/30 px-2 py-2 text-center">
+                  <p className="text-[10px] uppercase text-muted-foreground">Видео</p>
+                  <p className="mt-1 font-semibold">{channel.videos_analyzed}</p>
+                </div>
+                <div className="rounded-md bg-muted/30 px-2 py-2 text-center">
+                  <p className="text-[10px] uppercase text-muted-foreground">Просмотры</p>
+                  <p className="mt-1 font-semibold">{formatNumber(channel.total_views)}</p>
+                </div>
+                <div className="rounded-md bg-muted/30 px-2 py-2 text-center">
+                  <p className="text-[10px] uppercase text-muted-foreground">VPH</p>
+                  <p className="mt-1 font-semibold text-emerald-400">{formatNumber(Math.round(channel.avg_vph))}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

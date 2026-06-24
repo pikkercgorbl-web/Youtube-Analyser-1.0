@@ -40,11 +40,12 @@ export function VideoCard({ video }: VideoCardProps) {
           </div>
           <div
             className={cn(
-              "absolute left-2 top-2 rounded-lg bg-gradient-to-r px-3 py-1.5 text-sm font-bold text-white shadow-lg",
+              "absolute left-1.5 top-1.5 max-w-[calc(100%-3rem)] rounded-lg bg-gradient-to-r px-2 py-1 text-[10px] font-bold text-white shadow-lg sm:left-2 sm:top-2 sm:px-3 sm:py-1.5 sm:text-sm",
               viralityColor(video.virality_percent),
             )}
           >
-            Коэффициент вирусности: {formatPercent(video.virality_percent, 0)}
+            <span className="hidden sm:inline">Коэффициент вирусности: </span>
+            {formatPercent(video.virality_percent, 0)}
           </div>
         </div>
       </a>
@@ -70,7 +71,7 @@ export function VideoCard({ video }: VideoCardProps) {
 
         <div className="rounded-lg border border-border/60 bg-secondary/30 p-3">
           <p className="text-xs text-muted-foreground">Соотношение просмотров к подписчикам</p>
-          <div className="mt-1 flex items-baseline justify-between gap-2">
+          <div className="mt-1 flex flex-wrap items-baseline justify-between gap-2">
             <span className="text-lg font-bold text-emerald-400">{ratio.toFixed(1)}×</span>
             <Badge variant="success">{formatPercent(video.virality_percent, 0)} от базы</Badge>
           </div>

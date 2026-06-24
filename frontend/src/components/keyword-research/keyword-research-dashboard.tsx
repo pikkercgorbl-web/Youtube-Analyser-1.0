@@ -4,12 +4,15 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Bookmark,
+  Filter,
   FolderSearch,
+  History,
   Loader2,
   Plus,
   RefreshCw,
   Search,
   Video,
+  X,
 } from "lucide-react";
 
 import { fetchKeywordResearch, fetchSavedKeywords, saveSavedKeyword } from "@/lib/api";
@@ -141,6 +144,8 @@ export function KeywordResearchDashboard() {
   const [plusWordsRaw, setPlusWordsRaw] = useState("");
   const [minusWordsRaw, setMinusWordsRaw] = useState("");
   const [historyDates, setHistoryDates] = useState<Record<string, string>>({});
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const loadHistory = useCallback(async () => {
     setHistoryLoading(true);
@@ -222,20 +227,37 @@ export function KeywordResearchDashboard() {
   };
 
   return (
-    <div className="flex h-full min-h-screen w-full flex-1 overflow-hidden text-foreground">
+    <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden text-foreground lg:flex-row">
+      {historyOpen ? (
+        <div
+          className="fixed inset-0 z-30 bg-black/60 lg:hidden"
+          onClick={() => setHistoryOpen(false)}
+          aria-hidden="true"
+        />
+      ) : null}
+
       {/* History sidebar */}
       <aside
         className={cn(
-          "flex h-full min-h-screen w-[250px] shrink-0 flex-col border-r",
+          "fixed inset-y-0 left-0 z-40 flex w-[min(280px,85vw)] shrink-0 flex-col border-r transition-transform duration-200 ease-out lg:static lg:z-auto lg:w-[250px] lg:translate-x-0",
           SURFACE_PANEL,
+          historyOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
+        <div className="flex items-center justify-between border-b border-border/60 p-4 lg:hidden">
+          <p className="text-sm font-semibold">История</p>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setHistoryOpen(false)}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+
         <div className="border-b border-border/60 p-4">
           <Button
             className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
             onClick={() => {
               setNewKeywordInput(activeKeyword);
               setNewKeywordOpen(true);
+              setHistoryOpen(false);
             }}
           >
             <Plus className="h-4 w-4" />
@@ -244,7 +266,7 @@ export function KeywordResearchDashboard() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-2">
-          <p className="px-2 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="hidden px-2 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground lg:block">
             История
           </p>
           {historyLoading ? (
@@ -263,7 +285,10 @@ export function KeywordResearchDashboard() {
                   <li key={item.id}>
                     <button
                       type="button"
-                      onClick={() => void runAnalysis(item.keyword)}
+                      onClick={() => {
+                        setHistoryOpen(false);
+                        void runAnalysis(item.keyword);
+                      }}
                       className={cn(
                         "w-full rounded-lg px-3 py-2.5 text-left transition-colors",
                         active
@@ -283,28 +308,47 @@ export function KeywordResearchDashboard() {
       </aside>
 
       {/* Main dashboard */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+        <div className="flex shrink-0 items-center gap-2 border-b border-border/60 px-3 py-2 lg:hidden">
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => setHistoryOpen(true)}>
+            <History className="h-4 w-4" />
+            История
+          </Button>
+          {result || loading ? (
+            <Button variant="outline" size="sm" className="gap-2" onClick={() => setFiltersOpen(true)}>
+              <Filter className="h-4 w-4" />
+              Фильтры
+            </Button>
+          ) : null}
+        </div>
+
         {!result && !loading ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center gap-4 px-4 py-10 text-center">
             <FolderSearch className="h-12 w-12 text-primary/60" />
             <div>
               <p className="text-lg font-medium">Выберите или добавьте ключевое слово</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Используйте историю слева или кнопку «Новое ключевое слово»
+                Откройте историю или добавьте новый запрос для SEO-анализа
               </p>
             </div>
-            <Button
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-              onClick={() => setNewKeywordOpen(true)}
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Начать анализ
-            </Button>
+            <div className="flex w-full max-w-xs flex-col gap-2 sm:flex-row sm:max-w-none sm:justify-center">
+              <Button variant="outline" className="gap-2" onClick={() => setHistoryOpen(true)}>
+                <History className="h-4 w-4" />
+                История
+              </Button>
+              <Button
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                onClick={() => setNewKeywordOpen(true)}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Начать анализ
+              </Button>
+            </div>
           </div>
         ) : (
           <>
             {/* Top bar */}
-            <header className="border-b border-border/60 p-5">
+            <header className="border-b border-border/60 p-4 sm:p-5">
               <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
                 <div className="min-w-0 flex-1 space-y-3">
                   <div className="flex items-start gap-3">
@@ -313,9 +357,9 @@ export function KeywordResearchDashboard() {
                     </div>
                     <div className="min-w-0">
                       {loading ? (
-                        <Skeleton className="h-8 w-64" />
+                        <Skeleton className="h-8 w-full max-w-xs sm:max-w-sm" />
                       ) : (
-                        <h1 className="truncate text-2xl font-bold tracking-tight">
+                        <h1 className="truncate text-xl font-bold tracking-tight sm:text-2xl">
                           {result?.main_query.keyword ?? activeKeyword}
                         </h1>
                       )}
@@ -330,6 +374,7 @@ export function KeywordResearchDashboard() {
                     <Button
                       variant="outline"
                       size="sm"
+                      className="flex-1 sm:flex-none"
                       onClick={() => void handleSave()}
                       disabled={!result || saving}
                     >
@@ -343,23 +388,24 @@ export function KeywordResearchDashboard() {
                     <Button
                       variant="outline"
                       size="sm"
+                      className="flex-1 sm:flex-none"
                       onClick={() => result && void runAnalysis(result.main_query.keyword)}
                       disabled={!result || loading}
                     >
                       <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
-                      <span className="ml-2">Обновить данные</span>
+                      <span className="ml-2 sm:inline">Обновить</span>
                     </Button>
                     <Link
                       href={
                         result ? `/?q=${encodeURIComponent(result.main_query.keyword)}` : "#"
                       }
                       className={cn(
-                        "inline-flex h-8 items-center justify-center gap-2 rounded-md border border-border/60 bg-card/80 px-3 text-xs font-medium transition-colors hover:bg-white/5",
+                        "inline-flex h-8 flex-1 items-center justify-center gap-2 rounded-md border border-border/60 bg-card/80 px-3 text-xs font-medium transition-colors hover:bg-white/5 sm:flex-none",
                         !result && "pointer-events-none opacity-50",
                       )}
                     >
                       <Video className="h-4 w-4" />
-                      Найти видео
+                      Видео
                     </Link>
                   </div>
                 </div>
@@ -394,15 +440,15 @@ export function KeywordResearchDashboard() {
             </header>
 
             {/* Tabs + toolbar */}
-            <div className="border-b border-border/60 px-5">
-              <div className="flex gap-6 overflow-x-auto">
+            <div className="border-b border-border/60 px-3 sm:px-5">
+              <div className="-mx-3 flex gap-1 overflow-x-auto px-3 sm:mx-0 sm:gap-6 sm:px-0">
                 {TAB_ITEMS.map((tab) => (
                   <button
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                      "shrink-0 border-b-2 py-3 text-xs font-semibold tracking-wide transition-colors",
+                      "shrink-0 border-b-2 px-2 py-3 text-[11px] font-semibold tracking-wide transition-colors sm:px-0 sm:text-xs",
                       activeTab === tab.id
                         ? "border-primary text-primary"
                         : "border-transparent text-muted-foreground hover:text-foreground",
@@ -412,11 +458,11 @@ export function KeywordResearchDashboard() {
                   </button>
                 ))}
               </div>
-              <div className="flex flex-wrap items-center gap-3 py-3">
+              <div className="flex flex-col gap-3 py-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <Button
                   variant="outline"
                   size="sm"
-                  className={cn(multiSelectMode && "border-primary/50 text-primary")}
+                  className={cn("w-full sm:w-auto", multiSelectMode && "border-primary/50 text-primary")}
                   onClick={() => {
                     setMultiSelectMode((value) => !value);
                     setSelectedKeywords(new Set());
@@ -428,7 +474,7 @@ export function KeywordResearchDashboard() {
                   aria-label="Сортировка"
                   value={sortBy}
                   onChange={(event) => setSortBy(event.target.value as SortOption)}
-                  className="h-9 w-auto min-w-[160px]"
+                  className="h-9 w-full sm:w-auto sm:min-w-[160px]"
                 >
                   {SORT_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -446,10 +492,34 @@ export function KeywordResearchDashboard() {
             </div>
 
             {/* Work area */}
-            <div className="flex min-h-0 flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+              {filtersOpen ? (
+                <div
+                  className="fixed inset-0 z-30 bg-black/60 lg:hidden"
+                  onClick={() => setFiltersOpen(false)}
+                  aria-hidden="true"
+                />
+              ) : null}
+
               {/* Filters */}
-              <aside className={cn("w-[300px] shrink-0 overflow-y-auto border-r p-4", SURFACE_PANEL)}>
-                <h3 className="mb-4 text-sm font-semibold">Фильтры</h3>
+              <aside
+                className={cn(
+                  "fixed inset-y-0 right-0 z-40 flex w-[min(320px,90vw)] shrink-0 flex-col overflow-y-auto border-l p-4 transition-transform duration-200 ease-out lg:static lg:z-auto lg:w-[300px] lg:translate-x-0 lg:border-r lg:border-l-0",
+                  SURFACE_PANEL,
+                  filtersOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0",
+                )}
+              >
+                <div className="mb-4 flex items-center justify-between lg:block">
+                  <h3 className="text-sm font-semibold">Фильтры</h3>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 lg:hidden"
+                    onClick={() => setFiltersOpen(false)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <label className="text-xs font-medium text-muted-foreground">Плюс-слова</label>
@@ -477,7 +547,7 @@ export function KeywordResearchDashboard() {
               </aside>
 
               {/* Cards grid */}
-              <div className="min-w-0 flex-1 overflow-y-auto p-4">
+              <div className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4">
                 {loading ? (
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {Array.from({ length: 8 }).map((_, index) => (

@@ -259,7 +259,7 @@ export default function ExplosiveChannelsPage() {
         <div>
           <div className="flex items-center gap-2">
             <Flame className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold tracking-tight">Взрывные каналы</h1>
+            <h1 className="text-xl font-bold tracking-tight sm:text-2xl">Взрывные каналы</h1>
           </div>
           <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
             Молодые каналы с виральными видео. Настройте пороги и включите радар вручную — он будет
@@ -304,7 +304,7 @@ export default function ExplosiveChannelsPage() {
               type="button"
               size="sm"
               className={cn(
-                "shrink-0 min-w-[180px]",
+                "w-full shrink-0 sm:min-w-[180px] sm:w-auto",
                 isRadarRunning
                   ? "bg-muted text-muted-foreground hover:bg-muted/80"
                   : "bg-indigo-600 text-white hover:bg-indigo-500",
@@ -328,7 +328,7 @@ export default function ExplosiveChannelsPage() {
               type="button"
               variant="destructive"
               size="sm"
-              className="shrink-0"
+              className="w-full shrink-0 sm:w-auto"
               disabled={isClearing || isScanning || initialLoading}
               onClick={() => void handleClearChannels()}
             >

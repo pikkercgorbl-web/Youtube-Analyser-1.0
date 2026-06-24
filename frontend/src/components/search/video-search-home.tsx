@@ -187,7 +187,7 @@ export function VideoSearchHome() {
   const advancedFilterCount = countAdvancedFilters(advancedFilters);
 
   return (
-    <main className="min-h-screen bg-background px-4 py-10 text-foreground">
+    <div className="min-h-0 bg-background px-3 py-6 text-foreground sm:px-4 sm:py-10">
       <FiltersModal
         open={filtersOpen}
         filters={advancedFilters}
@@ -197,7 +197,7 @@ export function VideoSearchHome() {
 
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-semibold tracking-tight">Поиск видео на YouTube</h1>
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Поиск видео на YouTube</h1>
           <p className="text-sm text-muted-foreground">
             InnerTube-поиск с анализом каналов и коэффициентом виральности
           </p>
@@ -246,7 +246,7 @@ export function VideoSearchHome() {
               ) : null}
             </div>
 
-            <Button type="submit" className="sm:min-w-28" disabled={loading || !query.trim()}>
+            <Button type="submit" className="w-full sm:min-w-28 sm:w-auto" disabled={loading || !query.trim()}>
               Найти
             </Button>
           </form>
@@ -443,6 +443,6 @@ export function VideoSearchHome() {
           <p className="text-center text-sm text-muted-foreground">Ничего не найдено.</p>
         ) : null}
       </div>
-    </main>
+    </div>
   );
 }

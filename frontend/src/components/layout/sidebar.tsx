@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bookmark, Flame, KeyRound, Menu, Search, Users, X, Zap } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -26,6 +26,19 @@ function isActivePath(pathname: string, href: string): boolean {
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    if (!mobileOpen) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileOpen]);
 
   const NavContent = () => (
     <>
@@ -65,12 +78,18 @@ export function Sidebar() {
 
   return (
     <>
-      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-border/60 bg-background/95 px-4 py-3 backdrop-blur lg:hidden">
+      <div className="sticky top-0 z-40 flex shrink-0 items-center justify-between border-b border-border/60 bg-background/95 px-3 py-3 backdrop-blur supports-[padding:max(0px)]:pt-[max(0.75rem,env(safe-area-inset-top))] lg:hidden">
         <div className="flex items-center gap-2">
           <Zap className="h-5 w-5 text-primary" />
           <span className="font-semibold">NicheScope</span>
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setMobileOpen((value) => !value)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-expanded={mobileOpen}
+          aria-label={mobileOpen ? "Закрыть меню" : "Открыть меню"}
+          onClick={() => setMobileOpen((value) => !value)}
+        >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
       </div>
@@ -85,7 +104,7 @@ export function Sidebar() {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-[250px] shrink-0 flex-col border-r border-border/60 bg-card/95 backdrop-blur-xl transition-transform lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex w-[min(280px,85vw)] shrink-0 flex-col border-r border-border/60 bg-card/95 backdrop-blur-xl transition-transform duration-200 ease-out lg:static lg:w-[250px] lg:translate-x-0",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >

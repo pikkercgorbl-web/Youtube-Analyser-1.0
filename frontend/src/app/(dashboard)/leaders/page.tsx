@@ -81,48 +81,89 @@ export default function LeadersPage() {
               description="Добавьте каналы в базу и дождитесь снимков метрик для расчёта трендов."
             />
           ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Trophy className="h-4 w-4 text-amber-400" />
-                  Топ быстрорастущих каналов
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="overflow-x-auto p-0">
-                <table className="w-full min-w-[800px] text-sm">
-                  <thead>
-                    <tr className="border-b border-border/60 text-left text-muted-foreground">
-                      <th className="px-4 py-3 font-medium">#</th>
-                      <th className="px-4 py-3 font-medium">Канал</th>
-                      <th className="px-4 py-3 font-medium">Ниша</th>
-                      <th className="px-4 py-3 font-medium">Подписчики</th>
-                      <th className="px-4 py-3 font-medium">Рост подписчиков</th>
-                      <th className="px-4 py-3 font-medium">Рост просмотров</th>
-                      <th className="px-4 py-3 font-medium">Score</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {result.leaders.map((leader, index) => (
-                      <tr key={leader.channel_id} className="border-b border-border/40 hover:bg-muted/20">
-                        <td className="px-4 py-3">
-                          {index < 3 ? (
-                            <Badge variant={index === 0 ? "warning" : "secondary"}>{index + 1}</Badge>
-                          ) : (
-                            index + 1
-                          )}
-                        </td>
-                        <td className="px-4 py-3 font-medium">{leader.channel_title}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{leader.topic ?? "—"}</td>
-                        <td className="px-4 py-3">{formatNumber(leader.current_subscribers)}</td>
-                        <td className="px-4 py-3 text-emerald-400">+{leader.subscribers_growth_pct}%</td>
-                        <td className="px-4 py-3 text-emerald-400">+{leader.views_growth_pct}%</td>
-                        <td className="px-4 py-3 font-bold text-primary">{leader.growth_score}</td>
+            <>
+              <Card className="hidden md:block">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Trophy className="h-4 w-4 text-amber-400" />
+                    Топ быстрорастущих каналов
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="overflow-x-auto p-0">
+                  <table className="w-full min-w-[800px] text-sm">
+                    <thead>
+                      <tr className="border-b border-border/60 text-left text-muted-foreground">
+                        <th className="px-4 py-3 font-medium">#</th>
+                        <th className="px-4 py-3 font-medium">Канал</th>
+                        <th className="px-4 py-3 font-medium">Ниша</th>
+                        <th className="px-4 py-3 font-medium">Подписчики</th>
+                        <th className="px-4 py-3 font-medium">Рост подписчиков</th>
+                        <th className="px-4 py-3 font-medium">Рост просмотров</th>
+                        <th className="px-4 py-3 font-medium">Score</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </CardContent>
-            </Card>
+                    </thead>
+                    <tbody>
+                      {result.leaders.map((leader, index) => (
+                        <tr key={leader.channel_id} className="border-b border-border/40 hover:bg-muted/20">
+                          <td className="px-4 py-3">
+                            {index < 3 ? (
+                              <Badge variant={index === 0 ? "warning" : "secondary"}>{index + 1}</Badge>
+                            ) : (
+                              index + 1
+                            )}
+                          </td>
+                          <td className="px-4 py-3 font-medium">{leader.channel_title}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{leader.topic ?? "—"}</td>
+                          <td className="px-4 py-3">{formatNumber(leader.current_subscribers)}</td>
+                          <td className="px-4 py-3 text-emerald-400">+{leader.subscribers_growth_pct}%</td>
+                          <td className="px-4 py-3 text-emerald-400">+{leader.views_growth_pct}%</td>
+                          <td className="px-4 py-3 font-bold text-primary">{leader.growth_score}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+
+              <div className="space-y-3 md:hidden">
+                {result.leaders.map((leader, index) => (
+                  <Card key={leader.channel_id}>
+                    <CardContent className="space-y-3 p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="mb-1 flex items-center gap-2">
+                            {index < 3 ? (
+                              <Badge variant={index === 0 ? "warning" : "secondary"}>{index + 1}</Badge>
+                            ) : (
+                              <span className="text-sm text-muted-foreground">#{index + 1}</span>
+                            )}
+                            <span className="font-bold text-primary">{leader.growth_score}</span>
+                          </div>
+                          <p className="font-medium leading-snug">{leader.channel_title}</p>
+                          {leader.topic ? (
+                            <p className="mt-1 text-xs text-muted-foreground">{leader.topic}</p>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div className="rounded-md bg-muted/30 px-3 py-2">
+                          <p className="text-[10px] uppercase text-muted-foreground">Подписчики</p>
+                          <p className="mt-1 font-semibold">{formatNumber(leader.current_subscribers)}</p>
+                        </div>
+                        <div className="rounded-md bg-muted/30 px-3 py-2">
+                          <p className="text-[10px] uppercase text-muted-foreground">Рост подпис.</p>
+                          <p className="mt-1 font-semibold text-emerald-400">+{leader.subscribers_growth_pct}%</p>
+                        </div>
+                        <div className="col-span-2 rounded-md bg-muted/30 px-3 py-2">
+                          <p className="text-[10px] uppercase text-muted-foreground">Рост просмотров</p>
+                          <p className="mt-1 font-semibold text-emerald-400">+{leader.views_growth_pct}%</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
           )}
         </div>
       )}
