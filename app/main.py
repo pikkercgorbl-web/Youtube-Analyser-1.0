@@ -18,6 +18,8 @@ from contextlib import asynccontextmanager
 import logging
 
 from fastapi import FastAPI, HTTPException, Query, Request, Response, status
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.api.routes import analytics, explosive_channels, keywords, radar, radar_stats, saved_keywords, search, target_keywords, videos
 from app.core.config import settings
@@ -82,19 +84,38 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# 2. Сразу после app — CORS middleware (до всех роутов и include_router)
-@app.middleware("http")
-async def add_cors_and_skip_warning(request: Request, call_next):
-    if request.method == "OPTIONS":
-        response = Response(status_code=200)
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "*"
+# 2. Сразу после app — CORS middleware (до всех роутов и include_router).
+#    Используем штатный CORSMiddleware FastAPI: он сам корректно отвечает на
+#    preflight (OPTIONS) и проставляет заголовки на ВСЕ ответы.
+#
+#    allow_credentials=False, поэтому "*" в allow_origins разрешён. Если в
+#    будущем понадобятся cookie/credentials — заменить "*" на конкретный
+#    список доменов (например, "https://<your-app>.vercel.app").
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=86400,
+)
+
+
+# Гарантируем CORS-заголовки даже на ответах с ошибкой (500 и т.п.),
+# которые иначе формирует внешний обработчик ошибок Starlette уже ПОСЛЕ
+# CORSMiddleware — без этого браузер показывает "CORS error" вместо 500.
+class _EnsureCorsOnErrorsMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        try:
+            response = await call_next(request)
+        except Exception:
+            response = Response("Internal Server Error", status_code=500)
+        response.headers.setdefault("Access-Control-Allow-Origin", "*")
         return response
 
-    response = await call_next(request)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
+
+app.add_middleware(_EnsureCorsOnErrorsMiddleware)
 
 
 # 3. Роуты и подключение router-ов
