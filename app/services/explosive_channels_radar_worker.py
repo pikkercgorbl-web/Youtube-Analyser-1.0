@@ -62,9 +62,9 @@ def get_shared_worker() -> ExplosiveChannelsRadarWorker:
     return _shared_worker
 
 
-async def toggle_radar(upload_period: str | None = None) -> dict[str, bool | str]:
-    """Flip radar state and start the background loop when enabled."""
-    global is_radar_running, _radar_loop_task
+def apply_radar_toggle(upload_period: str | None = None) -> dict[str, bool | str]:
+    """Flip radar state without starting the scan loop (fast HTTP response)."""
+    global is_radar_running
 
     if upload_period is not None:
         save_radar_upload_period(upload_period)
@@ -72,13 +72,30 @@ async def toggle_radar(upload_period: str | None = None) -> dict[str, bool | str
     is_radar_running = not is_radar_running
 
     if is_radar_running:
-        if _radar_loop_task is None or _radar_loop_task.done():
-            _radar_loop_task = asyncio.create_task(run_radar_loop())
         radar_log("🟢 [РАДАР] Ручной запуск включён")
     else:
         radar_log("🛑 [РАДАР] Ручной запуск выключен — цикл завершится после текущей итерации")
 
     return get_radar_status()
+
+
+async def start_radar_loop_background() -> None:
+    """Start the long-running radar loop after the HTTP response is sent."""
+    global _radar_loop_task
+
+    if not is_radar_running:
+        return
+
+    if _radar_loop_task is None or _radar_loop_task.done():
+        _radar_loop_task = asyncio.create_task(run_radar_loop())
+
+
+async def toggle_radar(upload_period: str | None = None) -> dict[str, bool | str]:
+    """Flip radar state and start the background loop when enabled."""
+    state = apply_radar_toggle(upload_period=upload_period)
+    if state["is_running"]:
+        await start_radar_loop_background()
+    return state
 
 
 async def stop_radar() -> None:

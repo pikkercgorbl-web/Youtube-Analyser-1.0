@@ -17,8 +17,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 import logging
 
-from fastapi import FastAPI, HTTPException, Query, status
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException, Query, Request, Response, status
 
 from app.api.routes import analytics, explosive_channels, keywords, radar, radar_stats, saved_keywords, search, target_keywords, videos
 from app.core.config import settings
@@ -75,6 +74,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     # TODO: graceful shutdown (close connections, flush queues)
 
 
+# 1. Сначала создаём приложение
 app = FastAPI(
     title=settings.app_name,
     version="0.1.0",
@@ -82,15 +82,22 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Временно разрешаем всё для локального тестирования
-    allow_credentials=True,
-    allow_methods=["*"],  # Критично для пропуска OPTIONS-запросов
-    allow_headers=["*"],
-)
+# 2. Сразу после app — CORS middleware (до всех роутов и include_router)
+@app.middleware("http")
+async def add_cors_and_skip_warning(request: Request, call_next):
+    if request.method == "OPTIONS":
+        response = Response(status_code=200)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        return response
+
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
+# 3. Роуты и подключение router-ов
 @app.get("/health", tags=["system"])
 def health_check() -> dict[str, str]:
     """Liveness probe."""

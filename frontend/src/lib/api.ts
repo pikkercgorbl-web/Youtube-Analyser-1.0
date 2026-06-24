@@ -1,6 +1,6 @@
 import axios from "axios";
-import type {
-  AnomalySearchParams,
+
+import type {  AnomalySearchParams,
   EnrichedVideoModel,
   ExplosiveChannelFilters,
   ExplosiveChannelItem,
@@ -19,11 +19,13 @@ import type {
 import type { SearchRequestPayload } from "./search-filters";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
+  baseURL: "",
   timeout: 60_000,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true",
+  },
 });
-
 api.interceptors.response.use(
   (response) => response,
   (error) => {

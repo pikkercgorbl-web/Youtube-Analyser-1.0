@@ -20,8 +20,9 @@ def _build_engine():
             db_path = url.removeprefix("sqlite:///./")
             Path("data").mkdir(parents=True, exist_ok=True)
             Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+        # check_same_thread is SQLite-only; omit for PostgreSQL (Supabase / Render).
         kwargs["connect_args"] = {"check_same_thread": False}
-    else:
+    elif url.startswith("postgresql"):
         kwargs["pool_pre_ping"] = True
 
     return create_engine(url, **kwargs)
