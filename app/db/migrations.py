@@ -36,6 +36,27 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_explosive_channel_settings_upload_period(engine)
     ensure_explosive_channels_video_id(engine)
     ensure_explosive_channels_vph(engine)
+    ensure_radar_worker_state_status(engine)
+
+
+def ensure_radar_worker_state_status(engine: Engine) -> None:
+    """Add radar_worker_state.status when missing (SQLite-safe)."""
+    inspector = inspect(engine)
+    if "radar_worker_state" not in inspector.get_table_names():
+        return
+
+    column_names = {column["name"] for column in inspector.get_columns("radar_worker_state")}
+    if "status" in column_names:
+        return
+
+    with engine.begin() as connection:
+        connection.execute(
+            text(
+                "ALTER TABLE radar_worker_state "
+                "ADD COLUMN status VARCHAR(16) NOT NULL DEFAULT 'idle'",
+            ),
+        )
+    logger.info("Added radar_worker_state.status column")
 
 
 def ensure_explosive_channels_vph(engine: Engine) -> None:

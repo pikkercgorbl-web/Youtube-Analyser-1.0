@@ -14,6 +14,9 @@ from app.services.metrics import utc_now
 
 DEFAULT_BATCH_SIZE = 5
 WORKER_STATE_ROW_ID = 1
+WORKER_STATUS_IDLE = "idle"
+WORKER_STATUS_RUNNING = "running"
+WORKER_STATUS_STOPPED = "stopped"
 
 
 class TargetKeywordsService:
@@ -104,10 +107,42 @@ class TargetKeywordsService:
                 RadarWorkerState(
                     id=WORKER_STATE_ROW_ID,
                     last_target_keyword_id=0,
+                    status=WORKER_STATUS_IDLE,
                 ),
             )
         else:
             state.last_target_keyword_id = 0
+            state.status = WORKER_STATUS_IDLE
 
         db.commit()
         return total_keywords
+
+    def get_worker_status(self, db: Session) -> str:
+        state = self._get_or_create_worker_state(db)
+        return state.status or WORKER_STATUS_IDLE
+
+    def set_worker_status(self, db: Session, status: str) -> str:
+        state = self._get_or_create_worker_state(db)
+        state.status = status
+        state.updated_at = utc_now()
+        db.commit()
+        db.refresh(state)
+        return state.status
+
+    def is_worker_stopped(self, db: Session) -> bool:
+        return self.get_worker_status(db) == WORKER_STATUS_STOPPED
+
+    def _get_or_create_worker_state(self, db: Session) -> RadarWorkerState:
+        state = db.get(RadarWorkerState, WORKER_STATE_ROW_ID)
+        if state is not None:
+            return state
+
+        state = RadarWorkerState(
+            id=WORKER_STATE_ROW_ID,
+            last_target_keyword_id=0,
+            status=WORKER_STATUS_IDLE,
+        )
+        db.add(state)
+        db.commit()
+        db.refresh(state)
+        return state

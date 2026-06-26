@@ -243,6 +243,7 @@ class RadarWorkerState(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, default=1)
     last_target_keyword_id: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="idle")
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),

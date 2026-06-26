@@ -189,9 +189,18 @@ export interface ForceRadarScanResponse {
 
 export type RadarUploadPeriod = "all" | "month" | "3_months" | "6_months" | "year";
 
+export type RadarWorkerStatus = "idle" | "running" | "stopped";
+
+export interface RadarContentFormatOptions {
+  exclude_streams?: boolean;
+  exclude_shorts?: boolean;
+  exclude_videos?: boolean;
+}
+
 export interface RadarStatusResponse {
   is_running: boolean;
   upload_period: RadarUploadPeriod;
+  worker_status: RadarWorkerStatus;
 }
 
 export interface ClearExplosiveChannelsResponse {

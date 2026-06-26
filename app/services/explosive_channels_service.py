@@ -163,6 +163,12 @@ class RadarChannelHit:
     viral_coefficient: float
 
 
+@dataclass(frozen=True, slots=True)
+class RadarProcessResult:
+    hits: list[RadarChannelHit]
+    passed_count: int
+
+
 class ExplosiveChannelsService:
     """Evaluate channels against FR-5 thresholds and upsert explosive watchlist rows."""
 
@@ -431,7 +437,8 @@ class ExplosiveChannelsService:
         upload_period: str | None = None,
         subscriber_fetch_delay_seconds: float = RADAR_SUBSCRIBER_FETCH_DELAY_SECONDS,
         blacklist_words: list[str] | None = None,
-    ) -> list[RadarChannelHit]:
+        subscriber_cache: dict[str, int | None] | None = None,
+    ) -> RadarProcessResult:
         """
         Radar pipeline using search shelf data with a fast homepage fallback for subscribers.
         """
@@ -439,7 +446,8 @@ class ExplosiveChannelsService:
         effective_upload_period = upload_period or self.get_upload_period(db)
         hits: list[RadarChannelHit] = []
         rejection_logs = 0
-        subscriber_cache: dict[str, int | None] = {}
+        passed_count = 0
+        cache = subscriber_cache if subscriber_cache is not None else {}
 
         for video in videos:
             channel_name = video.channel_title or "Unknown"
@@ -486,10 +494,10 @@ class ExplosiveChannelsService:
             channel_id = video.channel_id
 
             if subscribers <= 0:
-                if channel_id not in subscriber_cache:
+                if channel_id not in cache:
                     await asyncio.sleep(subscriber_fetch_delay_seconds)
                     try:
-                        subscriber_cache[channel_id] = (
+                        cache[channel_id] = (
                             await fetch_channel_subscribers_from_homepage(
                                 channel_id,
                                 channel_name=channel_name,
@@ -500,9 +508,9 @@ class ExplosiveChannelsService:
                             "Failed to fetch subscribers from channel homepage for %s",
                             channel_id,
                         )
-                        subscriber_cache[channel_id] = None
+                        cache[channel_id] = None
 
-                fetched = subscriber_cache.get(channel_id)
+                fetched = cache.get(channel_id)
                 if fetched is not None and fetched > 0:
                     subscribers = fetched
 
@@ -532,6 +540,7 @@ class ExplosiveChannelsService:
                 continue
 
             vph = calc_vph_from_published_text(video_views, video.published_text)
+            passed_count += 1
 
             hit = self._register_channel_video(
                 db,
@@ -554,7 +563,7 @@ class ExplosiveChannelsService:
                 hits.append(hit)
 
         db.commit()
-        return hits
+        return RadarProcessResult(hits=hits, passed_count=passed_count)
 
     def process_channel_analysis(self, db: Session, analysis: ChannelAnalysisModel) -> None:
         thresholds = self.get_thresholds(db)

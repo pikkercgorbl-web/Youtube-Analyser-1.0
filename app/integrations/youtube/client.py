@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import re
 from typing import Any
+from collections.abc import AsyncIterator
 from urllib.parse import quote_plus
 
 import httpx
@@ -104,6 +105,8 @@ class VideoSearchModel(BaseModel):
     channel_avatar_url: str = ""
     subscribers_count: int = Field(default=0, ge=0)
     is_short: bool = False
+    is_live: bool = False
+    content_renderer: str = "videoRenderer"
 
 
 class EnrichedVideoModel(BaseModel):
@@ -387,6 +390,60 @@ class YouTubeApiClient:
             results = await self._fetch_search_via_html_page(query, limit=result_limit)
 
         return results[:result_limit]
+
+    async def iter_search_pages(
+        self,
+        query: str,
+        *,
+        sort_by_upload_date: bool = False,
+        max_pages: int = 50,
+    ) -> AsyncIterator[list[VideoSearchModel]]:
+        """Yield deduplicated video batches page-by-page using InnerTube continuations."""
+        if not query.strip():
+            return
+
+        context = _build_innertube_context(query)
+        seen_video_ids: set[str] = set()
+        continuation: str | None = None
+        pages_fetched = 0
+        page_limit = max(1, max_pages)
+        yielded_any = False
+
+        while pages_fetched < page_limit:
+            payload: dict[str, Any] = {"context": context}
+            if continuation:
+                payload["continuation"] = continuation
+            else:
+                payload["query"] = query
+                if sort_by_upload_date:
+                    payload["params"] = "EgQIAhAB"
+
+            response = await self._innertube_request(
+                payload,
+                url=self.INNERTUBE_SEARCH_URL,
+            )
+            pages_fetched += 1
+            page_videos = _parse_search_videos(response)
+
+            deduped: list[VideoSearchModel] = []
+            for video in page_videos:
+                if video.video_id in seen_video_ids:
+                    continue
+                seen_video_ids.add(video.video_id)
+                deduped.append(video)
+
+            if deduped:
+                yielded_any = True
+                yield deduped
+
+            continuation = _extract_search_continuation(response)
+            if not continuation or not page_videos:
+                break
+
+        if not yielded_any and _contains_cyrillic(query):
+            html_results = await self._fetch_search_via_html_page(query, limit=50)
+            if html_results:
+                yield html_results
 
     async def get_search_suggestions(self, query: str) -> list[str]:
         """Return up to 10 autocomplete suggestions for a YouTube search query."""
@@ -1289,7 +1346,8 @@ def _parse_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
         or renderer.get("shortBylineText"),
     )
     duration_text = _text_from_node(renderer.get("lengthText"))
-    is_short = _video_renderer_is_short(renderer)
+    is_short = _video_renderer_is_short(renderer) or "/shorts/" in _renderer_navigation_url(renderer)
+    is_live = _video_renderer_is_live(renderer)
     if is_short and not duration_text:
         duration_text = "0:00"
 
@@ -1305,6 +1363,8 @@ def _parse_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
         subscribers_count=_extract_subscribers_from_renderer(renderer),
         is_short=is_short,
+        is_live=is_live,
+        content_renderer="videoRenderer",
     )
 
 
@@ -1324,6 +1384,65 @@ def _video_renderer_is_short(renderer: dict[str, Any]) -> bool:
         )
         if isinstance(style, str) and style.upper() == "SHORTS":
             return True
+    return False
+
+
+_LIVE_BADGE_NEEDLES = (
+    "live",
+    "в эфире",
+    "на эфире",
+    "прямая трансляция",
+    "прямой эфир",
+)
+
+
+def _renderer_navigation_url(renderer: dict[str, Any]) -> str:
+    navigation = renderer.get("navigationEndpoint")
+    if not isinstance(navigation, dict):
+        return ""
+    command_metadata = navigation.get("commandMetadata")
+    if not isinstance(command_metadata, dict):
+        return ""
+    web_metadata = command_metadata.get("webCommandMetadata")
+    if not isinstance(web_metadata, dict):
+        return ""
+    url = web_metadata.get("url")
+    return url if isinstance(url, str) else ""
+
+
+def _video_renderer_is_live(renderer: dict[str, Any]) -> bool:
+    """Detect live/upcoming streams from InnerTube search card badges."""
+    if renderer.get("upcomingEventData"):
+        return True
+
+    for overlay in renderer.get("thumbnailOverlays") or []:
+        if not isinstance(overlay, dict):
+            continue
+        time_status = overlay.get("thumbnailOverlayTimeStatusRenderer")
+        if not isinstance(time_status, dict):
+            continue
+        style = str(time_status.get("style", "")).upper()
+        if style == "LIVE":
+            return True
+        label = _text_from_node(time_status.get("text")).lower()
+        if any(needle in label for needle in _LIVE_BADGE_NEEDLES):
+            return True
+
+    for badge in renderer.get("badges") or []:
+        if not isinstance(badge, dict):
+            continue
+        metadata_badge = badge.get("metadataBadgeRenderer")
+        if not isinstance(metadata_badge, dict):
+            continue
+        label = _text_from_node(metadata_badge.get("label")).lower()
+        if any(needle in label for needle in _LIVE_BADGE_NEEDLES):
+            return True
+
+    for text in _iter_texts(renderer):
+        lowered = text.lower()
+        if any(needle in lowered for needle in _LIVE_BADGE_NEEDLES):
+            return True
+
     return False
 
 
@@ -1357,6 +1476,8 @@ def _parse_reel_item_renderer(renderer: dict[str, Any]) -> VideoSearchModel | No
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
         subscribers_count=_extract_subscribers_from_renderer(renderer),
         is_short=True,
+        is_live=False,
+        content_renderer="reelItemRenderer",
     )
 
 
@@ -1380,6 +1501,8 @@ def _parse_short_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | 
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
         subscribers_count=_extract_subscribers_from_renderer(renderer),
         is_short=True,
+        is_live=False,
+        content_renderer="shortVideoRenderer",
     )
 
 
@@ -1424,6 +1547,8 @@ def _parse_shorts_lockup_view_model(renderer: dict[str, Any]) -> VideoSearchMode
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
         subscribers_count=_extract_subscribers_from_renderer(renderer),
         is_short=True,
+        is_live=False,
+        content_renderer="shortsLockupViewModel",
     )
 
 
@@ -2503,6 +2628,74 @@ async def get_enriched_search_results(
 
         ExplosiveChannelsService.track_enriched_videos(results)
     return results
+
+
+@dataclass(frozen=True, slots=True)
+class RadarContentFormatFilters:
+    exclude_streams: bool = False
+    exclude_shorts: bool = False
+    exclude_videos: bool = False
+
+
+SHORT_RENDERER_TYPES = frozenset(
+    {"reelItemRenderer", "shortVideoRenderer", "shortsLockupViewModel"},
+)
+
+
+def video_is_short_item(video: VideoSearchModel) -> bool:
+    if video.is_short:
+        return True
+    if video.content_renderer in SHORT_RENDERER_TYPES:
+        return True
+    return False
+
+
+def video_is_regular_item(video: VideoSearchModel) -> bool:
+    return not video_is_short_item(video) and not video.is_live
+
+
+def should_exclude_radar_video(
+    video: VideoSearchModel,
+    filters: RadarContentFormatFilters,
+) -> bool:
+    if filters.exclude_shorts and video_is_short_item(video):
+        return True
+    if filters.exclude_streams and video.is_live:
+        return True
+    if filters.exclude_videos and video_is_regular_item(video):
+        return True
+    return False
+
+
+def filter_radar_videos_by_format(
+    videos: list[VideoSearchModel],
+    filters: RadarContentFormatFilters,
+) -> list[VideoSearchModel]:
+    if not any((filters.exclude_streams, filters.exclude_shorts, filters.exclude_videos)):
+        return videos
+    return [
+        video
+        for video in videos
+        if not should_exclude_radar_video(video, filters)
+    ]
+
+
+async def iter_radar_search_pages(
+    query: str,
+    *,
+    sort_by_upload_date: bool = False,
+    max_pages: int = 50,
+) -> AsyncIterator[list[VideoSearchModel]]:
+    """Paginated InnerTube search for radar with per-page channel metadata fill."""
+    client = _get_innertube_client()
+    async for page in client.iter_search_pages(
+        query,
+        sort_by_upload_date=sort_by_upload_date,
+        max_pages=max_pages,
+    ):
+        if not page:
+            continue
+        yield await client._fill_missing_channel_metadata(page)
 
 
 async def get_radar_search_results(

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Flame, Loader2, Radar, RotateCcw, Sparkles, Trash2 } from "lucide-react";
+import { Flame, Loader2, Radar, RotateCcw, Sparkles, Square, Trash2 } from "lucide-react";
 
 import { AiIdeasModal } from "@/components/explosive-channels/ai-ideas-modal";
 import { ExplosiveChannelCard } from "@/components/explosive-channels/explosive-channel-card";
@@ -19,6 +19,7 @@ import {
   fetchRadarStatus,
   generateRadarIdeas,
   resetRadarQueue,
+  stopRadarSearch,
   toggleRadar,
   updateRadarSettings,
 } from "@/lib/api";
@@ -97,6 +98,11 @@ export default function ExplosiveChannelsPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiIdeas, setAiIdeas] = useState<string[]>([]);
+  const [isManualSearchActive, setIsManualSearchActive] = useState(false);
+  const [isStoppingSearch, setIsStoppingSearch] = useState(false);
+  const [excludeStreams, setExcludeStreams] = useState(false);
+  const [excludeShorts, setExcludeShorts] = useState(false);
+  const [excludeVideos, setExcludeVideos] = useState(false);
 
   useEffect(() => {
     writeStoredNumber(RADAR_FILTER_STORAGE_KEYS.minViews, minViews);
@@ -173,7 +179,10 @@ export default function ExplosiveChannelsPage() {
   }, [loadRadarStatus, loadRadarStats]);
 
   useEffect(() => {
-    if (!radarStatus?.is_running) {
+    const isSearchActive =
+      (radarStatus?.is_running ?? false) || radarStatus?.worker_status === "running";
+
+    if (!isSearchActive) {
       return;
     }
 
@@ -183,7 +192,12 @@ export default function ExplosiveChannelsPage() {
     }, RADAR_LIVE_UPDATE_MS);
 
     return () => window.clearInterval(timer);
-  }, [radarStatus?.is_running, loadChannels, loadRadarStatus]);
+  }, [
+    radarStatus?.is_running,
+    radarStatus?.worker_status,
+    loadChannels,
+    loadRadarStatus,
+  ]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -218,6 +232,9 @@ export default function ExplosiveChannelsPage() {
   }, [radarStats]);
 
   const isRadarRunning = radarStatus?.is_running ?? false;
+  const workerStatus = radarStatus?.worker_status ?? "idle";
+  const showStopSearchButton =
+    isManualSearchActive && (isRadarRunning || workerStatus === "running");
 
   const handleToggleRadar = async () => {
     setIsScanning(true);
@@ -231,9 +248,19 @@ export default function ExplosiveChannelsPage() {
             .map((word) => word.trim())
             .filter(Boolean)
         : undefined;
-      const status = await toggleRadar(uploadPeriod, manualQuery, blacklistWords);
+      const status = await toggleRadar(uploadPeriod, manualQuery, blacklistWords, {
+        exclude_streams: excludeStreams,
+        exclude_shorts: excludeShorts,
+        exclude_videos: excludeVideos,
+      });
       setRadarStatus(status);
       setUploadPeriod(status.upload_period);
+      if (manualQuery && status.is_running) {
+        setIsManualSearchActive(true);
+      }
+      if (!status.is_running && status.worker_status !== "running") {
+        setIsManualSearchActive(false);
+      }
       if (status.is_running) {
         await Promise.all([loadRadarStats(), loadChannels({ silent: true })]);
       }
@@ -241,6 +268,22 @@ export default function ExplosiveChannelsPage() {
       setScanError(err instanceof Error ? err.message : "Ошибка переключения радара");
     } finally {
       setIsScanning(false);
+    }
+  };
+
+  const handleStopSearch = async () => {
+    setIsStoppingSearch(true);
+    setScanError(null);
+
+    try {
+      const status = await stopRadarSearch();
+      setRadarStatus(status);
+      setIsManualSearchActive(false);
+      await loadChannels({ silent: true });
+    } catch (err) {
+      setScanError(err instanceof Error ? err.message : "Не удалось остановить поиск");
+    } finally {
+      setIsStoppingSearch(false);
     }
   };
 
@@ -397,6 +440,29 @@ export default function ExplosiveChannelsPage() {
                 </span>
                 Радар сканирует...
               </div>
+            ) : null}
+
+            {showStopSearchButton ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full shrink-0 border-rose-500/40 text-rose-300 hover:bg-rose-500/10 sm:w-auto"
+                disabled={isStoppingSearch}
+                onClick={() => void handleStopSearch()}
+              >
+                {isStoppingSearch ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Остановка...
+                  </>
+                ) : (
+                  <>
+                    <Square className="h-4 w-4 fill-current" />
+                    Остановить поиск
+                  </>
+                )}
+              </Button>
             ) : null}
 
             <Button
@@ -595,6 +661,27 @@ export default function ExplosiveChannelsPage() {
             />
             <span className="text-sm leading-snug">Только RU/EN (Скрыть иероглифы)</span>
           </label>
+
+          <div className="flex w-full flex-col gap-2 xl:w-80">
+            <ContentFormatToggle
+              label="Не искать трансляции"
+              checked={excludeStreams}
+              disabled={isScanning || isRadarRunning || radarStatusLoading}
+              onChange={setExcludeStreams}
+            />
+            <ContentFormatToggle
+              label="Не искать Shorts"
+              checked={excludeShorts}
+              disabled={isScanning || isRadarRunning || radarStatusLoading}
+              onChange={setExcludeShorts}
+            />
+            <ContentFormatToggle
+              label="Не искать обычные видео"
+              checked={excludeVideos}
+              disabled={isScanning || isRadarRunning || radarStatusLoading}
+              onChange={setExcludeVideos}
+            />
+          </div>
         </div>
       </header>
 
@@ -691,5 +778,30 @@ function ExplosiveChannelsSkeleton() {
         <Skeleton key={index} className="h-[420px] rounded-xl" />
       ))}
     </div>
+  );
+}
+
+function ContentFormatToggle({
+  label,
+  checked,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  disabled: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-border/60 bg-card/80 px-4 py-3">
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.checked)}
+        className="h-4 w-4 shrink-0 rounded border-border accent-primary disabled:cursor-not-allowed disabled:opacity-50"
+      />
+      <span className="text-sm leading-snug">{label}</span>
+    </label>
   );
 }

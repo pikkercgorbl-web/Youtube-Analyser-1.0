@@ -6,7 +6,12 @@ import asyncio
 import logging
 import random
 
-from app.integrations.youtube.client import YouTubeApiError, get_radar_search_results
+from app.integrations.youtube.client import (
+    RadarContentFormatFilters,
+    YouTubeApiError,
+    filter_radar_videos_by_format,
+    iter_radar_search_pages,
+)
 from app.models.db import SessionLocal
 from app.services.explosive_channels_service import (
     DEFAULT_UPLOAD_PERIOD,
@@ -14,13 +19,20 @@ from app.services.explosive_channels_service import (
     UPLOAD_PERIOD_LABELS,
     RadarChannelHit,
 )
-from app.services.target_keywords_service import DEFAULT_BATCH_SIZE, TargetKeywordsService
+from app.services.target_keywords_service import (
+    DEFAULT_BATCH_SIZE,
+    WORKER_STATUS_IDLE,
+    WORKER_STATUS_RUNNING,
+    WORKER_STATUS_STOPPED,
+    TargetKeywordsService,
+)
 
 logger = logging.getLogger(__name__)
 
 is_radar_running = False
 radar_upload_period = DEFAULT_UPLOAD_PERIOD
 _radar_blacklist_words: list[str] = []
+_radar_content_filters = RadarContentFormatFilters()
 _radar_loop_task: asyncio.Task[None] | None = None
 _shared_worker: ExplosiveChannelsRadarWorker | None = None
 
@@ -28,7 +40,9 @@ BATCH_SIZE = DEFAULT_BATCH_SIZE
 THROTTLE_SECONDS = 2
 RADAR_CYCLE_PAUSE_MIN_SECONDS = 30
 RADAR_CYCLE_PAUSE_MAX_SECONDS = 60
-MANUAL_RADAR_MAX_PAGES = 8
+TARGET_VIDEOS_COUNT = 60
+MAX_PAGES = 50
+SEARCH_PAGE_DELAY_SECONDS = 2
 
 
 def radar_log(message: str) -> None:
@@ -46,14 +60,51 @@ def get_radar_blacklist_words() -> list[str]:
     return list(_radar_blacklist_words)
 
 
+def set_radar_content_filters(
+    *,
+    exclude_streams: bool = False,
+    exclude_shorts: bool = False,
+    exclude_videos: bool = False,
+) -> None:
+    global _radar_content_filters
+    _radar_content_filters = RadarContentFormatFilters(
+        exclude_streams=exclude_streams,
+        exclude_shorts=exclude_shorts,
+        exclude_videos=exclude_videos,
+    )
+
+
+def get_radar_content_filters() -> RadarContentFormatFilters:
+    return _radar_content_filters
+
+
 def get_radar_status() -> dict[str, bool | str]:
     global radar_upload_period
     db = SessionLocal()
     try:
         radar_upload_period = ExplosiveChannelsService().get_upload_period(db)
+        worker_status = TargetKeywordsService().get_worker_status(db)
     finally:
         db.close()
-    return {"is_running": is_radar_running, "upload_period": radar_upload_period}
+    return {
+        "is_running": is_radar_running,
+        "upload_period": radar_upload_period,
+        "worker_status": worker_status,
+    }
+
+
+def stop_radar_search() -> dict[str, bool | str]:
+    """Stop the active paginated keyword search immediately."""
+    global is_radar_running
+
+    is_radar_running = False
+    db = SessionLocal()
+    try:
+        TargetKeywordsService().set_worker_status(db, WORKER_STATUS_STOPPED)
+    finally:
+        db.close()
+    radar_log("🛑 [РАДАР] Получен запрос на остановку поиска")
+    return get_radar_status()
 
 
 def save_radar_upload_period(upload_period: str) -> str:
@@ -133,7 +184,7 @@ async def _run_manual_scan_and_stop(search_query: str) -> None:
     worker = get_shared_worker()
     radar_log(
         f"🎯 [РАДАР] Ручной поиск по запросу «{search_query}» "
-        f"(до {MANUAL_RADAR_MAX_PAGES} страниц выдачи)",
+        f"(до {TARGET_VIDEOS_COUNT} видео / {MAX_PAGES} страниц)",
     )
     try:
         await worker.run_manual_scan(search_query)
@@ -142,6 +193,13 @@ async def _run_manual_scan_and_stop(search_query: str) -> None:
         logger.exception("Manual radar scan failed")
     finally:
         is_radar_running = False
+        db = SessionLocal()
+        try:
+            service = TargetKeywordsService()
+            if not service.is_worker_stopped(db):
+                service.set_worker_status(db, WORKER_STATUS_IDLE)
+        finally:
+            db.close()
         radar_log("🛑 [РАДАР] Ручной поиск завершён — радар остановлен")
 
 
@@ -159,6 +217,12 @@ async def stop_radar() -> None:
 
     is_radar_running = False
     await _cancel_radar_task()
+
+
+def _should_stop_scan(db) -> bool:
+    if not is_radar_running:
+        return True
+    return TargetKeywordsService().is_worker_stopped(db)
 
 
 async def run_radar_loop() -> None:
@@ -193,11 +257,9 @@ class ExplosiveChannelsRadarWorker:
     def __init__(
         self,
         *,
-        max_results: int = 30,
         batch_size: int = BATCH_SIZE,
         throttle_seconds: float = THROTTLE_SECONDS,
     ) -> None:
-        self._max_results = max_results
         self._batch_size = batch_size
         self._throttle_seconds = throttle_seconds
         self._scan_lock = asyncio.Lock()
@@ -213,7 +275,7 @@ class ExplosiveChannelsRadarWorker:
         await self.run_once()
 
     async def run_manual_scan(self, search_query: str) -> None:
-        """Scan a single user-provided keyword across several result pages."""
+        """Scan a single user-provided keyword across paginated InnerTube results."""
         keyword = search_query.strip()
         if not keyword:
             radar_log("⚠️ [РАДАР] Пустой ручной запрос — сканирование пропущено")
@@ -236,7 +298,6 @@ class ExplosiveChannelsRadarWorker:
                     keyword,
                     upload_period=upload_period,
                     label="ручной запрос",
-                    max_pages=MANUAL_RADAR_MAX_PAGES,
                 )
             finally:
                 db.close()
@@ -277,7 +338,7 @@ class ExplosiveChannelsRadarWorker:
 
             total_hits = 0
             for index, keyword_record in enumerate(batch, start=1):
-                if not is_radar_running:
+                if _should_stop_scan(db):
                     radar_log("🛑 [РАДАР] Остановка по запросу — прерываю текущий пакет")
                     break
 
@@ -314,56 +375,121 @@ class ExplosiveChannelsRadarWorker:
         *,
         upload_period: str,
         label: str,
-        max_pages: int | None = None,
     ) -> int:
-        """Fetch videos for one keyword and ingest qualifying channels."""
+        """Fetch paginated InnerTube results and ingest qualifying channels."""
+        self._target_keywords.set_worker_status(db, WORKER_STATUS_RUNNING)
+
+        passed_total = 0
+        total_hits = 0
+        pages_fetched = 0
+        subscriber_cache: dict[str, int | None] = {}
+        stopped_early = False
+
         try:
-            videos = await get_radar_search_results(
-                keyword,
-                max_results=self._max_results,
-                max_pages=max_pages,
-                sort_by_upload_date=True,
-            )
-        except YouTubeApiError as exc:
-            radar_log(f"❌ [РАДАР] '{keyword}': ошибка YouTube — {exc}")
-            logger.exception("Radar scan failed for keyword=%r", keyword)
-            return 0
+            try:
+                async for page_videos in iter_radar_search_pages(
+                    keyword,
+                    sort_by_upload_date=True,
+                    max_pages=MAX_PAGES,
+                ):
+                    if _should_stop_scan(db):
+                        radar_log("🛑 [РАДАР] Поиск остановлен — прерываю листание страниц")
+                        stopped_early = True
+                        break
 
-        pages_note = f", до {max_pages} стр." if max_pages else ""
-        radar_log(
-            f"⏳ [РАДАР] '{keyword}' ({label}): найдено {len(videos)} видео{pages_note}. "
-            "Проверяю каналы...",
-        )
+                    pages_fetched += 1
+                    content_filters = get_radar_content_filters()
+                    filtered_videos = filter_radar_videos_by_format(page_videos, content_filters)
+                    skipped_by_format = len(page_videos) - len(filtered_videos)
+                    radar_log(
+                        f"📄 [РАДАР] '{keyword}' ({label}): страница {pages_fetched}/{MAX_PAGES}, "
+                        f"видео на странице: {len(page_videos)}"
+                        + (
+                            f", пропущено по формату: {skipped_by_format}"
+                            if skipped_by_format
+                            else ""
+                        ),
+                    )
 
-        hits = await self._explosive_channels.process_radar_videos(
-            db,
-            videos,
-            log_rejections=True,
-            filter_title_language=True,
-            upload_period=upload_period,
-            blacklist_words=get_radar_blacklist_words(),
-        )
-        self._log_hits(hits)
+                    if not filtered_videos:
+                        if pages_fetched >= MAX_PAGES:
+                            radar_log(
+                                f"⚠️ [РАДАР] '{keyword}': достигнут лимит страниц ({MAX_PAGES})",
+                            )
+                            break
+                        if _should_stop_scan(db):
+                            radar_log("🛑 [РАДАР] Поиск остановлен — прерываю листание страниц")
+                            stopped_early = True
+                            break
+                        await asyncio.sleep(SEARCH_PAGE_DELAY_SECONDS)
+                        continue
 
-        if hits:
-            radar_log(
-                f"✅ [РАДАР] '{keyword}': сохранено каналов {len(hits)} "
-                f"(видео: {len(videos)})",
-            )
-        else:
-            radar_log(
-                f"ℹ️ [РАДАР] '{keyword}': взрывных каналов не найдено "
-                f"(видео: {len(videos)})",
-            )
+                    result = await self._explosive_channels.process_radar_videos(
+                        db,
+                        filtered_videos,
+                        log_rejections=True,
+                        filter_title_language=True,
+                        upload_period=upload_period,
+                        blacklist_words=get_radar_blacklist_words(),
+                        subscriber_cache=subscriber_cache,
+                    )
+                    self._log_hits(result.hits)
 
-        if is_radar_running:
-            radar_log(
-                f"⏸️ [РАДАР] Пауза {self._throttle_seconds:g} сек. "
-                "после запроса к YouTube...",
-            )
-            await asyncio.sleep(self._throttle_seconds)
+                    passed_total += result.passed_count
+                    total_hits += len(result.hits)
 
-        return len(hits)
+                    radar_log(
+                        f"📈 [РАДАР] '{keyword}': прошло фильтры {passed_total}/{TARGET_VIDEOS_COUNT}, "
+                        f"сохранено каналов {total_hits}",
+                    )
+
+                    if passed_total >= TARGET_VIDEOS_COUNT:
+                        radar_log(
+                            f"🎯 [РАДАР] '{keyword}': достигнут лимит "
+                            f"{TARGET_VIDEOS_COUNT} видео после фильтров",
+                        )
+                        break
+
+                    if pages_fetched >= MAX_PAGES:
+                        radar_log(
+                            f"⚠️ [РАДАР] '{keyword}': достигнут лимит страниц ({MAX_PAGES})",
+                        )
+                        break
+
+                    if _should_stop_scan(db):
+                        radar_log("🛑 [РАДАР] Поиск остановлен — прерываю листание страниц")
+                        stopped_early = True
+                        break
+
+                    await asyncio.sleep(SEARCH_PAGE_DELAY_SECONDS)
+
+            except YouTubeApiError as exc:
+                radar_log(f"❌ [РАДАР] '{keyword}': ошибка YouTube — {exc}")
+                logger.exception("Radar scan failed for keyword=%r", keyword)
+                return total_hits
+
+            if total_hits:
+                radar_log(
+                    f"✅ [РАДАР] '{keyword}': сохранено каналов {total_hits} "
+                    f"(страниц: {pages_fetched}, прошло фильтры: {passed_total})",
+                )
+            elif not stopped_early:
+                radar_log(
+                    f"ℹ️ [РАДАР] '{keyword}': взрывных каналов не найдено "
+                    f"(страниц: {pages_fetched})",
+                )
+
+            if is_radar_running and not self._target_keywords.is_worker_stopped(db):
+                radar_log(
+                    f"⏸️ [РАДАР] Пауза {self._throttle_seconds:g} сек. "
+                    "после запроса к YouTube...",
+                )
+                await asyncio.sleep(self._throttle_seconds)
+
+            return total_hits
+        finally:
+            if not self._target_keywords.is_worker_stopped(db):
+                self._target_keywords.set_worker_status(db, WORKER_STATUS_IDLE)
 
     @staticmethod
     def _log_hits(hits: list[RadarChannelHit]) -> None:

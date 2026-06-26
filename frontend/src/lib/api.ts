@@ -12,6 +12,7 @@ import type {  AnomalySearchParams,
   MassAnalysisResponse,
   RadarResetResponse,
   RadarGenerateIdeasResponse,
+  RadarContentFormatOptions,
   RadarStatsResponse,
   RadarStatusResponse,
   SavedKeywordItem,
@@ -138,11 +139,15 @@ export async function toggleRadar(
   uploadPeriod?: RadarStatusResponse["upload_period"],
   searchQuery?: string,
   blacklistWords?: string[],
+  contentFormat?: RadarContentFormatOptions,
 ): Promise<RadarStatusResponse> {
   const body: {
     upload_period?: RadarStatusResponse["upload_period"];
     search_query?: string;
     blacklist_words?: string[];
+    exclude_streams?: boolean;
+    exclude_shorts?: boolean;
+    exclude_videos?: boolean;
   } = {};
 
   if (uploadPeriod) {
@@ -158,7 +163,22 @@ export async function toggleRadar(
     body.blacklist_words = blacklistWords;
   }
 
+  if (contentFormat?.exclude_streams) {
+    body.exclude_streams = true;
+  }
+  if (contentFormat?.exclude_shorts) {
+    body.exclude_shorts = true;
+  }
+  if (contentFormat?.exclude_videos) {
+    body.exclude_videos = true;
+  }
+
   const { data } = await api.post<RadarStatusResponse>("/api/radar/toggle", body);
+  return data;
+}
+
+export async function stopRadarSearch(): Promise<RadarStatusResponse> {
+  const { data } = await api.post<RadarStatusResponse>("/api/radar/stop-search");
   return data;
 }
 

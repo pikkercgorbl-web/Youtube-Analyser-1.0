@@ -579,6 +579,7 @@ class RadarStatusResponse(BaseModel):
 
     is_running: bool
     upload_period: str = "all"
+    worker_status: Literal["idle", "running", "stopped"] = "idle"
 
 
 class RadarToggleRequest(BaseModel):
@@ -594,6 +595,9 @@ class RadarToggleRequest(BaseModel):
         default=None,
         description="Minus-words: skip videos whose title contains any of these",
     )
+    exclude_streams: bool = False
+    exclude_shorts: bool = False
+    exclude_videos: bool = False
 
     @field_validator("blacklist_words", mode="before")
     @classmethod
