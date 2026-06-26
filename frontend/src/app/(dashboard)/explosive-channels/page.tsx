@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Flame, Loader2, Radar, Trash2 } from "lucide-react";
+import { Flame, Loader2, Radar, RotateCcw, Sparkles, Trash2 } from "lucide-react";
 
+import { AiIdeasModal } from "@/components/explosive-channels/ai-ideas-modal";
 import { ExplosiveChannelCard } from "@/components/explosive-channels/explosive-channel-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,10 +17,12 @@ import {
   fetchExplosiveChannels,
   fetchRadarStats,
   fetchRadarStatus,
+  generateRadarIdeas,
+  resetRadarQueue,
   toggleRadar,
   updateRadarSettings,
 } from "@/lib/api";
-import { sortExplosiveChannels } from "@/lib/explosive-channels";
+import { filterRuEnExplosiveChannels, sortExplosiveChannels, youtubeVideoUrl } from "@/lib/explosive-channels";
 import {
   RADAR_FILTER_STORAGE_KEYS,
   hasStoredUploadPeriod,
@@ -42,6 +45,7 @@ import { cn, formatCompactNumber, formatNumber } from "@/lib/utils";
 const SORT_OPTIONS: { value: ExplosiveChannelSortOption; label: string }[] = [
   { value: "viral_coefficient_desc", label: "По коэффициенту виральности (убывание)" },
   { value: "video_views_desc", label: "По просмотрам (убывание)" },
+  { value: "vph_desc", label: "По VPH (убывание)" },
 ];
 
 const DEFAULT_MIN_VIEWS = 50_000;
@@ -72,7 +76,9 @@ export default function ExplosiveChannelsPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const [scanError, setScanError] = useState<string | null>(null);
+  const [resetNotice, setResetNotice] = useState<string | null>(null);
   const [clearError, setClearError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [radarStatus, setRadarStatus] = useState<RadarStatusResponse | null>(null);
@@ -84,6 +90,13 @@ export default function ExplosiveChannelsPage() {
     readStoredUploadPeriod("all"),
   );
   const [uploadPeriodError, setUploadPeriodError] = useState<string | null>(null);
+  const [isLangFilterActive, setIsLangFilterActive] = useState(false);
+  const [radarSearchQuery, setRadarSearchQuery] = useState("");
+  const [blacklistWordsInput, setBlacklistWordsInput] = useState("");
+  const [aiModalOpen, setAiModalOpen] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [aiIdeas, setAiIdeas] = useState<string[]>([]);
 
   useEffect(() => {
     writeStoredNumber(RADAR_FILTER_STORAGE_KEYS.minViews, minViews);
@@ -166,10 +179,11 @@ export default function ExplosiveChannelsPage() {
 
     const timer = window.setInterval(() => {
       void loadChannels({ silent: true });
+      void loadRadarStatus();
     }, RADAR_LIVE_UPDATE_MS);
 
     return () => window.clearInterval(timer);
-  }, [radarStatus?.is_running, loadChannels]);
+  }, [radarStatus?.is_running, loadChannels, loadRadarStatus]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -186,6 +200,13 @@ export default function ExplosiveChannelsPage() {
     [channels, sortBy],
   );
 
+  const visibleChannels = useMemo(() => {
+    if (!isLangFilterActive) {
+      return sortedChannels;
+    }
+    return filterRuEnExplosiveChannels(sortedChannels);
+  }, [sortedChannels, isLangFilterActive]);
+
   const radarProgressPercent = useMemo(() => {
     if (!radarStats || radarStats.total_keywords <= 0) {
       return 0;
@@ -196,12 +217,21 @@ export default function ExplosiveChannelsPage() {
     );
   }, [radarStats]);
 
+  const isRadarRunning = radarStatus?.is_running ?? false;
+
   const handleToggleRadar = async () => {
     setIsScanning(true);
     setScanError(null);
 
     try {
-      const status = await toggleRadar(uploadPeriod);
+      const manualQuery = !isRadarRunning ? radarSearchQuery.trim() : undefined;
+      const blacklistWords = !isRadarRunning
+        ? blacklistWordsInput
+            .split(",")
+            .map((word) => word.trim())
+            .filter(Boolean)
+        : undefined;
+      const status = await toggleRadar(uploadPeriod, manualQuery, blacklistWords);
       setRadarStatus(status);
       setUploadPeriod(status.upload_period);
       if (status.is_running) {
@@ -229,6 +259,57 @@ export default function ExplosiveChannelsPage() {
     }
   };
 
+  const handleResetRadar = async () => {
+    if (
+      !window.confirm(
+        "Сбросить очередь радара? Следующий цикл начнётся с первого ключевого слова в списке.",
+      )
+    ) {
+      return;
+    }
+
+    setIsResetting(true);
+    setResetNotice(null);
+    setScanError(null);
+
+    try {
+      const response = await resetRadarQueue();
+      setResetNotice(response.message);
+      await loadRadarStats();
+    } catch (err) {
+      setScanError(err instanceof Error ? err.message : "Не удалось сбросить очередь радара");
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
+  const handleGenerateIdeas = async () => {
+    const titles = visibleChannels
+      .map((channel) => channel.representative_video_title.trim())
+      .filter(Boolean);
+
+    if (titles.length === 0) {
+      setAiError("Нет названий видео для анализа");
+      setAiIdeas([]);
+      setAiModalOpen(true);
+      return;
+    }
+
+    setAiModalOpen(true);
+    setAiLoading(true);
+    setAiError(null);
+    setAiIdeas([]);
+
+    try {
+      const response = await generateRadarIdeas(titles);
+      setAiIdeas(response.ideas);
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : "Не удалось сгенерировать идеи");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   const handleClearChannels = async () => {
     if (
       !window.confirm(
@@ -251,8 +332,6 @@ export default function ExplosiveChannelsPage() {
     }
   };
 
-  const isRadarRunning = radarStatus?.is_running ?? false;
-
   return (
     <div className="space-y-6">
       <header className="space-y-4">
@@ -274,6 +353,26 @@ export default function ExplosiveChannelsPage() {
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+            <Input
+              type="text"
+              placeholder="Введите слово или оставьте пустым"
+              value={radarSearchQuery}
+              onChange={(event) => setRadarSearchQuery(event.target.value)}
+              disabled={isScanning || isRadarRunning || radarStatusLoading}
+              className="w-full sm:min-w-[220px] sm:flex-1"
+              maxLength={256}
+            />
+
+            <Input
+              type="text"
+              placeholder="Минус-слова (через запятую)"
+              value={blacklistWordsInput}
+              onChange={(event) => setBlacklistWordsInput(event.target.value)}
+              disabled={isScanning || isRadarRunning || radarStatusLoading}
+              className="w-full sm:min-w-[220px] sm:flex-1"
+              maxLength={512}
+            />
+
             <Select
               label="Период загрузки видео"
               value={uploadPeriod}
@@ -326,6 +425,27 @@ export default function ExplosiveChannelsPage() {
 
             <Button
               type="button"
+              variant="outline"
+              size="sm"
+              className="w-full shrink-0 sm:w-auto"
+              disabled={isResetting || isScanning || initialLoading || radarStatusLoading}
+              onClick={() => void handleResetRadar()}
+            >
+              {isResetting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Сброс...
+                </>
+              ) : (
+                <>
+                  <RotateCcw className="h-4 w-4" />
+                  Начать сначала
+                </>
+              )}
+            </Button>
+
+            <Button
+              type="button"
               variant="destructive"
               size="sm"
               className="w-full shrink-0 sm:w-auto"
@@ -347,6 +467,9 @@ export default function ExplosiveChannelsPage() {
           </div>
           {uploadPeriodError ? (
             <p className="w-full text-xs text-rose-400">{uploadPeriodError}</p>
+          ) : null}
+          {resetNotice ? (
+            <p className="w-full text-xs text-emerald-400">{resetNotice}</p>
           ) : null}
         </div>
 
@@ -462,6 +585,16 @@ export default function ExplosiveChannelsPage() {
               </option>
             ))}
           </Select>
+
+          <label className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-border/60 bg-card/80 px-4 py-3 xl:w-80">
+            <input
+              type="checkbox"
+              checked={isLangFilterActive}
+              onChange={(event) => setIsLangFilterActive(event.target.checked)}
+              className="h-4 w-4 shrink-0 rounded border-border accent-primary"
+            />
+            <span className="text-sm leading-snug">Только RU/EN (Скрыть иероглифы)</span>
+          </label>
         </div>
       </header>
 
@@ -478,18 +611,140 @@ export default function ExplosiveChannelsPage() {
         />
       ) : null}
 
-      {!initialLoading && !error && sortedChannels.length > 0 ? (
-        <div
-          className={cn(
-            "grid grid-cols-1 gap-5 transition-opacity md:grid-cols-2 lg:grid-cols-3",
-            (isRefreshing || isScanning) && "opacity-60",
-          )}
-        >
-          {sortedChannels.map((channel) => (
-            <ExplosiveChannelCard key={channel.channel_id} channel={channel} />
-          ))}
+      {!initialLoading && !error && sortedChannels.length > 0 && visibleChannels.length === 0 ? (
+        <StateMessage
+          title="Нет каналов после фильтра языка"
+          description="По выбранному фильтру RU/EN не осталось каналов с латиницей или кириллицей в названии видео. Отключите фильтр, чтобы увидеть полный список."
+        />
+      ) : null}
+
+      {!initialLoading && !error && visibleChannels.length > 0 ? (
+        <div className="space-y-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {isLangFilterActive ? (
+              <p className="text-sm text-muted-foreground">
+                Показано{" "}
+                <span className="font-semibold tabular-nums text-foreground">
+                  {visibleChannels.length}
+                </span>{" "}
+                из {sortedChannels.length} каналов (фильтр RU/EN)
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Отображается{" "}
+                <span className="font-semibold tabular-nums text-foreground">
+                  {visibleChannels.length}
+                </span>{" "}
+                каналов
+              </p>
+            )}
+
+            <Button
+              type="button"
+              size="sm"
+              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500 sm:w-auto"
+              disabled={aiLoading}
+              onClick={() => void handleGenerateIdeas()}
+            >
+              {aiLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Генерация...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4" />
+                  Сгенерировать идеи через AI
+                </>
+              )}
+            </Button>
+          </div>
+
+          <div
+            className={cn(
+              "hidden overflow-x-auto rounded-xl border border-border/60 lg:block",
+              (isRefreshing || isScanning) && "opacity-60",
+            )}
+          >
+            <table className="w-full min-w-[900px] text-left text-sm">
+              <thead className="border-b border-border/60 bg-muted/30 text-xs uppercase tracking-wide text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Канал</th>
+                  <th className="px-4 py-3 font-medium">Видео</th>
+                  <th className="px-4 py-3 font-medium text-right">Подписчики</th>
+                  <th className="px-4 py-3 font-medium text-right">Просмотры</th>
+                  <th className="px-4 py-3 font-medium text-right">VPH</th>
+                  <th className="px-4 py-3 font-medium text-right">Виральность</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleChannels.map((channel) => {
+                  const videoHref = channel.video_id
+                    ? youtubeVideoUrl(channel.video_id)
+                    : null;
+                  return (
+                    <tr
+                      key={channel.channel_id}
+                      className="border-b border-border/40 transition-colors hover:bg-muted/20"
+                    >
+                      <td className="px-4 py-3 font-medium">{channel.channel_name}</td>
+                      <td className="max-w-xs px-4 py-3">
+                        {videoHref ? (
+                          <a
+                            href={videoHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="line-clamp-2 text-primary hover:underline"
+                          >
+                            {channel.representative_video_title || "Без названия"}
+                          </a>
+                        ) : (
+                          <span className="line-clamp-2">
+                            {channel.representative_video_title || "Без названия"}
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-right tabular-nums">
+                        {formatCompactNumber(channel.subscribers)}
+                      </td>
+                      <td className="px-4 py-3 text-right tabular-nums">
+                        {formatCompactNumber(channel.representative_video_views)}
+                      </td>
+                      <td className="px-4 py-3 text-right tabular-nums font-semibold text-indigo-300">
+                        {channel.vph != null && channel.vph > 0
+                          ? `${formatCompactNumber(channel.vph)}/ч`
+                          : "—"}
+                      </td>
+                      <td className="px-4 py-3 text-right tabular-nums text-primary">
+                        {channel.viral_coefficient.toFixed(1)}×
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div
+            className={cn(
+              "grid grid-cols-1 gap-5 transition-opacity md:grid-cols-2 lg:hidden",
+              (isRefreshing || isScanning) && "opacity-60",
+            )}
+          >
+            {visibleChannels.map((channel) => (
+              <ExplosiveChannelCard key={channel.channel_id} channel={channel} />
+            ))}
+          </div>
         </div>
       ) : null}
+
+      <AiIdeasModal
+        open={aiModalOpen}
+        loading={aiLoading}
+        error={aiError}
+        ideas={aiIdeas}
+        onClose={() => setAiModalOpen(false)}
+      />
     </div>
   );
 }

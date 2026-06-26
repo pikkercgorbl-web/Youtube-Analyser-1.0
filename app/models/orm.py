@@ -190,6 +190,7 @@ class ExplosiveChannel(Base):
     representative_video_title: Mapped[str] = mapped_column(String(512), nullable=False, default="")
     representative_video_thumbnail: Mapped[str] = mapped_column(String(512), nullable=False, default="")
     representative_video_views: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
+    vph: Mapped[float | None] = mapped_column(nullable=True, default=None)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),

@@ -8,11 +8,12 @@ from sqlalchemy import func, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.models.orm import TargetKeyword
+from app.models.orm import RadarWorkerState, TargetKeyword
 from app.models.schemas import RadarStatsResponse, TargetKeywordCreate
 from app.services.metrics import utc_now
 
 DEFAULT_BATCH_SIZE = 5
+WORKER_STATE_ROW_ID = 1
 
 
 class TargetKeywordsService:
@@ -90,3 +91,23 @@ class TargetKeywordsService:
             total_keywords=total_keywords,
             checked_today=checked_today,
         )
+
+    def reset_radar_queue(self, db: Session) -> int:
+        """Reset radar cursor and clear last_checked so the next batch starts from id=1."""
+        total_keywords = db.scalar(select(func.count()).select_from(TargetKeyword)) or 0
+
+        db.execute(update(TargetKeyword).values(last_checked=None))
+
+        state = db.get(RadarWorkerState, WORKER_STATE_ROW_ID)
+        if state is None:
+            db.add(
+                RadarWorkerState(
+                    id=WORKER_STATE_ROW_ID,
+                    last_target_keyword_id=0,
+                ),
+            )
+        else:
+            state.last_target_keyword_id = 0
+
+        db.commit()
+        return total_keywords

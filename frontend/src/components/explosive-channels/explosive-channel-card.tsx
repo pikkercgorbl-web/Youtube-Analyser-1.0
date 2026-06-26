@@ -141,9 +141,17 @@ export function ExplosiveChannelCard({ channel }: ExplosiveChannelCardProps) {
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-2 border-t border-border/60 bg-muted/20 p-4">
+      <div className="grid grid-cols-2 gap-2 border-t border-border/60 bg-muted/20 p-4 sm:grid-cols-4">
         <Stat label="Подписчики" value={formatCompactNumber(channel.subscribers)} />
         <Stat label="Просмотры" value={formatCompactNumber(channel.representative_video_views)} />
+        <Stat
+          label="VPH"
+          value={
+            channel.vph != null && channel.vph > 0
+              ? `${formatCompactNumber(channel.vph)}/ч`
+              : "—"
+          }
+        />
         <Stat
           label="Виральность"
           value={`${channel.viral_coefficient.toFixed(1)}×`}

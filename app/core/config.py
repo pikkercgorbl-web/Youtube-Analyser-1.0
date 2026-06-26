@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     debug: bool = False
     database_url: str = Field(default=DATABASE_URL, validation_alias="DATABASE_URL")
     youtube_api_keys_raw: str = Field(default="", validation_alias="YOUTUBE_API_KEYS")
+    gemini_api_key: str = Field(default="", validation_alias="GEMINI_API_KEY")
     explosive_radar_interval_seconds: int = Field(
         default=300,
         ge=60,

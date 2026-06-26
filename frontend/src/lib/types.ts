@@ -168,12 +168,14 @@ export interface ExplosiveChannelItem {
   representative_video_title: string;
   representative_video_thumbnail: string;
   representative_video_views: number;
+  vph?: number | null;
   updated_at: string;
 }
 
 export type ExplosiveChannelSortOption =
   | "viral_coefficient_desc"
-  | "video_views_desc";
+  | "video_views_desc"
+  | "vph_desc";
 
 export interface ExplosiveChannelFilters {
   min_views?: number;
@@ -200,6 +202,16 @@ export interface ClearExplosiveChannelsResponse {
 export interface RadarStatsResponse {
   total_keywords: number;
   checked_today: number;
+}
+
+export interface RadarResetResponse {
+  status: string;
+  message: string;
+  total_keywords: number;
+}
+
+export interface RadarGenerateIdeasResponse {
+  ideas: string[];
 }
 
 export interface AnomalySearchParams {

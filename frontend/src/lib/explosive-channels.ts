@@ -1,5 +1,19 @@
 import type { ExplosiveChannelItem, ExplosiveChannelSortOption } from "./types";
 
+/** CJK, Arabic, Japanese kana, Korean hangul, Devanagari (Hindi). */
+const EXCLUDED_SCRIPT_RE =
+  /[\p{Script=Han}\p{Script=Arabic}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}\p{Script=Devanagari}]/u;
+
+export function containsExcludedScripts(text: string): boolean {
+  return EXCLUDED_SCRIPT_RE.test(text);
+}
+
+export function filterRuEnExplosiveChannels(
+  items: ExplosiveChannelItem[],
+): ExplosiveChannelItem[] {
+  return items.filter((item) => !containsExcludedScripts(item.representative_video_title));
+}
+
 export function sortExplosiveChannels(
   items: ExplosiveChannelItem[],
   sortBy: ExplosiveChannelSortOption,
@@ -11,6 +25,8 @@ export function sortExplosiveChannels(
       return sorted.sort(
         (a, b) => b.representative_video_views - a.representative_video_views,
       );
+    case "vph_desc":
+      return sorted.sort((a, b) => (b.vph ?? 0) - (a.vph ?? 0));
     default:
       return sorted.sort((a, b) => b.viral_coefficient - a.viral_coefficient);
   }

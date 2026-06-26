@@ -35,6 +35,24 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_target_keywords_last_checked(engine)
     ensure_explosive_channel_settings_upload_period(engine)
     ensure_explosive_channels_video_id(engine)
+    ensure_explosive_channels_vph(engine)
+
+
+def ensure_explosive_channels_vph(engine: Engine) -> None:
+    """Add explosive_channels.vph when missing (SQLite-safe)."""
+    inspector = inspect(engine)
+    if "explosive_channels" not in inspector.get_table_names():
+        return
+
+    column_names = {column["name"] for column in inspector.get_columns("explosive_channels")}
+    if "vph" in column_names:
+        return
+
+    with engine.begin() as connection:
+        connection.execute(
+            text("ALTER TABLE explosive_channels ADD COLUMN vph FLOAT DEFAULT NULL"),
+        )
+    logger.info("Added explosive_channels.vph column")
 
 
 def ensure_explosive_channel_settings_upload_period(engine: Engine) -> None:

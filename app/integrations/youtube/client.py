@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import re
 from typing import Any
+from urllib.parse import quote_plus
 
 import httpx
 from pydantic import BaseModel, Field
@@ -17,8 +18,12 @@ from app.utils.duration import parse_iso8601_duration
 
 INNERTUBE_HL = "en"
 INNERTUBE_GL = "US"
+INNERTUBE_HL_RU = "ru"
+INNERTUBE_GL_RU = "RU"
 INNERTUBE_ABOUT_TAB_PARAMS = "EgVhYm91dA=="
 CHANNEL_HOME_URL = "https://www.youtube.com/channel/{channel_id}"
+YOUTUBE_SEARCH_RESULTS_URL = "https://www.youtube.com/results"
+_CYRILLIC_RE = re.compile(r"[\u0400-\u04FF]")
 RADAR_SUBSCRIBER_FETCH_DELAY_SECONDS = 1.0
 _HIDDEN_SUBSCRIBER_NEEDLES = (
     "hidden subscriber",
@@ -325,19 +330,27 @@ class YouTubeApiClient:
         query: str,
         *,
         max_results: int = 50,
+        max_pages: int | None = None,
         sort_by_upload_date: bool = False,
     ) -> list[VideoSearchModel]:
         """Search videos through InnerTube and return parsed Pydantic models."""
         if not query.strip():
             return []
 
-        limit = max(1, min(max_results, 50))
-        context = _build_innertube_context()
+        if max_pages is not None:
+            page_limit = max(1, min(max_pages, 10))
+            result_limit = page_limit * 50
+        else:
+            page_limit = None
+            result_limit = max(1, min(max_results, 50))
+
+        context = _build_innertube_context(query)
         results: list[VideoSearchModel] = []
         seen_video_ids: set[str] = set()
         continuation: str | None = None
+        pages_fetched = 0
 
-        while len(results) < limit:
+        while len(results) < result_limit:
             payload: dict[str, Any] = {"context": context}
             if continuation:
                 payload["continuation"] = continuation
@@ -350,23 +363,30 @@ class YouTubeApiClient:
                 payload,
                 url=self.INNERTUBE_SEARCH_URL,
             )
+            pages_fetched += 1
             page_videos = _parse_search_videos(response)
             for video in page_videos:
                 if video.video_id in seen_video_ids:
                     continue
                 seen_video_ids.add(video.video_id)
                 results.append(video)
-                if len(results) >= limit:
+                if len(results) >= result_limit:
                     break
 
-            if len(results) >= limit:
+            if page_limit is not None and pages_fetched >= page_limit:
+                break
+
+            if len(results) >= result_limit:
                 break
 
             continuation = _extract_search_continuation(response)
             if not continuation or not page_videos:
                 break
 
-        return results[:limit]
+        if not results and _contains_cyrillic(query):
+            results = await self._fetch_search_via_html_page(query, limit=result_limit)
+
+        return results[:result_limit]
 
     async def get_search_suggestions(self, query: str) -> list[str]:
         """Return up to 10 autocomplete suggestions for a YouTube search query."""
@@ -376,7 +396,7 @@ class YouTubeApiClient:
 
         response = await self._innertube_request(
             {
-                "context": _build_innertube_suggestions_context(),
+                "context": _build_innertube_suggestions_context(normalized_query),
                 "input": normalized_query,
             },
             url=self.INNERTUBE_SEARCH_SUGGESTIONS_URL,
@@ -774,9 +794,17 @@ class YouTubeApiClient:
     ) -> dict[str, Any]:
         endpoint = url or self.INNERTUBE_BROWSE_URL
         request_timeout = self._timeout if timeout is None else timeout
+        locale_text = _extract_innertube_locale_text(payload)
+        hl, _gl = _innertube_locale_for_text(locale_text)
+        accept_language = (
+            "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7"
+            if hl == INNERTUBE_HL_RU
+            else "en-US,en;q=0.9"
+        )
         headers = {
             "Accept": "application/json",
-            "Content-Type": "application/json",
+            "Accept-Language": accept_language,
+            "Content-Type": "application/json; charset=utf-8",
             "Origin": "https://www.youtube.com",
             "Referer": "https://www.youtube.com/",
             "User-Agent": (
@@ -785,11 +813,12 @@ class YouTubeApiClient:
                 "Chrome/125.0.0.0 Safari/537.36"
             ),
         }
+        body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
         async with httpx.AsyncClient(timeout=request_timeout, headers=headers) as client:
             response = await client.post(
                 endpoint,
                 params={"prettyPrint": "false"},
-                json=payload,
+                content=body,
             )
         if response.status_code != 200:
             raise YouTubeApiError(
@@ -797,29 +826,59 @@ class YouTubeApiClient:
             )
         return response.json()
 
+    async def _fetch_search_via_html_page(
+        self,
+        query: str,
+        *,
+        limit: int,
+    ) -> list[VideoSearchModel]:
+        """Fallback for Cyrillic queries when InnerTube POST search returns an empty shelf."""
+        search_url = _build_youtube_search_page_url(query)
+        headers = _youtube_page_headers(query)
+        try:
+            async with httpx.AsyncClient(
+                timeout=self._timeout,
+                headers=headers,
+                follow_redirects=True,
+            ) as client:
+                response = await client.get(search_url)
+        except httpx.HTTPError:
+            return []
+
+        if response.status_code != 200:
+            return []
+
+        initial_data = extract_yt_initial_data(response.text)
+        if not initial_data:
+            return []
+
+        videos = _parse_search_videos(initial_data)
+        return videos[:limit]
+
     async def _fetch_google_search_suggestions(self, query: str) -> list[str]:
         """Lightweight fallback used by the main YouTube search bar autocomplete."""
+        hl, _gl = _innertube_locale_for_text(query)
         headers = {
             "Accept": "*/*",
+            "Accept-Language": (
+                "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7"
+                if hl == INNERTUBE_HL_RU
+                else "en-US,en;q=0.9"
+            ),
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
                 "Chrome/125.0.0.0 Safari/537.36"
             ),
         }
+        suggest_url = (
+            f"{self.GOOGLE_SUGGEST_URL}?client=youtube&ds=yt&hl={hl}&q={quote_plus(query)}"
+        )
         async with httpx.AsyncClient(
             timeout=self._INNERTUBE_SUGGESTIONS_TIMEOUT,
             headers=headers,
         ) as client:
-            response = await client.get(
-                self.GOOGLE_SUGGEST_URL,
-                params={
-                    "client": "youtube",
-                    "ds": "yt",
-                    "hl": INNERTUBE_HL,
-                    "q": query,
-                },
-            )
+            response = await client.get(suggest_url)
         if response.status_code != 200:
             return []
         return _parse_google_suggest_response(response.text)
@@ -952,16 +1011,48 @@ def parse_subscriber_count_text(value: Any) -> int | None:
     return None
 
 
-def _youtube_page_headers() -> dict[str, str]:
+def _youtube_page_headers(text: str = "") -> dict[str, str]:
+    hl, _gl = _innertube_locale_for_text(text)
+    accept_language = (
+        "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7"
+        if hl == INNERTUBE_HL_RU
+        else "en-US,en;q=0.9"
+    )
     return {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Language": accept_language,
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/125.0.0.0 Safari/537.36"
         ),
     }
+
+
+def _contains_cyrillic(text: str) -> bool:
+    return bool(_CYRILLIC_RE.search(text))
+
+
+def _innertube_locale_for_text(text: str = "") -> tuple[str, str]:
+    if _contains_cyrillic(text):
+        return INNERTUBE_HL_RU, INNERTUBE_GL_RU
+    return INNERTUBE_HL, INNERTUBE_GL
+
+
+def _extract_innertube_locale_text(payload: dict[str, Any]) -> str:
+    for key in ("query", "input", "q", "url"):
+        value = payload.get(key)
+        if isinstance(value, str) and value.strip():
+            return value
+    return ""
+
+
+def _build_youtube_search_page_url(query: str) -> str:
+    hl, gl = _innertube_locale_for_text(query)
+    return (
+        f"{YOUTUBE_SEARCH_RESULTS_URL}?search_query={quote_plus(query)}"
+        f"&hl={hl}&gl={gl}&persist_hl=1"
+    )
 
 
 def extract_yt_initial_data(html: str) -> dict[str, Any] | None:
@@ -1138,7 +1229,7 @@ async def fetch_channel_subscribers_from_homepage(
     try:
         async with httpx.AsyncClient(
             timeout=15.0,
-            headers=_youtube_page_headers(),
+            headers=_youtube_page_headers(channel_name or channel_id),
             follow_redirects=True,
         ) as client:
             for url in _channel_homepage_urls(channel_id, channel_name):
@@ -1829,25 +1920,27 @@ def _parse_playlist_video_renderer(
 _VIDEO_ID_PATTERN = re.compile(r"^[\w-]{11}$")
 
 
-def _build_innertube_context() -> dict[str, Any]:
+def _build_innertube_context(text: str = "") -> dict[str, Any]:
+    hl, gl = _innertube_locale_for_text(text)
     return {
         "client": {
             "clientName": "WEB",
             "clientVersion": "2.20240613.01.00",
-            "hl": INNERTUBE_HL,
-            "gl": INNERTUBE_GL,
+            "hl": hl,
+            "gl": gl,
         },
     }
 
 
-def _build_innertube_suggestions_context() -> dict[str, Any]:
+def _build_innertube_suggestions_context(text: str = "") -> dict[str, Any]:
     """InnerTube context required by ``music/get_search_suggestions``."""
+    hl, gl = _innertube_locale_for_text(text)
     return {
         "client": {
             "clientName": "WEB_REMIX",
             "clientVersion": "1.20240613.01.00",
-            "hl": INNERTUBE_HL,
-            "gl": INNERTUBE_GL,
+            "hl": hl,
+            "gl": gl,
         },
     }
 
@@ -2416,6 +2509,7 @@ async def get_radar_search_results(
     query: str,
     max_results: int = 50,
     *,
+    max_pages: int | None = None,
     sort_by_upload_date: bool = False,
 ) -> list[VideoSearchModel]:
     """InnerTube search for radar: video shelf only, no bulk channel enrichment."""
@@ -2423,6 +2517,7 @@ async def get_radar_search_results(
     videos = await client.search(
         query,
         max_results=max_results,
+        max_pages=max_pages,
         sort_by_upload_date=sort_by_upload_date,
     )
     if not videos:

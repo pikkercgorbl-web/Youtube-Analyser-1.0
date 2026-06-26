@@ -10,6 +10,8 @@ import type {  AnomalySearchParams,
   KeywordAnalyzeResponse,
   KeywordResearchResponse,
   MassAnalysisResponse,
+  RadarResetResponse,
+  RadarGenerateIdeasResponse,
   RadarStatsResponse,
   RadarStatusResponse,
   SavedKeywordItem,
@@ -134,10 +136,29 @@ export async function updateRadarSettings(
 
 export async function toggleRadar(
   uploadPeriod?: RadarStatusResponse["upload_period"],
+  searchQuery?: string,
+  blacklistWords?: string[],
 ): Promise<RadarStatusResponse> {
-  const { data } = await api.post<RadarStatusResponse>("/api/radar/toggle", {
-    upload_period: uploadPeriod,
-  });
+  const body: {
+    upload_period?: RadarStatusResponse["upload_period"];
+    search_query?: string;
+    blacklist_words?: string[];
+  } = {};
+
+  if (uploadPeriod) {
+    body.upload_period = uploadPeriod;
+  }
+
+  const trimmedQuery = searchQuery?.trim();
+  if (trimmedQuery) {
+    body.search_query = trimmedQuery;
+  }
+
+  if (blacklistWords && blacklistWords.length > 0) {
+    body.blacklist_words = blacklistWords;
+  }
+
+  const { data } = await api.post<RadarStatusResponse>("/api/radar/toggle", body);
   return data;
 }
 
@@ -146,8 +167,22 @@ export async function clearExplosiveChannels(): Promise<ClearExplosiveChannelsRe
   return data;
 }
 
+export async function resetRadarQueue(): Promise<RadarResetResponse> {
+  const { data } = await api.post<RadarResetResponse>("/api/radar/reset");
+  return data;
+}
+
 export async function fetchRadarStats(): Promise<RadarStatsResponse> {
   const { data } = await api.get<RadarStatsResponse>("/api/radar-stats");
+  return data;
+}
+
+export async function generateRadarIdeas(
+  videoTitles: string[],
+): Promise<RadarGenerateIdeasResponse> {
+  const { data } = await api.post<RadarGenerateIdeasResponse>("/api/radar/generate-ideas", {
+    video_titles: videoTitles,
+  });
   return data;
 }
 

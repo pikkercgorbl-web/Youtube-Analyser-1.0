@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import logging
 import re
 
@@ -20,7 +21,8 @@ from app.integrations.youtube.client import (
 )
 from app.models.db import SessionLocal
 from app.models.orm import ExplosiveChannel, ExplosiveChannelSettings
-from app.services.metrics import utc_now
+from app.services.metrics import calc_vph, utc_now
+from app.services.video_filter_service import parse_relative_published_date
 
 logger = logging.getLogger(__name__)
 
@@ -133,6 +135,20 @@ def passes_upload_date_text_filter(upload_date_text: str, upload_period: str) ->
 def reject_upload_date_text(upload_date_text: str, upload_period: str) -> bool:
     """Return True when the video should be rejected for being too old."""
     return not passes_upload_date_text_filter(upload_date_text, upload_period)
+
+
+def calc_vph_from_published_text(views_count: int, published_text: str) -> float | None:
+    published_at = parse_relative_published_date(published_text)
+    if published_at <= datetime.min.replace(tzinfo=timezone.utc):
+        return None
+    return round(calc_vph(views_count, published_at), 2)
+
+
+def title_matches_blacklist(title: str, blacklist_words: list[str] | None) -> bool:
+    if not blacklist_words:
+        return False
+    lowered = title.casefold()
+    return any(word.casefold() in lowered for word in blacklist_words if word.strip())
 
 
 @dataclass(frozen=True, slots=True)
@@ -313,6 +329,7 @@ class ExplosiveChannelsService:
         log_rejections: bool = False,
         filter_title_language: bool = False,
         upload_period: str | None = None,
+        blacklist_words: list[str] | None = None,
     ) -> list[RadarChannelHit]:
         thresholds = self.get_thresholds(db)
         effective_upload_period = upload_period or self.get_upload_period(db)
@@ -347,6 +364,10 @@ class ExplosiveChannelsService:
                     xray_log(f"❌ [ОТКАЗ] Индийские символы в названии: {video.title}")
                     continue
 
+            if title_matches_blacklist(video.title, blacklist_words):
+                xray_log(f"❌ [ОТКАЗ] Минус-слово в названии: {video.title}")
+                continue
+
             raw_age = DEFAULT_CHANNEL_AGE_DAYS
             subscribers = max(channel.subscribers_count, 0)
             if not channel_metrics_usable(subscribers_count=subscribers):
@@ -375,6 +396,8 @@ class ExplosiveChannelsService:
                     rejection_logs += 1
                 continue
 
+            vph = calc_vph_from_published_text(video_views, video.published_text)
+
             hit = self._register_channel_video(
                 db,
                 thresholds,
@@ -389,6 +412,7 @@ class ExplosiveChannelsService:
                 representative_video_thumbnail=video.thumbnail_url,
                 representative_video_views=video_views,
                 representative_video_id=video.video_id,
+                vph=vph,
                 skip_qualify_check=True,
             )
             if hit is not None:
@@ -406,6 +430,7 @@ class ExplosiveChannelsService:
         filter_title_language: bool = False,
         upload_period: str | None = None,
         subscriber_fetch_delay_seconds: float = RADAR_SUBSCRIBER_FETCH_DELAY_SECONDS,
+        blacklist_words: list[str] | None = None,
     ) -> list[RadarChannelHit]:
         """
         Radar pipeline using search shelf data with a fast homepage fallback for subscribers.
@@ -452,6 +477,10 @@ class ExplosiveChannelsService:
                 ):
                     xray_log(f"❌ [ОТКАЗ] Индийские символы в названии: {video.title}")
                     continue
+
+            if title_matches_blacklist(video.title, blacklist_words):
+                xray_log(f"❌ [ОТКАЗ] Минус-слово в названии: {video.title}")
+                continue
 
             subscribers = max(video.subscribers_count, 0)
             channel_id = video.channel_id
@@ -502,6 +531,8 @@ class ExplosiveChannelsService:
                     rejection_logs += 1
                 continue
 
+            vph = calc_vph_from_published_text(video_views, video.published_text)
+
             hit = self._register_channel_video(
                 db,
                 thresholds,
@@ -516,6 +547,7 @@ class ExplosiveChannelsService:
                 representative_video_thumbnail=video.thumbnail_url,
                 representative_video_views=video_views,
                 representative_video_id=video.video_id,
+                vph=vph,
                 skip_qualify_check=True,
             )
             if hit is not None:
@@ -532,6 +564,7 @@ class ExplosiveChannelsService:
         for video in analysis.videos:
             video_views = max(video.views_count, 0)
             viral_coefficient = calc_virality_coefficient(video_views, subscribers)
+            vph = calc_vph_from_published_text(video_views, video.published_text)
             self._register_channel_video(
                 db,
                 thresholds,
@@ -546,6 +579,7 @@ class ExplosiveChannelsService:
                 representative_video_thumbnail=video.thumbnail_url,
                 representative_video_views=video_views,
                 representative_video_id=video.video_id,
+                vph=vph,
             )
         db.commit()
 
@@ -646,6 +680,7 @@ class ExplosiveChannelsService:
         representative_video_thumbnail: str,
         representative_video_views: int,
         representative_video_id: str = "",
+        vph: float | None = None,
         skip_qualify_check: bool = False,
     ) -> RadarChannelHit | None:
         if is_placeholder_channel(channel_id, channel_name):
@@ -675,6 +710,7 @@ class ExplosiveChannelsService:
                     representative_video_thumbnail=representative_video_thumbnail,
                     representative_video_views=representative_video_views,
                     representative_video_id=representative_video_id,
+                    vph=vph,
                     updated_at=now,
                 ),
             )
@@ -700,6 +736,7 @@ class ExplosiveChannelsService:
             existing.representative_video_thumbnail = representative_video_thumbnail
             existing.representative_video_views = representative_video_views
             existing.representative_video_id = representative_video_id
+            existing.vph = vph
             return RadarChannelHit(
                 channel_name=channel_name,
                 viral_coefficient=viral_coefficient,

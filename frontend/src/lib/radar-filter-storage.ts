@@ -18,6 +18,7 @@ const VALID_UPLOAD_PERIODS: RadarUploadPeriod[] = [
 const VALID_SORT_OPTIONS: ExplosiveChannelSortOption[] = [
   "viral_coefficient_desc",
   "video_views_desc",
+  "vph_desc",
 ];
 
 function canUseStorage(): boolean {

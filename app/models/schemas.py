@@ -5,7 +5,7 @@ from datetime import datetime
 
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.models.orm import CompetitionLevel
 
@@ -547,6 +547,7 @@ class ExplosiveChannelItem(BaseModel):
     representative_video_title: str = ""
     representative_video_thumbnail: str = ""
     representative_video_views: int = Field(ge=0)
+    vph: float | None = Field(default=None, ge=0)
     updated_at: datetime
 
 
@@ -584,6 +585,40 @@ class RadarToggleRequest(BaseModel):
     """Optional radar settings sent when toggling the loop."""
 
     upload_period: Literal["all", "month", "3_months", "6_months", "year"] | None = None
+    search_query: str | None = Field(
+        default=None,
+        max_length=256,
+        description="Manual one-shot keyword; empty means standard queue cycle",
+    )
+    blacklist_words: list[str] | None = Field(
+        default=None,
+        description="Minus-words: skip videos whose title contains any of these",
+    )
+
+    @field_validator("blacklist_words", mode="before")
+    @classmethod
+    def normalize_blacklist_words(cls, value: object) -> list[str] | None:
+        if value is None:
+            return None
+        if isinstance(value, str):
+            parts = [part.strip() for part in value.split(",") if part.strip()]
+            return parts or None
+        if isinstance(value, list):
+            parts = [str(part).strip() for part in value if str(part).strip()]
+            return parts or None
+        return None
+
+
+class RadarGenerateIdeasRequest(BaseModel):
+    """Video titles used as context for Gemini title ideation."""
+
+    video_titles: list[str] = Field(min_length=1, max_length=50)
+
+
+class RadarGenerateIdeasResponse(BaseModel):
+    """AI-generated clickable video title ideas."""
+
+    ideas: list[str] = Field(default_factory=list)
 
 
 class RadarSettingsUpdate(BaseModel):
@@ -604,6 +639,16 @@ class RadarStatsResponse(BaseModel):
 
     total_keywords: int = Field(ge=0)
     checked_today: int = Field(ge=0)
+
+
+class RadarResetResponse(BaseModel):
+    """Result of resetting the radar keyword queue to the beginning."""
+
+    status: str = "ok"
+    message: str = (
+        "Очередь радара сброшена — следующий цикл начнётся с первого ключевого слова"
+    )
+    total_keywords: int = Field(ge=0)
 
 
 class SavedKeywordCreate(BaseModel):
