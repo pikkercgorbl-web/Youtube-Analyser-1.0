@@ -22,7 +22,7 @@ import {
   toggleRadar,
   updateRadarSettings,
 } from "@/lib/api";
-import { filterRuEnExplosiveChannels, sortExplosiveChannels, youtubeVideoUrl } from "@/lib/explosive-channels";
+import { filterRuEnExplosiveChannels, sortExplosiveChannels } from "@/lib/explosive-channels";
 import {
   RADAR_FILTER_STORAGE_KEYS,
   hasStoredUploadPeriod,
@@ -662,72 +662,7 @@ export default function ExplosiveChannelsPage() {
 
           <div
             className={cn(
-              "hidden overflow-x-auto rounded-xl border border-border/60 lg:block",
-              (isRefreshing || isScanning) && "opacity-60",
-            )}
-          >
-            <table className="w-full min-w-[900px] text-left text-sm">
-              <thead className="border-b border-border/60 bg-muted/30 text-xs uppercase tracking-wide text-muted-foreground">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Канал</th>
-                  <th className="px-4 py-3 font-medium">Видео</th>
-                  <th className="px-4 py-3 font-medium text-right">Подписчики</th>
-                  <th className="px-4 py-3 font-medium text-right">Просмотры</th>
-                  <th className="px-4 py-3 font-medium text-right">VPH</th>
-                  <th className="px-4 py-3 font-medium text-right">Виральность</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visibleChannels.map((channel) => {
-                  const videoHref = channel.video_id
-                    ? youtubeVideoUrl(channel.video_id)
-                    : null;
-                  return (
-                    <tr
-                      key={channel.channel_id}
-                      className="border-b border-border/40 transition-colors hover:bg-muted/20"
-                    >
-                      <td className="px-4 py-3 font-medium">{channel.channel_name}</td>
-                      <td className="max-w-xs px-4 py-3">
-                        {videoHref ? (
-                          <a
-                            href={videoHref}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="line-clamp-2 text-primary hover:underline"
-                          >
-                            {channel.representative_video_title || "Без названия"}
-                          </a>
-                        ) : (
-                          <span className="line-clamp-2">
-                            {channel.representative_video_title || "Без названия"}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-right tabular-nums">
-                        {formatCompactNumber(channel.subscribers)}
-                      </td>
-                      <td className="px-4 py-3 text-right tabular-nums">
-                        {formatCompactNumber(channel.representative_video_views)}
-                      </td>
-                      <td className="px-4 py-3 text-right tabular-nums font-semibold text-indigo-300">
-                        {channel.vph != null && channel.vph > 0
-                          ? `${formatCompactNumber(channel.vph)}/ч`
-                          : "—"}
-                      </td>
-                      <td className="px-4 py-3 text-right tabular-nums text-primary">
-                        {channel.viral_coefficient.toFixed(1)}×
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          <div
-            className={cn(
-              "grid grid-cols-1 gap-5 transition-opacity md:grid-cols-2 lg:hidden",
+              "grid grid-cols-1 gap-5 transition-opacity md:grid-cols-2 lg:grid-cols-3",
               (isRefreshing || isScanning) && "opacity-60",
             )}
           >
