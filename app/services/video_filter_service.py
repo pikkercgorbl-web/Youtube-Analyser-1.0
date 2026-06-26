@@ -83,8 +83,6 @@ class VideoFilterService:
     - ``virality_only_above_one`` (bool): keep only ``virality_coefficient > 1.0``
     - ``virality_min``, ``virality_max`` (float)
     - ``views_min``, ``views_max`` (int): video views
-    - ``plus_words``, ``minus_words`` (list[str]): case-insensitive title match
-    - ``hide_verified``, ``hide_artist``, ``hide_kids`` (bool): channel flags
     - ``subscribers_min``, ``subscribers_max`` (int): channel subscribers
     - ``channel_views_min``, ``channel_views_max`` (int): total channel views
     - ``channel_videos_min``, ``channel_videos_max`` (int): total videos on channel
@@ -105,35 +103,10 @@ class VideoFilterService:
         filtered = self._filter_by_duration(filtered, filters_config)
         filtered = self._filter_by_published_within(filtered, filters_config)
         filtered = self._filter_hieroglyphs(filtered, filters_config)
-        filtered = self._filter_channel_flags(filtered, filters_config)
         filtered = self._filter_virality_toggle(filtered, filters_config)
         filtered = self._filter_ranges(filtered, filters_config)
-        filtered = self._filter_plus_minus_words(filtered, filters_config)
 
         return filtered
-
-    def _filter_channel_flags(
-        self,
-        videos: list[EnrichedVideoModel],
-        filters_config: dict,
-    ) -> list[EnrichedVideoModel]:
-        hide_verified = bool(filters_config.get("hide_verified"))
-        hide_artist = bool(filters_config.get("hide_artist"))
-        hide_kids = bool(filters_config.get("hide_kids"))
-
-        if not (hide_verified or hide_artist or hide_kids):
-            return videos
-
-        result: list[EnrichedVideoModel] = []
-        for item in videos:
-            if hide_verified and item.channel.is_verified:
-                continue
-            if hide_artist and item.channel.is_artist:
-                continue
-            if hide_kids and getattr(item.channel, "is_kids", False):
-                continue
-            result.append(item)
-        return result
 
     def _filter_by_video_type(
         self,
@@ -257,33 +230,7 @@ class VideoFilterService:
                 "channel_videos_max",
             ):
                 continue
-            if not _matches_range(
-                item.channel.channel_age_days,
-                filters_config,
-                "channel_age_min",
-                "channel_age_max",
-            ):
-                continue
-            result.append(item)
-        return result
-
-    def _filter_plus_minus_words(
-        self,
-        videos: list[EnrichedVideoModel],
-        filters_config: dict,
-    ) -> list[EnrichedVideoModel]:
-        plus_words = _normalize_words(filters_config.get("plus_words"))
-        minus_words = _normalize_words(filters_config.get("minus_words"))
-
-        if not plus_words and not minus_words:
-            return videos
-
-        result: list[EnrichedVideoModel] = []
-        for item in videos:
-            title = item.video.title.lower()
-            if plus_words and not all(word in title for word in plus_words):
-                continue
-            if minus_words and any(word in title for word in minus_words):
+            if not _matches_channel_age(item.channel.channel_age_days, filters_config):
                 continue
             result.append(item)
         return result
@@ -426,6 +373,19 @@ def _relative_delta(amount: int, unit: str) -> timedelta:
     return timedelta()
 
 
+def _matches_channel_age(
+    channel_age_days: int | None,
+    config: dict,
+) -> bool:
+    min_value = config.get("channel_age_min")
+    max_value = config.get("channel_age_max")
+    if min_value is None and max_value is None:
+        return True
+    if channel_age_days is None:
+        return False
+    return _matches_range(channel_age_days, config, "channel_age_min", "channel_age_max")
+
+
 def _matches_range(
     value: float | int,
     config: dict,
@@ -441,9 +401,3 @@ def _matches_range(
     if max_value is not None and value > max_value:
         return False
     return True
-
-
-def _normalize_words(words: object) -> list[str]:
-    if not isinstance(words, list):
-        return []
-    return [word.strip().lower() for word in words if isinstance(word, str) and word.strip()]

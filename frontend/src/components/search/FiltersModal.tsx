@@ -5,13 +5,10 @@ import { SlidersHorizontal, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   DEFAULT_SEARCH_FILTERS,
   parseOptionalNumber,
-  parseWordsInput,
   type SearchFilters,
-  wordsToInputValue,
 } from "@/lib/search-filters";
 import { cn } from "@/lib/utils";
 
@@ -95,16 +92,12 @@ function RangeField({
 export function FiltersModal({ open, filters, onClose, onApply }: FiltersModalProps) {
   const [activeTab, setActiveTab] = useState<FiltersTab>("video");
   const [draft, setDraft] = useState<SearchFilters>(filters);
-  const [plusWordsText, setPlusWordsText] = useState(wordsToInputValue(filters.plus_words));
-  const [minusWordsText, setMinusWordsText] = useState(wordsToInputValue(filters.minus_words));
 
   useEffect(() => {
     if (!open) {
       return;
     }
     setDraft(filters);
-    setPlusWordsText(wordsToInputValue(filters.plus_words));
-    setMinusWordsText(wordsToInputValue(filters.minus_words));
     setActiveTab("video");
   }, [open, filters]);
 
@@ -117,18 +110,12 @@ export function FiltersModal({ open, filters, onClose, onApply }: FiltersModalPr
   }
 
   function handleApply() {
-    onApply({
-      ...draft,
-      plus_words: parseWordsInput(plusWordsText),
-      minus_words: parseWordsInput(minusWordsText),
-    });
+    onApply(draft);
     onClose();
   }
 
   function handleReset() {
     setDraft(DEFAULT_SEARCH_FILTERS);
-    setPlusWordsText("");
-    setMinusWordsText("");
   }
 
   return (
@@ -230,47 +217,9 @@ export function FiltersModal({ open, filters, onClose, onApply }: FiltersModalPr
                 onMinChange={(value) => updateDraft({ views_min: parseOptionalNumber(value) })}
                 onMaxChange={(value) => updateDraft({ views_max: parseOptionalNumber(value) })}
               />
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground">Плюс-слова в названии</label>
-                <Textarea
-                  value={plusWordsText}
-                  onChange={(event) => setPlusWordsText(event.target.value)}
-                  placeholder="python, tutorial, course"
-                  rows={2}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground">Минус-слова в названии</label>
-                <Textarea
-                  value={minusWordsText}
-                  onChange={(event) => setMinusWordsText(event.target.value)}
-                  placeholder="spam, clickbait"
-                  rows={2}
-                />
-              </div>
             </div>
           ) : (
             <div className="space-y-5">
-              <div className="grid gap-2 sm:grid-cols-2">
-                <FilterToggle
-                  label="Скрыть верифицированные каналы"
-                  checked={draft.hide_verified}
-                  onChange={(checked) => updateDraft({ hide_verified: checked })}
-                />
-                <FilterToggle
-                  label="Скрыть каналы артистов (OAC)"
-                  checked={draft.hide_artist}
-                  onChange={(checked) => updateDraft({ hide_artist: checked })}
-                />
-                <FilterToggle
-                  label="Скрыть детские каналы"
-                  checked={draft.hide_kids}
-                  onChange={(checked) => updateDraft({ hide_kids: checked })}
-                />
-              </div>
-
               <RangeField
                 label="Подписчики канала"
                 minValue={draft.subscribers_min?.toString() ?? ""}

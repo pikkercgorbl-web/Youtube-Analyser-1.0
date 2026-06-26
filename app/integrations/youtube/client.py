@@ -84,7 +84,8 @@ class ChannelDetailModel(BaseModel):
     subscribers_count: int = Field(default=0, ge=0)
     total_videos: int = Field(default=0, ge=0)
     total_views: int = Field(default=0, ge=0)
-    channel_age_days: int = Field(default=0, ge=0)
+    channel_age_days: int | None = Field(default=None, ge=0)
+    # Legacy channel flags — no longer used in search filters; candidate for removal.
     is_verified: bool = False
     is_artist: bool = False
     is_kids: bool = False
@@ -505,7 +506,22 @@ class YouTubeApiClient:
             },
         )
 
-        return _parse_channel_details([initial_response, about_response])
+        responses = [initial_response, about_response]
+        continuation_token = _extract_about_panel_continuation(initial_response)
+        if continuation_token:
+            try:
+                about_panel_response = await self._innertube_request(
+                    {
+                        "context": context,
+                        "continuation": continuation_token,
+                    },
+                )
+            except YouTubeApiError:
+                pass
+            else:
+                responses.append(about_panel_response)
+
+        return _parse_channel_details(responses)
 
     async def get_enriched_search_results(
         self,
@@ -764,7 +780,7 @@ class YouTubeApiClient:
             channel_title=resolved_title,
             subscribers_count=subscribers,
             channel_avatar_url=channel_details.channel_avatar_url,
-            channel_age_days=channel_details.channel_age_days,
+            channel_age_days=channel_details.channel_age_days or 0,
             total_views=channel_details.total_views,
             videos=enriched_videos,
         )
@@ -1818,6 +1834,15 @@ def _extract_search_continuation(payload: dict[str, Any]) -> str | None:
     return None
 
 
+def _extract_about_panel_continuation(payload: dict[str, Any]) -> str | None:
+    """Return continuation token for the channel About engagement panel."""
+    for panel in _iter_renderers(payload, "engagementPanelSectionListRenderer"):
+        token = _extract_search_continuation(panel)
+        if token:
+            return token
+    return None
+
+
 def _find_tab_params(payload: dict[str, Any], titles: tuple[str, ...]) -> str | None:
     """Find InnerTube browse ``params`` for a channel tab by localized title."""
     normalized_titles = {title.lower() for title in titles}
@@ -2214,12 +2239,13 @@ def _parse_channel_details(responses: list[dict[str, Any]]) -> ChannelDetailMode
     ) or _extract_total_views_from_about(responses)
 
     joined_text = _extract_joined_date_text(responses, all_texts)
+    channel_age_days = _channel_age_days(joined_text) if joined_text else None
 
     return ChannelDetailModel(
         subscribers_count=subscribers_count,
         total_videos=total_videos,
         total_views=total_views,
-        channel_age_days=_channel_age_days(joined_text),
+        channel_age_days=channel_age_days,
         is_verified=_has_badge(header, ("verified", "подтвержден")),
         is_artist=_has_badge(header, ("artist", "артист", "исполнитель")),
         channel_avatar_url=_extract_channel_avatar_url(header),
@@ -2299,6 +2325,12 @@ def _extract_joined_date_text(
     )
 
     for response in responses:
+        for renderer in _iter_renderers(response, "aboutChannelViewModel"):
+            for field in joined_field_names:
+                text = _text_from_node(renderer.get(field))
+                if text:
+                    return text
+
         for renderer_name in (
             "channelAboutFullMetadataRenderer",
             "aboutChannelRenderer",

@@ -63,11 +63,6 @@ function countAdvancedFilters(filters: SearchFilters): number {
   if (filters.virality_max !== null) count += 1;
   if (filters.views_min !== null) count += 1;
   if (filters.views_max !== null) count += 1;
-  if (filters.plus_words.length > 0) count += 1;
-  if (filters.minus_words.length > 0) count += 1;
-  if (filters.hide_verified) count += 1;
-  if (filters.hide_artist) count += 1;
-  if (filters.hide_kids) count += 1;
   if (filters.subscribers_min !== null) count += 1;
   if (filters.subscribers_max !== null) count += 1;
   if (filters.channel_views_min !== null) count += 1;

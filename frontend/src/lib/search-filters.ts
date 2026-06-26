@@ -9,12 +9,7 @@ export interface SearchFilters {
   virality_max: number | null;
   views_min: number | null;
   views_max: number | null;
-  plus_words: string[];
-  minus_words: string[];
   // Channel tab.
-  hide_verified: boolean;
-  hide_artist: boolean;
-  hide_kids: boolean;
   subscribers_min: number | null;
   subscribers_max: number | null;
   channel_views_min: number | null;
@@ -35,11 +30,6 @@ export const DEFAULT_SEARCH_FILTERS: SearchFilters = {
   virality_max: null,
   views_min: null,
   views_max: null,
-  plus_words: [],
-  minus_words: [],
-  hide_verified: false,
-  hide_artist: false,
-  hide_kids: false,
   subscribers_min: null,
   subscribers_max: null,
   channel_views_min: null,
@@ -49,6 +39,39 @@ export const DEFAULT_SEARCH_FILTERS: SearchFilters = {
   channel_age_min: null,
   channel_age_max: null,
 };
+
+/** Strip legacy/unknown keys when loading saved filter presets. */
+export function normalizeSearchFilters(value: unknown): SearchFilters {
+  const source = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+  return {
+    ...DEFAULT_SEARCH_FILTERS,
+    hide_shorts: Boolean(source.hide_shorts),
+    hide_regular: Boolean(source.hide_regular),
+    hide_streams: Boolean(source.hide_streams),
+    hide_hieroglyphs: Boolean(source.hide_hieroglyphs),
+    virality_only_above_one: Boolean(source.virality_only_above_one),
+    virality_min: parseStoredNumber(source.virality_min),
+    virality_max: parseStoredNumber(source.virality_max),
+    views_min: parseStoredNumber(source.views_min),
+    views_max: parseStoredNumber(source.views_max),
+    subscribers_min: parseStoredNumber(source.subscribers_min),
+    subscribers_max: parseStoredNumber(source.subscribers_max),
+    channel_views_min: parseStoredNumber(source.channel_views_min),
+    channel_views_max: parseStoredNumber(source.channel_views_max),
+    channel_videos_min: parseStoredNumber(source.channel_videos_min),
+    channel_videos_max: parseStoredNumber(source.channel_videos_max),
+    channel_age_min: parseStoredNumber(source.channel_age_min),
+    channel_age_max: parseStoredNumber(source.channel_age_max),
+  };
+}
+
+function parseStoredNumber(value: unknown): number | null {
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
 
 export type VideoTypeOption = "all" | "shorts" | "regular";
 export type UploadDateOption = "any" | "hour" | "24h" | "week" | "month" | "year";
@@ -132,17 +155,6 @@ export function buildSearchPayload(
     },
     sort_by: SORT_BY_API_MAP[base.sortBy],
   };
-}
-
-export function parseWordsInput(value: string): string[] {
-  return value
-    .split(/[\n,]+/)
-    .map((word) => word.trim())
-    .filter(Boolean);
-}
-
-export function wordsToInputValue(words: string[]): string {
-  return words.join(", ");
 }
 
 export function parseOptionalNumber(value: string): number | null {

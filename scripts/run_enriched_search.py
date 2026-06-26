@@ -45,8 +45,6 @@ async def run_pipeline(
         "hide_hieroglyphs": False,
         "virality_only_above_one": False,
         "virality_min": 0.0,
-        "plus_words": [],
-        "minus_words": [],
     }
     filtered = filter_service.apply_filters(enriched, filters_config)
     sorted_videos = filter_service.sort_results(filtered, sort_by)

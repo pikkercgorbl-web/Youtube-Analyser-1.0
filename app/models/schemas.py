@@ -420,13 +420,8 @@ class SearchFiltersModel(BaseModel):
     virality_max: float | None = Field(default=None, ge=0)
     views_min: int | None = Field(default=None, ge=0)
     views_max: int | None = Field(default=None, ge=0)
-    plus_words: list[str] = Field(default_factory=list)
-    minus_words: list[str] = Field(default_factory=list)
 
     # Advanced filters (rendered inside the modal) — channel tab.
-    hide_verified: bool = False
-    hide_artist: bool = False
-    hide_kids: bool = False
     subscribers_min: int | None = Field(default=None, ge=0)
     subscribers_max: int | None = Field(default=None, ge=0)
     channel_views_min: int | None = Field(default=None, ge=0)
