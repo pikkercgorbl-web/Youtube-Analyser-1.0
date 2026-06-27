@@ -97,7 +97,6 @@ export default function ExplosiveChannelsPage() {
   const [radarSearchQuery, setRadarSearchQuery] = useState("");
   const [radarSuggestions, setRadarSuggestions] = useState<string[]>([]);
   const [showRadarSuggestions, setShowRadarSuggestions] = useState(false);
-  const [blacklistWordsInput, setBlacklistWordsInput] = useState("");
   const [aiModalOpen, setAiModalOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
@@ -270,13 +269,7 @@ export default function ExplosiveChannelsPage() {
 
     try {
       const manualQuery = !isRadarRunning ? radarSearchQuery.trim() : undefined;
-      const blacklistWords = !isRadarRunning
-        ? blacklistWordsInput
-            .split(",")
-            .map((word) => word.trim())
-            .filter(Boolean)
-        : undefined;
-      const status = await toggleRadar(uploadPeriod, manualQuery, blacklistWords, {
+      const status = await toggleRadar(uploadPeriod, manualQuery, undefined, {
         exclude_streams: excludeStreams,
         exclude_shorts: excludeShorts,
         exclude_videos: excludeVideos,
@@ -427,7 +420,7 @@ export default function ExplosiveChannelsPage() {
             <div className="relative w-full sm:min-w-[220px] sm:flex-1">
               <Input
                 type="text"
-                placeholder="Введите слово или оставьте пустым"
+                placeholder="Введите слово для поиска"
                 value={radarSearchQuery}
                 onChange={(event) => {
                   const value = event.target.value;
@@ -473,16 +466,6 @@ export default function ExplosiveChannelsPage() {
                 </ul>
               ) : null}
             </div>
-
-            <Input
-              type="text"
-              placeholder="Минус-слова (через запятую)"
-              value={blacklistWordsInput}
-              onChange={(event) => setBlacklistWordsInput(event.target.value)}
-              disabled={isScanning || isRadarRunning || radarStatusLoading}
-              className="w-full sm:min-w-[220px] sm:flex-1"
-              maxLength={512}
-            />
 
             <Select
               label="Период загрузки видео"

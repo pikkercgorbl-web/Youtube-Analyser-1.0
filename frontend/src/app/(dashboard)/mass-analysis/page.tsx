@@ -47,11 +47,11 @@ export default function MassAnalysisPage() {
       <header>
         <div className="flex items-center gap-2">
           <Users className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold tracking-tight">Массовый анализ</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Outlier-анализ видео</h1>
         </div>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Вставьте от 3 до 20 ссылок на YouTube-каналы конкурентов — система загрузит последние 30 видео
-          и покажет трендовые темы.
+          Вставьте от 3 до 20 ссылок на YouTube-каналы конкурентов — система загрузит последние 30 видео,
+          сравнит каждое видео со средними просмотрами канала и покажет самые аномально популярные ролики.
         </p>
       </header>
 
@@ -95,7 +95,7 @@ export default function MassAnalysisPage() {
       {!loading && !error && !result && (
         <StateMessage
           title="Добавьте каналы конкурентов"
-          description="Вставьте 3–20 ссылок и запустите анализ, чтобы увидеть таблицу трендовых тем."
+          description="Вставьте 3–20 ссылок и запустите анализ, чтобы увидеть единую ленту outlier-видео."
         />
       )}
     </div>

@@ -209,7 +209,7 @@ class MassAnalysisRequest(BaseModel):
         max_length=20,
         description="3–20 YouTube channel IDs or URLs",
     )
-    videos_per_channel: int = Field(default=30, ge=1, le=50)
+    videos_per_channel: int = Field(default=30, ge=1, le=30)
 
 
 class DimensionAggregate(BaseModel):
@@ -234,21 +234,28 @@ class ChannelAnalysisSummary(BaseModel):
     avg_vph: float
 
 
+class MassAnalysisVideoItem(BaseModel):
+    """Single outlier video returned by competitor mass analysis."""
+
+    channel_name: str
+    channel_url: str
+    channel_avatar: str = ""
+    video_title: str
+    video_url: str
+    views: int = Field(ge=0)
+    channel_average_views: int = Field(ge=0)
+    outlier_score: float = Field(ge=0)
+    published_at: str
+
+
 class MassAnalysisResponse(BaseModel):
-    """Aggregated competitor analysis across multiple channels."""
+    """Outlier video feed across multiple competitor channels."""
 
     channels_requested: int
     channels_found: int
     channels_not_found: list[str]
     total_videos_analyzed: int
-    channels: list[ChannelAnalysisSummary]
-    top_by_avg_views: list[DimensionAggregate]
-    top_by_avg_vph: list[DimensionAggregate]
-    top_by_total_views: list[DimensionAggregate]
-    by_format: list[DimensionAggregate]
-    by_topic: list[DimensionAggregate]
-    by_tag: list[DimensionAggregate]
-    by_title_keyword: list[DimensionAggregate]
+    videos: list[MassAnalysisVideoItem]
 
 
 class ChannelGrowthLeader(BaseModel):

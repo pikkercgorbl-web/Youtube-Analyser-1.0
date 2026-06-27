@@ -69,6 +69,8 @@ export async function runMassAnalysis(
   const { data } = await api.post<MassAnalysisResponse>("/api/analysis/mass", {
     channel_refs: channelRefs,
     videos_per_channel: videosPerChannel,
+  }, {
+    timeout: 300_000,
   });
   return data;
 }

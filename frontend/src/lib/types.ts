@@ -40,20 +40,17 @@ export interface MassAnalysisResponse {
   channels_found: number;
   channels_not_found: string[];
   total_videos_analyzed: number;
-  channels: {
-    channel_id: string;
-    channel_title: string;
-    videos_analyzed: number;
-    total_views: number;
-    avg_vph: number;
+  videos: {
+    channel_name: string;
+    channel_url: string;
+    channel_avatar: string;
+    video_title: string;
+    video_url: string;
+    views: number;
+    channel_average_views: number;
+    outlier_score: number;
+    published_at: string;
   }[];
-  top_by_avg_views: DimensionAggregate[];
-  top_by_avg_vph: DimensionAggregate[];
-  top_by_total_views: DimensionAggregate[];
-  by_format: DimensionAggregate[];
-  by_topic: DimensionAggregate[];
-  by_tag: DimensionAggregate[];
-  by_title_keyword: DimensionAggregate[];
 }
 
 export type CompetitionLevel = "low" | "medium" | "high";

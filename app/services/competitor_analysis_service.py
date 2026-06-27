@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from typing import Iterable
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -16,6 +17,7 @@ from app.models.schemas import (
     ChannelGrowthLeader,
     DimensionAggregate,
     MassAnalysisResponse,
+    MassAnalysisVideoItem,
     YouTubeLeadersResponse,
 )
 from app.services.metrics import (
@@ -98,6 +100,19 @@ def _aggregate_dimension(
         )
 
     return aggregates
+
+
+def _average_views(values: Iterable[int]) -> int:
+    view_counts = [max(value, 0) for value in values]
+    if not view_counts:
+        return 0
+    return round(sum(view_counts) / len(view_counts))
+
+
+def _outlier_score(views_count: int, average_views: int) -> float:
+    if average_views <= 0:
+        return 0.0
+    return round(max(views_count, 0) / average_views, 1)
 
 
 class CompetitorAnalysisService:
@@ -229,8 +244,7 @@ class CompetitorAnalysisService:
         videos_per_channel: int,
     ) -> MassAnalysisResponse:
         assert self._youtube is not None
-        now = utc_now()
-        channel_rows: list[tuple[str, str, list[VideoMetricRow]]] = []
+        outlier_videos: list[MassAnalysisVideoItem] = []
         failed_channels: list[str] = []
 
         for ref in channel_refs:
@@ -253,6 +267,7 @@ class CompetitorAnalysisService:
                     max_results=videos_per_channel,
                 )
                 resolved_title = channel_title or title_hint or channel_id
+                channel_url = f"https://www.youtube.com/channel/{channel_id}"
 
                 self._upsert_channel_innertube(
                     channel_id,
@@ -262,24 +277,33 @@ class CompetitorAnalysisService:
 
                 analyzed_videos = [self._from_browse_video(video) for video in browse_videos]
                 self._upsert_browse_videos(channel_id, analyzed_videos)
+                average_views = _average_views(video.views_count for video in analyzed_videos)
 
-                metric_rows = [
-                    VideoMetricRow(
-                        video=video,
-                        vph=calc_vph(video.views_count, video.published_at, now=now),
+                outlier_videos.extend(
+                    MassAnalysisVideoItem(
+                        channel_name=resolved_title,
+                        channel_url=channel_url,
+                        channel_avatar=channel_details.channel_avatar_url,
+                        video_title=video.title,
+                        video_url=f"https://www.youtube.com/watch?v={video.video_id}",
+                        views=video.views_count,
+                        channel_average_views=average_views,
+                        outlier_score=_outlier_score(video.views_count, average_views),
+                        published_at=browse_video.published_text or video.published_at.isoformat(),
                     )
-                    for video in analyzed_videos
-                ]
-                channel_rows.append((channel_id, resolved_title, metric_rows))
+                    for video, browse_video in zip(analyzed_videos, browse_videos, strict=False)
+                )
             except Exception as exc:
                 print(f"❌ Ошибка загрузки канала [{identifier}]: [{exc}]")
                 failed_channels.append(ref)
 
         self._db.commit()
-        return self._build_mass_response(
-            channel_refs=channel_refs,
-            channel_rows=channel_rows,
-            not_found=failed_channels,
+        return MassAnalysisResponse(
+            channels_requested=len(channel_refs),
+            channels_found=len(channel_refs) - len(failed_channels),
+            channels_not_found=failed_channels,
+            total_videos_analyzed=len(outlier_videos),
+            videos=sorted(outlier_videos, key=lambda item: item.outlier_score, reverse=True),
         )
 
     def _mass_analyze_from_db(
@@ -288,8 +312,7 @@ class CompetitorAnalysisService:
         *,
         videos_per_channel: int,
     ) -> MassAnalysisResponse:
-        now = utc_now()
-        channel_rows: list[tuple[str, str, list[VideoMetricRow]]] = []
+        outlier_videos: list[MassAnalysisVideoItem] = []
         failed_channels: list[str] = []
 
         for ref in channel_refs:
@@ -310,19 +333,28 @@ class CompetitorAnalysisService:
                 continue
 
             videos = self._fetch_recent_videos(channel.id, limit=videos_per_channel)
-            metric_rows = [
-                VideoMetricRow(
-                    video=self._from_db_video(video),
-                    vph=calc_vph(video.views_count, video.published_at, now=now),
+            average_views = _average_views(video.views_count for video in videos)
+            outlier_videos.extend(
+                MassAnalysisVideoItem(
+                    channel_name=channel.title,
+                    channel_url=f"https://www.youtube.com/channel/{channel.id}",
+                    channel_avatar="",
+                    video_title=video.title,
+                    video_url=f"https://www.youtube.com/watch?v={video.id}",
+                    views=video.views_count,
+                    channel_average_views=average_views,
+                    outlier_score=_outlier_score(video.views_count, average_views),
+                    published_at=video.published_at.isoformat(),
                 )
                 for video in videos
-            ]
-            channel_rows.append((channel.id, channel.title, metric_rows))
+            )
 
-        return self._build_mass_response(
-            channel_refs=channel_refs,
-            channel_rows=channel_rows,
-            not_found=failed_channels,
+        return MassAnalysisResponse(
+            channels_requested=len(channel_refs),
+            channels_found=len(channel_refs) - len(failed_channels),
+            channels_not_found=failed_channels,
+            total_videos_analyzed=len(outlier_videos),
+            videos=sorted(outlier_videos, key=lambda item: item.outlier_score, reverse=True),
         )
 
     def _build_mass_response(
@@ -332,61 +364,29 @@ class CompetitorAnalysisService:
         channel_rows: list[tuple[str, str, list[VideoMetricRow]]],
         not_found: list[str],
     ) -> MassAnalysisResponse:
-        all_rows = [row for _, _, rows in channel_rows for row in rows]
-
-        by_format = _aggregate_dimension(
-            all_rows,
-            dimension_type="format",
-            keys_for_video=lambda video: infer_video_format(
-                duration_seconds=video.duration_seconds,
-                content_format=video.content_format,
-            ).value,
-        )
-        by_topic = _aggregate_dimension(
-            all_rows,
-            dimension_type="topic",
-            keys_for_video=lambda video: video.topic or "unknown",
-        )
-        by_tag = _aggregate_dimension(
-            all_rows,
-            dimension_type="tag",
-            keys_for_video=lambda video: [_normalize_tag(tag) for tag in video.tags] or ["untagged"],
-        )
-        by_title_keyword = _aggregate_dimension(
-            all_rows,
-            dimension_type="title_keyword",
-            keys_for_video=lambda video: extract_title_keywords(video.title) or ["untitled"],
-        )
-
-        all_dimensions = by_format + by_topic + by_tag + by_title_keyword
-        top_by_avg_views = sorted(all_dimensions, key=lambda item: item.avg_views, reverse=True)[:15]
-        top_by_avg_vph = sorted(all_dimensions, key=lambda item: item.avg_vph, reverse=True)[:15]
-        top_by_total_views = sorted(all_dimensions, key=lambda item: item.total_views, reverse=True)[:15]
-
-        channel_summaries = [
-            ChannelAnalysisSummary(
-                channel_id=channel_id,
-                channel_title=channel_title,
-                videos_analyzed=len(rows),
-                total_views=sum(row.video.views_count for row in rows),
-                avg_vph=(sum(row.vph for row in rows) / len(rows)) if rows else 0.0,
+        outlier_videos: list[MassAnalysisVideoItem] = []
+        for channel_id, channel_title, rows in channel_rows:
+            average_views = _average_views(row.video.views_count for row in rows)
+            outlier_videos.extend(
+                MassAnalysisVideoItem(
+                    channel_name=channel_title,
+                    channel_url=f"https://www.youtube.com/channel/{channel_id}",
+                    channel_avatar="",
+                    video_title=row.video.title,
+                    video_url=f"https://www.youtube.com/watch?v={row.video.video_id}",
+                    views=row.video.views_count,
+                    channel_average_views=average_views,
+                    outlier_score=_outlier_score(row.video.views_count, average_views),
+                    published_at=row.video.published_at.isoformat(),
+                )
+                for row in rows
             )
-            for channel_id, channel_title, rows in channel_rows
-        ]
-
         return MassAnalysisResponse(
             channels_requested=len(channel_refs),
             channels_found=len(channel_rows),
             channels_not_found=not_found,
-            total_videos_analyzed=len(all_rows),
-            channels=sorted(channel_summaries, key=lambda item: item.avg_vph, reverse=True),
-            top_by_avg_views=top_by_avg_views,
-            top_by_avg_vph=top_by_avg_vph,
-            top_by_total_views=top_by_total_views,
-            by_format=sorted(by_format, key=lambda item: item.avg_views, reverse=True),
-            by_topic=sorted(by_topic, key=lambda item: item.avg_views, reverse=True),
-            by_tag=sorted(by_tag, key=lambda item: item.avg_views, reverse=True),
-            by_title_keyword=sorted(by_title_keyword, key=lambda item: item.avg_views, reverse=True),
+            total_videos_analyzed=len(outlier_videos),
+            videos=sorted(outlier_videos, key=lambda item: item.outlier_score, reverse=True),
         )
 
     def _upsert_channel(self, channel_details) -> None:

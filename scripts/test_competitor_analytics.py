@@ -97,10 +97,10 @@ def main() -> None:
     mass = service.mass_analyze(refs, videos_per_channel=50)
     assert mass.channels_found == 10
     assert mass.total_videos_analyzed == 30
-    assert mass.by_format
-    assert mass.by_title_keyword
-    assert mass.top_by_avg_views[0].avg_views >= mass.top_by_avg_views[-1].avg_views
-    assert mass.top_by_avg_vph[0].avg_vph >= mass.top_by_avg_vph[-1].avg_vph
+    assert mass.videos
+    assert mass.videos[0].video_url.startswith("https://www.youtube.com/watch?v=")
+    assert mass.videos[0].channel_url.startswith("https://www.youtube.com/channel/")
+    assert mass.videos[0].outlier_score >= mass.videos[-1].outlier_score
 
     growing = db.get(Channel, "UC0000000000000000000001")
     assert growing is not None

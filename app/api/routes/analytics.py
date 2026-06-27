@@ -26,8 +26,7 @@ async def mass_analysis(
     """
     Mass Analysis: fetch the last 30 videos from 3–20 competitor channels via InnerTube.
 
-    Aggregates formats, topics, tags, and title keywords with average views and VPH
-    to highlight what drives the strongest real-time traffic.
+    Returns a single outlier feed sorted by video_views / channel_average_views.
     """
     try:
         return await service.mass_analyze_async(
