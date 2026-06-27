@@ -138,11 +138,13 @@ export async function updateRadarSettings(
 export async function toggleRadar(
   uploadPeriod?: RadarStatusResponse["upload_period"],
   searchQuery?: string,
+  blacklistWords?: string[],
   contentFormat?: RadarContentFormatOptions,
 ): Promise<RadarStatusResponse> {
   const body: {
     upload_period?: RadarStatusResponse["upload_period"];
     search_query?: string;
+    blacklist_words?: string[];
     exclude_streams?: boolean;
     exclude_shorts?: boolean;
     exclude_videos?: boolean;
@@ -155,6 +157,10 @@ export async function toggleRadar(
   const trimmedQuery = searchQuery?.trim();
   if (trimmedQuery) {
     body.search_query = trimmedQuery;
+  }
+
+  if (blacklistWords && blacklistWords.length > 0) {
+    body.blacklist_words = blacklistWords;
   }
 
   if (contentFormat?.exclude_streams) {

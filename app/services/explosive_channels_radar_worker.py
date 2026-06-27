@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 
 is_radar_running = False
 radar_upload_period = DEFAULT_UPLOAD_PERIOD
+_radar_blacklist_words: list[str] = []
 _radar_content_filters = RadarContentFormatFilters()
 _radar_loop_task: asyncio.Task[None] | None = None
 _shared_worker: ExplosiveChannelsRadarWorker | None = None
@@ -48,6 +49,15 @@ def radar_log(message: str) -> None:
     """Write radar progress to terminal and application logs."""
     print(message, flush=True)
     logger.info(message)
+
+
+def set_radar_blacklist_words(words: list[str] | None) -> None:
+    global _radar_blacklist_words
+    _radar_blacklist_words = [word.strip() for word in (words or []) if word.strip()]
+
+
+def get_radar_blacklist_words() -> list[str]:
+    return list(_radar_blacklist_words)
 
 
 def set_radar_content_filters(
@@ -420,6 +430,7 @@ class ExplosiveChannelsRadarWorker:
                         log_rejections=True,
                         filter_title_language=True,
                         upload_period=upload_period,
+                        blacklist_words=get_radar_blacklist_words(),
                         subscriber_cache=subscriber_cache,
                     )
                     self._log_hits(result.hits)

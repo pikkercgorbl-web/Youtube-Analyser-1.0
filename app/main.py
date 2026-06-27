@@ -221,7 +221,7 @@ async def analyze_channel(body: AnalyzeChannelRequest) -> AnalyzeChannelResponse
 
 @app.get("/api/keyword-research", response_model=KeywordResearchResponse, tags=["keywords"])
 async def keyword_research(
-    query: str = Query(..., min_length=1, max_length=256, description="Keyword or search query"),
+    query: str = Query(..., min_length=1, max_length=512, description="Keyword or search query"),
 ) -> KeywordResearchResponse:
     """SEO keyword research: main query and related suggestions with volume and competition scores."""
     service = KeywordResearchService()

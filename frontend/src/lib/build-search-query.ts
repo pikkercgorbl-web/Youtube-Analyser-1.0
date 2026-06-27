@@ -1,4 +1,3 @@
-/** Split comma-separated tokens and trim whitespace. */
 function parseCommaTokens(value: string): string[] {
   return value
     .split(",")
@@ -8,7 +7,8 @@ function parseCommaTokens(value: string): string[] {
 
 /**
  * Build a YouTube search query with native plus/minus operators.
- * Example: "роблокс", plus "кликер", minus "стрим, шортс" → "роблокс кликер -стрим -шортс".
+ * Example: "k pop", "tutorial, обзор", "minecraft, free, shorts"
+ * → "k pop tutorial обзор -minecraft -free -shorts"
  */
 export function buildYouTubeSearchQuery(
   baseQuery: string,
@@ -21,13 +21,10 @@ export function buildYouTubeSearchQuery(
     parts.push(base);
   }
 
-  for (const token of parseCommaTokens(plusWordsRaw)) {
-    parts.push(token);
-  }
+  parts.push(...parseCommaTokens(plusWordsRaw));
 
   for (const token of parseCommaTokens(minusWordsRaw)) {
-    const normalized = token.startsWith("-") ? token : `-${token}`;
-    parts.push(normalized);
+    parts.push(token.startsWith("-") ? token : `-${token}`);
   }
 
   return parts.join(" ").trim();

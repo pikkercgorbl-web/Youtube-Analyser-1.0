@@ -24,7 +24,6 @@ import {
   toggleRadar,
   updateRadarSettings,
 } from "@/lib/api";
-import { buildYouTubeSearchQuery } from "@/lib/build-search-query";
 import { filterRuEnExplosiveChannels, sortExplosiveChannels } from "@/lib/explosive-channels";
 import {
   RADAR_FILTER_STORAGE_KEYS,
@@ -98,8 +97,7 @@ export default function ExplosiveChannelsPage() {
   const [radarSearchQuery, setRadarSearchQuery] = useState("");
   const [radarSuggestions, setRadarSuggestions] = useState<string[]>([]);
   const [showRadarSuggestions, setShowRadarSuggestions] = useState(false);
-  const [plusWordsInput, setPlusWordsInput] = useState("");
-  const [minusWordsInput, setMinusWordsInput] = useState("");
+  const [blacklistWordsInput, setBlacklistWordsInput] = useState("");
   const [aiModalOpen, setAiModalOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
@@ -271,10 +269,14 @@ export default function ExplosiveChannelsPage() {
     setShowRadarSuggestions(false);
 
     try {
-      const manualQuery = !isRadarRunning
-        ? buildYouTubeSearchQuery(radarSearchQuery, plusWordsInput, minusWordsInput)
+      const manualQuery = !isRadarRunning ? radarSearchQuery.trim() : undefined;
+      const blacklistWords = !isRadarRunning
+        ? blacklistWordsInput
+            .split(",")
+            .map((word) => word.trim())
+            .filter(Boolean)
         : undefined;
-      const status = await toggleRadar(uploadPeriod, manualQuery || undefined, {
+      const status = await toggleRadar(uploadPeriod, manualQuery, blacklistWords, {
         exclude_streams: excludeStreams,
         exclude_shorts: excludeShorts,
         exclude_videos: excludeVideos,
@@ -474,22 +476,12 @@ export default function ExplosiveChannelsPage() {
 
             <Input
               type="text"
-              placeholder="Плюс-слова (через запятую)"
-              value={plusWordsInput}
-              onChange={(event) => setPlusWordsInput(event.target.value)}
-              disabled={isScanning || isRadarRunning || radarStatusLoading}
-              className="w-full sm:min-w-[220px] sm:flex-1"
-              maxLength={256}
-            />
-
-            <Input
-              type="text"
               placeholder="Минус-слова (через запятую)"
-              value={minusWordsInput}
-              onChange={(event) => setMinusWordsInput(event.target.value)}
+              value={blacklistWordsInput}
+              onChange={(event) => setBlacklistWordsInput(event.target.value)}
               disabled={isScanning || isRadarRunning || radarStatusLoading}
               className="w-full sm:min-w-[220px] sm:flex-1"
-              maxLength={256}
+              maxLength={512}
             />
 
             <Select

@@ -15,13 +15,13 @@ import {
   X,
 } from "lucide-react";
 
+import { buildYouTubeSearchQuery } from "@/lib/build-search-query";
 import { fetchKeywordResearch, fetchSavedKeywords, saveSavedKeyword } from "@/lib/api";
 import type { KeywordResearchItem, KeywordResearchResponse, SavedKeywordItem } from "@/lib/types";
 import {
   cn,
   competitionLevelLabel,
   overallLevelLabel,
-  parseCommaWords,
 } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -97,19 +97,6 @@ function getItemsForTab(result: KeywordResearchResponse, tab: QueryTab): Keyword
   return merged;
 }
 
-function filterByWords(
-  items: KeywordResearchItem[],
-  plusWords: string[],
-  minusWords: string[],
-): KeywordResearchItem[] {
-  return items.filter((item) => {
-    const lower = item.keyword.toLowerCase();
-    if (minusWords.some((word) => lower.includes(word))) return false;
-    if (plusWords.length === 0) return true;
-    return plusWords.every((word) => lower.includes(word));
-  });
-}
-
 function sortItems(items: KeywordResearchItem[], sortBy: SortOption): KeywordResearchItem[] {
   const sorted = [...items];
   switch (sortBy) {
@@ -164,28 +151,34 @@ export function KeywordResearchDashboard() {
     setHistoryDates(readHistoryDates());
   }, [loadHistory]);
 
-  const runAnalysis = useCallback(async (keyword: string) => {
-    const trimmed = keyword.trim();
-    if (!trimmed) return;
+  const runAnalysis = useCallback(
+    async (keyword: string) => {
+      const baseKeyword = keyword.trim();
+      if (!baseKeyword) return;
 
-    setActiveKeyword(trimmed);
-    setLoading(true);
-    setError(null);
-    setResult(null);
-    setSelectedKeywords(new Set());
-    touchHistoryDate(trimmed);
-    setHistoryDates(readHistoryDates());
+      const finalQuery = buildYouTubeSearchQuery(baseKeyword, plusWordsRaw, minusWordsRaw);
+      if (!finalQuery) return;
 
-    try {
-      const data = await fetchKeywordResearch(trimmed);
-      setResult(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Ошибка анализа");
+      setActiveKeyword(baseKeyword);
+      setLoading(true);
+      setError(null);
       setResult(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      setSelectedKeywords(new Set());
+      touchHistoryDate(baseKeyword);
+      setHistoryDates(readHistoryDates());
+
+      try {
+        const data = await fetchKeywordResearch(finalQuery);
+        setResult(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Ошибка анализа");
+        setResult(null);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [plusWordsRaw, minusWordsRaw],
+  );
 
   const handleSave = async () => {
     if (!result) return;
@@ -193,7 +186,7 @@ export function KeywordResearchDashboard() {
     setSaveNotice(null);
     try {
       await saveSavedKeyword({
-        keyword: result.main_query.keyword,
+        keyword: activeKeyword,
         volume: result.main_query.volume,
         competition: result.main_query.competition,
         score: result.main_query.score,
@@ -207,15 +200,13 @@ export function KeywordResearchDashboard() {
     }
   };
 
-  const plusWords = useMemo(() => parseCommaWords(plusWordsRaw), [plusWordsRaw]);
-  const minusWords = useMemo(() => parseCommaWords(minusWordsRaw), [minusWordsRaw]);
+  const hasQueryModifiers = Boolean(plusWordsRaw.trim() || minusWordsRaw.trim());
 
-  const filteredRelated = useMemo(() => {
+  const displayedRelated = useMemo(() => {
     if (!result) return [];
     const tabbed = getItemsForTab(result, activeTab);
-    const wordFiltered = filterByWords(tabbed, plusWords, minusWords);
-    return sortItems(wordFiltered, sortBy);
-  }, [result, activeTab, plusWords, minusWords, sortBy]);
+    return sortItems(tabbed, sortBy);
+  }, [result, activeTab, sortBy]);
 
   const toggleSelect = (keyword: string) => {
     setSelectedKeywords((current) => {
@@ -360,9 +351,14 @@ export function KeywordResearchDashboard() {
                         <Skeleton className="h-8 w-full max-w-xs sm:max-w-sm" />
                       ) : (
                         <h1 className="truncate text-xl font-bold tracking-tight sm:text-2xl">
-                          {result?.main_query.keyword ?? activeKeyword}
+                          {activeKeyword}
                         </h1>
                       )}
+                      {hasQueryModifiers && result ? (
+                        <p className="mt-1 truncate text-sm text-muted-foreground">
+                          Запрос: {result.main_query.keyword}
+                        </p>
+                      ) : null}
                       {error ? <p className="mt-1 text-sm text-rose-400">{error}</p> : null}
                       {saveNotice ? (
                         <p className="mt-1 text-xs text-emerald-400">{saveNotice}</p>
@@ -389,8 +385,8 @@ export function KeywordResearchDashboard() {
                       variant="outline"
                       size="sm"
                       className="flex-1 sm:flex-none"
-                      onClick={() => result && void runAnalysis(result.main_query.keyword)}
-                      disabled={!result || loading}
+                      onClick={() => activeKeyword && void runAnalysis(activeKeyword)}
+                      disabled={!activeKeyword || loading}
                     >
                       <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                       <span className="ml-2 sm:inline">Обновить</span>
@@ -483,7 +479,7 @@ export function KeywordResearchDashboard() {
                   ))}
                 </Select>
                 <span className="text-xs text-muted-foreground">
-                  Показано: {filteredRelated.length}
+                  Показано: {displayedRelated.length}
                   {multiSelectMode && selectedKeywords.size > 0
                     ? ` · Выбрано: ${selectedKeywords.size}`
                     : ""}
@@ -530,7 +526,9 @@ export function KeywordResearchDashboard() {
                       rows={4}
                       className="resize-none"
                     />
-                    <p className="text-xs text-muted-foreground/70">Через запятую — все слова должны быть в запросе</p>
+                    <p className="text-xs text-muted-foreground/70">
+                      Через запятую — добавляются к запросу при обновлении анализа
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-medium text-muted-foreground">Минус-слова</label>
@@ -541,7 +539,9 @@ export function KeywordResearchDashboard() {
                       rows={4}
                       className="resize-none"
                     />
-                    <p className="text-xs text-muted-foreground/70">Через запятую — скрыть запросы с этими словами</p>
+                    <p className="text-xs text-muted-foreground/70">
+                      Через запятую — исключаются через оператор «-» в запросе YouTube
+                    </p>
                   </div>
                 </div>
               </aside>
@@ -554,13 +554,13 @@ export function KeywordResearchDashboard() {
                       <Skeleton key={index} className="h-44" />
                     ))}
                   </div>
-                ) : filteredRelated.length === 0 ? (
+                ) : displayedRelated.length === 0 ? (
                   <div className="flex h-full min-h-[200px] items-center justify-center text-sm text-muted-foreground">
-                    Нет запросов по выбранным фильтрам
+                    Нет связанных запросов
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {filteredRelated.map((item) => (
+                    {displayedRelated.map((item) => (
                       <RelatedKeywordCard
                         key={item.keyword}
                         item={item}

@@ -144,6 +144,13 @@ def calc_vph_from_published_text(views_count: int, published_text: str) -> float
     return round(calc_vph(views_count, published_at), 2)
 
 
+def title_matches_blacklist(title: str, blacklist_words: list[str] | None) -> bool:
+    if not blacklist_words:
+        return False
+    lowered = title.casefold()
+    return any(word.casefold() in lowered for word in blacklist_words if word.strip())
+
+
 @dataclass(frozen=True, slots=True)
 class ExplosiveChannelThresholds:
     min_views: int = DEFAULT_MIN_VIEWS
@@ -328,6 +335,7 @@ class ExplosiveChannelsService:
         log_rejections: bool = False,
         filter_title_language: bool = False,
         upload_period: str | None = None,
+        blacklist_words: list[str] | None = None,
     ) -> list[RadarChannelHit]:
         thresholds = self.get_thresholds(db)
         effective_upload_period = upload_period or self.get_upload_period(db)
@@ -361,6 +369,10 @@ class ExplosiveChannelsService:
                 ):
                     xray_log(f"❌ [ОТКАЗ] Индийские символы в названии: {video.title}")
                     continue
+
+            if title_matches_blacklist(video.title, blacklist_words):
+                xray_log(f"❌ [ОТКАЗ] Минус-слово в названии: {video.title}")
+                continue
 
             raw_age = DEFAULT_CHANNEL_AGE_DAYS
             subscribers = max(channel.subscribers_count, 0)
@@ -424,6 +436,7 @@ class ExplosiveChannelsService:
         filter_title_language: bool = False,
         upload_period: str | None = None,
         subscriber_fetch_delay_seconds: float = RADAR_SUBSCRIBER_FETCH_DELAY_SECONDS,
+        blacklist_words: list[str] | None = None,
         subscriber_cache: dict[str, int | None] | None = None,
     ) -> RadarProcessResult:
         """
@@ -472,6 +485,10 @@ class ExplosiveChannelsService:
                 ):
                     xray_log(f"❌ [ОТКАЗ] Индийские символы в названии: {video.title}")
                     continue
+
+            if title_matches_blacklist(video.title, blacklist_words):
+                xray_log(f"❌ [ОТКАЗ] Минус-слово в названии: {video.title}")
+                continue
 
             subscribers = max(video.subscribers_count, 0)
             channel_id = video.channel_id
