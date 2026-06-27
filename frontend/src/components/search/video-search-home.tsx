@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
 
@@ -86,6 +86,13 @@ export function VideoSearchHome() {
   const [baseFilters, setBaseFilters] = useState<BaseFilters>(DEFAULT_BASE_FILTERS);
   const [advancedFilters, setAdvancedFilters] = useState<SearchFilters>(DEFAULT_SEARCH_FILTERS);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const suppressSuggestionsRef = useRef(false);
+
+  const hideSuggestions = useCallback(() => {
+    suppressSuggestionsRef.current = true;
+    setShowSuggestions(false);
+    setSuggestions([]);
+  }, []);
 
   const handleVideoSearch = useCallback(
     async (
@@ -101,6 +108,7 @@ export function VideoSearchHome() {
       const base = baseOverride ?? baseFilters;
       const advanced = advancedOverride ?? advancedFilters;
 
+      suppressSuggestionsRef.current = true;
       setQuery(trimmedQuery);
       setShowSuggestions(false);
       setSuggestions([]);
@@ -129,6 +137,7 @@ export function VideoSearchHome() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    hideSuggestions();
     void handleVideoSearch();
   }
 
@@ -154,6 +163,11 @@ export function VideoSearchHome() {
       try {
         const data = await fetchSuggestions(trimmedQuery);
         setSuggestions(data);
+        if (suppressSuggestionsRef.current) {
+          suppressSuggestionsRef.current = false;
+          setShowSuggestions(false);
+          return;
+        }
         setShowSuggestions(data.length > 0);
       } catch {
         setSuggestions([]);
@@ -165,6 +179,10 @@ export function VideoSearchHome() {
   }, [query]);
 
   function selectSuggestion(suggestion: string) {
+    suppressSuggestionsRef.current = true;
+    setQuery(suggestion);
+    setShowSuggestions(false);
+    setSuggestions([]);
     void handleVideoSearch(suggestion);
   }
 
@@ -205,18 +223,25 @@ export function VideoSearchHome() {
                 type="text"
                 placeholder="Введите запрос, например: python tutorial"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  suppressSuggestionsRef.current = false;
+                  setQuery(value);
+                  if (value.trim().length <= 1) {
+                    setShowSuggestions(false);
+                  }
+                }}
                 onFocus={() => {
-                  if (suggestions.length > 0) {
+                  if (!suppressSuggestionsRef.current && suggestions.length > 0) {
                     setShowSuggestions(true);
                   }
                 }}
                 onBlur={() => {
-                  window.setTimeout(() => setShowSuggestions(false), 150);
+                  setShowSuggestions(false);
                 }}
                 onKeyDown={(event) => {
                   if (event.key === "Escape") {
-                    setShowSuggestions(false);
+                    hideSuggestions();
                   }
                 }}
                 disabled={loading}

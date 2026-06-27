@@ -13,7 +13,6 @@ from app.models.schemas import (
 from app.services.explosive_channels_radar_worker import (
     apply_radar_toggle,
     get_radar_status,
-    set_radar_blacklist_words,
     set_radar_content_filters,
     start_manual_radar_scan_background,
     start_radar_loop_background,
@@ -67,7 +66,6 @@ async def radar_toggle(
     search_query = payload.search_query.strip() if payload and payload.search_query else ""
 
     if payload is not None:
-        set_radar_blacklist_words(payload.blacklist_words)
         set_radar_content_filters(
             exclude_streams=payload.exclude_streams,
             exclude_shorts=payload.exclude_shorts,

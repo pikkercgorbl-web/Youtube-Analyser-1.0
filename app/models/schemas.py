@@ -583,29 +583,12 @@ class RadarToggleRequest(BaseModel):
     upload_period: Literal["all", "month", "3_months", "6_months", "year"] | None = None
     search_query: str | None = Field(
         default=None,
-        max_length=256,
+        max_length=512,
         description="Manual one-shot keyword; empty means standard queue cycle",
-    )
-    blacklist_words: list[str] | None = Field(
-        default=None,
-        description="Minus-words: skip videos whose title contains any of these",
     )
     exclude_streams: bool = False
     exclude_shorts: bool = False
     exclude_videos: bool = False
-
-    @field_validator("blacklist_words", mode="before")
-    @classmethod
-    def normalize_blacklist_words(cls, value: object) -> list[str] | None:
-        if value is None:
-            return None
-        if isinstance(value, str):
-            parts = [part.strip() for part in value.split(",") if part.strip()]
-            return parts or None
-        if isinstance(value, list):
-            parts = [str(part).strip() for part in value if str(part).strip()]
-            return parts or None
-        return None
 
 
 class RadarGenerateIdeasRequest(BaseModel):

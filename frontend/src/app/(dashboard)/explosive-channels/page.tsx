@@ -17,12 +17,14 @@ import {
   fetchExplosiveChannels,
   fetchRadarStats,
   fetchRadarStatus,
+  fetchSuggestions,
   generateRadarIdeas,
   resetRadarQueue,
   stopRadarSearch,
   toggleRadar,
   updateRadarSettings,
 } from "@/lib/api";
+import { buildYouTubeSearchQuery } from "@/lib/build-search-query";
 import { filterRuEnExplosiveChannels, sortExplosiveChannels } from "@/lib/explosive-channels";
 import {
   RADAR_FILTER_STORAGE_KEYS,
@@ -52,6 +54,7 @@ const SORT_OPTIONS: { value: ExplosiveChannelSortOption; label: string }[] = [
 const DEFAULT_MIN_VIEWS = 50_000;
 const DEFAULT_MIN_VIRAL_COEFF = 3.0;
 const FETCH_DEBOUNCE_MS = 400;
+const SUGGESTIONS_DEBOUNCE_MS = 300;
 const RADAR_LIVE_UPDATE_MS = 10_000;
 
 const UPLOAD_PERIOD_OPTIONS: { value: RadarUploadPeriod; label: string }[] = [
@@ -93,7 +96,10 @@ export default function ExplosiveChannelsPage() {
   const [uploadPeriodError, setUploadPeriodError] = useState<string | null>(null);
   const [isLangFilterActive, setIsLangFilterActive] = useState(false);
   const [radarSearchQuery, setRadarSearchQuery] = useState("");
-  const [blacklistWordsInput, setBlacklistWordsInput] = useState("");
+  const [radarSuggestions, setRadarSuggestions] = useState<string[]>([]);
+  const [showRadarSuggestions, setShowRadarSuggestions] = useState(false);
+  const [plusWordsInput, setPlusWordsInput] = useState("");
+  const [minusWordsInput, setMinusWordsInput] = useState("");
   const [aiModalOpen, setAiModalOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
@@ -103,6 +109,29 @@ export default function ExplosiveChannelsPage() {
   const [excludeStreams, setExcludeStreams] = useState(false);
   const [excludeShorts, setExcludeShorts] = useState(false);
   const [excludeVideos, setExcludeVideos] = useState(false);
+
+  useEffect(() => {
+    const trimmedQuery = radarSearchQuery.trim();
+
+    if (trimmedQuery.length <= 1) {
+      setRadarSuggestions([]);
+      setShowRadarSuggestions(false);
+      return;
+    }
+
+    const timer = window.setTimeout(async () => {
+      try {
+        const data = await fetchSuggestions(trimmedQuery);
+        setRadarSuggestions(data);
+        setShowRadarSuggestions(data.length > 0);
+      } catch {
+        setRadarSuggestions([]);
+        setShowRadarSuggestions(false);
+      }
+    }, SUGGESTIONS_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [radarSearchQuery]);
 
   useEffect(() => {
     writeStoredNumber(RADAR_FILTER_STORAGE_KEYS.minViews, minViews);
@@ -239,16 +268,13 @@ export default function ExplosiveChannelsPage() {
   const handleToggleRadar = async () => {
     setIsScanning(true);
     setScanError(null);
+    setShowRadarSuggestions(false);
 
     try {
-      const manualQuery = !isRadarRunning ? radarSearchQuery.trim() : undefined;
-      const blacklistWords = !isRadarRunning
-        ? blacklistWordsInput
-            .split(",")
-            .map((word) => word.trim())
-            .filter(Boolean)
+      const manualQuery = !isRadarRunning
+        ? buildYouTubeSearchQuery(radarSearchQuery, plusWordsInput, minusWordsInput)
         : undefined;
-      const status = await toggleRadar(uploadPeriod, manualQuery, blacklistWords, {
+      const status = await toggleRadar(uploadPeriod, manualQuery || undefined, {
         exclude_streams: excludeStreams,
         exclude_shorts: excludeShorts,
         exclude_videos: excludeVideos,
@@ -396,11 +422,61 @@ export default function ExplosiveChannelsPage() {
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+            <div className="relative w-full sm:min-w-[220px] sm:flex-1">
+              <Input
+                type="text"
+                placeholder="Введите слово или оставьте пустым"
+                value={radarSearchQuery}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setRadarSearchQuery(value);
+                  setShowRadarSuggestions(value.trim().length > 0);
+                }}
+                onFocus={() => {
+                  if (radarSearchQuery.trim().length > 0 && radarSuggestions.length > 0) {
+                    setShowRadarSuggestions(true);
+                  }
+                }}
+                onBlur={() => {
+                  setShowRadarSuggestions(false);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") {
+                    setShowRadarSuggestions(false);
+                  }
+                }}
+                disabled={isScanning || isRadarRunning || radarStatusLoading}
+                className="w-full"
+                maxLength={256}
+                autoComplete="off"
+              />
+
+              {showRadarSuggestions && radarSuggestions.length > 0 ? (
+                <ul className="absolute left-0 right-0 top-[calc(100%+0.25rem)] z-50 max-h-72 overflow-y-auto rounded-md border border-border/60 bg-card py-1 shadow-lg">
+                  {radarSuggestions.map((suggestion) => (
+                    <li key={suggestion}>
+                      <button
+                        type="button"
+                        className="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => {
+                          setRadarSearchQuery(suggestion);
+                          setShowRadarSuggestions(false);
+                        }}
+                      >
+                        {suggestion}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+
             <Input
               type="text"
-              placeholder="Введите слово или оставьте пустым"
-              value={radarSearchQuery}
-              onChange={(event) => setRadarSearchQuery(event.target.value)}
+              placeholder="Плюс-слова (через запятую)"
+              value={plusWordsInput}
+              onChange={(event) => setPlusWordsInput(event.target.value)}
               disabled={isScanning || isRadarRunning || radarStatusLoading}
               className="w-full sm:min-w-[220px] sm:flex-1"
               maxLength={256}
@@ -409,11 +485,11 @@ export default function ExplosiveChannelsPage() {
             <Input
               type="text"
               placeholder="Минус-слова (через запятую)"
-              value={blacklistWordsInput}
-              onChange={(event) => setBlacklistWordsInput(event.target.value)}
+              value={minusWordsInput}
+              onChange={(event) => setMinusWordsInput(event.target.value)}
               disabled={isScanning || isRadarRunning || radarStatusLoading}
               className="w-full sm:min-w-[220px] sm:flex-1"
-              maxLength={512}
+              maxLength={256}
             />
 
             <Select
