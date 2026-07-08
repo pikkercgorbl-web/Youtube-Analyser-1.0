@@ -1677,7 +1677,7 @@ def _parse_playlist_video_search_renderer(renderer: dict[str, Any]) -> VideoSear
         views_count=parse_compact_int(
             renderer.get("shortViewCountText") or renderer.get("viewCountText"),
         ),
-        published_text=_text_from_node(renderer.get("publishedTimeText")),
+        published_text=_extract_published_text_from_renderer(renderer),
         duration_text=_text_from_node(renderer.get("lengthText")),
         thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
@@ -1713,6 +1713,88 @@ def _parse_rich_item_search_renderer(rich_item: dict[str, Any]) -> VideoSearchMo
     return None
 
 
+_RELATIVE_TIME_HINTS = (
+    "ago",
+    "назад",
+    "minute",
+    "hour",
+    "day",
+    "week",
+    "month",
+    "year",
+    "минут",
+    "час",
+    "день",
+    "недел",
+    "месяц",
+    "год",
+    "лет",
+    "секунд",
+    "just now",
+    "только что",
+)
+
+
+def _looks_like_relative_time(text: str) -> bool:
+    lowered = text.strip().lower()
+    if not lowered:
+        return False
+    return any(hint in lowered for hint in _RELATIVE_TIME_HINTS)
+
+
+def _extract_published_text_from_renderer(renderer: dict[str, Any]) -> str:
+    """Extract relative publish date from search card renderers, including Shorts."""
+    for field in (
+        "publishedTimeText",
+        "publishedTime",
+        "dateText",
+        "uploadDateText",
+    ):
+        text = _text_from_node(renderer.get(field))
+        if _looks_like_relative_time(text):
+            return text
+
+    accessibility_text = _text_from_node(renderer.get("accessibilityText"))
+    if _looks_like_relative_time(accessibility_text):
+        return accessibility_text
+
+    overlay = renderer.get("overlayMetadata")
+    if isinstance(overlay, dict):
+        for field in ("primaryText", "secondaryText"):
+            node = overlay.get(field)
+            if isinstance(node, dict):
+                text = _text_from_node(node.get("content") or node)
+                if _looks_like_relative_time(text):
+                    return text
+
+    metadata_root = renderer.get("metadata", {})
+    if isinstance(metadata_root, dict):
+        metadata_root = metadata_root.get("lockupMetadataViewModel", metadata_root)
+    if isinstance(metadata_root, dict):
+        content_metadata = metadata_root.get("metadata", {})
+        if isinstance(content_metadata, dict):
+            content_metadata = content_metadata.get(
+                "contentMetadataViewModel",
+                content_metadata,
+            )
+        if isinstance(content_metadata, dict):
+            for row in content_metadata.get("metadataRows") or []:
+                if not isinstance(row, dict):
+                    continue
+                for part in row.get("metadataParts") or []:
+                    if not isinstance(part, dict):
+                        continue
+                    text = _text_from_node(part.get("text", {}).get("content") or part.get("text"))
+                    if _looks_like_relative_time(text):
+                        return text
+
+    for text in _iter_texts(renderer):
+        if _looks_like_relative_time(text):
+            return text
+
+    return ""
+
+
 def _parse_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
     video_id = renderer.get("videoId")
     title = _text_from_node(renderer.get("title"))
@@ -1737,7 +1819,7 @@ def _parse_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
         channel_title=channel_title,
         title=title,
         views_count=parse_compact_int(renderer.get("viewCountText")),
-        published_text=_text_from_node(renderer.get("publishedTimeText")),
+        published_text=_extract_published_text_from_renderer(renderer),
         duration_text=duration_text,
         thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
@@ -1850,7 +1932,7 @@ def _parse_reel_item_renderer(renderer: dict[str, Any]) -> VideoSearchModel | No
         channel_title=channel_title,
         title=title,
         views_count=views_count,
-        published_text=_text_from_node(renderer.get("publishedTimeText")),
+        published_text=_extract_published_text_from_renderer(renderer),
         duration_text="0:00",
         thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
@@ -1875,7 +1957,7 @@ def _parse_short_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | 
         channel_title=channel_title,
         title=title,
         views_count=parse_compact_int(renderer.get("viewCountText")),
-        published_text=_text_from_node(renderer.get("publishedTimeText")),
+        published_text=_extract_published_text_from_renderer(renderer),
         duration_text="0:00",
         thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
@@ -1946,6 +2028,9 @@ def _parse_search_lockup_view_model(lockup: dict[str, Any]) -> VideoSearchModel 
 
     if not title:
         title = _text_from_node(lockup.get("accessibilityText")) or "Untitled video"
+
+    if not published_text:
+        published_text = _extract_published_text_from_renderer(lockup)
 
     channel_id, channel_title = _extract_channel_metadata_from_renderer(lockup)
     is_short = _lockup_view_model_is_short(lockup)
@@ -2028,7 +2113,7 @@ def _parse_shorts_lockup_view_model(renderer: dict[str, Any]) -> VideoSearchMode
         channel_title=channel_title,
         title=title,
         views_count=parse_compact_int(views_text),
-        published_text="",
+        published_text=_extract_published_text_from_renderer(renderer),
         duration_text="0:00",
         thumbnail_url=thumbnail_url or f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
         channel_avatar_url=_extract_video_channel_avatar_url(renderer),
@@ -2591,7 +2676,7 @@ def _parse_playlist_video_renderer(
         thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail"))
         or f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
         views_count=parse_compact_int(renderer.get("shortViewCountText") or renderer.get("viewCountText")),
-        published_text=_text_from_node(renderer.get("publishedTimeText")),
+        published_text=_extract_published_text_from_renderer(renderer),
         duration_text=_text_from_node(renderer.get("lengthText")),
     )
 

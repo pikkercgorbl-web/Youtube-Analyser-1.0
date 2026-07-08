@@ -22,7 +22,10 @@ from app.integrations.youtube.client import (
 from app.models.db import SessionLocal
 from app.models.orm import ExplosiveChannel, ExplosiveChannelSettings
 from app.services.metrics import calc_vph, utc_now
-from app.services.video_filter_service import parse_relative_published_date
+from app.services.video_filter_service import (
+    parse_relative_published_date,
+    parse_relative_time_to_days,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -38,17 +41,16 @@ UPLOAD_PERIOD_LABELS: dict[str, str] = {
     "6_months": "До 6 месяцев",
     "year": "До 1 года",
 }
+UPLOAD_PERIOD_TO_MAX_AGE_DAYS: dict[str, int] = {
+    "month": 30,
+    "3_months": 90,
+    "6_months": 180,
+    "year": 365,
+}
 SETTINGS_ROW_ID = 1
 MAX_REJECTION_LOGS = 5
 DEFAULT_CHANNEL_AGE_DAYS = 0
 indian_scripts_pattern = re.compile(r"[\u0900-\u0D7F]")
-_MONTHS_AGO_PATTERN = re.compile(r"(\d+)\s+months?\s*(?:ago|назад)?", re.IGNORECASE)
-_YEARS_AGO_PATTERN = re.compile(r"(\d+)\s+years?\s*(?:ago|назад)?", re.IGNORECASE)
-_MULTI_YEARS_PATTERN = re.compile(r"\b([2-9]|\d{2,})\s+years?\b", re.IGNORECASE)
-_YEAR_WORD_PATTERN = re.compile(r"\b(years?|год(?:а|у)?|лет)\b", re.IGNORECASE)
-_MONTH_WORD_PATTERN = re.compile(r"\b(months?|месяц(?:а|ев)?)\b", re.IGNORECASE)
-_RU_MONTHS_AGO_PATTERN = re.compile(r"(\d+)\s+месяц(?:а|ев)?\s*(?:назад)?", re.IGNORECASE)
-_RU_YEARS_AGO_PATTERN = re.compile(r"(\d+)\s+(?:год(?:а|у)?|лет)\s*(?:назад)?", re.IGNORECASE)
 
 PLACEHOLDER_CHANNEL_ID_PREFIXES = ("UCtest",)
 PLACEHOLDER_CHANNEL_NAMES = frozenset({"a", "b", "test"})
@@ -89,52 +91,69 @@ def xray_log(message: str) -> None:
     print(message, flush=True)
 
 
-def passes_upload_date_text_filter(upload_date_text: str, upload_period: str) -> bool:
-    """
-    Filter InnerTube relative upload labels like ``5 days ago`` / ``4 months ago``.
-
-    Returns True when the video is fresh enough for the selected radar period.
-    """
+def resolve_max_age_days(upload_period: str, settings_max_age_days: int) -> int | None:
+    """Map radar upload period to a strict day limit."""
     if upload_period == "all":
-        return True
+        return None
+    return UPLOAD_PERIOD_TO_MAX_AGE_DAYS.get(upload_period, settings_max_age_days)
 
-    text = upload_date_text.strip().lower()
-    if not text:
-        return True
 
-    if upload_period in {"month", "3_months", "6_months"}:
-        if _YEAR_WORD_PATTERN.search(text):
-            return False
+def reject_video_by_max_age(
+    published_text: str,
+    max_age_days: int | None,
+    *,
+    video_title: str = "",
+) -> bool:
+    """
+    Return True when the video should be rejected for being too old.
 
-    if upload_period == "year":
-        years_match = _YEARS_AGO_PATTERN.search(text) or _RU_YEARS_AGO_PATTERN.search(text)
-        if years_match and int(years_match.group(1)) >= 2:
-            return False
-        if _MULTI_YEARS_PATTERN.search(text):
-            return False
-        ru_multi_years = re.search(r"\b([2-9]|\d{2,})\s+(?:год(?:а|у)?|лет)\b", text)
-        return ru_multi_years is None
+    Missing or unparseable dates are rejected when ``max_age_days`` is set.
+    """
+    if max_age_days is None:
+        return False
 
-    if upload_period == "month":
-        return (
-            _MONTH_WORD_PATTERN.search(text) is None
-            and _YEAR_WORD_PATTERN.search(text) is None
+    text = published_text.strip()
+    if not text or text == "—":
+        logger.warning(
+            "Видео %r без даты публикации — пропуск при фильтре max_age_days=%s",
+            video_title or "?",
+            max_age_days,
         )
-
-    if upload_period in {"3_months", "6_months"}:
-        limit = 3 if upload_period == "3_months" else 6
-        for pattern in (_MONTHS_AGO_PATTERN, _RU_MONTHS_AGO_PATTERN):
-            match = pattern.search(text)
-            if match and int(match.group(1)) > limit:
-                return False
         return True
 
-    return True
+    age_days = parse_relative_time_to_days(text)
+    if age_days < 0:
+        logger.warning(
+            "Не удалось распознать дату %r для %r — пропуск при фильтре max_age_days=%s",
+            text,
+            video_title or "?",
+            max_age_days,
+        )
+        return True
+
+    return age_days > max_age_days
 
 
-def reject_upload_date_text(upload_date_text: str, upload_period: str) -> bool:
+def passes_upload_date_text_filter(upload_date_text: str, upload_period: str) -> bool:
+    """Return True when the video is fresh enough for the selected radar period."""
+    max_age_days = resolve_max_age_days(upload_period, DEFAULT_MAX_AGE_DAYS)
+    return not reject_video_by_max_age(upload_date_text, max_age_days)
+
+
+def reject_upload_date_text(
+    upload_date_text: str,
+    upload_period: str,
+    *,
+    settings_max_age_days: int = DEFAULT_MAX_AGE_DAYS,
+    video_title: str = "",
+) -> bool:
     """Return True when the video should be rejected for being too old."""
-    return not passes_upload_date_text_filter(upload_date_text, upload_period)
+    max_age_days = resolve_max_age_days(upload_period, settings_max_age_days)
+    return reject_video_by_max_age(
+        upload_date_text,
+        max_age_days,
+        video_title=video_title,
+    )
 
 
 def calc_vph_from_published_text(views_count: int, published_text: str) -> float | None:
@@ -254,6 +273,13 @@ class ExplosiveChannelsService:
             return DEFAULT_UPLOAD_PERIOD
         return period
 
+    def get_max_age_days(self, db: Session) -> int | None:
+        settings = self._get_or_create_settings(db)
+        return resolve_max_age_days(
+            self.get_upload_period(db),
+            settings.max_age_days,
+        )
+
     def update_upload_period(self, db: Session, upload_period: str) -> str:
         if upload_period not in VALID_UPLOAD_PERIODS:
             msg = f"Unsupported upload_period: {upload_period!r}"
@@ -341,6 +367,7 @@ class ExplosiveChannelsService:
     ) -> list[RadarChannelHit]:
         thresholds = self.get_thresholds(db)
         effective_upload_period = upload_period or self.get_upload_period(db)
+        settings = self._get_or_create_settings(db)
         hits: list[RadarChannelHit] = []
         rejection_logs = 0
 
@@ -353,6 +380,8 @@ class ExplosiveChannelsService:
             if effective_upload_period != "all" and reject_upload_date_text(
                 upload_date_text,
                 effective_upload_period,
+                settings_max_age_days=settings.max_age_days,
+                video_title=video.title,
             ):
                 xray_log(
                     f"❌ [ОТКАЗ] Видео слишком старое ({upload_date_text}): {video.title}",
@@ -446,6 +475,7 @@ class ExplosiveChannelsService:
         """
         thresholds = self.get_thresholds(db)
         effective_upload_period = upload_period or self.get_upload_period(db)
+        settings = self._get_or_create_settings(db)
         hits: list[RadarChannelHit] = []
         rejection_logs = 0
         passed_count = 0
@@ -461,6 +491,8 @@ class ExplosiveChannelsService:
                 if effective_upload_period != "all" and reject_upload_date_text(
                     upload_date_text,
                     effective_upload_period,
+                    settings_max_age_days=settings.max_age_days,
+                    video_title=video.title,
                 ):
                     if log_rejections:
                         xray_log(

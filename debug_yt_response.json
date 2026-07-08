@@ -1,30 +1,21 @@
 {
   "responseContext": {
-    "visitorData": "CgtGcVhIdVB6Mk5Gcyiz1rnSBjIKCgJLWhIEGgAgOg%3D%3D",
+    "visitorData": "CgtXaUpNcUJXaGpyVSia2LnSBjIKCgJLWhIEGgAgJg%3D%3D",
     "serviceTrackingParams": [
-      {
-        "service": "GUIDED_HELP",
-        "params": [
-          {
-            "key": "context",
-            "value": "yt_web_search"
-          },
-          {
-            "key": "logged_in",
-            "value": "0"
-          }
-        ]
-      },
       {
         "service": "GFEEDBACK",
         "params": [
           {
-            "key": "has_unlimited_entitlement",
+            "key": "is_viewed_live",
             "value": "False"
           },
           {
-            "key": "has_premium_lite_entitlement",
-            "value": "False"
+            "key": "ipcc",
+            "value": "0"
+          },
+          {
+            "key": "is_alc_surface",
+            "value": "false"
           },
           {
             "key": "logged_in",
@@ -32,17 +23,13 @@
           },
           {
             "key": "visitor_data",
-            "value": "CgtGcVhIdVB6Mk5Gcyiz1rnSBjIKCgJLWhIEGgAgOg%3D%3D"
+            "value": "CgtXaUpNcUJXaGpyVSia2LnSBjIKCgJLWhIEGgAgJg%3D%3D"
           }
         ]
       },
       {
         "service": "CSI",
         "params": [
-          {
-            "key": "yt_ad",
-            "value": "1"
-          },
           {
             "key": "c",
             "value": "WEB"
@@ -56,8 +43,17 @@
             "value": "0"
           },
           {
-            "key": "GetSearch_rid",
-            "value": "0x10f1d3f290e6bb46"
+            "key": "GetPlayer_rid",
+            "value": "0xce7c61d7c5ca0f5e"
+          }
+        ]
+      },
+      {
+        "service": "GUIDED_HELP",
+        "params": [
+          {
+            "key": "logged_in",
+            "value": "0"
           }
         ]
       },
@@ -75,939 +71,586 @@
         ]
       }
     ],
+    "maxAgeSeconds": 0,
     "mainAppWebResponseContext": {
       "loggedOut": true,
-      "trackingParam": "k5_fmPxhoXZRKTiMEfKfkBz0GCmvdfyfaXr3MfsTju3nYz5HzkTctGBrTzRMkuMESLBwOcCw59TLtslLKPQGSS"
+      "trackingParam": "k5_fmPxhoXZRqRUk3mJI9D0sn_BY0gM4DWdctelIBt8MuynAzkCwoFXQpzRMkuMYNLBwOcCw59TLtslLKPQGSS"
     },
-    "responseId": "IhMI_9jumbHDlQMVneLEAR2U4w3i",
+    "responseId": "IhMIzMSuiLLDlQMVPGZ6BR0kKjiQ",
     "webResponseContextExtensionData": {
       "webResponseContextPreloadData": {
         "preloadMessageNames": [
-          "desktopTopbarRenderer",
-          "topbarLogoRenderer",
-          "fusionSearchboxRenderer",
+          "playerErrorMessageRenderer",
           "buttonRenderer",
-          "dialogViewModel",
-          "dialogHeaderViewModel",
-          "panelFooterViewModel",
-          "buttonViewModel",
-          "basicContentViewModel",
-          "topbarMenuButtonRenderer",
-          "multiPageMenuRenderer",
-          "hotkeyDialogRenderer",
-          "hotkeyDialogSectionRenderer",
-          "hotkeyDialogSectionOptionRenderer",
-          "voiceSearchDialogRenderer"
+          "playerMicroformatRenderer",
+          "mealbarPromoRenderer"
         ]
       },
       "hasDecorated": true
     }
   },
-  "estimatedResults": "1",
-  "trackingParams": "CAAQvGkiEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-  "topbar": {
-    "desktopTopbarRenderer": {
-      "logo": {
-        "topbarLogoRenderer": {
-          "iconImage": {
-            "iconType": "YOUTUBE_LOGO"
-          },
-          "tooltipText": {
-            "runs": [
-              {
-                "text": "Главная страница YouTube"
-              }
-            ]
-          },
-          "endpoint": {
-            "clickTrackingParams": "CBEQsV4iEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-            "commandMetadata": {
-              "webCommandMetadata": {
-                "url": "/",
-                "webPageType": "WEB_PAGE_TYPE_BROWSE",
-                "rootVe": 3854,
-                "apiUrl": "/youtubei/v1/browse"
-              }
-            },
-            "browseEndpoint": {
-              "browseId": "FEwhat_to_watch"
-            }
-          },
-          "trackingParams": "CBEQsV4iEwj_2O6ZscOVAxWd4sQBHZTjDeI=",
-          "overrideEntityKey": "EgZ0b3BiYXIg9QEoAQ%3D%3D"
-        }
-      },
-      "searchbox": {
-        "fusionSearchboxRenderer": {
-          "icon": {
-            "iconType": "SEARCH"
-          },
-          "placeholderText": {
-            "runs": [
-              {
-                "text": "Поиск"
-              }
-            ]
-          },
-          "config": {
-            "webSearchboxConfig": {
-              "requestLanguage": "ru",
-              "requestDomain": "ru",
-              "hasOnscreenKeyboard": true,
-              "focusSearchbox": true
-            }
-          },
-          "trackingParams": "CA0Q7VAiEwj_2O6ZscOVAxWd4sQBHZTjDeI=",
-          "searchEndpoint": {
-            "clickTrackingParams": "CA0Q7VAiEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-            "commandMetadata": {
-              "webCommandMetadata": {
-                "url": "/results?search_query=",
-                "webPageType": "WEB_PAGE_TYPE_SEARCH",
-                "rootVe": 4724
-              }
-            },
-            "searchEndpoint": {
-              "query": ""
-            }
-          },
-          "clearButton": {
-            "buttonRenderer": {
-              "style": "STYLE_DEFAULT",
-              "size": "SIZE_DEFAULT",
-              "isDisabled": false,
-              "icon": {
-                "iconType": "CLOSE"
-              },
-              "trackingParams": "CBAQ8FsiEwj_2O6ZscOVAxWd4sQBHZTjDeI=",
-              "accessibilityData": {
-                "accessibilityData": {
-                  "label": "Очистить поле поиска"
-                }
-              }
-            }
-          },
-          "showImageSourceDialog": {
-            "clickTrackingParams": "CA0Q7VAiEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-            "showDialogCommand": {
-              "panelLoadingStrategy": {
-                "inlineContent": {
-                  "dialogViewModel": {
-                    "header": {
-                      "dialogHeaderViewModel": {
-                        "headline": {
-                          "content": "Источник изображения"
-                        }
-                      }
-                    },
-                    "footer": {
-                      "panelFooterViewModel": {
-                        "primaryButton": {
-                          "buttonViewModel": {
-                            "title": "Открыть источник",
-                            "style": "BUTTON_VIEW_MODEL_STYLE_MONO",
-                            "trackingParams": "CA8Q8FsiEwj_2O6ZscOVAxWd4sQBHZTjDeI=",
-                            "isFullWidth": true,
-                            "type": "BUTTON_VIEW_MODEL_TYPE_FILLED"
-                          }
-                        },
-                        "secondaryButton": {
-                          "buttonViewModel": {
-                            "title": "Отмена",
-                            "style": "BUTTON_VIEW_MODEL_STYLE_MONO",
-                            "trackingParams": "CA4Q8FsiEwj_2O6ZscOVAxWd4sQBHZTjDeI=",
-                            "isFullWidth": true,
-                            "type": "BUTTON_VIEW_MODEL_TYPE_TONAL"
-                          }
-                        },
-                        "shouldHideDivider": true
-                      }
-                    },
-                    "content": {
-                      "basicContentViewModel": {
-                        "paragraphs": [
-                          {
-                            "text": {
-                              "content": "Перейти на сайт, с которого взято изображение?"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "disableAiAppearance": true
-        }
-      },
-      "trackingParams": "CAEQq6wBIhMI_9jumbHDlQMVneLEAR2U4w3i",
-      "countryCode": "RU",
-      "topbarButtons": [
-        {
-          "topbarMenuButtonRenderer": {
-            "icon": {
-              "iconType": "MORE_VERT"
-            },
-            "menuRequest": {
-              "clickTrackingParams": "CAsQ_qsBGAAiEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-              "commandMetadata": {
-                "webCommandMetadata": {
-                  "sendPost": true,
-                  "apiUrl": "/youtubei/v1/account/account_menu"
-                }
-              },
-              "signalServiceEndpoint": {
-                "signal": "GET_ACCOUNT_MENU",
-                "actions": [
-                  {
-                    "clickTrackingParams": "CAsQ_qsBGAAiEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-                    "openPopupAction": {
-                      "popup": {
-                        "multiPageMenuRenderer": {
-                          "trackingParams": "CAwQ_6sBIhMI_9jumbHDlQMVneLEAR2U4w3i",
-                          "style": "MULTI_PAGE_MENU_STYLE_TYPE_SYSTEM",
-                          "showLoadingSpinner": true
-                        }
-                      },
-                      "popupType": "DROPDOWN",
-                      "beReused": true
-                    }
-                  }
-                ]
-              }
-            },
-            "trackingParams": "CAsQ_qsBGAAiEwj_2O6ZscOVAxWd4sQBHZTjDeI=",
-            "accessibility": {
-              "accessibilityData": {
-                "label": "Настройки"
-              }
-            },
-            "tooltip": "Настройки",
-            "style": "STYLE_DEFAULT"
-          }
+  "playabilityStatus": {
+    "status": "UNPLAYABLE",
+    "reason": "Video unavailable",
+    "errorScreen": {
+      "playerErrorMessageRenderer": {
+        "subreason": {
+          "simpleText": "The page needs to be reloaded."
         },
-        {
+        "reason": {
+          "runs": [
+            {
+              "text": "The page needs to be reloaded."
+            }
+          ]
+        },
+        "proceedButton": {
           "buttonRenderer": {
-            "style": "STYLE_SUGGESTIVE",
-            "size": "SIZE_SMALL",
+            "style": "STYLE_PRIMARY",
+            "size": "SIZE_DEFAULT",
+            "isDisabled": false,
             "text": {
               "runs": [
                 {
-                  "text": "Войти"
+                  "text": "Reload"
                 }
               ]
             },
-            "icon": {
-              "iconType": "AVATAR_LOGGED_OUT"
-            },
-            "navigationEndpoint": {
-              "clickTrackingParams": "CAoQ1IAEGAEiEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-              "commandMetadata": {
-                "webCommandMetadata": {
-                  "url": "https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Dru%26next%3Dhttps%253A%252F%252Fwww.youtube.com%252Fyoutubei%252Fv1%252Fsearch%253FprettyPrint%253Dfalse&hl=ru&ec=65620",
-                  "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
-                  "rootVe": 83769
+            "trackingParams": "CAQQ8FsiEwjMxK6IssOVAxU8ZnoFHSQqOJA=",
+            "command": {
+              "clickTrackingParams": "CAQQ8FsiEwjMxK6IssOVAxU8ZnoFHSQqOJDKAQRtj_SI",
+              "signalAction": {
+                "signal": "RELOAD_PAGE"
+              }
+            }
+          }
+        },
+        "thumbnail": {
+          "thumbnails": [
+            {
+              "url": "//s.ytimg.com/yts/img/meh7-vflGevej7.png",
+              "width": 140,
+              "height": 100
+            }
+          ]
+        },
+        "icon": {
+          "iconType": "ERROR_OUTLINE"
+        }
+      }
+    },
+    "skip": {
+      "playabilityErrorSkipConfig": {
+        "skipOnPlayabilityError": false
+      }
+    },
+    "contextParams": "Q0FFU0FnZ0M="
+  },
+  "videoDetails": {
+    "videoId": "4Ctd5iexDRo",
+    "title": "Начинаю 2026 с обтираний. Всем здоровья! #здоровье #закаливание  #бодифлекс #bodyflex",
+    "lengthSeconds": "41",
+    "channelId": "UCZgO6ENm5NzVrbsrsxCrloQ",
+    "isOwnerViewing": false,
+    "shortDescription": "",
+    "isCrawlable": true,
+    "thumbnail": {
+      "thumbnails": [
+        {
+          "url": "https://i.ytimg.com/vi/4Ctd5iexDRo/hq2.jpg?sqp=-oaymwE5CKgBEF5IVfKriqkDLAgBFQAAiEIYAHABwAEG8AEB-AG2CIACgA-KAgwIABABGEcgWChyMA-4AvcY&rs=AOn4CLBxTjGz5XPVyaWkE2YKoPUDCNGYKw",
+          "width": 168,
+          "height": 94
+        },
+        {
+          "url": "https://i.ytimg.com/vi/4Ctd5iexDRo/hq2.jpg?sqp=-oaymwE5CMQBEG5IVfKriqkDLAgBFQAAiEIYAHABwAEG8AEB-AG2CIACgA-KAgwIABABGEcgWChyMA-4AvcY&rs=AOn4CLCP1ba3VlbhpcnaNxHRaQihPsE0sA",
+          "width": 196,
+          "height": 110
+        },
+        {
+          "url": "https://i.ytimg.com/vi/4Ctd5iexDRo/hq2.jpg?sqp=-oaymwE6CPYBEIoBSFXyq4qpAywIARUAAIhCGABwAcABBvABAfgBtgiAAoAPigIMCAAQARhHIFgocjAPuAL3GA==&rs=AOn4CLAmS8SwkD33Wm6jGF_lvGLw77NBMg",
+          "width": 246,
+          "height": 138
+        },
+        {
+          "url": "https://i.ytimg.com/vi/4Ctd5iexDRo/hq2.jpg?sqp=-oaymwE6CNACELwBSFXyq4qpAywIARUAAIhCGABwAcABBvABAfgBtgiAAoAPigIMCAAQARhHIFgocjAPuAL3GA==&rs=AOn4CLDrnpX5NF9sb40Ep7js5ZF88iF7uQ",
+          "width": 336,
+          "height": 188
+        },
+        {
+          "url": "https://i.ytimg.com/vi/4Ctd5iexDRo/maxres2.jpg?sqp=-oaymwEoCIAKENAF8quKqQMcGADwAQH4AbYIgAKAD4oCDAgAEAEYRyBYKHIwDw==&rs=AOn4CLAW34CsimOqmTZ6_KnoxayTK7UK-w",
+          "width": 1920,
+          "height": 1080
+        }
+      ]
+    },
+    "allowRatings": true,
+    "viewCount": "1559",
+    "author": "Куликова Маша. Нутрициолог с Мед.Образованием",
+    "isPrivate": false,
+    "isUnpluggedCorpus": false,
+    "isLiveContent": false,
+    "isTvfilmVideo": false
+  },
+  "microformat": {
+    "playerMicroformatRenderer": {
+      "thumbnail": {
+        "thumbnails": [
+          {
+            "url": "https://i.ytimg.com/vi/4Ctd5iexDRo/maxres2.jpg?sqp=-oaymwEoCIAKENAF8quKqQMcGADwAQH4AbYIgAKAD4oCDAgAEAEYRyBYKHIwDw==&rs=AOn4CLAW34CsimOqmTZ6_KnoxayTK7UK-w",
+            "width": 1280,
+            "height": 720
+          }
+        ]
+      },
+      "embed": {
+        "iframeUrl": "https://www.youtube.com/embed/4Ctd5iexDRo",
+        "width": 405,
+        "height": 720
+      },
+      "title": {
+        "simpleText": "Начинаю 2026 с обтираний. Всем здоровья! #здоровье #закаливание  #бодифлекс #bodyflex"
+      },
+      "lengthSeconds": "41",
+      "ownerProfileUrl": "http://www.youtube.com/@MashaKOS",
+      "externalChannelId": "UCZgO6ENm5NzVrbsrsxCrloQ",
+      "isFamilySafe": true,
+      "availableCountries": [
+        "AD",
+        "AE",
+        "AF",
+        "AG",
+        "AI",
+        "AL",
+        "AM",
+        "AO",
+        "AQ",
+        "AR",
+        "AS",
+        "AT",
+        "AU",
+        "AW",
+        "AX",
+        "AZ",
+        "BA",
+        "BB",
+        "BD",
+        "BE",
+        "BF",
+        "BG",
+        "BH",
+        "BI",
+        "BJ",
+        "BL",
+        "BM",
+        "BN",
+        "BO",
+        "BQ",
+        "BR",
+        "BS",
+        "BT",
+        "BV",
+        "BW",
+        "BY",
+        "BZ",
+        "CA",
+        "CC",
+        "CD",
+        "CF",
+        "CG",
+        "CH",
+        "CI",
+        "CK",
+        "CL",
+        "CM",
+        "CN",
+        "CO",
+        "CR",
+        "CU",
+        "CV",
+        "CW",
+        "CX",
+        "CY",
+        "CZ",
+        "DE",
+        "DJ",
+        "DK",
+        "DM",
+        "DO",
+        "DZ",
+        "EC",
+        "EE",
+        "EG",
+        "EH",
+        "ER",
+        "ES",
+        "ET",
+        "FI",
+        "FJ",
+        "FK",
+        "FM",
+        "FO",
+        "FR",
+        "GA",
+        "GB",
+        "GD",
+        "GE",
+        "GF",
+        "GG",
+        "GH",
+        "GI",
+        "GL",
+        "GM",
+        "GN",
+        "GP",
+        "GQ",
+        "GR",
+        "GS",
+        "GT",
+        "GU",
+        "GW",
+        "GY",
+        "HK",
+        "HM",
+        "HN",
+        "HR",
+        "HT",
+        "HU",
+        "ID",
+        "IE",
+        "IL",
+        "IM",
+        "IN",
+        "IO",
+        "IQ",
+        "IR",
+        "IS",
+        "IT",
+        "JE",
+        "JM",
+        "JO",
+        "JP",
+        "KE",
+        "KG",
+        "KH",
+        "KI",
+        "KM",
+        "KN",
+        "KP",
+        "KR",
+        "KW",
+        "KY",
+        "KZ",
+        "LA",
+        "LB",
+        "LC",
+        "LI",
+        "LK",
+        "LR",
+        "LS",
+        "LT",
+        "LU",
+        "LV",
+        "LY",
+        "MA",
+        "MC",
+        "MD",
+        "ME",
+        "MF",
+        "MG",
+        "MH",
+        "MK",
+        "ML",
+        "MM",
+        "MN",
+        "MO",
+        "MP",
+        "MQ",
+        "MR",
+        "MS",
+        "MT",
+        "MU",
+        "MV",
+        "MW",
+        "MX",
+        "MY",
+        "MZ",
+        "NA",
+        "NC",
+        "NE",
+        "NF",
+        "NG",
+        "NI",
+        "NL",
+        "NO",
+        "NP",
+        "NR",
+        "NU",
+        "NZ",
+        "OM",
+        "PA",
+        "PE",
+        "PF",
+        "PG",
+        "PH",
+        "PK",
+        "PL",
+        "PM",
+        "PN",
+        "PR",
+        "PS",
+        "PT",
+        "PW",
+        "PY",
+        "QA",
+        "RE",
+        "RO",
+        "RS",
+        "RU",
+        "RW",
+        "SA",
+        "SB",
+        "SC",
+        "SD",
+        "SE",
+        "SG",
+        "SH",
+        "SI",
+        "SJ",
+        "SK",
+        "SL",
+        "SM",
+        "SN",
+        "SO",
+        "SR",
+        "SS",
+        "ST",
+        "SV",
+        "SX",
+        "SY",
+        "SZ",
+        "TC",
+        "TD",
+        "TF",
+        "TG",
+        "TH",
+        "TJ",
+        "TK",
+        "TL",
+        "TM",
+        "TN",
+        "TO",
+        "TR",
+        "TT",
+        "TV",
+        "TW",
+        "TZ",
+        "UA",
+        "UG",
+        "UM",
+        "US",
+        "UY",
+        "UZ",
+        "VA",
+        "VC",
+        "VE",
+        "VG",
+        "VI",
+        "VN",
+        "VU",
+        "WF",
+        "WS",
+        "YE",
+        "YT",
+        "ZA",
+        "ZM",
+        "ZW"
+      ],
+      "isUnlisted": false,
+      "hasYpcMetadata": false,
+      "viewCount": "1559",
+      "category": "Sports",
+      "publishDate": "2026-01-01T00:50:06-08:00",
+      "ownerChannelName": "Куликова Маша. Нутрициолог с Мед.Образованием",
+      "uploadDate": "2026-01-01T00:50:06-08:00",
+      "isShortsEligible": true,
+      "externalVideoId": "4Ctd5iexDRo",
+      "likeCount": "14",
+      "canonicalUrl": "https://www.youtube.com/shorts/4Ctd5iexDRo"
+    }
+  },
+  "trackingParams": "CAAQu2kiEwjMxK6IssOVAxU8ZnoFHSQqOJDKAQRtj_SI",
+  "messages": [
+    {
+      "mealbarPromoRenderer": {
+        "icon": {
+          "thumbnails": [
+            {
+              "url": "https://www.gstatic.com/youtube/img/promos/growth/6ad5a99c727579634bc3e2fb67562a2621170bdd11578967392667be5a05c5e4_384x384.png",
+              "width": 384,
+              "height": 384
+            }
+          ]
+        },
+        "messageTexts": [
+          {
+            "runs": [
+              {
+                "text": "Get YouTube without the ads"
+              }
+            ]
+          }
+        ],
+        "actionButton": {
+          "buttonRenderer": {
+            "style": "STYLE_MONO_FILLED",
+            "size": "SIZE_DEFAULT",
+            "text": {
+              "runs": [
+                {
+                  "text": "1 month free"
                 }
-              },
-              "signInEndpoint": {
-                "idamTag": "65620"
+              ]
+            },
+            "trackingParams": "CAMQ7G8iEwjMxK6IssOVAxU8ZnoFHSQqOJA=",
+            "command": {
+              "clickTrackingParams": "CAMQ7G8iEwjMxK6IssOVAxU8ZnoFHSQqOJDKAQRtj_SI",
+              "commandExecutorCommand": {
+                "commands": [
+                  {
+                    "clickTrackingParams": "CAMQ7G8iEwjMxK6IssOVAxU8ZnoFHSQqOJDKAQRtj_SI",
+                    "commandMetadata": {
+                      "webCommandMetadata": {
+                        "url": "/premium?ybp=Eg9GRXdoYXRfdG9fd2F0Y2gqEmRtZWEtYWNxLWMtZWdzb1ZEZDoaCAYYASoUChJkbWVhLWFjcS1jLWVnc29WRGQ%253D",
+                        "webPageType": "WEB_PAGE_TYPE_BROWSE",
+                        "rootVe": 93498,
+                        "apiUrl": "/youtubei/v1/browse"
+                      }
+                    },
+                    "browseEndpoint": {
+                      "browseId": "SPunlimited",
+                      "params": "kgNBEg9GRXdoYXRfdG9fd2F0Y2gqEmRtZWEtYWNxLWMtZWdzb1ZEZDoaCAYYASoUChJkbWVhLWFjcS1jLWVnc29WRGQ%3D"
+                    }
+                  },
+                  {
+                    "commandMetadata": {
+                      "webCommandMetadata": {
+                        "sendPost": true,
+                        "apiUrl": "/youtubei/v1/feedback"
+                      }
+                    },
+                    "feedbackEndpoint": {
+                      "feedbackToken": "AB9zfpLTlcG1OxIRVCafZHh6isoDRRpZci6BVqfsBAhyc3wNPoEEbc6jyddmzqo1OYbR3BiJuTuq42aT92UPmQYReZwJyNuCF2KhcBTZfkA97mK0Y8MDVVvkcOcPmvpEiR8GWWX57qhC4Ktkpv_GOylEObuoXAQyGy3Cd6Asg2-8G3y2W3mOEO4",
+                      "uiActions": {
+                        "hideEnclosingContainer": true
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "dismissButton": {
+          "buttonRenderer": {
+            "style": "STYLE_MONO_TONAL",
+            "size": "SIZE_DEFAULT",
+            "text": {
+              "runs": [
+                {
+                  "text": "No thanks"
+                }
+              ]
+            },
+            "trackingParams": "CAIQ7W8iEwjMxK6IssOVAxU8ZnoFHSQqOJA=",
+            "command": {
+              "clickTrackingParams": "CAIQ7W8iEwjMxK6IssOVAxU8ZnoFHSQqOJDKAQRtj_SI",
+              "commandExecutorCommand": {
+                "commands": [
+                  {
+                    "clickTrackingParams": "CAIQ7W8iEwjMxK6IssOVAxU8ZnoFHSQqOJDKAQRtj_SI",
+                    "commandMetadata": {
+                      "webCommandMetadata": {
+                        "sendPost": true,
+                        "apiUrl": "/youtubei/v1/feedback"
+                      }
+                    },
+                    "feedbackEndpoint": {
+                      "feedbackToken": "AB9zfpKVsKHV8EgNEj4XeDp8wYdbPGLsSea2cmgIxGSmnSVpQnxPc_YgYTEa2am212OJuO1Cow0jJC7Y8E4X0JAdTU8w1VkuBCcE-17qHBU-Dzu9wL85U-Gxon5w43eQzmg-aMB9znaQfkw1QM2TX1TWRor_2fqhJuZQNWHSlYXZ16TtFULZ7Yw",
+                      "uiActions": {
+                        "hideEnclosingContainer": true
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "triggerCondition": "TRIGGER_CONDITION_POST_AD",
+        "style": "STYLE_MODERN",
+        "trackingParams": "CAEQ42kYACITCMzEroiyw5UDFTxmegUdJCo4kA==",
+        "impressionEndpoints": [
+          {
+            "clickTrackingParams": "CAEQ42kYACITCMzEroiyw5UDFTxmegUdJCo4kMoBBG2P9Ig=",
+            "commandMetadata": {
+              "webCommandMetadata": {
+                "sendPost": true,
+                "apiUrl": "/youtubei/v1/feedback"
               }
             },
-            "trackingParams": "CAoQ1IAEGAEiEwj_2O6ZscOVAxWd4sQBHZTjDeI=",
-            "targetId": "topbar-signin"
+            "feedbackEndpoint": {
+              "feedbackToken": "AB9zfpK2co9lZqCH_aicYSRgZIpxadUxrCh1D9aLBo6yILPey6Chzoqgoj6KOafahvgBtts67H5QfChvhc2TMTtYxKsM-jpAXLp-exZFo4ny_lHYzy3kfAfKWHyMQtIc7axbyjtvyeOtTV-iWkUp4feY_SIxLe8Q54nC5CFtgd49Z5Y1KFE4e-Q",
+              "uiActions": {
+                "hideEnclosingContainer": false
+              }
+            }
+          }
+        ],
+        "isVisible": true,
+        "messageTitle": {
+          "runs": [
+            {
+              "text": "YouTube Premium"
+            }
+          ]
+        },
+        "iconDark": {
+          "thumbnails": [
+            {
+              "url": "https://www.gstatic.com/youtube/img/promos/growth/6ad5a99c727579634bc3e2fb67562a2621170bdd11578967392667be5a05c5e4_384x384.png",
+              "width": 384,
+              "height": 384
+            }
+          ]
+        },
+        "supplementalText": {
+          "runs": [
+            {
+              "text": "Terms apply. Cancel anytime"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "adBreakHeartbeatParams": "Q0FBJTNE",
+  "frameworkUpdates": {
+    "entityBatchUpdate": {
+      "mutations": [
+        {
+          "entityKey": "Eg0KCzRDdGQ1aWV4RFJvIPYBKAE%3D",
+          "type": "ENTITY_MUTATION_TYPE_REPLACE",
+          "payload": {
+            "offlineabilityEntity": {
+              "key": "Eg0KCzRDdGQ1aWV4RFJvIPYBKAE%3D",
+              "addToOfflineButtonState": "ADD_TO_OFFLINE_BUTTON_STATE_UNKNOWN"
+            }
           }
         }
       ],
-      "hotkeyDialog": {
-        "hotkeyDialogRenderer": {
-          "title": {
-            "runs": [
-              {
-                "text": "Быстрые клавиши"
-              }
-            ]
-          },
-          "sections": [
-            {
-              "hotkeyDialogSectionRenderer": {
-                "title": {
-                  "runs": [
-                    {
-                      "text": "Воспроизведение"
-                    }
-                  ]
-                },
-                "options": [
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Приостановить или продолжить воспроизведение"
-                          }
-                        ]
-                      },
-                      "hotkey": "k"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перемотать ролик на 10 секунд назад"
-                          }
-                        ]
-                      },
-                      "hotkey": "j"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перемотать ролик на 10 секунд вперед"
-                          }
-                        ]
-                      },
-                      "hotkey": "l"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перейти к предыдущему видео"
-                          }
-                        ]
-                      },
-                      "hotkey": "P (Shift + p)"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перейти к следующему видео"
-                          }
-                        ]
-                      },
-                      "hotkey": "N (Shift + n)"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перейти к следующему кадру (когда воспроизведение приостановлено)"
-                          }
-                        ]
-                      },
-                      "hotkey": ",",
-                      "hotkeyAccessibilityLabel": {
-                        "accessibilityData": {
-                          "label": "Запятая"
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перейти к следующему кадру (когда воспроизведение приостановлено)"
-                          }
-                        ]
-                      },
-                      "hotkey": ".",
-                      "hotkeyAccessibilityLabel": {
-                        "accessibilityData": {
-                          "label": "Точка"
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Уменьшить скорость воспроизведения"
-                          }
-                        ]
-                      },
-                      "hotkey": "< (SHIFT+,)",
-                      "hotkeyAccessibilityLabel": {
-                        "accessibilityData": {
-                          "label": "Символ \"меньше чем\" либо Shift и запятая"
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Увеличить скорость воспроизведения"
-                          }
-                        ]
-                      },
-                      "hotkey": "> (SHIFT+.)",
-                      "hotkeyAccessibilityLabel": {
-                        "accessibilityData": {
-                          "label": "Символ \"больше чем\" либо Shift и точка."
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перейти к определенному моменту видео (например, при нажатии на цифру \"7\" ролик будет перемотан до временной отметки, которая соответствует 70% от длительности видео)"
-                          }
-                        ]
-                      },
-                      "hotkey": "0..9"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перейти к предыдущему эпизоду"
-                          }
-                        ]
-                      },
-                      "hotkey": "Control + Стрелка влево"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Перейти к следующему эпизоду"
-                          }
-                        ]
-                      },
-                      "hotkey": "Control + Стрелка вправо"
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "hotkeyDialogSectionRenderer": {
-                "title": {
-                  "runs": [
-                    {
-                      "text": "Общие"
-                    }
-                  ]
-                },
-                "options": [
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Включить или выключить полноэкранный режим"
-                          }
-                        ]
-                      },
-                      "hotkey": "f"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Увеличить/уменьшить окно проигрывателя"
-                          }
-                        ]
-                      },
-                      "hotkey": "t"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Включить или отключить мини-проигрыватель"
-                          }
-                        ]
-                      },
-                      "hotkey": "i"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Закрыть мини-проигрыватель или текущее диалоговое окно"
-                          }
-                        ]
-                      },
-                      "hotkey": "Esc"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Включить или отключить звук"
-                          }
-                        ]
-                      },
-                      "hotkey": "m"
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "hotkeyDialogSectionRenderer": {
-                "title": {
-                  "runs": [
-                    {
-                      "text": "Субтитры"
-                    }
-                  ]
-                },
-                "options": [
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Включить или отключить субтитры"
-                          }
-                        ]
-                      },
-                      "hotkey": "c"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Настроить прозрачность текста"
-                          }
-                        ]
-                      },
-                      "hotkey": "o"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Настроить прозрачность окна"
-                          }
-                        ]
-                      },
-                      "hotkey": "w"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Увеличить размер шрифта"
-                          }
-                        ]
-                      },
-                      "hotkey": "+"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Уменьшить размер шрифта"
-                          }
-                        ]
-                      },
-                      "hotkey": "-",
-                      "hotkeyAccessibilityLabel": {
-                        "accessibilityData": {
-                          "label": "Символ \"минус\""
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "hotkeyDialogSectionRenderer": {
-                "title": {
-                  "runs": [
-                    {
-                      "text": "Панорамные видео"
-                    }
-                  ]
-                },
-                "options": [
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Передвинуть вверх"
-                          }
-                        ]
-                      },
-                      "hotkey": "w"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Посмотреть влево"
-                          }
-                        ]
-                      },
-                      "hotkey": "a"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Передвинуть вниз"
-                          }
-                        ]
-                      },
-                      "hotkey": "s"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Передвинуть вправо"
-                          }
-                        ]
-                      },
-                      "hotkey": "d"
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Приблизить"
-                          }
-                        ]
-                      },
-                      "hotkey": "Плюс (+) на цифровой клавиатуре или ]",
-                      "hotkeyAccessibilityLabel": {
-                        "accessibilityData": {
-                          "label": "Плюс на цифровой клавиатуре или закрывающая квадратная скобка"
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "hotkeyDialogSectionOptionRenderer": {
-                      "label": {
-                        "runs": [
-                          {
-                            "text": "Отдалить"
-                          }
-                        ]
-                      },
-                      "hotkey": "Минус (-) на цифровой клавиатуре или [",
-                      "hotkeyAccessibilityLabel": {
-                        "accessibilityData": {
-                          "label": "Символ \"минус\" на цифровой клавиатуре или открывающая квадратная скобка"
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          ],
-          "dismissButton": {
-            "buttonRenderer": {
-              "style": "STYLE_BLUE_TEXT",
-              "size": "SIZE_DEFAULT",
-              "isDisabled": false,
-              "text": {
-                "runs": [
-                  {
-                    "text": "Закрыть"
-                  }
-                ]
-              },
-              "trackingParams": "CAkQ8FsiEwj_2O6ZscOVAxWd4sQBHZTjDeI="
-            }
-          },
-          "trackingParams": "CAgQteYDIhMI_9jumbHDlQMVneLEAR2U4w3i"
-        }
-      },
-      "backButton": {
-        "buttonRenderer": {
-          "trackingParams": "CAcQvIYDIhMI_9jumbHDlQMVneLEAR2U4w3i",
-          "command": {
-            "clickTrackingParams": "CAcQvIYDIhMI_9jumbHDlQMVneLEAR2U4w3iygEEiMd2Sg==",
-            "commandMetadata": {
-              "webCommandMetadata": {
-                "sendPost": true
-              }
-            },
-            "signalServiceEndpoint": {
-              "signal": "CLIENT_SIGNAL",
-              "actions": [
-                {
-                  "clickTrackingParams": "CAcQvIYDIhMI_9jumbHDlQMVneLEAR2U4w3iygEEiMd2Sg==",
-                  "signalAction": {
-                    "signal": "HISTORY_BACK"
-                  }
-                }
-              ]
-            }
-          }
-        }
-      },
-      "forwardButton": {
-        "buttonRenderer": {
-          "trackingParams": "CAYQvYYDIhMI_9jumbHDlQMVneLEAR2U4w3i",
-          "command": {
-            "clickTrackingParams": "CAYQvYYDIhMI_9jumbHDlQMVneLEAR2U4w3iygEEiMd2Sg==",
-            "commandMetadata": {
-              "webCommandMetadata": {
-                "sendPost": true
-              }
-            },
-            "signalServiceEndpoint": {
-              "signal": "CLIENT_SIGNAL",
-              "actions": [
-                {
-                  "clickTrackingParams": "CAYQvYYDIhMI_9jumbHDlQMVneLEAR2U4w3iygEEiMd2Sg==",
-                  "signalAction": {
-                    "signal": "HISTORY_FORWARD"
-                  }
-                }
-              ]
-            }
-          }
-        }
-      },
-      "a11ySkipNavigationButton": {
-        "buttonRenderer": {
-          "style": "STYLE_DEFAULT",
-          "size": "SIZE_DEFAULT",
-          "isDisabled": false,
-          "text": {
-            "runs": [
-              {
-                "text": "Пропустить"
-              }
-            ]
-          },
-          "trackingParams": "CAUQ8FsiEwj_2O6ZscOVAxWd4sQBHZTjDeI=",
-          "command": {
-            "clickTrackingParams": "CAUQ8FsiEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-            "commandMetadata": {
-              "webCommandMetadata": {
-                "sendPost": true
-              }
-            },
-            "signalServiceEndpoint": {
-              "signal": "CLIENT_SIGNAL",
-              "actions": [
-                {
-                  "clickTrackingParams": "CAUQ8FsiEwj_2O6ZscOVAxWd4sQBHZTjDeLKAQSIx3ZK",
-                  "signalAction": {
-                    "signal": "SKIP_NAVIGATION"
-                  }
-                }
-              ]
-            }
-          }
-        }
-      },
-      "voiceSearchButton": {
-        "buttonRenderer": {
-          "style": "STYLE_DEFAULT",
-          "size": "SIZE_DEFAULT",
-          "isDisabled": false,
-          "serviceEndpoint": {
-            "clickTrackingParams": "CAIQ7a8FIhMI_9jumbHDlQMVneLEAR2U4w3iygEEiMd2Sg==",
-            "commandMetadata": {
-              "webCommandMetadata": {
-                "sendPost": true
-              }
-            },
-            "signalServiceEndpoint": {
-              "signal": "CLIENT_SIGNAL",
-              "actions": [
-                {
-                  "clickTrackingParams": "CAIQ7a8FIhMI_9jumbHDlQMVneLEAR2U4w3iygEEiMd2Sg==",
-                  "openPopupAction": {
-                    "popup": {
-                      "voiceSearchDialogRenderer": {
-                        "placeholderHeader": {
-                          "runs": [
-                            {
-                              "text": "Говорите…"
-                            }
-                          ]
-                        },
-                        "promptHeader": {
-                          "runs": [
-                            {
-                              "text": "Запрос не распознан. Повторите попытку"
-                            }
-                          ]
-                        },
-                        "exampleQuery1": {
-                          "runs": [
-                            {
-                              "text": "\"Включи песни Дуа Липы\""
-                            }
-                          ]
-                        },
-                        "exampleQuery2": {
-                          "runs": [
-                            {
-                              "text": "\"Покажи мои подписки\""
-                            }
-                          ]
-                        },
-                        "promptMicrophoneLabel": {
-                          "runs": [
-                            {
-                              "text": "Чтобы повторить попытку, нажмите на значок микрофона"
-                            }
-                          ]
-                        },
-                        "loadingHeader": {
-                          "runs": [
-                            {
-                              "text": "Подождите…"
-                            }
-                          ]
-                        },
-                        "connectionErrorHeader": {
-                          "runs": [
-                            {
-                              "text": "Нет подключения"
-                            }
-                          ]
-                        },
-                        "connectionErrorMicrophoneLabel": {
-                          "runs": [
-                            {
-                              "text": "Проверьте подключение к Интернету и повторите попытку"
-                            }
-                          ]
-                        },
-                        "permissionsHeader": {
-                          "runs": [
-                            {
-                              "text": "Предоставьте приложению необходимое разрешение"
-                            }
-                          ]
-                        },
-                        "permissionsSubtext": {
-                          "runs": [
-                            {
-                              "text": "Чтобы пользоваться голосовым поиском, откройте приложению доступ к микрофону."
-                            }
-                          ]
-                        },
-                        "disabledHeader": {
-                          "runs": [
-                            {
-                              "text": "Голосовой поиск"
-                            }
-                          ]
-                        },
-                        "disabledSubtext": {
-                          "runs": [
-                            {
-                              "text": "Чтобы пользоваться голосовым поиском, перейдите в настройки браузера и откройте приложению доступ к микрофону."
-                            }
-                          ]
-                        },
-                        "microphoneButtonAriaLabel": {
-                          "runs": [
-                            {
-                              "text": "Отмена"
-                            }
-                          ]
-                        },
-                        "exitButton": {
-                          "buttonRenderer": {
-                            "style": "STYLE_DEFAULT",
-                            "size": "SIZE_DEFAULT",
-                            "isDisabled": false,
-                            "icon": {
-                              "iconType": "CLOSE"
-                            },
-                            "trackingParams": "CAQQ0LEFIhMI_9jumbHDlQMVneLEAR2U4w3i",
-                            "accessibilityData": {
-                              "accessibilityData": {
-                                "label": "Отмена"
-                              }
-                            }
-                          }
-                        },
-                        "trackingParams": "CAMQ7q8FIhMI_9jumbHDlQMVneLEAR2U4w3i",
-                        "microphoneOffPromptHeader": {
-                          "runs": [
-                            {
-                              "text": "Микрофон отключен. Повторите попытку"
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    "popupType": "TOP_ALIGNED_DIALOG"
-                  }
-                }
-              ]
-            }
-          },
-          "icon": {
-            "iconType": "MICROPHONE_ON"
-          },
-          "tooltip": "Голосовой поиск",
-          "trackingParams": "CAIQ7a8FIhMI_9jumbHDlQMVneLEAR2U4w3i",
-          "accessibilityData": {
-            "accessibilityData": {
-              "label": "Голосовой поиск"
-            }
-          }
-        }
+      "timestamp": {
+        "seconds": "1783524378",
+        "nanos": 892068561
       }
     }
   }
