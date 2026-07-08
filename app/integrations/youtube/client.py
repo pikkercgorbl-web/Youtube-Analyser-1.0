@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import logging
 import re
+from pathlib import Path
 from typing import Any
 from collections.abc import AsyncIterator
 from urllib.parse import quote_plus
@@ -46,13 +47,16 @@ _ZERO_SUBSCRIBER_NEEDLES = (
 YOUTUBE_API_REGION_CODE = "US"
 YOUTUBE_API_RELEVANCE_LANGUAGE = "en"
 MAX_SEARCH_PAGES = 100
+DEBUG_YT_RESPONSE_PATH = Path(__file__).resolve().parents[3] / "debug_yt_response.json"
 
 SEARCH_VIDEO_RENDERER_KEYS = (
     "videoRenderer",
     "lockupViewModel",
     "compactVideoRenderer",
     "gridVideoRenderer",
+    "richItemRenderer",
     "reelItemRenderer",
+    "playlistVideoRenderer",
     "shortVideoRenderer",
     "shortsLockupViewModel",
 )
@@ -984,7 +988,10 @@ class YouTubeApiClient:
             raise YouTubeApiError(
                 f"InnerTube request error {response.status_code} on {endpoint}: {response.text}",
             )
-        return response.json()
+        data = response.json()
+        _persist_innertube_debug_response(data)
+        _warn_innertube_response_blockers(data, endpoint=endpoint)
+        return data
 
     async def _fetch_search_via_html_page(
         self,
@@ -1539,8 +1546,56 @@ def _parse_search_videos(
     for renderer in _iter_nodes_by_key(payload, "shortsLockupViewModel"):
         if isinstance(renderer, dict):
             _try_add(renderer, _parse_shorts_lockup_view_model)
+    for renderer in _iter_nodes_by_key(payload, "playlistVideoRenderer"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_playlist_video_search_renderer)
+    for renderer in _iter_nodes_by_key(payload, "richItemRenderer"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_rich_item_search_renderer)
 
     return videos, parse_skipped, renderer_counts
+
+
+def _persist_innertube_debug_response(payload: dict[str, Any]) -> None:
+    """Temporary debug dump: overwrite raw InnerTube JSON on every request."""
+    try:
+        DEBUG_YT_RESPONSE_PATH.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        logger.debug("InnerTube debug response saved to %s", DEBUG_YT_RESPONSE_PATH)
+    except OSError as exc:
+        logger.warning("Не удалось сохранить %s: %s", DEBUG_YT_RESPONSE_PATH, exc)
+
+
+def _warn_innertube_response_blockers(payload: dict[str, Any], *, endpoint: str) -> None:
+    """Log critical warnings when YouTube returns captcha/consent/error stubs."""
+    serialized = json.dumps(payload, ensure_ascii=False).lower()
+
+    if re.search(r"\bcaptcha\b", serialized) or "botguard" in serialized:
+        logger.critical(
+            "InnerTube ответ (%s) содержит captcha/botguard — возможна заглушка YouTube. "
+            "Проверьте debug_yt_response.json",
+            endpoint,
+        )
+
+    if re.search(r"\bconsent\b", serialized) or "consent.youtube" in serialized:
+        logger.critical(
+            "InnerTube ответ (%s) содержит consent — возможна заглушка YouTube. "
+            "Проверьте debug_yt_response.json",
+            endpoint,
+        )
+
+    if (
+        re.search(r'"error"\s*:\s*\{', serialized)
+        or re.search(r'"errorcode"\s*:', serialized)
+        or re.search(r'"status"\s*:\s*"error"', serialized)
+    ):
+        logger.critical(
+            "InnerTube ответ (%s) содержит error — возможна заглушка YouTube. "
+            "Проверьте debug_yt_response.json",
+            endpoint,
+        )
 
 
 def _count_search_renderer_nodes(payload: dict[str, Any]) -> dict[str, int]:
@@ -1569,12 +1624,16 @@ def _log_search_page_renderer_counts(
 ) -> None:
     logger.info(
         "Страница %s: найдено videoRenderer=%s, lockupViewModel=%s, "
-        "compactVideoRenderer=%s, continuationItemRenderer=%s; "
+        "richItemRenderer=%s, reelItemRenderer=%s, compactVideoRenderer=%s, "
+        "playlistVideoRenderer=%s, continuationItemRenderer=%s; "
         "распознано видео: %s",
         page_number,
         renderer_counts.get("videoRenderer", 0),
         renderer_counts.get("lockupViewModel", 0),
+        renderer_counts.get("richItemRenderer", 0),
+        renderer_counts.get("reelItemRenderer", 0),
         renderer_counts.get("compactVideoRenderer", 0),
+        renderer_counts.get("playlistVideoRenderer", 0),
         renderer_counts.get("continuationItemRenderer", 0),
         parsed_count,
     )
@@ -1584,6 +1643,58 @@ def _log_search_page_renderer_counts(
             page_number,
             parse_skipped,
         )
+
+
+def _parse_playlist_video_search_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
+    """Parse a ``playlistVideoRenderer`` entry from search results."""
+    video_id = renderer.get("videoId")
+    title = _text_from_node(renderer.get("title"))
+    if not video_id or not title:
+        return None
+
+    channel_id, channel_title = _extract_channel_metadata_from_renderer(renderer)
+    return VideoSearchModel(
+        video_id=video_id,
+        channel_id=channel_id,
+        channel_title=channel_title,
+        title=title,
+        views_count=parse_compact_int(
+            renderer.get("shortViewCountText") or renderer.get("viewCountText"),
+        ),
+        published_text=_text_from_node(renderer.get("publishedTimeText")),
+        duration_text=_text_from_node(renderer.get("lengthText")),
+        thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
+        channel_avatar_url=_extract_video_channel_avatar_url(renderer),
+        subscribers_count=_extract_subscribers_from_renderer(renderer),
+        is_short=False,
+        is_live=False,
+        content_renderer="playlistVideoRenderer",
+    )
+
+
+def _parse_rich_item_search_renderer(rich_item: dict[str, Any]) -> VideoSearchModel | None:
+    """Unwrap ``richItemRenderer.content`` and parse the nested video card."""
+    content = rich_item.get("content")
+    if not isinstance(content, dict):
+        return None
+
+    nested_parsers: tuple[tuple[str, Any], ...] = (
+        ("videoRenderer", _parse_video_renderer),
+        ("lockupViewModel", _parse_search_lockup_view_model),
+        ("compactVideoRenderer", _parse_video_renderer),
+        ("gridVideoRenderer", _parse_video_renderer),
+        ("reelItemRenderer", _parse_reel_item_renderer),
+        ("shortVideoRenderer", _parse_short_video_renderer),
+        ("shortsLockupViewModel", _parse_shorts_lockup_view_model),
+        ("playlistVideoRenderer", _parse_playlist_video_search_renderer),
+    )
+    for key, parser in nested_parsers:
+        nested = content.get(key)
+        if isinstance(nested, dict):
+            parsed = parser(nested)
+            if parsed is not None:
+                return parsed.model_copy(update={"content_renderer": "richItemRenderer"})
+    return None
 
 
 def _parse_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:

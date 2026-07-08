@@ -411,6 +411,9 @@ class ExplosiveChannelsRadarWorker:
                         f"📄 [РАДАР] '{keyword}' ({label}): страница {pages_fetched}/{MAX_PAGES}, "
                         f"videoRenderer={renderer_counts.get('videoRenderer', 0)}, "
                         f"lockupViewModel={renderer_counts.get('lockupViewModel', 0)}, "
+                        f"richItemRenderer={renderer_counts.get('richItemRenderer', 0)}, "
+                        f"reelItemRenderer={renderer_counts.get('reelItemRenderer', 0)}, "
+                        f"playlistVideoRenderer={renderer_counts.get('playlistVideoRenderer', 0)}, "
                         f"continuationItemRenderer={renderer_counts.get('continuationItemRenderer', 0)}, "
                         f"распознано видео: {len(page_videos)}"
                         + (
