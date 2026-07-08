@@ -390,7 +390,7 @@ class ExplosiveChannelsRadarWorker:
 
         try:
             try:
-                async for page_videos in iter_radar_search_pages(
+                async for page_batch in iter_radar_search_pages(
                     keyword,
                     sort_by_upload_date=True,
                     max_pages=MAX_PAGES,
@@ -401,13 +401,18 @@ class ExplosiveChannelsRadarWorker:
                         break
 
                     pages_fetched += 1
+                    page_videos = page_batch.videos
+                    renderer_counts = page_batch.renderer_counts
                     content_filters = get_radar_content_filters()
                     filtered_videos = filter_radar_videos_by_format(page_videos, content_filters)
                     skipped_by_format = len(page_videos) - len(filtered_videos)
                     skipped_by_format_total += skipped_by_format
                     radar_log(
                         f"📄 [РАДАР] '{keyword}' ({label}): страница {pages_fetched}/{MAX_PAGES}, "
-                        f"видео на странице: {len(page_videos)}"
+                        f"videoRenderer={renderer_counts.get('videoRenderer', 0)}, "
+                        f"lockupViewModel={renderer_counts.get('lockupViewModel', 0)}, "
+                        f"continuationItemRenderer={renderer_counts.get('continuationItemRenderer', 0)}, "
+                        f"распознано видео: {len(page_videos)}"
                         + (
                             f", пропущено по формату: {skipped_by_format}"
                             if skipped_by_format

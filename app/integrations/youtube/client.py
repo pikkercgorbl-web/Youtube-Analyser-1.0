@@ -47,6 +47,20 @@ YOUTUBE_API_REGION_CODE = "US"
 YOUTUBE_API_RELEVANCE_LANGUAGE = "en"
 MAX_SEARCH_PAGES = 100
 
+SEARCH_VIDEO_RENDERER_KEYS = (
+    "videoRenderer",
+    "lockupViewModel",
+    "compactVideoRenderer",
+    "gridVideoRenderer",
+    "reelItemRenderer",
+    "shortVideoRenderer",
+    "shortsLockupViewModel",
+)
+SEARCH_CONTINUATION_KEYS = (
+    "continuationItemRenderer",
+    "continuationEndpoint",
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -112,6 +126,15 @@ class VideoSearchModel(BaseModel):
     is_short: bool = False
     is_live: bool = False
     content_renderer: str = "videoRenderer"
+
+
+@dataclass(frozen=True, slots=True)
+class SearchPageBatch:
+    """One InnerTube search results page before client-side filtering."""
+
+    videos: list[VideoSearchModel]
+    renderer_counts: dict[str, int]
+    parse_skipped: int = 0
 
 
 class EnrichedVideoModel(BaseModel):
@@ -375,18 +398,13 @@ class YouTubeApiClient:
                 url=self.INNERTUBE_SEARCH_URL,
             )
             pages_fetched += 1
-            page_videos, parse_skipped = _parse_search_videos(response)
+            page_videos, parse_skipped, renderer_counts = _parse_search_videos(response)
             parse_skipped_total += parse_skipped
-            if parse_skipped:
-                logger.info(
-                    "Страница %s: пропущено видео из-за ошибок парсинга: %s",
-                    pages_fetched,
-                    parse_skipped,
-                )
-            logger.info(
-                "Страница %s: распознано видео: %s",
+            _log_search_page_renderer_counts(
                 pages_fetched,
-                len(page_videos),
+                renderer_counts,
+                parsed_count=len(page_videos),
+                parse_skipped=parse_skipped,
             )
             for video in page_videos:
                 if video.video_id in seen_video_ids:
@@ -434,7 +452,7 @@ class YouTubeApiClient:
         *,
         sort_by_upload_date: bool = False,
         max_pages: int = MAX_SEARCH_PAGES,
-    ) -> AsyncIterator[list[VideoSearchModel]]:
+    ) -> AsyncIterator[SearchPageBatch]:
         """Yield deduplicated video batches page-by-page using InnerTube continuations."""
         if not query.strip():
             return
@@ -462,18 +480,13 @@ class YouTubeApiClient:
                 url=self.INNERTUBE_SEARCH_URL,
             )
             pages_fetched += 1
-            page_videos, parse_skipped = _parse_search_videos(response)
+            page_videos, parse_skipped, renderer_counts = _parse_search_videos(response)
             parse_skipped_total += parse_skipped
-            if parse_skipped:
-                logger.info(
-                    "Страница %s: пропущено видео из-за ошибок парсинга: %s",
-                    pages_fetched,
-                    parse_skipped,
-                )
-            logger.info(
-                "Страница %s: распознано видео: %s",
+            _log_search_page_renderer_counts(
                 pages_fetched,
-                len(page_videos),
+                renderer_counts,
+                parsed_count=len(page_videos),
+                parse_skipped=parse_skipped,
             )
 
             deduped: list[VideoSearchModel] = []
@@ -485,7 +498,11 @@ class YouTubeApiClient:
 
             if deduped:
                 yielded_any = True
-                yield deduped
+            yield SearchPageBatch(
+                videos=deduped,
+                renderer_counts=renderer_counts,
+                parse_skipped=parse_skipped,
+            )
 
             if pages_fetched >= page_limit:
                 logger.info(
@@ -514,7 +531,7 @@ class YouTubeApiClient:
         if not yielded_any and _contains_cyrillic(query):
             html_results = await self._fetch_search_via_html_page(query, limit=50)
             if html_results:
-                yield html_results
+                yield SearchPageBatch(videos=html_results, renderer_counts={})
 
     async def get_search_suggestions(self, query: str) -> list[str]:
         """Return up to 10 autocomplete suggestions for a YouTube search query."""
@@ -995,7 +1012,7 @@ class YouTubeApiClient:
         if not initial_data:
             return []
 
-        videos, _parse_skipped = _parse_search_videos(initial_data)
+        videos, _parse_skipped, _renderer_counts = _parse_search_videos(initial_data)
         return videos[:limit]
 
     async def _fetch_google_search_suggestions(self, query: str) -> list[str]:
@@ -1462,16 +1479,20 @@ async def fetch_channel_subscribers_from_homepage(
     return None
 
 
-def _parse_search_videos(payload: dict[str, Any]) -> tuple[list[VideoSearchModel], int]:
+def _parse_search_videos(
+    payload: dict[str, Any],
+) -> tuple[list[VideoSearchModel], int, dict[str, int]]:
     """
     Parse regular videos and Shorts from an InnerTube search response.
 
-    Shorts are returned under different renderer keys depending on the response
-    shape: ``reelItemRenderer`` (legacy) and ``shortsLockupViewModel`` (current).
+    Uses a deep walk of the JSON tree (no hard-coded ``contents[0]`` paths) to
+    collect every supported renderer type regardless of nesting inside
+    ``itemSectionRenderer``, ``shelfRenderer``, ``appendContinuationItemsAction``,
+    etc.
 
-    Returns ``(videos, parse_skipped)`` where ``parse_skipped`` counts items that
-    raised an exception during parsing.
+    Returns ``(videos, parse_skipped, renderer_counts)``.
     """
+    renderer_counts = _count_search_renderer_nodes(payload)
     videos: list[VideoSearchModel] = []
     seen: set[str] = set()
     parse_skipped = 0
@@ -1497,23 +1518,79 @@ def _parse_search_videos(payload: dict[str, Any]) -> tuple[list[VideoSearchModel
                 exc,
             )
 
-    for renderer in _iter_renderers(payload, "videoRenderer"):
-        _try_add(renderer, _parse_video_renderer)
-    for renderer in _iter_renderers(payload, "reelItemRenderer"):
-        _try_add(renderer, _parse_reel_item_renderer)
-    for renderer in _iter_renderers(payload, "shortVideoRenderer"):
-        _try_add(renderer, _parse_short_video_renderer)
-    for renderer in _iter_renderers(payload, "shortsLockupViewModel"):
-        _try_add(renderer, _parse_shorts_lockup_view_model)
+    for renderer in _iter_nodes_by_key(payload, "videoRenderer"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_video_renderer)
+    for renderer in _iter_nodes_by_key(payload, "compactVideoRenderer"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_video_renderer)
+    for renderer in _iter_nodes_by_key(payload, "gridVideoRenderer"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_video_renderer)
+    for renderer in _iter_nodes_by_key(payload, "lockupViewModel"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_search_lockup_view_model)
+    for renderer in _iter_nodes_by_key(payload, "reelItemRenderer"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_reel_item_renderer)
+    for renderer in _iter_nodes_by_key(payload, "shortVideoRenderer"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_short_video_renderer)
+    for renderer in _iter_nodes_by_key(payload, "shortsLockupViewModel"):
+        if isinstance(renderer, dict):
+            _try_add(renderer, _parse_shorts_lockup_view_model)
 
-    return videos, parse_skipped
+    return videos, parse_skipped, renderer_counts
+
+
+def _count_search_renderer_nodes(payload: dict[str, Any]) -> dict[str, int]:
+    counts = {
+        key: sum(
+            1
+            for node in _iter_nodes_by_key(payload, key)
+            if isinstance(node, dict)
+        )
+        for key in SEARCH_VIDEO_RENDERER_KEYS
+    }
+    counts["continuationItemRenderer"] = sum(
+        1
+        for node in _iter_nodes_by_key(payload, "continuationItemRenderer")
+        if isinstance(node, dict)
+    )
+    return counts
+
+
+def _log_search_page_renderer_counts(
+    page_number: int,
+    renderer_counts: dict[str, int],
+    *,
+    parsed_count: int,
+    parse_skipped: int,
+) -> None:
+    logger.info(
+        "Страница %s: найдено videoRenderer=%s, lockupViewModel=%s, "
+        "compactVideoRenderer=%s, continuationItemRenderer=%s; "
+        "распознано видео: %s",
+        page_number,
+        renderer_counts.get("videoRenderer", 0),
+        renderer_counts.get("lockupViewModel", 0),
+        renderer_counts.get("compactVideoRenderer", 0),
+        renderer_counts.get("continuationItemRenderer", 0),
+        parsed_count,
+    )
+    if parse_skipped:
+        logger.info(
+            "Страница %s: пропущено видео из-за ошибок парсинга: %s",
+            page_number,
+            parse_skipped,
+        )
 
 
 def _parse_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
     video_id = renderer.get("videoId")
     title = _text_from_node(renderer.get("title"))
     channel_id, channel_title = _extract_channel_metadata_from_renderer(renderer)
-    if not video_id or not channel_id or not title:
+    if not video_id or not title:
         return None
 
     channel_title = channel_title or _text_from_node(
@@ -1680,6 +1757,113 @@ def _parse_short_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | 
         is_live=False,
         content_renderer="shortVideoRenderer",
     )
+
+
+def _parse_search_lockup_view_model(lockup: dict[str, Any]) -> VideoSearchModel | None:
+    """Parse a search-result ``lockupViewModel`` (regular video or Short)."""
+    video_id = lockup.get("contentId")
+    if not isinstance(video_id, str) or not _VIDEO_ID_PATTERN.match(video_id):
+        video_id = _extract_lockup_video_id(lockup)
+    if not video_id:
+        return None
+
+    metadata_root = lockup.get("metadata", {})
+    if isinstance(metadata_root, dict):
+        metadata_root = metadata_root.get("lockupMetadataViewModel", metadata_root)
+
+    title = ""
+    views_text = ""
+    published_text = ""
+    if isinstance(metadata_root, dict):
+        title = _text_from_node(
+            metadata_root.get("title", {}).get("content")
+            if isinstance(metadata_root.get("title"), dict)
+            else metadata_root.get("title"),
+        )
+        content_metadata = metadata_root.get("metadata", {})
+        if isinstance(content_metadata, dict):
+            content_metadata = content_metadata.get(
+                "contentMetadataViewModel",
+                content_metadata,
+            )
+        if isinstance(content_metadata, dict):
+            for row in content_metadata.get("metadataRows") or []:
+                if not isinstance(row, dict):
+                    continue
+                for part in row.get("metadataParts") or []:
+                    if not isinstance(part, dict):
+                        continue
+                    text = _text_from_node(part.get("text", {}).get("content") or part.get("text"))
+                    if not text:
+                        continue
+                    lowered = text.lower()
+                    if any(
+                        token in lowered
+                        for token in ("view", "просмотр", "watching", "зрител")
+                    ):
+                        views_text = text
+                    elif any(
+                        token in lowered
+                        for token in (
+                            "ago",
+                            "назад",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "year",
+                            "minute",
+                        )
+                    ):
+                        published_text = text
+
+    if not title:
+        title = _text_from_node(lockup.get("accessibilityText")) or "Untitled video"
+
+    channel_id, channel_title = _extract_channel_metadata_from_renderer(lockup)
+    is_short = _lockup_view_model_is_short(lockup)
+    duration_text = _extract_lockup_duration_text(lockup)
+    if is_short and not duration_text:
+        duration_text = "0:00"
+
+    thumbnail_url = ""
+    content_image = lockup.get("contentImage")
+    if isinstance(content_image, dict):
+        thumbnail_view = content_image.get("thumbnailViewModel", {}).get("image", {})
+        if isinstance(thumbnail_view, dict):
+            thumbnail_url = _extract_largest_image_url_from_sources(thumbnail_view.get("sources"))
+        if not thumbnail_url:
+            thumbnail_url = _extract_largest_thumbnail_url(content_image)
+
+    return VideoSearchModel(
+        video_id=video_id,
+        channel_id=channel_id,
+        channel_title=channel_title,
+        title=title,
+        views_count=parse_compact_int(views_text),
+        published_text=published_text,
+        duration_text=duration_text,
+        thumbnail_url=thumbnail_url or f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
+        channel_avatar_url=_extract_video_channel_avatar_url(lockup),
+        subscribers_count=_extract_subscribers_from_renderer(lockup),
+        is_short=is_short,
+        is_live=False,
+        content_renderer="lockupViewModel",
+    )
+
+
+def _lockup_view_model_is_short(lockup: dict[str, Any]) -> bool:
+    on_tap = lockup.get("onTap")
+    if isinstance(on_tap, dict):
+        endpoint = on_tap.get("innertubeCommand") or on_tap
+        if isinstance(endpoint, dict) and "reelWatchEndpoint" in endpoint:
+            return True
+
+    entity_id = lockup.get("entityId")
+    if isinstance(entity_id, str) and "shorts" in entity_id.lower():
+        return True
+
+    return "/shorts/" in _renderer_navigation_url(lockup)
 
 
 def _parse_shorts_lockup_view_model(renderer: dict[str, Any]) -> VideoSearchModel | None:
@@ -1982,47 +2166,99 @@ def _extract_owner_channel_name_from_node(
     return ""
 
 
+def _extract_continuation_token_from_node(node: Any) -> str | None:
+    if not isinstance(node, dict):
+        return None
+
+    continuation_command = node.get("continuationCommand")
+    if isinstance(continuation_command, dict):
+        token = continuation_command.get("token")
+        if isinstance(token, str) and token.strip():
+            return token.strip()
+
+    token = (
+        node.get("continuationEndpoint", {})
+        .get("continuationCommand", {})
+        .get("token")
+        if isinstance(node.get("continuationEndpoint"), dict)
+        else None
+    )
+    if isinstance(token, str) and token.strip():
+        return token.strip()
+
+    continuation = node.get("continuation")
+    if isinstance(continuation, str) and continuation.strip():
+        return continuation.strip()
+
+    return None
+
+
 def _extract_continuation_token_from_item(item: Any) -> str | None:
     if not isinstance(item, dict):
         return None
 
     renderer = item.get("continuationItemRenderer")
     if isinstance(renderer, dict):
-        token = (
-            renderer.get("continuationEndpoint", {})
-            .get("continuationCommand", {})
-            .get("token")
-        )
-        if isinstance(token, str) and token:
+        token = _extract_continuation_token_from_node(renderer)
+        if token:
             return token
-    return None
+
+    return _extract_continuation_token_from_node(item)
 
 
 def _extract_search_continuation(payload: dict[str, Any]) -> str | None:
-    for renderer in _iter_renderers(payload, "continuationItemRenderer"):
-        token = (
-            renderer.get("continuationEndpoint", {})
-            .get("continuationCommand", {})
-            .get("token")
-        )
-        if isinstance(token, str) and token:
-            return token
+    """
+    Find the next-page continuation token anywhere in an InnerTube search payload.
 
-    for action in _iter_renderers(payload, "appendContinuationItemsAction"):
+    YouTube may place the token inside ``continuationItemRenderer`` at the end of
+    ``sectionListRenderer.contents``, inside ``appendContinuationItemsAction`` on
+    continuation pages, or under a bare ``continuationEndpoint`` node.
+    """
+    tokens: list[str] = []
+
+    for renderer in _iter_nodes_by_key(payload, "continuationItemRenderer"):
+        if not isinstance(renderer, dict):
+            continue
+        token = _extract_continuation_token_from_node(renderer)
+        if token:
+            tokens.append(token)
+
+    for action in _iter_nodes_by_key(payload, "appendContinuationItemsAction"):
+        if not isinstance(action, dict):
+            continue
         continuation_items = action.get("continuationItems")
         if not isinstance(continuation_items, list):
             continue
         for item in continuation_items:
             token = _extract_continuation_token_from_item(item)
             if token:
-                return token
+                tokens.append(token)
 
-    for continuation_data in _iter_renderers(payload, "nextContinuationData"):
-        token = continuation_data.get("continuation")
-        if isinstance(token, str) and token:
-            return token
+    for endpoint in _iter_nodes_by_key(payload, "continuationEndpoint"):
+        if not isinstance(endpoint, dict):
+            continue
+        token = _extract_continuation_token_from_node(endpoint)
+        if token:
+            tokens.append(token)
 
-    return None
+    for continuation_data in _iter_nodes_by_key(payload, "nextContinuationData"):
+        if not isinstance(continuation_data, dict):
+            continue
+        token = _extract_continuation_token_from_node(continuation_data)
+        if token:
+            tokens.append(token)
+
+    for command in _iter_nodes_by_key(payload, "reloadContinuationItemsCommand"):
+        if not isinstance(command, dict):
+            continue
+        token = _extract_continuation_token_from_node(command)
+        if token:
+            tokens.append(token)
+
+    if not tokens:
+        return None
+
+    return tokens[-1]
 
 
 def _extract_about_panel_continuation(payload: dict[str, Any]) -> str | None:
@@ -2666,6 +2902,18 @@ def _find_renderer(node: Any, renderer_name: str) -> dict[str, Any] | None:
     return None
 
 
+def _iter_nodes_by_key(node: Any, key: str) -> Any:
+    """Yield every value stored under ``key`` at any nesting depth."""
+    if isinstance(node, dict):
+        if key in node:
+            yield node[key]
+        for value in node.values():
+            yield from _iter_nodes_by_key(value, key)
+    elif isinstance(node, list):
+        for item in node:
+            yield from _iter_nodes_by_key(item, key)
+
+
 def _iter_renderers(node: Any, renderer_name: str) -> Any:
     if isinstance(node, dict):
         value = node.get(renderer_name)
@@ -2926,7 +3174,7 @@ async def iter_radar_search_pages(
     *,
     sort_by_upload_date: bool = False,
     max_pages: int = MAX_SEARCH_PAGES,
-) -> AsyncIterator[list[VideoSearchModel]]:
+) -> AsyncIterator[SearchPageBatch]:
     """Paginated InnerTube search for radar with per-page channel metadata fill."""
     client = _get_innertube_client()
     async for page in client.iter_search_pages(
@@ -2934,9 +3182,18 @@ async def iter_radar_search_pages(
         sort_by_upload_date=sort_by_upload_date,
         max_pages=max_pages,
     ):
-        if not page:
+        if not page.videos and not page.renderer_counts:
             continue
-        yield await client._fill_missing_channel_metadata(page)
+        filled_videos = (
+            await client._fill_missing_channel_metadata(page.videos)
+            if page.videos
+            else []
+        )
+        yield SearchPageBatch(
+            videos=filled_videos,
+            renderer_counts=page.renderer_counts,
+            parse_skipped=page.parse_skipped,
+        )
 
 
 async def get_radar_search_results(
