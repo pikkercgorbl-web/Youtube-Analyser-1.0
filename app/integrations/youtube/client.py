@@ -467,6 +467,7 @@ class YouTubeApiClient:
         pages_fetched = 0
         page_limit = max(1, min(max_pages, MAX_SEARCH_PAGES))
         yielded_any = False
+        yielded_count = 0
         parse_skipped_total = 0
 
         while pages_fetched < page_limit:
@@ -502,6 +503,7 @@ class YouTubeApiClient:
 
             if deduped:
                 yielded_any = True
+                yielded_count += len(deduped)
             yield SearchPageBatch(
                 videos=deduped,
                 renderer_counts=renderer_counts,
@@ -532,10 +534,24 @@ class YouTubeApiClient:
                 parse_skipped_total,
             )
 
-        if not yielded_any and _contains_cyrillic(query):
+        if _contains_cyrillic(query) and yielded_count < 5:
             html_results = await self._fetch_search_via_html_page(query, limit=50)
-            if html_results:
-                yield SearchPageBatch(videos=html_results, renderer_counts={})
+            fallback_videos = [
+                video
+                for video in html_results
+                if video.video_id not in seen_video_ids
+            ]
+            if fallback_videos:
+                logger.info(
+                    "InnerTube вернул мало видео для %r (%s), использую HTML fallback: %s видео",
+                    query,
+                    yielded_count,
+                    len(fallback_videos),
+                )
+                yield SearchPageBatch(
+                    videos=fallback_videos,
+                    renderer_counts={"htmlFallback": len(fallback_videos)},
+                )
 
     async def get_search_suggestions(self, query: str) -> list[str]:
         """Return up to 10 autocomplete suggestions for a YouTube search query."""
@@ -2322,18 +2338,10 @@ def _extract_search_continuation(payload: dict[str, Any]) -> str | None:
     Find the next-page continuation token anywhere in an InnerTube search payload.
 
     YouTube may place the token inside ``continuationItemRenderer`` at the end of
-    ``sectionListRenderer.contents``, inside ``appendContinuationItemsAction`` on
-    continuation pages, or under a bare ``continuationEndpoint`` node.
+    ``sectionListRenderer.contents`` or inside ``appendContinuationItemsAction`` on
+    continuation pages. Intentionally avoid arbitrary ``continuationEndpoint``
+    matches because topbar/service commands can contain non-search continuations.
     """
-    tokens: list[str] = []
-
-    for renderer in _iter_nodes_by_key(payload, "continuationItemRenderer"):
-        if not isinstance(renderer, dict):
-            continue
-        token = _extract_continuation_token_from_node(renderer)
-        if token:
-            tokens.append(token)
-
     for action in _iter_nodes_by_key(payload, "appendContinuationItemsAction"):
         if not isinstance(action, dict):
             continue
@@ -2343,33 +2351,16 @@ def _extract_search_continuation(payload: dict[str, Any]) -> str | None:
         for item in continuation_items:
             token = _extract_continuation_token_from_item(item)
             if token:
-                tokens.append(token)
+                return token
 
-    for endpoint in _iter_nodes_by_key(payload, "continuationEndpoint"):
-        if not isinstance(endpoint, dict):
+    for renderer in _iter_nodes_by_key(payload, "continuationItemRenderer"):
+        if not isinstance(renderer, dict):
             continue
-        token = _extract_continuation_token_from_node(endpoint)
+        token = _extract_continuation_token_from_node(renderer)
         if token:
-            tokens.append(token)
+            return token
 
-    for continuation_data in _iter_nodes_by_key(payload, "nextContinuationData"):
-        if not isinstance(continuation_data, dict):
-            continue
-        token = _extract_continuation_token_from_node(continuation_data)
-        if token:
-            tokens.append(token)
-
-    for command in _iter_nodes_by_key(payload, "reloadContinuationItemsCommand"):
-        if not isinstance(command, dict):
-            continue
-        token = _extract_continuation_token_from_node(command)
-        if token:
-            tokens.append(token)
-
-    if not tokens:
-        return None
-
-    return tokens[-1]
+    return None
 
 
 def _extract_about_panel_continuation(payload: dict[str, Any]) -> str | None:

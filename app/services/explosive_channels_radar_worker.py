@@ -414,6 +414,7 @@ class ExplosiveChannelsRadarWorker:
                         f"richItemRenderer={renderer_counts.get('richItemRenderer', 0)}, "
                         f"reelItemRenderer={renderer_counts.get('reelItemRenderer', 0)}, "
                         f"playlistVideoRenderer={renderer_counts.get('playlistVideoRenderer', 0)}, "
+                        f"htmlFallback={renderer_counts.get('htmlFallback', 0)}, "
                         f"continuationItemRenderer={renderer_counts.get('continuationItemRenderer', 0)}, "
                         f"распознано видео: {len(page_videos)}"
                         + (
