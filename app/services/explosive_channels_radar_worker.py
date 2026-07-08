@@ -41,7 +41,7 @@ THROTTLE_SECONDS = 2
 RADAR_CYCLE_PAUSE_MIN_SECONDS = 30
 RADAR_CYCLE_PAUSE_MAX_SECONDS = 60
 TARGET_VIDEOS_COUNT = 60
-MAX_PAGES = 50
+MAX_PAGES = 100
 SEARCH_PAGE_DELAY_SECONDS = 2
 
 
@@ -382,6 +382,9 @@ class ExplosiveChannelsRadarWorker:
         passed_total = 0
         total_hits = 0
         pages_fetched = 0
+        skipped_by_format_total = 0
+        skipped_by_filters_total = 0
+        parse_errors_total = 0
         subscriber_cache: dict[str, int | None] = {}
         stopped_early = False
 
@@ -401,6 +404,7 @@ class ExplosiveChannelsRadarWorker:
                     content_filters = get_radar_content_filters()
                     filtered_videos = filter_radar_videos_by_format(page_videos, content_filters)
                     skipped_by_format = len(page_videos) - len(filtered_videos)
+                    skipped_by_format_total += skipped_by_format
                     radar_log(
                         f"📄 [РАДАР] '{keyword}' ({label}): страница {pages_fetched}/{MAX_PAGES}, "
                         f"видео на странице: {len(page_videos)}"
@@ -427,12 +431,14 @@ class ExplosiveChannelsRadarWorker:
                     result = await self._explosive_channels.process_radar_videos(
                         db,
                         filtered_videos,
-                        log_rejections=True,
+                        log_rejections=False,
                         filter_title_language=True,
                         upload_period=upload_period,
                         blacklist_words=get_radar_blacklist_words(),
                         subscriber_cache=subscriber_cache,
                     )
+                    skipped_by_filters_total += result.skipped_count
+                    parse_errors_total += result.parse_error_count
                     self._log_hits(result.hits)
 
                     passed_total += result.passed_count
@@ -440,7 +446,17 @@ class ExplosiveChannelsRadarWorker:
 
                     radar_log(
                         f"📈 [РАДАР] '{keyword}': прошло фильтры {passed_total}/{TARGET_VIDEOS_COUNT}, "
-                        f"сохранено каналов {total_hits}",
+                        f"сохранено каналов {total_hits}"
+                        + (
+                            f", пропущено по фильтрам на странице: {result.skipped_count}"
+                            if result.skipped_count
+                            else ""
+                        )
+                        + (
+                            f", ошибок обработки: {result.parse_error_count}"
+                            if result.parse_error_count
+                            else ""
+                        ),
                     )
 
                     if passed_total >= TARGET_VIDEOS_COUNT:
@@ -471,12 +487,17 @@ class ExplosiveChannelsRadarWorker:
             if total_hits:
                 radar_log(
                     f"✅ [РАДАР] '{keyword}': сохранено каналов {total_hits} "
-                    f"(страниц: {pages_fetched}, прошло фильтры: {passed_total})",
+                    f"(страниц: {pages_fetched}, прошло фильтры: {passed_total}, "
+                    f"пропущено по формату: {skipped_by_format_total}, "
+                    f"пропущено по фильтрам: {skipped_by_filters_total}, "
+                    f"ошибок обработки: {parse_errors_total})",
                 )
             elif not stopped_early:
                 radar_log(
                     f"ℹ️ [РАДАР] '{keyword}': взрывных каналов не найдено "
-                    f"(страниц: {pages_fetched})",
+                    f"(страниц: {pages_fetched}, пропущено по формату: {skipped_by_format_total}, "
+                    f"пропущено по фильтрам: {skipped_by_filters_total}, "
+                    f"ошибок обработки: {parse_errors_total})",
                 )
 
             if is_radar_running and not self._target_keywords.is_worker_stopped(db):

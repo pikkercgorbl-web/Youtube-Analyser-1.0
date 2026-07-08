@@ -167,6 +167,8 @@ class RadarChannelHit:
 class RadarProcessResult:
     hits: list[RadarChannelHit]
     passed_count: int
+    skipped_count: int = 0
+    parse_error_count: int = 0
 
 
 class ExplosiveChannelsService:
@@ -447,123 +449,151 @@ class ExplosiveChannelsService:
         hits: list[RadarChannelHit] = []
         rejection_logs = 0
         passed_count = 0
+        skipped_count = 0
+        parse_error_count = 0
         cache = subscriber_cache if subscriber_cache is not None else {}
 
         for video in videos:
-            channel_name = video.channel_title or "Unknown"
-            upload_date_text = video.published_text.strip() or "—"
+            try:
+                channel_name = video.channel_title or "Unknown"
+                upload_date_text = video.published_text.strip() or "—"
 
-            if effective_upload_period != "all" and reject_upload_date_text(
-                upload_date_text,
-                effective_upload_period,
-            ):
-                xray_log(
-                    f"❌ [ОТКАЗ] Видео слишком старое ({upload_date_text}): {video.title}",
-                )
-                continue
-
-            video_views = max(video.views_count, 0)
-            if video_views < thresholds.min_views:
-                if log_rejections and rejection_logs < MAX_REJECTION_LOGS:
-                    label = format_channel_label(channel_name)
-                    xray_log(
-                        f"❌ [ОТКАЗ] {label}: просмотры {video_views:,} "
-                        f"< {thresholds.min_views:,}",
-                    )
-                    rejection_logs += 1
-                continue
-
-            if not video.channel_id.strip():
-                if log_rejections and rejection_logs < MAX_REJECTION_LOGS:
-                    xray_log("❌ [ОТКАЗ] Видео без channel_id — пропуск")
-                    rejection_logs += 1
-                continue
-
-            if filter_title_language:
-                if indian_scripts_pattern.search(video.title) or indian_scripts_pattern.search(
-                    channel_name,
+                if effective_upload_period != "all" and reject_upload_date_text(
+                    upload_date_text,
+                    effective_upload_period,
                 ):
-                    xray_log(f"❌ [ОТКАЗ] Индийские символы в названии: {video.title}")
+                    if log_rejections:
+                        xray_log(
+                            f"❌ [ОТКАЗ] Видео слишком старое ({upload_date_text}): {video.title}",
+                        )
+                    skipped_count += 1
                     continue
 
-            if title_matches_blacklist(video.title, blacklist_words):
-                xray_log(f"❌ [ОТКАЗ] Минус-слово в названии: {video.title}")
-                continue
+                video_views = max(video.views_count, 0)
+                if video_views < thresholds.min_views:
+                    if log_rejections and rejection_logs < MAX_REJECTION_LOGS:
+                        label = format_channel_label(channel_name)
+                        xray_log(
+                            f"❌ [ОТКАЗ] {label}: просмотры {video_views:,} "
+                            f"< {thresholds.min_views:,}",
+                        )
+                        rejection_logs += 1
+                    skipped_count += 1
+                    continue
 
-            subscribers = max(video.subscribers_count, 0)
-            channel_id = video.channel_id
+                if not video.channel_id.strip():
+                    if log_rejections and rejection_logs < MAX_REJECTION_LOGS:
+                        xray_log("❌ [ОТКАЗ] Видео без channel_id — пропуск")
+                        rejection_logs += 1
+                    skipped_count += 1
+                    continue
 
-            if subscribers <= 0:
-                if channel_id not in cache:
-                    await asyncio.sleep(subscriber_fetch_delay_seconds)
-                    try:
-                        cache[channel_id] = (
-                            await fetch_channel_subscribers_from_homepage(
-                                channel_id,
-                                channel_name=channel_name,
+                if filter_title_language:
+                    if indian_scripts_pattern.search(video.title) or indian_scripts_pattern.search(
+                        channel_name,
+                    ):
+                        if log_rejections:
+                            xray_log(
+                                f"❌ [ОТКАЗ] Индийские символы в названии: {video.title}",
                             )
-                        )
-                    except Exception:
-                        logger.exception(
-                            "Failed to fetch subscribers from channel homepage for %s",
-                            channel_id,
-                        )
-                        cache[channel_id] = None
+                        skipped_count += 1
+                        continue
 
-                fetched = cache.get(channel_id)
-                if fetched is not None and fetched > 0:
-                    subscribers = fetched
+                if title_matches_blacklist(video.title, blacklist_words):
+                    if log_rejections:
+                        xray_log(f"❌ [ОТКАЗ] Минус-слово в названии: {video.title}")
+                    skipped_count += 1
+                    continue
 
-            if not channel_metrics_usable(subscribers_count=subscribers):
-                rejection = explain_missing_channel_metrics(
+                subscribers = max(video.subscribers_count, 0)
+                channel_id = video.channel_id
+
+                if subscribers <= 0:
+                    if channel_id not in cache:
+                        await asyncio.sleep(subscriber_fetch_delay_seconds)
+                        try:
+                            cache[channel_id] = (
+                                await fetch_channel_subscribers_from_homepage(
+                                    channel_id,
+                                    channel_name=channel_name,
+                                )
+                            )
+                        except Exception:
+                            logger.exception(
+                                "Failed to fetch subscribers from channel homepage for %s",
+                                channel_id,
+                            )
+                            cache[channel_id] = None
+
+                    fetched = cache.get(channel_id)
+                    if fetched is not None and fetched > 0:
+                        subscribers = fetched
+
+                if not channel_metrics_usable(subscribers_count=subscribers):
+                    rejection = explain_missing_channel_metrics(
+                        channel_name=channel_name,
+                        subscribers_count=subscribers,
+                    )
+                    if log_rejections and rejection and rejection_logs < MAX_REJECTION_LOGS:
+                        xray_log(f"❌ [ОТКАЗ] {rejection}")
+                        rejection_logs += 1
+                    skipped_count += 1
+                    continue
+
+                viral_coefficient = calc_virality_coefficient(video_views, subscribers)
+
+                rejection = self.explain_rejection(
+                    thresholds,
                     channel_name=channel_name,
-                    subscribers_count=subscribers,
+                    video_views=video_views,
+                    viral_coefficient=viral_coefficient,
+                    subscribers=subscribers,
                 )
-                if log_rejections and rejection and rejection_logs < MAX_REJECTION_LOGS:
-                    xray_log(f"❌ [ОТКАЗ] {rejection}")
-                    rejection_logs += 1
+                if rejection:
+                    if log_rejections and rejection_logs < MAX_REJECTION_LOGS:
+                        xray_log(f"❌ [ОТКАЗ] {rejection}")
+                        rejection_logs += 1
+                    skipped_count += 1
+                    continue
+
+                vph = calc_vph_from_published_text(video_views, video.published_text)
+                passed_count += 1
+
+                hit = self._register_channel_video(
+                    db,
+                    thresholds,
+                    channel_id=video.channel_id,
+                    channel_name=channel_name,
+                    avatar_url=video.channel_avatar_url,
+                    subscribers=subscribers,
+                    channel_age_days=DEFAULT_CHANNEL_AGE_DAYS,
+                    total_views=0,
+                    viral_coefficient=viral_coefficient,
+                    representative_video_title=video.title,
+                    representative_video_thumbnail=video.thumbnail_url,
+                    representative_video_views=video_views,
+                    representative_video_id=video.video_id,
+                    vph=vph,
+                    skip_qualify_check=True,
+                )
+                if hit is not None:
+                    hits.append(hit)
+            except Exception as exc:
+                parse_error_count += 1
+                logger.warning(
+                    "Пропуск видео %r из-за ошибки обработки: %s",
+                    getattr(video, "video_id", "?"),
+                    exc,
+                )
                 continue
-
-            viral_coefficient = calc_virality_coefficient(video_views, subscribers)
-
-            rejection = self.explain_rejection(
-                thresholds,
-                channel_name=channel_name,
-                video_views=video_views,
-                viral_coefficient=viral_coefficient,
-                subscribers=subscribers,
-            )
-            if rejection:
-                if log_rejections and rejection_logs < MAX_REJECTION_LOGS:
-                    xray_log(f"❌ [ОТКАЗ] {rejection}")
-                    rejection_logs += 1
-                continue
-
-            vph = calc_vph_from_published_text(video_views, video.published_text)
-            passed_count += 1
-
-            hit = self._register_channel_video(
-                db,
-                thresholds,
-                channel_id=video.channel_id,
-                channel_name=channel_name,
-                avatar_url=video.channel_avatar_url,
-                subscribers=subscribers,
-                channel_age_days=DEFAULT_CHANNEL_AGE_DAYS,
-                total_views=0,
-                viral_coefficient=viral_coefficient,
-                representative_video_title=video.title,
-                representative_video_thumbnail=video.thumbnail_url,
-                representative_video_views=video_views,
-                representative_video_id=video.video_id,
-                vph=vph,
-                skip_qualify_check=True,
-            )
-            if hit is not None:
-                hits.append(hit)
 
         db.commit()
-        return RadarProcessResult(hits=hits, passed_count=passed_count)
+        return RadarProcessResult(
+            hits=hits,
+            passed_count=passed_count,
+            skipped_count=skipped_count,
+            parse_error_count=parse_error_count,
+        )
 
     def process_channel_analysis(self, db: Session, analysis: ChannelAnalysisModel) -> None:
         thresholds = self.get_thresholds(db)

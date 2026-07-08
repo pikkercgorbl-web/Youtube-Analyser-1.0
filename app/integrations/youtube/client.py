@@ -6,6 +6,7 @@ import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
+import logging
 import re
 from typing import Any
 from collections.abc import AsyncIterator
@@ -44,6 +45,9 @@ _ZERO_SUBSCRIBER_NEEDLES = (
 )
 YOUTUBE_API_REGION_CODE = "US"
 YOUTUBE_API_RELEVANCE_LANGUAGE = "en"
+MAX_SEARCH_PAGES = 100
+
+logger = logging.getLogger(__name__)
 
 
 class YouTubeApiError(RuntimeError):
@@ -342,7 +346,7 @@ class YouTubeApiClient:
             return []
 
         if max_pages is not None:
-            page_limit = max(1, min(max_pages, 10))
+            page_limit = max(1, min(max_pages, MAX_SEARCH_PAGES))
             result_limit = page_limit * 50
         else:
             page_limit = None
@@ -354,7 +358,10 @@ class YouTubeApiClient:
         continuation: str | None = None
         pages_fetched = 0
 
+        parse_skipped_total = 0
+
         while len(results) < result_limit:
+            logger.info("Обработка страницы %s...", pages_fetched + 1)
             payload: dict[str, Any] = {"context": context}
             if continuation:
                 payload["continuation"] = continuation
@@ -368,7 +375,19 @@ class YouTubeApiClient:
                 url=self.INNERTUBE_SEARCH_URL,
             )
             pages_fetched += 1
-            page_videos = _parse_search_videos(response)
+            page_videos, parse_skipped = _parse_search_videos(response)
+            parse_skipped_total += parse_skipped
+            if parse_skipped:
+                logger.info(
+                    "Страница %s: пропущено видео из-за ошибок парсинга: %s",
+                    pages_fetched,
+                    parse_skipped,
+                )
+            logger.info(
+                "Страница %s: распознано видео: %s",
+                pages_fetched,
+                len(page_videos),
+            )
             for video in page_videos:
                 if video.video_id in seen_video_ids:
                     continue
@@ -378,14 +397,31 @@ class YouTubeApiClient:
                     break
 
             if page_limit is not None and pages_fetched >= page_limit:
+                logger.info(
+                    "Достигнут лимит страниц (%s), поиск остановлен",
+                    page_limit,
+                )
                 break
 
             if len(results) >= result_limit:
                 break
 
             continuation = _extract_search_continuation(response)
-            if not continuation or not page_videos:
+            if not continuation:
+                logger.info("Токен следующей страницы не найден, поиск остановлен")
                 break
+            if not page_videos:
+                logger.info(
+                    "Страница %s не содержит видео, переход к следующей странице",
+                    pages_fetched,
+                )
+
+        if parse_skipped_total:
+            logger.info(
+                "Поиск %r: всего пропущено видео из-за ошибок парсинга: %s",
+                query,
+                parse_skipped_total,
+            )
 
         if not results and _contains_cyrillic(query):
             results = await self._fetch_search_via_html_page(query, limit=result_limit)
@@ -397,7 +433,7 @@ class YouTubeApiClient:
         query: str,
         *,
         sort_by_upload_date: bool = False,
-        max_pages: int = 50,
+        max_pages: int = MAX_SEARCH_PAGES,
     ) -> AsyncIterator[list[VideoSearchModel]]:
         """Yield deduplicated video batches page-by-page using InnerTube continuations."""
         if not query.strip():
@@ -407,10 +443,12 @@ class YouTubeApiClient:
         seen_video_ids: set[str] = set()
         continuation: str | None = None
         pages_fetched = 0
-        page_limit = max(1, max_pages)
+        page_limit = max(1, min(max_pages, MAX_SEARCH_PAGES))
         yielded_any = False
+        parse_skipped_total = 0
 
         while pages_fetched < page_limit:
+            logger.info("Обработка страницы %s...", pages_fetched + 1)
             payload: dict[str, Any] = {"context": context}
             if continuation:
                 payload["continuation"] = continuation
@@ -424,7 +462,19 @@ class YouTubeApiClient:
                 url=self.INNERTUBE_SEARCH_URL,
             )
             pages_fetched += 1
-            page_videos = _parse_search_videos(response)
+            page_videos, parse_skipped = _parse_search_videos(response)
+            parse_skipped_total += parse_skipped
+            if parse_skipped:
+                logger.info(
+                    "Страница %s: пропущено видео из-за ошибок парсинга: %s",
+                    pages_fetched,
+                    parse_skipped,
+                )
+            logger.info(
+                "Страница %s: распознано видео: %s",
+                pages_fetched,
+                len(page_videos),
+            )
 
             deduped: list[VideoSearchModel] = []
             for video in page_videos:
@@ -437,9 +487,29 @@ class YouTubeApiClient:
                 yielded_any = True
                 yield deduped
 
-            continuation = _extract_search_continuation(response)
-            if not continuation or not page_videos:
+            if pages_fetched >= page_limit:
+                logger.info(
+                    "Достигнут лимит страниц (%s), поиск остановлен",
+                    page_limit,
+                )
                 break
+
+            continuation = _extract_search_continuation(response)
+            if not continuation:
+                logger.info("Токен следующей страницы не найден, поиск остановлен")
+                break
+            if not page_videos:
+                logger.info(
+                    "Страница %s не содержит видео, переход к следующей странице",
+                    pages_fetched,
+                )
+
+        if parse_skipped_total:
+            logger.info(
+                "Поиск %r: всего пропущено видео из-за ошибок парсинга: %s",
+                query,
+                parse_skipped_total,
+            )
 
         if not yielded_any and _contains_cyrillic(query):
             html_results = await self._fetch_search_via_html_page(query, limit=50)
@@ -925,7 +995,7 @@ class YouTubeApiClient:
         if not initial_data:
             return []
 
-        videos = _parse_search_videos(initial_data)
+        videos, _parse_skipped = _parse_search_videos(initial_data)
         return videos[:limit]
 
     async def _fetch_google_search_suggestions(self, query: str) -> list[str]:
@@ -1392,15 +1462,19 @@ async def fetch_channel_subscribers_from_homepage(
     return None
 
 
-def _parse_search_videos(payload: dict[str, Any]) -> list[VideoSearchModel]:
+def _parse_search_videos(payload: dict[str, Any]) -> tuple[list[VideoSearchModel], int]:
     """
     Parse regular videos and Shorts from an InnerTube search response.
 
     Shorts are returned under different renderer keys depending on the response
     shape: ``reelItemRenderer`` (legacy) and ``shortsLockupViewModel`` (current).
+
+    Returns ``(videos, parse_skipped)`` where ``parse_skipped`` counts items that
+    raised an exception during parsing.
     """
     videos: list[VideoSearchModel] = []
     seen: set[str] = set()
+    parse_skipped = 0
 
     def _add(parsed: VideoSearchModel | None) -> None:
         if parsed is None or parsed.video_id in seen:
@@ -1408,16 +1482,31 @@ def _parse_search_videos(payload: dict[str, Any]) -> list[VideoSearchModel]:
         seen.add(parsed.video_id)
         videos.append(parsed)
 
-    for renderer in _iter_renderers(payload, "videoRenderer"):
-        _add(_parse_video_renderer(renderer))
-    for renderer in _iter_renderers(payload, "reelItemRenderer"):
-        _add(_parse_reel_item_renderer(renderer))
-    for renderer in _iter_renderers(payload, "shortVideoRenderer"):
-        _add(_parse_short_video_renderer(renderer))
-    for renderer in _iter_renderers(payload, "shortsLockupViewModel"):
-        _add(_parse_shorts_lockup_view_model(renderer))
+    def _try_add(
+        renderer: dict[str, Any],
+        parser,
+    ) -> None:
+        nonlocal parse_skipped
+        try:
+            _add(parser(renderer))
+        except Exception as exc:
+            parse_skipped += 1
+            logger.debug(
+                "Пропуск видео: ошибка парсинга %s — %s",
+                parser.__name__,
+                exc,
+            )
 
-    return videos
+    for renderer in _iter_renderers(payload, "videoRenderer"):
+        _try_add(renderer, _parse_video_renderer)
+    for renderer in _iter_renderers(payload, "reelItemRenderer"):
+        _try_add(renderer, _parse_reel_item_renderer)
+    for renderer in _iter_renderers(payload, "shortVideoRenderer"):
+        _try_add(renderer, _parse_short_video_renderer)
+    for renderer in _iter_renderers(payload, "shortsLockupViewModel"):
+        _try_add(renderer, _parse_shorts_lockup_view_model)
+
+    return videos, parse_skipped
 
 
 def _parse_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
@@ -1893,6 +1982,22 @@ def _extract_owner_channel_name_from_node(
     return ""
 
 
+def _extract_continuation_token_from_item(item: Any) -> str | None:
+    if not isinstance(item, dict):
+        return None
+
+    renderer = item.get("continuationItemRenderer")
+    if isinstance(renderer, dict):
+        token = (
+            renderer.get("continuationEndpoint", {})
+            .get("continuationCommand", {})
+            .get("token")
+        )
+        if isinstance(token, str) and token:
+            return token
+    return None
+
+
 def _extract_search_continuation(payload: dict[str, Any]) -> str | None:
     for renderer in _iter_renderers(payload, "continuationItemRenderer"):
         token = (
@@ -1902,6 +2007,21 @@ def _extract_search_continuation(payload: dict[str, Any]) -> str | None:
         )
         if isinstance(token, str) and token:
             return token
+
+    for action in _iter_renderers(payload, "appendContinuationItemsAction"):
+        continuation_items = action.get("continuationItems")
+        if not isinstance(continuation_items, list):
+            continue
+        for item in continuation_items:
+            token = _extract_continuation_token_from_item(item)
+            if token:
+                return token
+
+    for continuation_data in _iter_renderers(payload, "nextContinuationData"):
+        token = continuation_data.get("continuation")
+        if isinstance(token, str) and token:
+            return token
+
     return None
 
 
@@ -2805,7 +2925,7 @@ async def iter_radar_search_pages(
     query: str,
     *,
     sort_by_upload_date: bool = False,
-    max_pages: int = 50,
+    max_pages: int = MAX_SEARCH_PAGES,
 ) -> AsyncIterator[list[VideoSearchModel]]:
     """Paginated InnerTube search for radar with per-page channel metadata fill."""
     client = _get_innertube_client()
