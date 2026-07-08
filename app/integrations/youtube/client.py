@@ -983,6 +983,94 @@ def calc_virality_coefficient(views_count: int, subscribers_count: int) -> float
     return round(views_count / denominator, 2)
 
 
+def parse_subscriber_count(text: str) -> int:
+    """
+    Parse a YouTube subscriber counter label into an integer.
+
+    Examples: ``1,5 млн подписчиков``, ``234K``, ``10 тыс.``, ``850``.
+    Returns ``0`` when the count is hidden, zero, or cannot be parsed.
+    """
+    raw = _text_from_node(text)
+    if not raw:
+        return 0
+
+    normalized = (
+        raw.replace("\xa0", " ")
+        .replace("\u202f", " ")
+        .replace("−", "-")
+        .strip()
+        .lower()
+    )
+    if not normalized:
+        return 0
+
+    if any(needle in normalized for needle in _HIDDEN_SUBSCRIBER_NEEDLES):
+        return 0
+    if any(needle in normalized for needle in _ZERO_SUBSCRIBER_NEEDLES):
+        return 0
+
+    cleaned = re.sub(
+        r"\b(?:subscribers?|subscriber|подписчик\w*)\b",
+        "",
+        normalized,
+        flags=re.IGNORECASE,
+    ).strip(" .,")
+
+    compact_match = re.search(
+        r"(\d+(?:[.,]\d+)?)\s*([kmb]|tys\.?|тыс(?:\.|яч(?:а|ев)?)?|млн|млрд|million|billion|thousand)\b",
+        cleaned,
+        flags=re.IGNORECASE,
+    )
+    if compact_match:
+        return _parse_counter_number(compact_match.group(1), compact_match.group(2))
+
+    glued_match = re.search(
+        r"(\d+(?:[.,]\d+)?)([kmb])\b",
+        cleaned,
+        flags=re.IGNORECASE,
+    )
+    if glued_match:
+        return _parse_counter_number(glued_match.group(1), glued_match.group(2))
+
+    plain_match = re.search(r"(\d[\d\s.,]*)", cleaned)
+    if plain_match:
+        return _parse_counter_number(plain_match.group(1), "")
+
+    return 0
+
+
+def _parse_counter_number(number_raw: str, suffix: str) -> int:
+    multiplier = _counter_multiplier(suffix)
+    token = number_raw.strip().replace("\xa0", " ").replace("\u202f", " ").replace(" ", "")
+
+    if multiplier > 1:
+        token = token.replace(",", ".")
+        try:
+            return int(float(token) * multiplier)
+        except ValueError:
+            return 0
+
+    if re.fullmatch(r"\d{1,3}(?:[.,]\d{3})+", token):
+        return int(re.sub(r"[.,]", "", token))
+
+    if "," in token and "." not in token:
+        parts = token.split(",")
+        if len(parts) == 2 and 1 <= len(parts[1]) <= 2:
+            try:
+                return int(float(f"{parts[0]}.{parts[1]}"))
+            except ValueError:
+                return 0
+
+    if "." in token:
+        try:
+            return int(float(token))
+        except ValueError:
+            return 0
+
+    digits_only = re.sub(r"\D", "", token)
+    return int(digits_only) if digits_only else 0
+
+
 def parse_compact_int(value: Any) -> int:
     """
     Convert localized YouTube counters into integers.
@@ -1058,28 +1146,11 @@ def parse_subscriber_count_text(value: Any) -> int | None:
     if any(needle in normalized for needle in _HIDDEN_SUBSCRIBER_NEEDLES):
         return None
 
-    if any(needle in normalized for needle in _ZERO_SUBSCRIBER_NEEDLES):
-        return 0
-
-    compact_match = re.search(
-        r"(\d+(?:[.,]\d+)?)\s*([kmb]|tys\.?|тыс(?:\.|яч(?:а|ев)?)?|млн|млрд)\b",
-        normalized,
-        flags=re.IGNORECASE,
-    )
-    if compact_match:
-        number_text = compact_match.group(1).replace(",", ".")
-        suffix = compact_match.group(2).strip(".")
-        try:
-            return int(float(number_text) * _counter_multiplier(suffix))
-        except ValueError:
-            return None
-
-    parsed = parse_compact_int(text)
+    parsed = parse_subscriber_count(text)
     if parsed > 0:
         return parsed
-
-    if re.fullmatch(r"\d+", normalized):
-        return int(normalized)
+    if any(needle in normalized for needle in _ZERO_SUBSCRIBER_NEEDLES):
+        return 0
 
     return None
 
@@ -1576,8 +1647,8 @@ def _extract_subscribers_from_renderer(renderer: dict[str, Any]) -> int:
             needle in lowered
             for needle in ("subscriber", "subscribers", "подписчик", "подписчиков", "подписчика")
         ):
-            parsed = parse_subscriber_count_text(text)
-            if parsed is not None and parsed > 0:
+            parsed = parse_subscriber_count(text)
+            if parsed > 0:
                 return parsed
     return 0
 
@@ -2258,6 +2329,14 @@ def _extract_subscribers_count(
     all_texts: list[str],
 ) -> int:
     for response in responses:
+        for renderer in _iter_renderers(response, "aboutChannelViewModel"):
+            for field in ("subscriberCountText", "subscriberCount"):
+                text = _text_from_node(renderer.get(field))
+                if text:
+                    parsed = parse_subscriber_count(text)
+                    if parsed:
+                        return parsed
+
         for renderer in _iter_renderers(response, "pageHeaderViewModel"):
             metadata = renderer.get("metadata", {})
             if not isinstance(metadata, dict):
@@ -2283,14 +2362,14 @@ def _extract_subscribers_count(
                         needle in lowered
                         for needle in ("subscriber", "subscribers", "подписчик")
                     ):
-                        value = parse_compact_int(text)
+                        value = parse_subscriber_count(text)
                         if value:
                             return value
 
-    return _first_counter(
+    return _first_subscriber_count(
         header_texts,
         ("subscriber", "subscribers", "подписчик", "подписчиков", "подписчика"),
-    ) or _first_counter(
+    ) or _first_subscriber_count(
         all_texts,
         ("subscriber", "subscribers", "подписчик", "подписчиков", "подписчика"),
     )
@@ -2410,6 +2489,16 @@ def _first_counter(texts: list[str], needles: tuple[str, ...]) -> int:
         lowered = text.lower()
         if any(needle in lowered for needle in needles):
             value = parse_compact_int(text)
+            if value:
+                return value
+    return 0
+
+
+def _first_subscriber_count(texts: list[str], needles: tuple[str, ...]) -> int:
+    for text in texts:
+        lowered = text.lower()
+        if any(needle in lowered for needle in needles):
+            value = parse_subscriber_count(text)
             if value:
                 return value
     return 0
