@@ -30,12 +30,14 @@ Discovery
 
 ### Discovery
 
-- Keep the existing InnerTube discovery path as the primary free candidate source.
+- Keep the existing InnerTube discovery path as the primary experimental candidate source.
 - Do not treat `min_views` and `min_viral_coeff` as hard discovery filters; those are observation/ranking signals.
 - Keep hard validity filters (missing channel, blacklist, invalid upload period/format) as rejection filters.
 - Persist every discovered candidate and its rejection reason.
 - Deduplicate by `video_id` before embedding or topic assignment.
 - Persist the discovery source (`keyword`, `suggestion`, `channel`, `graph`, `api`) so source quality can be measured later.
+
+Removing the old hard view/virality thresholds is intentionally expected to increase the candidate volume by orders of magnitude. Stage 0 must measure the resulting discovery, storage, embedding, and observation load before tightening polling policy.
 
 ### Observation
 
@@ -45,6 +47,7 @@ Discovery
 - Polling is adaptive: promotion and demotion are both required.
 - Every observed candidate has a hard observation budget (`checks_count`, maximum age/hot duration) as a safety stop.
 - A traffic-quality heuristic may reduce polling priority but must not claim to identify bots with certainty.
+- Stage 0 is a measurement phase: record candidate volume, hard-filter rejection rate, eligible volume, unique channels, and later observation throughput before relying on fixed polling assumptions.
 
 ### Baseline
 
@@ -57,7 +60,7 @@ channel_estimate = shrink(channel_baseline, topic_estimate, n_channel)
 w = n / (n + k)
 ```
 
-Until semantic topics exist, use a temporary proxy (`Video.topic`, `Channel.topic`, or discovery keyword) and record the baseline source so it cannot be confused with the final semantic topic during evaluation.
+Until semantic topics exist, the only valid temporary topic proxy in v0.1 is `discovery_keyword`. `Channel.topic` and `Video.topic` are not baseline inputs because they are currently not populated by the existing radar/search ingestion path. Every baseline calculation must store `baseline_source` explicitly so proxy-based measurements cannot be confused with semantic-topic measurements during evaluation.
 
 ### Temporal signal
 
@@ -86,6 +89,7 @@ Minimum MVP rule:
 - Use a lightweight local multilingual embedding model such as `multilingual-e5-small`.
 - The embedding service owns preprocessing and E5 prefixes; callers do not add prefixes manually.
 - Store the semantic input `content_hash` and a `config_hash` derived from model + preprocessing configuration.
+- `config_hash` answers whether the embedding configuration changed; `content_hash` answers whether the semantic input changed. Both are required for deterministic, idempotent recomputation.
 - Similarity is used for online topic assignment.
 
 ### Topic grouping
@@ -94,17 +98,19 @@ Use a simple online nearest-topic approach in v0.1:
 
 ```text
 new embedding
-  -> nearest topic centroid
+  -> nearest active topic centroid
   -> similarity >= threshold ? attach : create topic
 ```
 
 Run a daily merge pass to reduce fragmentation. Merge operations must be logged as events; historical topic metrics are not silently rewritten.
 
-Topic membership is historical so that a video can move between topic identities without destroying the past.
+Merged topics must have an explicit inactive/resolution state (for example `merged_into_id`) so a source topic cannot continue receiving new memberships after it has been merged.
+
+Topic membership is historical so that a video can move between topic identities without destroying the past. The current active membership used for cross-channel confirmation must be unambiguous; reassignment history must not inflate channel counts.
 
 ### Cross-channel confirmation
 
-A topic becomes meaningful only when semantic similarity and multiple independent channels agree. Individual video virality alone is Level 1, not the final product signal.
+A topic becomes meaningful only when semantic similarity and multiple independent channels agree. Count distinct channels within the active/new-topic observation window, not raw video count. Individual video virality alone is Level 1, not the final product signal.
 
 ### Alerts
 
@@ -126,7 +132,7 @@ Every alert stores:
 - initial topic video count;
 - initial topic channel count.
 
-Outcomes are measured at 6h / 24h / 72h / 7d.
+Outcomes are measured at 6h / 24h / 72h / 7d. Control samples must receive equivalent future outcome measurement so the control group can estimate missed opportunities, not only precision among alerted items.
 
 Maintain a stratified control group:
 
@@ -134,17 +140,15 @@ Maintain a stratified control group:
 - borderline;
 - low-score.
 
-This is required to estimate missed opportunities, not only precision among alerted items.
-
 ### Idempotency
 
-All derived results must be safely repeatable after worker failure. External/expensive work is keyed by a deterministic configuration hash rather than a manually incremented integer version.
+All derived results must be safely repeatable after worker failure. External/expensive work is keyed by deterministic content/config hashes rather than manually incremented versions.
 
 ## Database direction
 
 Production/experimental target: PostgreSQL/Supabase + pgvector.
 
-Local SQLite remains the fallback for the current application until the runtime is switched explicitly. New code must not silently assume SQLite-only behavior.
+Local SQLite remains the fallback for the current application until the runtime is switched explicitly. New vector code must not silently assume SQLite-only behavior.
 
 ## Out of scope for v0.1
 
