@@ -116,5 +116,140 @@ class _EnsureCorsOnErrorsMiddleware(BaseHTTPMiddleware):
         return response
 
 
-app.add_middleware(_EnsureCorsOnErrorsMiddleware)
+# 3. Роуты и подключение router-ов
+@app.get("/health", tags=["system"])
+def health_check() -> dict[str, str]:
+    """Liveness probe."""
+    return {"status": "ok"}
 
+
+app.include_router(videos.router, prefix="/api/v1/videos", tags=["videos"])
+app.include_router(analytics.router, prefix="/api/analysis", tags=["analysis"])
+app.include_router(search.router, prefix="/api/youtube-search", tags=["search"])
+app.include_router(keywords.router, prefix="/api/keywords", tags=["keywords"])
+app.include_router(saved_keywords.router, prefix="/api/saved-keywords", tags=["keywords"])
+app.include_router(explosive_channels.router, prefix="/api/explosive-channels", tags=["analysis"])
+app.include_router(radar.router, prefix="/api/radar", tags=["analysis"])
+app.include_router(target_keywords.router, prefix="/api/target-keywords", tags=["analysis"])
+app.include_router(radar_stats.router, prefix="/api/radar-stats", tags=["analysis"])
+
+
+@app.post("/api/force-radar-scan", response_model=ForceRadarScanResponse, tags=["analysis"])
+async def force_radar_scan() -> ForceRadarScanResponse:
+    """Run one immediate radar scan using the next due keywords from the queue."""
+    worker = get_shared_worker()
+
+    try:
+        await worker.run_force_scan()
+    except YouTubeApiError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=str(exc),
+        ) from exc
+
+    return ForceRadarScanResponse(
+        status="ok",
+        message="Радар выполнил принудительный поиск",
+    )
+
+
+@app.post("/api/search", response_model=list[EnrichedVideoModel], tags=["search"])
+async def search_videos(request: SearchRequest) -> list[EnrichedVideoModel]:
+    """InnerTube search enriched with channel metadata, optional local filtering."""
+    sort_by_upload_date = request.sort_by.strip().lower() == "date"
+    try:
+        enriched = await get_enriched_search_results(
+            request.query,
+            max_results=SEARCH_MAX_RESULTS,
+            sort_by_upload_date=sort_by_upload_date,
+            save_to_db=False,
+        )
+    except YouTubeApiError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=str(exc),
+        ) from exc
+
+    filters_config = (request.filters or SearchFiltersModel()).model_dump()
+    filter_service = VideoFilterService()
+    filtered = filter_service.apply_filters(enriched, filters_config)
+    try:
+        return filter_service.sort_results(filtered, request.sort_by)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        ) from exc
+
+
+@app.post("/api/analyze-channel", response_model=AnalyzeChannelResponse, tags=["analysis"])
+async def analyze_channel(body: AnalyzeChannelRequest) -> AnalyzeChannelResponse:
+    """Analyze a channel or resolve channel from a video URL via InnerTube browse."""
+    try:
+        result = await analyze_channel_from_url(body.url)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        ) from exc
+    except YouTubeApiError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=str(exc),
+        ) from exc
+
+    if not result.channel_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Channel not found for the provided URL",
+        )
+
+    return AnalyzeChannelResponse(
+        channel_id=result.channel_id,
+        channel_title=result.channel_title,
+        subscribers_count=result.subscribers_count,
+        channel_avatar_url=result.channel_avatar_url,
+        videos=[
+            ChannelAnalysisVideoItem(**video.model_dump())
+            for video in result.videos
+        ],
+        total_videos=len(result.videos),
+    )
+
+
+@app.get("/api/keyword-research", response_model=KeywordResearchResponse, tags=["keywords"])
+async def keyword_research(
+    query: str = Query(..., min_length=1, max_length=512, description="Keyword or search query"),
+) -> KeywordResearchResponse:
+    """SEO keyword research: main query and related suggestions with volume and competition scores."""
+    service = KeywordResearchService()
+    try:
+        return await service.research(query)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        ) from exc
+    except YouTubeApiError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=str(exc),
+        ) from exc
+
+
+@app.get("/api/suggestions", response_model=list[str], tags=["search"])
+async def search_suggestions(
+    query: str = Query(..., min_length=2, max_length=256, description="Partial search query"),
+) -> list[str]:
+    """YouTube autocomplete suggestions (FR-1)."""
+    try:
+        return await get_search_suggestions(query)
+    except YouTubeApiError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=str(exc),
+        ) from exc
+
+# TODO: include routers
+# from app.api.routes import channels
+# app.include_router(channels.router, prefix="/api/v1/channels", tags=["channels"])
