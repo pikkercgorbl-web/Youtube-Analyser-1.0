@@ -39,6 +39,8 @@ Discovery
 
 Removing the old hard view/virality thresholds is intentionally expected to increase the candidate volume by orders of magnitude. Stage 0 must measure the resulting discovery, storage, embedding, and observation load before tightening polling policy.
 
+For duplicate discoveries of the same `video_id`, v0.1 uses **first source wins** semantics for the single `discovery_source` field: the first successful discovery source is retained and later duplicate discoveries do not overwrite it. This keeps the candidate record stable and avoids adding a source-event table prematurely. As a consequence, source-quality metrics can be slightly biased for later/faster sources that often rediscover videos already captured by another source. This is an explicit accepted limitation for v0.1, not a task to solve now. If source-quality metrics become suspicious after sustained operation, revisit the model with a separate discovery-event/history table rather than changing semantics implicitly.
+
 ### Observation
 
 - Add `VideoSnapshot` for point-in-time video statistics.
@@ -192,6 +194,7 @@ Implementation rules:
 - Deduplicate on `video_id` before any embedding/topic processing.
 - Keep discovery source information for later source-quality evaluation.
 - Do not destroy an existing candidate record merely because the same video is rediscovered from another source.
+- For v0.1, when the same `video_id` is rediscovered from another source, keep the first recorded `discovery_source` and do not overwrite it. Do not add a discovery-event history table yet. Treat the resulting source-quality bias as a known limitation to revisit only if real evaluation later shows it is material.
 
 ### Stage 2 — Video history + reuse channel history
 
@@ -447,3 +450,4 @@ It must also retain enough future observations to measure whether those alerts w
 - Do not use `Channel.topic` or `Video.topic` as a Stage-3 baseline proxy unless a later plan revision explicitly changes that decision.
 - Do not make PostgreSQL/pgvector a hidden dependency of the existing SQLite application.
 - Do not remove old legacy behavior merely because a v0.1 subsystem exists; migrate dependent UI/services deliberately.
+- For duplicate discovery of the same `video_id`, preserve the first recorded discovery source in v0.1; do not silently change this rule during implementation.
