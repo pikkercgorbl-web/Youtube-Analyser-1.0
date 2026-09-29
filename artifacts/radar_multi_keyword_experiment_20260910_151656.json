@@ -1,0 +1,4283 @@
+{
+  "generated_at": "2026-09-10T15:16:56.938574+00:00",
+  "keywords": [
+    {
+      "keyword": "AI tools",
+      "success": true,
+      "error": null,
+      "pages": 20,
+      "innertube": {
+        "keyword": "AI tools",
+        "request_count": 20,
+        "total_duration_ms": 19321.21,
+        "max_duration_ms": 1119.48,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 20,
+            "total_duration_ms": 19321.21,
+            "max_duration_ms": 1119.48,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "AI tools",
+        "discovered_videos": 341,
+        "format_skips": 0,
+        "filter_skips": 340,
+        "passed_videos": 1,
+        "parse_errors": 0,
+        "unique_channels": 1,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "language": 2,
+          "min_subscribers": 1,
+          "min_views": 303,
+          "min_viral_coeff": 34
+        }
+      },
+      "candidate_summary": {
+        "keyword": "AI tools",
+        "candidate_count": 341,
+        "passed_count": 1,
+        "rejected_count": 340,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "language": 2,
+          "min_subscribers": 1,
+          "min_views": 303,
+          "min_viral_coeff": 34
+        },
+        "signal_availability": {
+          "viral_coefficient": 8,
+          "vph": 341,
+          "video_age_days": 341
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 7.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 0.35,
+            "min": 0.0
+          },
+          "vph": {
+            "max": 378364.0,
+            "min": 0.0
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "q9tpIc8PVKM",
+            "views": 85531,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 85531.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "LPef1aMmJDY",
+            "views": 242,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 242.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "2ymlvXp9clk",
+            "views": 3403,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 3403.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "-KcHn0QcSb0",
+            "views": 33359,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 33359.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "gWDGmReaUYU",
+            "views": 8,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 8.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "AI tools",
+        "total_candidates": 341,
+        "passed": 1,
+        "rejected": 340,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "language": 2,
+          "min_subscribers": 1,
+          "min_views": 303,
+          "min_viral_coeff": 34
+        },
+        "signal_availability": {
+          "views": 341,
+          "subscribers": 341,
+          "viral_coefficient": 8,
+          "vph": 341,
+          "video_age_days": 341
+        },
+        "groups": {
+          "all": {
+            "count": 341,
+            "views": {
+              "count": 341,
+              "min": 0,
+              "max": 378364
+            },
+            "vph": {
+              "count": 341,
+              "min": 0.0,
+              "max": 378364.0
+            },
+            "video_age_days": {
+              "count": 341,
+              "min": 0.0,
+              "max": 7.0
+            },
+            "viral_coefficient": {
+              "count": 8,
+              "min": 0.0,
+              "max": 0.35
+            }
+          },
+          "passed": {
+            "count": 1,
+            "views": {
+              "count": 1,
+              "min": 34867,
+              "max": 34867
+            },
+            "vph": {
+              "count": 1,
+              "min": 1452.79,
+              "max": 1452.79
+            },
+            "video_age_days": {
+              "count": 1,
+              "min": 1.0,
+              "max": 1.0
+            }
+          },
+          "language": {
+            "count": 2,
+            "views": {
+              "count": 2,
+              "min": 10460,
+              "max": 122410
+            },
+            "vph": {
+              "count": 2,
+              "min": 435.83,
+              "max": 5100.42
+            },
+            "video_age_days": {
+              "count": 2,
+              "min": 1.0,
+              "max": 1.0
+            }
+          },
+          "min_subscribers": {
+            "count": 1,
+            "views": {
+              "count": 1,
+              "min": 11681,
+              "max": 11681
+            },
+            "vph": {
+              "count": 1,
+              "min": 486.71,
+              "max": 486.71
+            },
+            "video_age_days": {
+              "count": 1,
+              "min": 1.0,
+              "max": 1.0
+            }
+          },
+          "min_views": {
+            "count": 303,
+            "views": {
+              "count": 303,
+              "min": 0,
+              "max": 8940
+            },
+            "vph": {
+              "count": 303,
+              "min": 0.0,
+              "max": 8940.0
+            },
+            "video_age_days": {
+              "count": 303,
+              "min": 0.0,
+              "max": 7.0
+            },
+            "viral_coefficient": {
+              "count": 7,
+              "min": 0.0,
+              "max": 0.35
+            }
+          },
+          "min_viral_coeff": {
+            "count": 34,
+            "views": {
+              "count": 34,
+              "min": 10017,
+              "max": 378364
+            },
+            "vph": {
+              "count": 34,
+              "min": 652.75,
+              "max": 378364.0
+            },
+            "video_age_days": {
+              "count": 34,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 1,
+              "min": 0.24,
+              "max": 0.24
+            }
+          }
+        },
+        "samples": {
+          "language": [
+            {
+              "title": "AI Engineer ஆகணுமா? First Know This in 2026 🤯 (தமிழ்)",
+              "views": 10460,
+              "subscribers": 0,
+              "vph": 435.83,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "80-90 च्या Retro लूकची क्रेझ! राहुल गांधींपासून फडणवीसांपर्यंत नेत्यांचे AI फोटो व्हायरल | AI Retro",
+              "views": 122410,
+              "subscribers": 0,
+              "vph": 5100.42,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_subscribers": [
+            {
+              "title": "All AI Models in One Place: Opus 5, GPT-5.6 Luna, Grok 4.6, Gemini 3.6 and other",
+              "views": 11681,
+              "subscribers": 0,
+              "vph": 486.71,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_views": [
+            {
+              "title": "I Tried Craziest AI Tools",
+              "views": 242,
+              "subscribers": 0,
+              "vph": 242.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "The AI Tools I Actually Pay For - And Where I'd Start",
+              "views": 3403,
+              "subscribers": 0,
+              "vph": 3403.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "After I Tried 567 AI Tools, Here’s What Will Make You Rich.",
+              "views": 8,
+              "subscribers": 0,
+              "vph": 8.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "New BEST AI image generator is here",
+              "views": 85531,
+              "subscribers": 0,
+              "vph": 85531.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Trying To Solve The Biggest AI Problem",
+              "views": 33359,
+              "subscribers": 0,
+              "vph": 33359.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "One AI Risk to Rule Them All with Roman Yampolskiy | TGS 233",
+              "views": 32934,
+              "subscribers": 136000,
+              "vph": 1372.25,
+              "video_age_days": 1.0,
+              "viral_coefficient": 0.24
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "productivity",
+      "success": true,
+      "error": null,
+      "pages": 20,
+      "innertube": {
+        "keyword": "productivity",
+        "request_count": 20,
+        "total_duration_ms": 19121.89,
+        "max_duration_ms": 1125.37,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 20,
+            "total_duration_ms": 19121.89,
+            "max_duration_ms": 1125.37,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "productivity",
+        "discovered_videos": 311,
+        "format_skips": 0,
+        "filter_skips": 311,
+        "passed_videos": 0,
+        "parse_errors": 0,
+        "unique_channels": 0,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "min_views": 306,
+          "min_viral_coeff": 5
+        }
+      },
+      "candidate_summary": {
+        "keyword": "productivity",
+        "candidate_count": 311,
+        "passed_count": 0,
+        "rejected_count": 311,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "min_views": 306,
+          "min_viral_coeff": 5
+        },
+        "signal_availability": {
+          "viral_coefficient": 2,
+          "vph": 304,
+          "video_age_days": 304
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 1.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 169.0,
+            "min": 0.0
+          },
+          "vph": {
+            "max": 45614.0,
+            "min": 0.0
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "3n6Jb8948sk",
+            "views": 45614,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 45614.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "fDZ5xO-Nuto",
+            "views": 13029,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 542.88,
+            "video_age_days": 1.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "0gBSP40in0c",
+            "views": 4260,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 4260.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "OXbKKLna1io",
+            "views": 11367,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 11367.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "8L2HY3oS06M",
+            "views": 19230,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 19230.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "productivity",
+        "total_candidates": 311,
+        "passed": 0,
+        "rejected": 311,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "min_views": 306,
+          "min_viral_coeff": 5
+        },
+        "signal_availability": {
+          "views": 311,
+          "subscribers": 311,
+          "viral_coefficient": 2,
+          "vph": 304,
+          "video_age_days": 304
+        },
+        "groups": {
+          "all": {
+            "count": 311,
+            "views": {
+              "count": 311,
+              "min": 0,
+              "max": 45614
+            },
+            "vph": {
+              "count": 304,
+              "min": 0.0,
+              "max": 45614.0
+            },
+            "video_age_days": {
+              "count": 304,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 2,
+              "min": 0.0,
+              "max": 169.0
+            }
+          },
+          "passed": {
+            "count": 0
+          },
+          "min_views": {
+            "count": 306,
+            "views": {
+              "count": 306,
+              "min": 0,
+              "max": 8072
+            },
+            "vph": {
+              "count": 299,
+              "min": 0.0,
+              "max": 8072.0
+            },
+            "video_age_days": {
+              "count": 299,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 2,
+              "min": 0.0,
+              "max": 169.0
+            }
+          },
+          "min_viral_coeff": {
+            "count": 5,
+            "views": {
+              "count": 5,
+              "min": 11367,
+              "max": 45614
+            },
+            "vph": {
+              "count": 5,
+              "min": 542.88,
+              "max": 45614.0
+            },
+            "video_age_days": {
+              "count": 5,
+              "min": 0.0,
+              "max": 1.0
+            }
+          }
+        },
+        "samples": {
+          "min_views": [
+            {
+              "title": "The Science of Productivity: Get MORE Done in 24 Hours without Working More",
+              "views": 4260,
+              "subscribers": 0,
+              "vph": 4260.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "How to be so productive it feels illegal",
+              "views": 0,
+              "subscribers": 0,
+              "vph": 0.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "The AI productivity paradox: Why feeling faster isn't the same as going faster",
+              "views": 16,
+              "subscribers": 0,
+              "vph": 16.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "5AM HARVARD FIRST DAY OF SCHOOL VLOG 📚 study motivation, back-to-school routine, productive day",
+              "views": 45614,
+              "subscribers": 0,
+              "vph": 45614.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "PRODUCTIVE  DAY🌷🌱study vlog, reading, taking notes, romanticizing life˚ ༘",
+              "views": 13029,
+              "subscribers": 0,
+              "vph": 542.88,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "SEPTEMBER RESET VLOG | cooking, *trying to* be productive & sorting my life out",
+              "views": 11367,
+              "subscribers": 0,
+              "vph": 11367.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "fitness",
+      "success": true,
+      "error": null,
+      "pages": 20,
+      "innertube": {
+        "keyword": "fitness",
+        "request_count": 20,
+        "total_duration_ms": 20710.48,
+        "max_duration_ms": 1337.05,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 20,
+            "total_duration_ms": 20710.48,
+            "max_duration_ms": 1337.05,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "fitness",
+        "discovered_videos": 319,
+        "format_skips": 0,
+        "filter_skips": 311,
+        "passed_videos": 8,
+        "parse_errors": 0,
+        "unique_channels": 7,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "language": 3,
+          "min_views": 288,
+          "min_viral_coeff": 20
+        }
+      },
+      "candidate_summary": {
+        "keyword": "fitness",
+        "candidate_count": 319,
+        "passed_count": 8,
+        "rejected_count": 311,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "language": 3,
+          "min_views": 288,
+          "min_viral_coeff": 20
+        },
+        "signal_availability": {
+          "viral_coefficient": 6,
+          "vph": 319,
+          "video_age_days": 319
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 1.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 180.06,
+            "min": 0.0
+          },
+          "vph": {
+            "max": 2015487.0,
+            "min": 0.0
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "L1fuBlZi258",
+            "views": 3512,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 3512.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "-PCpPhkqBm0",
+            "views": 2913,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 2913.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "OV09yPLf8BI",
+            "views": 27513,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 27513.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "cRVP46pT_Fg",
+            "views": 6114,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 6114.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "mbkD7LbwbgQ",
+            "views": 20914,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 20914.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "fitness",
+        "total_candidates": 319,
+        "passed": 8,
+        "rejected": 311,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "language": 3,
+          "min_views": 288,
+          "min_viral_coeff": 20
+        },
+        "signal_availability": {
+          "views": 319,
+          "subscribers": 319,
+          "viral_coefficient": 6,
+          "vph": 319,
+          "video_age_days": 319
+        },
+        "groups": {
+          "all": {
+            "count": 319,
+            "views": {
+              "count": 319,
+              "min": 0,
+              "max": 2015487
+            },
+            "vph": {
+              "count": 319,
+              "min": 0.0,
+              "max": 2015487.0
+            },
+            "video_age_days": {
+              "count": 319,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 6,
+              "min": 0.0,
+              "max": 180.06
+            }
+          },
+          "passed": {
+            "count": 8,
+            "views": {
+              "count": 8,
+              "min": 11846,
+              "max": 2015487
+            },
+            "vph": {
+              "count": 8,
+              "min": 493.58,
+              "max": 2015487.0
+            },
+            "video_age_days": {
+              "count": 8,
+              "min": 0.0,
+              "max": 1.0
+            }
+          },
+          "language": {
+            "count": 3,
+            "views": {
+              "count": 3,
+              "min": 10731,
+              "max": 45976
+            },
+            "vph": {
+              "count": 3,
+              "min": 10731.0,
+              "max": 45976.0
+            },
+            "video_age_days": {
+              "count": 3,
+              "min": 0.0,
+              "max": 0.0
+            },
+            "viral_coefficient": {
+              "count": 1,
+              "min": 0.0,
+              "max": 0.0
+            }
+          },
+          "min_views": {
+            "count": 288,
+            "views": {
+              "count": 288,
+              "min": 0,
+              "max": 9659
+            },
+            "vph": {
+              "count": 288,
+              "min": 0.0,
+              "max": 9556.0
+            },
+            "video_age_days": {
+              "count": 288,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 4,
+              "min": 0.05,
+              "max": 180.06
+            }
+          },
+          "min_viral_coeff": {
+            "count": 20,
+            "views": {
+              "count": 20,
+              "min": 10579,
+              "max": 275291
+            },
+            "vph": {
+              "count": 20,
+              "min": 477.67,
+              "max": 275291.0
+            },
+            "video_age_days": {
+              "count": 20,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 1,
+              "min": 0.96,
+              "max": 0.96
+            }
+          }
+        },
+        "samples": {
+          "language": [
+            {
+              "title": "India Vs Afghanistan T20 Series: Team India की Fitness Report आई| Gambhir के करीबी की विदाई? Iyer",
+              "views": 10731,
+              "subscribers": 4179999,
+              "vph": 10731.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": 0.0
+            },
+            {
+              "title": "😱 मोटापा और Extra Fat घटाएँ 🔥 | Powerful Full Body Weight Loss Workout | #fitness #weightloss",
+              "views": 45976,
+              "subscribers": 0,
+              "vph": 45976.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "China का T-59 Tank Exercise में फटा! Bangladesh में 2 सैनिकों की मौत | Trump, Israel & Modern War",
+              "views": 18010,
+              "subscribers": 0,
+              "vph": 18010.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_views": [
+            {
+              "title": "FITNESS GETS MORE ATTRACTIVE WITH AGE",
+              "views": 3512,
+              "subscribers": 0,
+              "vph": 3512.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Is the Fitness Industry becoming Gay? (literally - not metaphorically)",
+              "views": 2913,
+              "subscribers": 0,
+              "vph": 2913.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "15 MIN CORE WORKOUT | Sculpt Your Abs & Waist, No Equipment #fitness",
+              "views": 6114,
+              "subscribers": 0,
+              "vph": 6114.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "How I Built This $160K/Month Mobile App",
+              "views": 27513,
+              "subscribers": 0,
+              "vph": 27513.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Shape Your Lower Body | Walk & Squat Workout",
+              "views": 20914,
+              "subscribers": 0,
+              "vph": 20914.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "The CARB MISTAKE Making You Gain Fat",
+              "views": 23961,
+              "subscribers": 0,
+              "vph": 23961.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "gaming",
+      "success": true,
+      "error": null,
+      "pages": 15,
+      "innertube": {
+        "keyword": "gaming",
+        "request_count": 15,
+        "total_duration_ms": 15691.37,
+        "max_duration_ms": 1330.17,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 15,
+            "total_duration_ms": 15691.37,
+            "max_duration_ms": 1330.17,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "gaming",
+        "discovered_videos": 251,
+        "format_skips": 0,
+        "filter_skips": 214,
+        "passed_videos": 37,
+        "parse_errors": 0,
+        "unique_channels": 33,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "language": 3,
+          "min_views": 73,
+          "min_viral_coeff": 138
+        }
+      },
+      "candidate_summary": {
+        "keyword": "gaming",
+        "candidate_count": 251,
+        "passed_count": 37,
+        "rejected_count": 214,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "language": 3,
+          "min_views": 73,
+          "min_viral_coeff": 138
+        },
+        "signal_availability": {
+          "viral_coefficient": 5,
+          "vph": 245,
+          "video_age_days": 245
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 1.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 12318.11,
+            "min": 0.02
+          },
+          "vph": {
+            "max": 3727706.0,
+            "min": 209.33
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "BLEdo5Bv8mI",
+            "views": 1217990,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 50749.58,
+            "video_age_days": 1.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "r4yEw0xDfsM",
+            "views": 4566,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 4566.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "N-2XJ0X6m2I",
+            "views": 101927,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 101927.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "JfIsARMEsZg",
+            "views": 10293,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 10293.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "1iWiG7NcPDs",
+            "views": 26474,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 26474.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "gaming",
+        "total_candidates": 251,
+        "passed": 37,
+        "rejected": 214,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "language": 3,
+          "min_views": 73,
+          "min_viral_coeff": 138
+        },
+        "signal_availability": {
+          "views": 251,
+          "subscribers": 251,
+          "viral_coefficient": 5,
+          "vph": 245,
+          "video_age_days": 245
+        },
+        "groups": {
+          "all": {
+            "count": 251,
+            "views": {
+              "count": 251,
+              "min": 769,
+              "max": 3727706
+            },
+            "vph": {
+              "count": 245,
+              "min": 209.33,
+              "max": 3727706.0
+            },
+            "video_age_days": {
+              "count": 245,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 5,
+              "min": 0.02,
+              "max": 12318.11
+            }
+          },
+          "passed": {
+            "count": 37,
+            "views": {
+              "count": 37,
+              "min": 10438,
+              "max": 3727706
+            },
+            "vph": {
+              "count": 37,
+              "min": 4619.29,
+              "max": 3727706.0
+            },
+            "video_age_days": {
+              "count": 37,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 1,
+              "min": 12318.11,
+              "max": 12318.11
+            }
+          },
+          "language": {
+            "count": 3,
+            "views": {
+              "count": 3,
+              "min": 56600,
+              "max": 568183
+            },
+            "vph": {
+              "count": 3,
+              "min": 2358.33,
+              "max": 372603.0
+            },
+            "video_age_days": {
+              "count": 3,
+              "min": 0.0,
+              "max": 1.0
+            }
+          },
+          "min_views": {
+            "count": 73,
+            "views": {
+              "count": 73,
+              "min": 769,
+              "max": 9885
+            },
+            "vph": {
+              "count": 67,
+              "min": 209.33,
+              "max": 9885.0
+            },
+            "video_age_days": {
+              "count": 67,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 1,
+              "min": 403.67,
+              "max": 403.67
+            }
+          },
+          "min_viral_coeff": {
+            "count": 138,
+            "views": {
+              "count": 138,
+              "min": 10293,
+              "max": 2668705
+            },
+            "vph": {
+              "count": 138,
+              "min": 488.96,
+              "max": 2668705.0
+            },
+            "video_age_days": {
+              "count": 138,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 3,
+              "min": 0.02,
+              "max": 1.12
+            }
+          }
+        },
+        "samples": {
+          "language": [
+            {
+              "title": "Bharti ने Harssh को दी Last Warning | Indian Game Show | Best Comedy",
+              "views": 568183,
+              "subscribers": 0,
+              "vph": 23674.29,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "ALIF GAMING ও MAHFUZ BHAI💖 vs SHUVO 69 ও HIMON GAMING🥰 কারা করতে পারবে সবচেয়ে বেশি কিল?😱",
+              "views": 56600,
+              "subscribers": 0,
+              "vph": 2358.33,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Ball Run 🏐 2048 game play no 249 a।।Infinity Run game।।gaming video।। #ballrun2048 #ballrun #gaming",
+              "views": 372603,
+              "subscribers": 0,
+              "vph": 372603.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_views": [
+            {
+              "title": "Best Nightcore Gaming Mix 2026 ♫ Gaming Music Mix ♫ New Music 2026 EDM Gaming Music",
+              "views": 4566,
+              "subscribers": 0,
+              "vph": 4566.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "SERIOUS RANK PUSH ON LIVE || BIN ZAID GAMING 👽#binzaid #freefirelive",
+              "views": 1077,
+              "subscribers": 0,
+              "vph": null,
+              "video_age_days": null,
+              "viral_coefficient": null
+            },
+            {
+              "title": "I Built My Own Cloud Gaming Server With a Mini PC",
+              "views": 4337,
+              "subscribers": 0,
+              "vph": 4337.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "NVIDIA Just Changed Gaming Forever",
+              "views": 1217990,
+              "subscribers": 0,
+              "vph": 50749.58,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "A COMEDY BACKROOMS HORROR GAME THAT IS ACTUALLY HILARIOUS.",
+              "views": 101927,
+              "subscribers": 0,
+              "vph": 101927.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Microsoft Vibe Gaming: an AI to play your games for you",
+              "views": 10293,
+              "subscribers": 0,
+              "vph": 10293.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "history",
+      "success": true,
+      "error": null,
+      "pages": 20,
+      "innertube": {
+        "keyword": "history",
+        "request_count": 20,
+        "total_duration_ms": 21792.51,
+        "max_duration_ms": 1558.78,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 20,
+            "total_duration_ms": 21792.51,
+            "max_duration_ms": 1558.78,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "history",
+        "discovered_videos": 347,
+        "format_skips": 0,
+        "filter_skips": 346,
+        "passed_videos": 1,
+        "parse_errors": 0,
+        "unique_channels": 1,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "language": 8,
+          "min_views": 292,
+          "min_viral_coeff": 46
+        }
+      },
+      "candidate_summary": {
+        "keyword": "history",
+        "candidate_count": 347,
+        "passed_count": 1,
+        "rejected_count": 346,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "language": 8,
+          "min_views": 292,
+          "min_viral_coeff": 46
+        },
+        "signal_availability": {
+          "viral_coefficient": 10,
+          "vph": 346,
+          "video_age_days": 346
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 2.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 65.5,
+            "min": 0.0
+          },
+          "vph": {
+            "max": 153837.0,
+            "min": 0.0
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "f7KjbemUhkw",
+            "views": 3577,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 3577.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "8qfGeA2YlVI",
+            "views": 153837,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 153837.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "Oxa0RygxEbE",
+            "views": 7060,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 7060.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "HH5OCed5PGQ",
+            "views": 11138,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 11138.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "wkHgZhuXhnE",
+            "views": 16764,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 16764.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "history",
+        "total_candidates": 347,
+        "passed": 1,
+        "rejected": 346,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "language": 8,
+          "min_views": 292,
+          "min_viral_coeff": 46
+        },
+        "signal_availability": {
+          "views": 347,
+          "subscribers": 347,
+          "viral_coefficient": 10,
+          "vph": 346,
+          "video_age_days": 346
+        },
+        "groups": {
+          "all": {
+            "count": 347,
+            "views": {
+              "count": 347,
+              "min": 0,
+              "max": 153837
+            },
+            "vph": {
+              "count": 346,
+              "min": 0.0,
+              "max": 153837.0
+            },
+            "video_age_days": {
+              "count": 346,
+              "min": 0.0,
+              "max": 2.0
+            },
+            "viral_coefficient": {
+              "count": 10,
+              "min": 0.0,
+              "max": 65.5
+            }
+          },
+          "passed": {
+            "count": 1,
+            "views": {
+              "count": 1,
+              "min": 18023,
+              "max": 18023
+            },
+            "vph": {
+              "count": 1,
+              "min": 750.96,
+              "max": 750.96
+            },
+            "video_age_days": {
+              "count": 1,
+              "min": 1.0,
+              "max": 1.0
+            }
+          },
+          "language": {
+            "count": 8,
+            "views": {
+              "count": 8,
+              "min": 10736,
+              "max": 46972
+            },
+            "vph": {
+              "count": 8,
+              "min": 289.98,
+              "max": 46972.0
+            },
+            "video_age_days": {
+              "count": 8,
+              "min": 0.0,
+              "max": 2.0
+            }
+          },
+          "min_views": {
+            "count": 292,
+            "views": {
+              "count": 292,
+              "min": 0,
+              "max": 9669
+            },
+            "vph": {
+              "count": 291,
+              "min": 0.0,
+              "max": 9669.0
+            },
+            "video_age_days": {
+              "count": 291,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 7,
+              "min": 0.01,
+              "max": 65.5
+            }
+          },
+          "min_viral_coeff": {
+            "count": 46,
+            "views": {
+              "count": 46,
+              "min": 10234,
+              "max": 153837
+            },
+            "vph": {
+              "count": 46,
+              "min": 493.67,
+              "max": 153837.0
+            },
+            "video_age_days": {
+              "count": 46,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 3,
+              "min": 0.0,
+              "max": 0.38
+            }
+          }
+        },
+        "samples": {
+          "language": [
+            {
+              "title": "क्या है भारत में बिरयानी का पूरा इतिहास ? | Biryani History Explained",
+              "views": 46972,
+              "subscribers": 0,
+              "vph": 46972.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Maharaja Ranjit Singh को सज़ा सुनाने वाले Nihang Sikhs कौन हैं? History| Controversies| Tarikh",
+              "views": 35270,
+              "subscribers": 0,
+              "vph": 35270.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "CTET Sep. 2026 I सम्पूर्ण HISTORY - 60 प्रश्न सीरीज CLASS -4 I Virendra Sir 12 PM",
+              "views": 15209,
+              "subscribers": 0,
+              "vph": 15209.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_views": [
+            {
+              "title": "When Peasants Seized London - History behind Wat Tyler's Uprising",
+              "views": 3577,
+              "subscribers": 0,
+              "vph": 3577.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "What Lies Beneath the Temple Mount? | Forbidden History | S1 E5 | Full Episode",
+              "views": 7060,
+              "subscribers": 0,
+              "vph": 7060.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "The Stormlands: History & Lore Of The Storm Kings | House Of The Dragon / ASOIAF Analysis Explained",
+              "views": 6698,
+              "subscribers": 0,
+              "vph": 6698.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "Is There Life In the Stars? | Ancient Aliens",
+              "views": 153837,
+              "subscribers": 0,
+              "vph": 153837.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "The ENTIRE History of CHINA | History Teacher Reacts | Historically",
+              "views": 11138,
+              "subscribers": 0,
+              "vph": 11138.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "The Complete History of the Peasants’ Revolt | Human Voiced, No Ads",
+              "views": 16764,
+              "subscribers": 0,
+              "vph": 16764.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "technology",
+      "success": true,
+      "error": null,
+      "pages": 19,
+      "innertube": {
+        "keyword": "technology",
+        "request_count": 19,
+        "total_duration_ms": 20611.12,
+        "max_duration_ms": 1345.13,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 19,
+            "total_duration_ms": 20611.12,
+            "max_duration_ms": 1345.13,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "technology",
+        "discovered_videos": 304,
+        "format_skips": 0,
+        "filter_skips": 301,
+        "passed_videos": 3,
+        "parse_errors": 0,
+        "unique_channels": 3,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "language": 4,
+          "min_views": 187,
+          "min_viral_coeff": 110
+        }
+      },
+      "candidate_summary": {
+        "keyword": "technology",
+        "candidate_count": 304,
+        "passed_count": 3,
+        "rejected_count": 301,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "language": 4,
+          "min_views": 187,
+          "min_viral_coeff": 110
+        },
+        "signal_availability": {
+          "viral_coefficient": 9,
+          "vph": 300,
+          "video_age_days": 300
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 2.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 6.8,
+            "min": 0.01
+          },
+          "vph": {
+            "max": 7662053.0,
+            "min": 0.0
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "5pV3D14y1FQ",
+            "views": 2214380,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 2214380.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "CEgynoERrqc",
+            "views": 187940,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 187940.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "y-1Euhv7hSs",
+            "views": 7414,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 7414.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "24FCS8tFHcE",
+            "views": 12101,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 12101.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "Ro7EUljMmJA",
+            "views": 13272,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 13272.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "technology",
+        "total_candidates": 304,
+        "passed": 3,
+        "rejected": 301,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "language": 4,
+          "min_views": 187,
+          "min_viral_coeff": 110
+        },
+        "signal_availability": {
+          "views": 304,
+          "subscribers": 304,
+          "viral_coefficient": 9,
+          "vph": 300,
+          "video_age_days": 300
+        },
+        "groups": {
+          "all": {
+            "count": 304,
+            "views": {
+              "count": 304,
+              "min": 0,
+              "max": 7662053
+            },
+            "vph": {
+              "count": 300,
+              "min": 0.0,
+              "max": 7662053.0
+            },
+            "video_age_days": {
+              "count": 300,
+              "min": 0.0,
+              "max": 2.0
+            },
+            "viral_coefficient": {
+              "count": 9,
+              "min": 0.01,
+              "max": 6.8
+            }
+          },
+          "passed": {
+            "count": 3,
+            "views": {
+              "count": 3,
+              "min": 26776,
+              "max": 98403
+            },
+            "vph": {
+              "count": 3,
+              "min": 26776.0,
+              "max": 98403.0
+            },
+            "video_age_days": {
+              "count": 3,
+              "min": 0.0,
+              "max": 0.0
+            },
+            "viral_coefficient": {
+              "count": 1,
+              "min": 6.8,
+              "max": 6.8
+            }
+          },
+          "language": {
+            "count": 4,
+            "views": {
+              "count": 4,
+              "min": 11437,
+              "max": 44706
+            },
+            "vph": {
+              "count": 4,
+              "min": 938.54,
+              "max": 44706.0
+            },
+            "video_age_days": {
+              "count": 4,
+              "min": 0.0,
+              "max": 1.0
+            }
+          },
+          "min_views": {
+            "count": 187,
+            "views": {
+              "count": 187,
+              "min": 0,
+              "max": 9536
+            },
+            "vph": {
+              "count": 183,
+              "min": 0.0,
+              "max": 8202.0
+            },
+            "video_age_days": {
+              "count": 183,
+              "min": 0.0,
+              "max": 2.0
+            },
+            "viral_coefficient": {
+              "count": 2,
+              "min": 0.01,
+              "max": 0.37
+            }
+          },
+          "min_viral_coeff": {
+            "count": 110,
+            "views": {
+              "count": 110,
+              "min": 10173,
+              "max": 7662053
+            },
+            "vph": {
+              "count": 110,
+              "min": 519.42,
+              "max": 7662053.0
+            },
+            "video_age_days": {
+              "count": 110,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 6,
+              "min": 0.01,
+              "max": 0.18
+            }
+          }
+        },
+        "samples": {
+          "language": [
+            {
+              "title": "Iran Captures US Underwater Drone | Could America Lose Its Secret Technology? By Ankit Sir।",
+              "views": 11437,
+              "subscribers": 0,
+              "vph": 11437.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "মিসাইলে কী বসিয়েছে ইরানি বিজ্ঞানীরা? | IRAN VS PATRIOT | Iran Missile Technology",
+              "views": 44706,
+              "subscribers": 0,
+              "vph": 44706.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Tech News 1782 ⚡ iPhone 18 Pro వచ్చేస్తోంది! ⚡ Apple ఈవెంట్ & FlipKart డీల్స్! 🔥 Meta Muse x Jarvis",
+              "views": 22525,
+              "subscribers": 0,
+              "vph": 938.54,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_views": [
+            {
+              "title": "AI researcher quits job and issues warning about the technology",
+              "views": 7414,
+              "subscribers": 0,
+              "vph": 7414.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Magik & Technology - Relativity",
+              "views": 3578,
+              "subscribers": 0,
+              "vph": 3578.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Iran captured US Submarine drone - Reverse Engineering of US technology - Tariq Pathan",
+              "views": 6314,
+              "subscribers": 0,
+              "vph": 6314.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "iPhone Duo/18 Pro Hands On - Beyond Impressive.",
+              "views": 2214380,
+              "subscribers": 0,
+              "vph": 2214380.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "iPhone Duo Impressions - They NAILED This",
+              "views": 187940,
+              "subscribers": 0,
+              "vph": 187940.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "NAM A2: The Team Behind the Technology",
+              "views": 12101,
+              "subscribers": 0,
+              "vph": 12101.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "self improvement",
+      "success": true,
+      "error": null,
+      "pages": 14,
+      "innertube": {
+        "keyword": "self improvement",
+        "request_count": 14,
+        "total_duration_ms": 14644.7,
+        "max_duration_ms": 1316.5,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 14,
+            "total_duration_ms": 14644.7,
+            "max_duration_ms": 1316.5,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "self improvement",
+        "discovered_videos": 210,
+        "format_skips": 0,
+        "filter_skips": 209,
+        "passed_videos": 1,
+        "parse_errors": 0,
+        "unique_channels": 1,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "language": 1,
+          "min_views": 202,
+          "min_viral_coeff": 6
+        }
+      },
+      "candidate_summary": {
+        "keyword": "self improvement",
+        "candidate_count": 210,
+        "passed_count": 1,
+        "rejected_count": 209,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "language": 1,
+          "min_views": 202,
+          "min_viral_coeff": 6
+        },
+        "signal_availability": {
+          "viral_coefficient": 7,
+          "vph": 208,
+          "video_age_days": 208
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 1.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 82.71,
+            "min": 0.0
+          },
+          "vph": {
+            "max": 66916.0,
+            "min": 0.0
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "NcvDhZIoGas",
+            "views": 17075,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 17075.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "eScU7qTqfW8",
+            "views": 54,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 54.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "X6Uc7uxeYM4",
+            "views": 103,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 103.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "52eulXjduiY",
+            "views": 888,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 888.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "XImI03e4wds",
+            "views": 2323,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 2323.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "self improvement",
+        "total_candidates": 210,
+        "passed": 1,
+        "rejected": 209,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "language": 1,
+          "min_views": 202,
+          "min_viral_coeff": 6
+        },
+        "signal_availability": {
+          "views": 210,
+          "subscribers": 210,
+          "viral_coefficient": 7,
+          "vph": 208,
+          "video_age_days": 208
+        },
+        "groups": {
+          "all": {
+            "count": 210,
+            "views": {
+              "count": 210,
+              "min": 0,
+              "max": 66947
+            },
+            "vph": {
+              "count": 208,
+              "min": 0.0,
+              "max": 66916.0
+            },
+            "video_age_days": {
+              "count": 208,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 7,
+              "min": 0.0,
+              "max": 82.71
+            }
+          },
+          "passed": {
+            "count": 1,
+            "views": {
+              "count": 1,
+              "min": 17093,
+              "max": 17093
+            },
+            "vph": {
+              "count": 1,
+              "min": 712.21,
+              "max": 712.21
+            },
+            "video_age_days": {
+              "count": 1,
+              "min": 1.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 1,
+              "min": 4.12,
+              "max": 4.12
+            }
+          },
+          "language": {
+            "count": 1,
+            "views": {
+              "count": 1,
+              "min": 66916,
+              "max": 66916
+            },
+            "vph": {
+              "count": 1,
+              "min": 66916.0,
+              "max": 66916.0
+            },
+            "video_age_days": {
+              "count": 1,
+              "min": 0.0,
+              "max": 0.0
+            }
+          },
+          "min_views": {
+            "count": 202,
+            "views": {
+              "count": 202,
+              "min": 0,
+              "max": 8305
+            },
+            "vph": {
+              "count": 200,
+              "min": 0.0,
+              "max": 8305.0
+            },
+            "video_age_days": {
+              "count": 200,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 6,
+              "min": 0.0,
+              "max": 82.71
+            }
+          },
+          "min_viral_coeff": {
+            "count": 6,
+            "views": {
+              "count": 6,
+              "min": 10089,
+              "max": 66947
+            },
+            "vph": {
+              "count": 6,
+              "min": 452.62,
+              "max": 20542.0
+            },
+            "video_age_days": {
+              "count": 6,
+              "min": 0.0,
+              "max": 1.0
+            }
+          }
+        },
+        "samples": {
+          "language": [
+            {
+              "title": "आज की मुरली 10-09-2026 with TEXT | Aaj Ki Murli | BK Usha | DAILY MURLI In Hindi | BRAHMA KUMARIS",
+              "views": 66916,
+              "subscribers": 0,
+              "vph": 66916.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_views": [
+            {
+              "title": "how self improvement got me close to s**cide",
+              "views": 54,
+              "subscribers": 0,
+              "vph": 54.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Being Productive Is Easy, Actually",
+              "views": 103,
+              "subscribers": 0,
+              "vph": 103.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Self Improvement Needs Relaxation To Thrive",
+              "views": 888,
+              "subscribers": 0,
+              "vph": 888.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "10,000 hours of self-improvement in 15 minutes",
+              "views": 17075,
+              "subscribers": 0,
+              "vph": 17075.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Women ADMIT They Aren't Attracted To Nice Guys But Use Them Anyway In Modern Dating!",
+              "views": 20542,
+              "subscribers": 0,
+              "vph": 20542.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Last 4 Months - Project 30 to be Discipline | How to be Disciplined | Disciplined Kese Bane | Rewirs",
+              "views": 66947,
+              "subscribers": 0,
+              "vph": 2789.46,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "interesting facts",
+      "success": true,
+      "error": null,
+      "pages": 19,
+      "innertube": {
+        "keyword": "interesting facts",
+        "request_count": 19,
+        "total_duration_ms": 21125.88,
+        "max_duration_ms": 1342.5,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 19,
+            "total_duration_ms": 21125.88,
+            "max_duration_ms": 1342.5,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "interesting facts",
+        "discovered_videos": 321,
+        "format_skips": 0,
+        "filter_skips": 321,
+        "passed_videos": 0,
+        "parse_errors": 0,
+        "unique_channels": 0,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "language": 2,
+          "min_views": 250,
+          "min_viral_coeff": 69
+        }
+      },
+      "candidate_summary": {
+        "keyword": "interesting facts",
+        "candidate_count": 321,
+        "passed_count": 0,
+        "rejected_count": 321,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "language": 2,
+          "min_views": 250,
+          "min_viral_coeff": 69
+        },
+        "signal_availability": {
+          "viral_coefficient": 12,
+          "vph": 321,
+          "video_age_days": 321
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 1.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 9.26,
+            "min": 0.0
+          },
+          "vph": {
+            "max": 371494.0,
+            "min": 0.0
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "kIEOX10ip54",
+            "views": 8178,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 8178.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "Vgd9Iqj3VbQ",
+            "views": 371494,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 371494.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "LemSZAd0N-M",
+            "views": 45784,
+            "subscribers": 181000,
+            "viral_coefficient": 0.25,
+            "vph": 45784.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "ykU6I0sqvUU",
+            "views": 412,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 412.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "hcZapFmkbUQ",
+            "views": 14457,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 14457.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "interesting facts",
+        "total_candidates": 321,
+        "passed": 0,
+        "rejected": 321,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "language": 2,
+          "min_views": 250,
+          "min_viral_coeff": 69
+        },
+        "signal_availability": {
+          "views": 321,
+          "subscribers": 321,
+          "viral_coefficient": 12,
+          "vph": 321,
+          "video_age_days": 321
+        },
+        "groups": {
+          "all": {
+            "count": 321,
+            "views": {
+              "count": 321,
+              "min": 0,
+              "max": 371494
+            },
+            "vph": {
+              "count": 321,
+              "min": 0.0,
+              "max": 371494.0
+            },
+            "video_age_days": {
+              "count": 321,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 12,
+              "min": 0.0,
+              "max": 9.26
+            }
+          },
+          "passed": {
+            "count": 0
+          },
+          "language": {
+            "count": 2,
+            "views": {
+              "count": 2,
+              "min": 13264,
+              "max": 56380
+            },
+            "vph": {
+              "count": 2,
+              "min": 13264.0,
+              "max": 56380.0
+            },
+            "video_age_days": {
+              "count": 2,
+              "min": 0.0,
+              "max": 0.0
+            }
+          },
+          "min_views": {
+            "count": 250,
+            "views": {
+              "count": 250,
+              "min": 0,
+              "max": 9852
+            },
+            "vph": {
+              "count": 250,
+              "min": 0.0,
+              "max": 9852.0
+            },
+            "video_age_days": {
+              "count": 250,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 9,
+              "min": 0.0,
+              "max": 9.26
+            }
+          },
+          "min_viral_coeff": {
+            "count": 69,
+            "views": {
+              "count": 69,
+              "min": 10016,
+              "max": 371494
+            },
+            "vph": {
+              "count": 69,
+              "min": 433.92,
+              "max": 371494.0
+            },
+            "video_age_days": {
+              "count": 69,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 3,
+              "min": 0.01,
+              "max": 0.25
+            }
+          }
+        },
+        "samples": {
+          "language": [
+            {
+              "title": "क्या होता है Food Coma? खाना खाने के बाद नींद क्यों आती है? Feeling Sleepy After Eating? RWA",
+              "views": 13264,
+              "subscribers": 0,
+              "vph": 13264.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "కేరళ గురించి ఈ నిజాలు తెలుసా? 😱 | God's Own Country Kerala | Telugu facts",
+              "views": 56380,
+              "subscribers": 0,
+              "vph": 56380.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_views": [
+            {
+              "title": "Ten Things You Didn’t Know About Halloween H20",
+              "views": 8178,
+              "subscribers": 0,
+              "vph": 8178.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "50 Curiously Fascinating Facts 🤯 | Mind-Blowing Random Facts",
+              "views": 412,
+              "subscribers": 0,
+              "vph": 412.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "INTERESTING FACTS YOU WON’T BELIEVE! 🌍 ** 🤯 | Amazing Facts Across the World**",
+              "views": 9,
+              "subscribers": 0,
+              "vph": 9.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "Interesting Details in Ocarina of Time Remake",
+              "views": 371494,
+              "subscribers": 0,
+              "vph": 371494.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Der Sommer 2026 war ein Fiebertraum | mit Leonie Sun",
+              "views": 45784,
+              "subscribers": 181000,
+              "vph": 45784.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": 0.25
+            },
+            {
+              "title": "The Most Relaxing Fossil Facts to Fall Asleep To — No Adverts",
+              "views": 14457,
+              "subscribers": 0,
+              "vph": 14457.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "home improvement",
+      "success": true,
+      "error": null,
+      "pages": 16,
+      "innertube": {
+        "keyword": "home improvement",
+        "request_count": 16,
+        "total_duration_ms": 18545.67,
+        "max_duration_ms": 1433.55,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 16,
+            "total_duration_ms": 18545.67,
+            "max_duration_ms": 1433.55,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "home improvement",
+        "discovered_videos": 293,
+        "format_skips": 0,
+        "filter_skips": 292,
+        "passed_videos": 1,
+        "parse_errors": 0,
+        "unique_channels": 1,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "min_views": 284,
+          "min_viral_coeff": 8
+        }
+      },
+      "candidate_summary": {
+        "keyword": "home improvement",
+        "candidate_count": 293,
+        "passed_count": 1,
+        "rejected_count": 292,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "min_views": 284,
+          "min_viral_coeff": 8
+        },
+        "signal_availability": {
+          "viral_coefficient": 8,
+          "vph": 291,
+          "video_age_days": 291
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 2.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 20.02,
+            "min": 0.01
+          },
+          "vph": {
+            "max": 62549.0,
+            "min": 0.0
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "K3Oj3TfVMy4",
+            "views": 71,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 71.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "4fzoJVK_SlQ",
+            "views": 434,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 434.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "U88rbxDR1G4",
+            "views": 10295,
+            "subscribers": 530000,
+            "viral_coefficient": 0.02,
+            "vph": 10295.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          },
+          {
+            "video_id": "mxXrU8hl5SM",
+            "views": 4583,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 190.96,
+            "video_age_days": 1.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "FA3YdiJyhUY",
+            "views": 700,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 700.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "home improvement",
+        "total_candidates": 293,
+        "passed": 1,
+        "rejected": 292,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "min_views": 284,
+          "min_viral_coeff": 8
+        },
+        "signal_availability": {
+          "views": 293,
+          "subscribers": 293,
+          "viral_coefficient": 8,
+          "vph": 291,
+          "video_age_days": 291
+        },
+        "groups": {
+          "all": {
+            "count": 293,
+            "views": {
+              "count": 293,
+              "min": 0,
+              "max": 62549
+            },
+            "vph": {
+              "count": 291,
+              "min": 0.0,
+              "max": 62549.0
+            },
+            "video_age_days": {
+              "count": 291,
+              "min": 0.0,
+              "max": 2.0
+            },
+            "viral_coefficient": {
+              "count": 8,
+              "min": 0.01,
+              "max": 20.02
+            }
+          },
+          "passed": {
+            "count": 1,
+            "views": {
+              "count": 1,
+              "min": 62549,
+              "max": 62549
+            },
+            "vph": {
+              "count": 1,
+              "min": 62549.0,
+              "max": 62549.0
+            },
+            "video_age_days": {
+              "count": 1,
+              "min": 0.0,
+              "max": 0.0
+            }
+          },
+          "min_views": {
+            "count": 284,
+            "views": {
+              "count": 284,
+              "min": 0,
+              "max": 8945
+            },
+            "vph": {
+              "count": 282,
+              "min": 0.0,
+              "max": 8945.0
+            },
+            "video_age_days": {
+              "count": 282,
+              "min": 0.0,
+              "max": 2.0
+            },
+            "viral_coefficient": {
+              "count": 7,
+              "min": 0.01,
+              "max": 20.02
+            }
+          },
+          "min_viral_coeff": {
+            "count": 8,
+            "views": {
+              "count": 8,
+              "min": 10295,
+              "max": 57054
+            },
+            "vph": {
+              "count": 8,
+              "min": 633.17,
+              "max": 57054.0
+            },
+            "video_age_days": {
+              "count": 8,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 1,
+              "min": 0.02,
+              "max": 0.02
+            }
+          }
+        },
+        "samples": {
+          "min_views": [
+            {
+              "title": "This Home Transformation Brings Their Hope Back! | Fixer To Fabulous S1 E1 | HGTV Asia",
+              "views": 71,
+              "subscribers": 0,
+              "vph": 71.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Can You Build a Luxury Bathroom for $50k? (Start to Finish)",
+              "views": 434,
+              "subscribers": 0,
+              "vph": 434.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "035r.BlindTenonMortising",
+              "views": 4583,
+              "subscribers": 0,
+              "vph": 190.96,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "TWO HOMES TRANSFORMING! 😭🏡 Doors & Windows DONE + Interior Plastering Continues!",
+              "views": 10295,
+              "subscribers": 530000,
+              "vph": 10295.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": 0.02
+            },
+            {
+              "title": "Starting the floor of the shop (Building our Home Part70)",
+              "views": 17615,
+              "subscribers": 0,
+              "vph": 733.96,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "This $45 Lowe's Part Replaces a $2,000 Generator (Nobody Tells You This)",
+              "views": 15196,
+              "subscribers": 0,
+              "vph": 633.17,
+              "video_age_days": 1.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "keyword": "travel",
+      "success": true,
+      "error": null,
+      "pages": 21,
+      "innertube": {
+        "keyword": "travel",
+        "request_count": 21,
+        "total_duration_ms": 24302.88,
+        "max_duration_ms": 1588.14,
+        "error_count": 0,
+        "by_endpoint": {
+          "search": {
+            "count": 21,
+            "total_duration_ms": 24302.88,
+            "max_duration_ms": 1588.14,
+            "error_count": 0
+          }
+        }
+      },
+      "filter_metrics": {
+        "keyword": "travel",
+        "discovered_videos": 350,
+        "format_skips": 0,
+        "filter_skips": 350,
+        "passed_videos": 0,
+        "parse_errors": 0,
+        "unique_channels": 0,
+        "html_fallback_count": 0,
+        "filter_skip_reasons": {
+          "language": 2,
+          "min_views": 319,
+          "min_viral_coeff": 29
+        }
+      },
+      "candidate_summary": {
+        "keyword": "travel",
+        "candidate_count": 350,
+        "passed_count": 0,
+        "rejected_count": 350,
+        "parse_error_count": 0,
+        "rejection_reasons": {
+          "language": 2,
+          "min_views": 319,
+          "min_viral_coeff": 29
+        },
+        "signal_availability": {
+          "viral_coefficient": 3,
+          "vph": 347,
+          "video_age_days": 347
+        },
+        "signal_ranges": {
+          "video_age_days": {
+            "max": 1.0,
+            "min": 0.0
+          },
+          "viral_coefficient": {
+            "max": 11.31,
+            "min": 0.0
+          },
+          "vph": {
+            "max": 291017.0,
+            "min": 0.12
+          }
+        },
+        "rejected_signal_samples": [
+          {
+            "video_id": "qjeDhs-3dfA",
+            "views": 3219,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 3219.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "fq7mpitMM5M",
+            "views": 329,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 329.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "VHlqwzRQchc",
+            "views": 6724,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 6724.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "IhL9dAuxzJE",
+            "views": 3502,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 3502.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_views"
+          },
+          {
+            "video_id": "fNi3Xgcy2pI",
+            "views": 26343,
+            "subscribers": 0,
+            "viral_coefficient": null,
+            "vph": 26343.0,
+            "video_age_days": 0.0,
+            "first_failure_reason": "min_viral_coeff"
+          }
+        ]
+      },
+      "distribution": {
+        "keyword": "travel",
+        "total_candidates": 350,
+        "passed": 0,
+        "rejected": 350,
+        "parse_errors": 0,
+        "filter_skip_reasons": {
+          "language": 2,
+          "min_views": 319,
+          "min_viral_coeff": 29
+        },
+        "signal_availability": {
+          "views": 350,
+          "subscribers": 350,
+          "viral_coefficient": 3,
+          "vph": 347,
+          "video_age_days": 347
+        },
+        "groups": {
+          "all": {
+            "count": 350,
+            "views": {
+              "count": 350,
+              "min": 0,
+              "max": 291017
+            },
+            "vph": {
+              "count": 347,
+              "min": 0.12,
+              "max": 291017.0
+            },
+            "video_age_days": {
+              "count": 347,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 3,
+              "min": 0.0,
+              "max": 11.31
+            }
+          },
+          "passed": {
+            "count": 0
+          },
+          "language": {
+            "count": 2,
+            "views": {
+              "count": 2,
+              "min": 26375,
+              "max": 37763
+            },
+            "vph": {
+              "count": 2,
+              "min": 26375.0,
+              "max": 37763.0
+            },
+            "video_age_days": {
+              "count": 2,
+              "min": 0.0,
+              "max": 0.0
+            }
+          },
+          "min_views": {
+            "count": 319,
+            "views": {
+              "count": 319,
+              "min": 0,
+              "max": 9930
+            },
+            "vph": {
+              "count": 316,
+              "min": 0.12,
+              "max": 9930.0
+            },
+            "video_age_days": {
+              "count": 316,
+              "min": 0.0,
+              "max": 1.0
+            },
+            "viral_coefficient": {
+              "count": 3,
+              "min": 0.0,
+              "max": 11.31
+            }
+          },
+          "min_viral_coeff": {
+            "count": 29,
+            "views": {
+              "count": 29,
+              "min": 10074,
+              "max": 291017
+            },
+            "vph": {
+              "count": 29,
+              "min": 468.21,
+              "max": 291017.0
+            },
+            "video_age_days": {
+              "count": 29,
+              "min": 0.0,
+              "max": 1.0
+            }
+          }
+        },
+        "samples": {
+          "language": [
+            {
+              "title": "Shimla Trip Horror Story | शिमला ट्रिप की भूतिया घटना",
+              "views": 37763,
+              "subscribers": 0,
+              "vph": 37763.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "निकल पड़े खूबसूरत सफर में 😇 पहाड़ों की तरफ || Travel Vlog || Arti Uttarakhand Wali ||",
+              "views": 26375,
+              "subscribers": 0,
+              "vph": 26375.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_views": [
+            {
+              "title": "Getting Home From My Cruise Did NOT Go As Planned",
+              "views": 3219,
+              "subscribers": 0,
+              "vph": 3219.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Romania: Europe’s Last True Wilderness and Medieval Villages | 4K Travel Documentary",
+              "views": 329,
+              "subscribers": 0,
+              "vph": 329.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "2 very REAL days of car life & travel | Behind the scenes",
+              "views": 6724,
+              "subscribers": 0,
+              "vph": 6724.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ],
+          "min_viral_coeff": [
+            {
+              "title": "Where to Cheap Out on Travel (and Where to Splurge)",
+              "views": 26343,
+              "subscribers": 0,
+              "vph": 26343.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "Former CIA: What I Pack for Overseas Travel That Most People Don’t",
+              "views": 13320,
+              "subscribers": 0,
+              "vph": 13320.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            },
+            {
+              "title": "I Used My YouTube Earnings to Travel 1,000 km in China | Real Life in China",
+              "views": 42457,
+              "subscribers": 0,
+              "vph": 42457.0,
+              "video_age_days": 0.0,
+              "viral_coefficient": null
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "table_rows": [
+    {
+      "keyword": "AI tools",
+      "success": true,
+      "error": null,
+      "pages": 20,
+      "request_count": 20,
+      "request_duration_ms": 19321.21,
+      "request_errors": 0,
+      "discovered": 341,
+      "candidates": 341,
+      "passed": 1,
+      "rejected": 340,
+      "parse_errors": 0,
+      "min_views": 303,
+      "min_viral_coeff": 34,
+      "language": 2,
+      "vph_available": 341,
+      "viral_available": 8,
+      "distribution_groups": {
+        "all": {
+          "count": 341,
+          "views": {
+            "count": 341,
+            "min": 0,
+            "max": 378364
+          },
+          "vph": {
+            "count": 341,
+            "min": 0.0,
+            "max": 378364.0
+          },
+          "video_age_days": {
+            "count": 341,
+            "min": 0.0,
+            "max": 7.0
+          },
+          "viral_coefficient": {
+            "count": 8,
+            "min": 0.0,
+            "max": 0.35
+          }
+        },
+        "passed": {
+          "count": 1,
+          "views": {
+            "count": 1,
+            "min": 34867,
+            "max": 34867
+          },
+          "vph": {
+            "count": 1,
+            "min": 1452.79,
+            "max": 1452.79
+          },
+          "video_age_days": {
+            "count": 1,
+            "min": 1.0,
+            "max": 1.0
+          }
+        },
+        "language": {
+          "count": 2,
+          "views": {
+            "count": 2,
+            "min": 10460,
+            "max": 122410
+          },
+          "vph": {
+            "count": 2,
+            "min": 435.83,
+            "max": 5100.42
+          },
+          "video_age_days": {
+            "count": 2,
+            "min": 1.0,
+            "max": 1.0
+          }
+        },
+        "min_subscribers": {
+          "count": 1,
+          "views": {
+            "count": 1,
+            "min": 11681,
+            "max": 11681
+          },
+          "vph": {
+            "count": 1,
+            "min": 486.71,
+            "max": 486.71
+          },
+          "video_age_days": {
+            "count": 1,
+            "min": 1.0,
+            "max": 1.0
+          }
+        },
+        "min_views": {
+          "count": 303,
+          "views": {
+            "count": 303,
+            "min": 0,
+            "max": 8940
+          },
+          "vph": {
+            "count": 303,
+            "min": 0.0,
+            "max": 8940.0
+          },
+          "video_age_days": {
+            "count": 303,
+            "min": 0.0,
+            "max": 7.0
+          },
+          "viral_coefficient": {
+            "count": 7,
+            "min": 0.0,
+            "max": 0.35
+          }
+        },
+        "min_viral_coeff": {
+          "count": 34,
+          "views": {
+            "count": 34,
+            "min": 10017,
+            "max": 378364
+          },
+          "vph": {
+            "count": 34,
+            "min": 652.75,
+            "max": 378364.0
+          },
+          "video_age_days": {
+            "count": 34,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 1,
+            "min": 0.24,
+            "max": 0.24
+          }
+        }
+      }
+    },
+    {
+      "keyword": "productivity",
+      "success": true,
+      "error": null,
+      "pages": 20,
+      "request_count": 20,
+      "request_duration_ms": 19121.89,
+      "request_errors": 0,
+      "discovered": 311,
+      "candidates": 311,
+      "passed": 0,
+      "rejected": 311,
+      "parse_errors": 0,
+      "min_views": 306,
+      "min_viral_coeff": 5,
+      "language": 0,
+      "vph_available": 304,
+      "viral_available": 2,
+      "distribution_groups": {
+        "all": {
+          "count": 311,
+          "views": {
+            "count": 311,
+            "min": 0,
+            "max": 45614
+          },
+          "vph": {
+            "count": 304,
+            "min": 0.0,
+            "max": 45614.0
+          },
+          "video_age_days": {
+            "count": 304,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 2,
+            "min": 0.0,
+            "max": 169.0
+          }
+        },
+        "passed": {
+          "count": 0
+        },
+        "min_views": {
+          "count": 306,
+          "views": {
+            "count": 306,
+            "min": 0,
+            "max": 8072
+          },
+          "vph": {
+            "count": 299,
+            "min": 0.0,
+            "max": 8072.0
+          },
+          "video_age_days": {
+            "count": 299,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 2,
+            "min": 0.0,
+            "max": 169.0
+          }
+        },
+        "min_viral_coeff": {
+          "count": 5,
+          "views": {
+            "count": 5,
+            "min": 11367,
+            "max": 45614
+          },
+          "vph": {
+            "count": 5,
+            "min": 542.88,
+            "max": 45614.0
+          },
+          "video_age_days": {
+            "count": 5,
+            "min": 0.0,
+            "max": 1.0
+          }
+        }
+      }
+    },
+    {
+      "keyword": "fitness",
+      "success": true,
+      "error": null,
+      "pages": 20,
+      "request_count": 20,
+      "request_duration_ms": 20710.48,
+      "request_errors": 0,
+      "discovered": 319,
+      "candidates": 319,
+      "passed": 8,
+      "rejected": 311,
+      "parse_errors": 0,
+      "min_views": 288,
+      "min_viral_coeff": 20,
+      "language": 3,
+      "vph_available": 319,
+      "viral_available": 6,
+      "distribution_groups": {
+        "all": {
+          "count": 319,
+          "views": {
+            "count": 319,
+            "min": 0,
+            "max": 2015487
+          },
+          "vph": {
+            "count": 319,
+            "min": 0.0,
+            "max": 2015487.0
+          },
+          "video_age_days": {
+            "count": 319,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 6,
+            "min": 0.0,
+            "max": 180.06
+          }
+        },
+        "passed": {
+          "count": 8,
+          "views": {
+            "count": 8,
+            "min": 11846,
+            "max": 2015487
+          },
+          "vph": {
+            "count": 8,
+            "min": 493.58,
+            "max": 2015487.0
+          },
+          "video_age_days": {
+            "count": 8,
+            "min": 0.0,
+            "max": 1.0
+          }
+        },
+        "language": {
+          "count": 3,
+          "views": {
+            "count": 3,
+            "min": 10731,
+            "max": 45976
+          },
+          "vph": {
+            "count": 3,
+            "min": 10731.0,
+            "max": 45976.0
+          },
+          "video_age_days": {
+            "count": 3,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "viral_coefficient": {
+            "count": 1,
+            "min": 0.0,
+            "max": 0.0
+          }
+        },
+        "min_views": {
+          "count": 288,
+          "views": {
+            "count": 288,
+            "min": 0,
+            "max": 9659
+          },
+          "vph": {
+            "count": 288,
+            "min": 0.0,
+            "max": 9556.0
+          },
+          "video_age_days": {
+            "count": 288,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 4,
+            "min": 0.05,
+            "max": 180.06
+          }
+        },
+        "min_viral_coeff": {
+          "count": 20,
+          "views": {
+            "count": 20,
+            "min": 10579,
+            "max": 275291
+          },
+          "vph": {
+            "count": 20,
+            "min": 477.67,
+            "max": 275291.0
+          },
+          "video_age_days": {
+            "count": 20,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 1,
+            "min": 0.96,
+            "max": 0.96
+          }
+        }
+      }
+    },
+    {
+      "keyword": "gaming",
+      "success": true,
+      "error": null,
+      "pages": 15,
+      "request_count": 15,
+      "request_duration_ms": 15691.37,
+      "request_errors": 0,
+      "discovered": 251,
+      "candidates": 251,
+      "passed": 37,
+      "rejected": 214,
+      "parse_errors": 0,
+      "min_views": 73,
+      "min_viral_coeff": 138,
+      "language": 3,
+      "vph_available": 245,
+      "viral_available": 5,
+      "distribution_groups": {
+        "all": {
+          "count": 251,
+          "views": {
+            "count": 251,
+            "min": 769,
+            "max": 3727706
+          },
+          "vph": {
+            "count": 245,
+            "min": 209.33,
+            "max": 3727706.0
+          },
+          "video_age_days": {
+            "count": 245,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 5,
+            "min": 0.02,
+            "max": 12318.11
+          }
+        },
+        "passed": {
+          "count": 37,
+          "views": {
+            "count": 37,
+            "min": 10438,
+            "max": 3727706
+          },
+          "vph": {
+            "count": 37,
+            "min": 4619.29,
+            "max": 3727706.0
+          },
+          "video_age_days": {
+            "count": 37,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 1,
+            "min": 12318.11,
+            "max": 12318.11
+          }
+        },
+        "language": {
+          "count": 3,
+          "views": {
+            "count": 3,
+            "min": 56600,
+            "max": 568183
+          },
+          "vph": {
+            "count": 3,
+            "min": 2358.33,
+            "max": 372603.0
+          },
+          "video_age_days": {
+            "count": 3,
+            "min": 0.0,
+            "max": 1.0
+          }
+        },
+        "min_views": {
+          "count": 73,
+          "views": {
+            "count": 73,
+            "min": 769,
+            "max": 9885
+          },
+          "vph": {
+            "count": 67,
+            "min": 209.33,
+            "max": 9885.0
+          },
+          "video_age_days": {
+            "count": 67,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 1,
+            "min": 403.67,
+            "max": 403.67
+          }
+        },
+        "min_viral_coeff": {
+          "count": 138,
+          "views": {
+            "count": 138,
+            "min": 10293,
+            "max": 2668705
+          },
+          "vph": {
+            "count": 138,
+            "min": 488.96,
+            "max": 2668705.0
+          },
+          "video_age_days": {
+            "count": 138,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 3,
+            "min": 0.02,
+            "max": 1.12
+          }
+        }
+      }
+    },
+    {
+      "keyword": "history",
+      "success": true,
+      "error": null,
+      "pages": 20,
+      "request_count": 20,
+      "request_duration_ms": 21792.51,
+      "request_errors": 0,
+      "discovered": 347,
+      "candidates": 347,
+      "passed": 1,
+      "rejected": 346,
+      "parse_errors": 0,
+      "min_views": 292,
+      "min_viral_coeff": 46,
+      "language": 8,
+      "vph_available": 346,
+      "viral_available": 10,
+      "distribution_groups": {
+        "all": {
+          "count": 347,
+          "views": {
+            "count": 347,
+            "min": 0,
+            "max": 153837
+          },
+          "vph": {
+            "count": 346,
+            "min": 0.0,
+            "max": 153837.0
+          },
+          "video_age_days": {
+            "count": 346,
+            "min": 0.0,
+            "max": 2.0
+          },
+          "viral_coefficient": {
+            "count": 10,
+            "min": 0.0,
+            "max": 65.5
+          }
+        },
+        "passed": {
+          "count": 1,
+          "views": {
+            "count": 1,
+            "min": 18023,
+            "max": 18023
+          },
+          "vph": {
+            "count": 1,
+            "min": 750.96,
+            "max": 750.96
+          },
+          "video_age_days": {
+            "count": 1,
+            "min": 1.0,
+            "max": 1.0
+          }
+        },
+        "language": {
+          "count": 8,
+          "views": {
+            "count": 8,
+            "min": 10736,
+            "max": 46972
+          },
+          "vph": {
+            "count": 8,
+            "min": 289.98,
+            "max": 46972.0
+          },
+          "video_age_days": {
+            "count": 8,
+            "min": 0.0,
+            "max": 2.0
+          }
+        },
+        "min_views": {
+          "count": 292,
+          "views": {
+            "count": 292,
+            "min": 0,
+            "max": 9669
+          },
+          "vph": {
+            "count": 291,
+            "min": 0.0,
+            "max": 9669.0
+          },
+          "video_age_days": {
+            "count": 291,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 7,
+            "min": 0.01,
+            "max": 65.5
+          }
+        },
+        "min_viral_coeff": {
+          "count": 46,
+          "views": {
+            "count": 46,
+            "min": 10234,
+            "max": 153837
+          },
+          "vph": {
+            "count": 46,
+            "min": 493.67,
+            "max": 153837.0
+          },
+          "video_age_days": {
+            "count": 46,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 3,
+            "min": 0.0,
+            "max": 0.38
+          }
+        }
+      }
+    },
+    {
+      "keyword": "technology",
+      "success": true,
+      "error": null,
+      "pages": 19,
+      "request_count": 19,
+      "request_duration_ms": 20611.12,
+      "request_errors": 0,
+      "discovered": 304,
+      "candidates": 304,
+      "passed": 3,
+      "rejected": 301,
+      "parse_errors": 0,
+      "min_views": 187,
+      "min_viral_coeff": 110,
+      "language": 4,
+      "vph_available": 300,
+      "viral_available": 9,
+      "distribution_groups": {
+        "all": {
+          "count": 304,
+          "views": {
+            "count": 304,
+            "min": 0,
+            "max": 7662053
+          },
+          "vph": {
+            "count": 300,
+            "min": 0.0,
+            "max": 7662053.0
+          },
+          "video_age_days": {
+            "count": 300,
+            "min": 0.0,
+            "max": 2.0
+          },
+          "viral_coefficient": {
+            "count": 9,
+            "min": 0.01,
+            "max": 6.8
+          }
+        },
+        "passed": {
+          "count": 3,
+          "views": {
+            "count": 3,
+            "min": 26776,
+            "max": 98403
+          },
+          "vph": {
+            "count": 3,
+            "min": 26776.0,
+            "max": 98403.0
+          },
+          "video_age_days": {
+            "count": 3,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "viral_coefficient": {
+            "count": 1,
+            "min": 6.8,
+            "max": 6.8
+          }
+        },
+        "language": {
+          "count": 4,
+          "views": {
+            "count": 4,
+            "min": 11437,
+            "max": 44706
+          },
+          "vph": {
+            "count": 4,
+            "min": 938.54,
+            "max": 44706.0
+          },
+          "video_age_days": {
+            "count": 4,
+            "min": 0.0,
+            "max": 1.0
+          }
+        },
+        "min_views": {
+          "count": 187,
+          "views": {
+            "count": 187,
+            "min": 0,
+            "max": 9536
+          },
+          "vph": {
+            "count": 183,
+            "min": 0.0,
+            "max": 8202.0
+          },
+          "video_age_days": {
+            "count": 183,
+            "min": 0.0,
+            "max": 2.0
+          },
+          "viral_coefficient": {
+            "count": 2,
+            "min": 0.01,
+            "max": 0.37
+          }
+        },
+        "min_viral_coeff": {
+          "count": 110,
+          "views": {
+            "count": 110,
+            "min": 10173,
+            "max": 7662053
+          },
+          "vph": {
+            "count": 110,
+            "min": 519.42,
+            "max": 7662053.0
+          },
+          "video_age_days": {
+            "count": 110,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 6,
+            "min": 0.01,
+            "max": 0.18
+          }
+        }
+      }
+    },
+    {
+      "keyword": "self improvement",
+      "success": true,
+      "error": null,
+      "pages": 14,
+      "request_count": 14,
+      "request_duration_ms": 14644.7,
+      "request_errors": 0,
+      "discovered": 210,
+      "candidates": 210,
+      "passed": 1,
+      "rejected": 209,
+      "parse_errors": 0,
+      "min_views": 202,
+      "min_viral_coeff": 6,
+      "language": 1,
+      "vph_available": 208,
+      "viral_available": 7,
+      "distribution_groups": {
+        "all": {
+          "count": 210,
+          "views": {
+            "count": 210,
+            "min": 0,
+            "max": 66947
+          },
+          "vph": {
+            "count": 208,
+            "min": 0.0,
+            "max": 66916.0
+          },
+          "video_age_days": {
+            "count": 208,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 7,
+            "min": 0.0,
+            "max": 82.71
+          }
+        },
+        "passed": {
+          "count": 1,
+          "views": {
+            "count": 1,
+            "min": 17093,
+            "max": 17093
+          },
+          "vph": {
+            "count": 1,
+            "min": 712.21,
+            "max": 712.21
+          },
+          "video_age_days": {
+            "count": 1,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 1,
+            "min": 4.12,
+            "max": 4.12
+          }
+        },
+        "language": {
+          "count": 1,
+          "views": {
+            "count": 1,
+            "min": 66916,
+            "max": 66916
+          },
+          "vph": {
+            "count": 1,
+            "min": 66916.0,
+            "max": 66916.0
+          },
+          "video_age_days": {
+            "count": 1,
+            "min": 0.0,
+            "max": 0.0
+          }
+        },
+        "min_views": {
+          "count": 202,
+          "views": {
+            "count": 202,
+            "min": 0,
+            "max": 8305
+          },
+          "vph": {
+            "count": 200,
+            "min": 0.0,
+            "max": 8305.0
+          },
+          "video_age_days": {
+            "count": 200,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 6,
+            "min": 0.0,
+            "max": 82.71
+          }
+        },
+        "min_viral_coeff": {
+          "count": 6,
+          "views": {
+            "count": 6,
+            "min": 10089,
+            "max": 66947
+          },
+          "vph": {
+            "count": 6,
+            "min": 452.62,
+            "max": 20542.0
+          },
+          "video_age_days": {
+            "count": 6,
+            "min": 0.0,
+            "max": 1.0
+          }
+        }
+      }
+    },
+    {
+      "keyword": "interesting facts",
+      "success": true,
+      "error": null,
+      "pages": 19,
+      "request_count": 19,
+      "request_duration_ms": 21125.88,
+      "request_errors": 0,
+      "discovered": 321,
+      "candidates": 321,
+      "passed": 0,
+      "rejected": 321,
+      "parse_errors": 0,
+      "min_views": 250,
+      "min_viral_coeff": 69,
+      "language": 2,
+      "vph_available": 321,
+      "viral_available": 12,
+      "distribution_groups": {
+        "all": {
+          "count": 321,
+          "views": {
+            "count": 321,
+            "min": 0,
+            "max": 371494
+          },
+          "vph": {
+            "count": 321,
+            "min": 0.0,
+            "max": 371494.0
+          },
+          "video_age_days": {
+            "count": 321,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 12,
+            "min": 0.0,
+            "max": 9.26
+          }
+        },
+        "passed": {
+          "count": 0
+        },
+        "language": {
+          "count": 2,
+          "views": {
+            "count": 2,
+            "min": 13264,
+            "max": 56380
+          },
+          "vph": {
+            "count": 2,
+            "min": 13264.0,
+            "max": 56380.0
+          },
+          "video_age_days": {
+            "count": 2,
+            "min": 0.0,
+            "max": 0.0
+          }
+        },
+        "min_views": {
+          "count": 250,
+          "views": {
+            "count": 250,
+            "min": 0,
+            "max": 9852
+          },
+          "vph": {
+            "count": 250,
+            "min": 0.0,
+            "max": 9852.0
+          },
+          "video_age_days": {
+            "count": 250,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 9,
+            "min": 0.0,
+            "max": 9.26
+          }
+        },
+        "min_viral_coeff": {
+          "count": 69,
+          "views": {
+            "count": 69,
+            "min": 10016,
+            "max": 371494
+          },
+          "vph": {
+            "count": 69,
+            "min": 433.92,
+            "max": 371494.0
+          },
+          "video_age_days": {
+            "count": 69,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 3,
+            "min": 0.01,
+            "max": 0.25
+          }
+        }
+      }
+    },
+    {
+      "keyword": "home improvement",
+      "success": true,
+      "error": null,
+      "pages": 16,
+      "request_count": 16,
+      "request_duration_ms": 18545.67,
+      "request_errors": 0,
+      "discovered": 293,
+      "candidates": 293,
+      "passed": 1,
+      "rejected": 292,
+      "parse_errors": 0,
+      "min_views": 284,
+      "min_viral_coeff": 8,
+      "language": 0,
+      "vph_available": 291,
+      "viral_available": 8,
+      "distribution_groups": {
+        "all": {
+          "count": 293,
+          "views": {
+            "count": 293,
+            "min": 0,
+            "max": 62549
+          },
+          "vph": {
+            "count": 291,
+            "min": 0.0,
+            "max": 62549.0
+          },
+          "video_age_days": {
+            "count": 291,
+            "min": 0.0,
+            "max": 2.0
+          },
+          "viral_coefficient": {
+            "count": 8,
+            "min": 0.01,
+            "max": 20.02
+          }
+        },
+        "passed": {
+          "count": 1,
+          "views": {
+            "count": 1,
+            "min": 62549,
+            "max": 62549
+          },
+          "vph": {
+            "count": 1,
+            "min": 62549.0,
+            "max": 62549.0
+          },
+          "video_age_days": {
+            "count": 1,
+            "min": 0.0,
+            "max": 0.0
+          }
+        },
+        "min_views": {
+          "count": 284,
+          "views": {
+            "count": 284,
+            "min": 0,
+            "max": 8945
+          },
+          "vph": {
+            "count": 282,
+            "min": 0.0,
+            "max": 8945.0
+          },
+          "video_age_days": {
+            "count": 282,
+            "min": 0.0,
+            "max": 2.0
+          },
+          "viral_coefficient": {
+            "count": 7,
+            "min": 0.01,
+            "max": 20.02
+          }
+        },
+        "min_viral_coeff": {
+          "count": 8,
+          "views": {
+            "count": 8,
+            "min": 10295,
+            "max": 57054
+          },
+          "vph": {
+            "count": 8,
+            "min": 633.17,
+            "max": 57054.0
+          },
+          "video_age_days": {
+            "count": 8,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 1,
+            "min": 0.02,
+            "max": 0.02
+          }
+        }
+      }
+    },
+    {
+      "keyword": "travel",
+      "success": true,
+      "error": null,
+      "pages": 21,
+      "request_count": 21,
+      "request_duration_ms": 24302.88,
+      "request_errors": 0,
+      "discovered": 350,
+      "candidates": 350,
+      "passed": 0,
+      "rejected": 350,
+      "parse_errors": 0,
+      "min_views": 319,
+      "min_viral_coeff": 29,
+      "language": 2,
+      "vph_available": 347,
+      "viral_available": 3,
+      "distribution_groups": {
+        "all": {
+          "count": 350,
+          "views": {
+            "count": 350,
+            "min": 0,
+            "max": 291017
+          },
+          "vph": {
+            "count": 347,
+            "min": 0.12,
+            "max": 291017.0
+          },
+          "video_age_days": {
+            "count": 347,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 3,
+            "min": 0.0,
+            "max": 11.31
+          }
+        },
+        "passed": {
+          "count": 0
+        },
+        "language": {
+          "count": 2,
+          "views": {
+            "count": 2,
+            "min": 26375,
+            "max": 37763
+          },
+          "vph": {
+            "count": 2,
+            "min": 26375.0,
+            "max": 37763.0
+          },
+          "video_age_days": {
+            "count": 2,
+            "min": 0.0,
+            "max": 0.0
+          }
+        },
+        "min_views": {
+          "count": 319,
+          "views": {
+            "count": 319,
+            "min": 0,
+            "max": 9930
+          },
+          "vph": {
+            "count": 316,
+            "min": 0.12,
+            "max": 9930.0
+          },
+          "video_age_days": {
+            "count": 316,
+            "min": 0.0,
+            "max": 1.0
+          },
+          "viral_coefficient": {
+            "count": 3,
+            "min": 0.0,
+            "max": 11.31
+          }
+        },
+        "min_viral_coeff": {
+          "count": 29,
+          "views": {
+            "count": 29,
+            "min": 10074,
+            "max": 291017
+          },
+          "vph": {
+            "count": 29,
+            "min": 468.21,
+            "max": 291017.0
+          },
+          "video_age_days": {
+            "count": 29,
+            "min": 0.0,
+            "max": 1.0
+          }
+        }
+      }
+    }
+  ],
+  "totals": {
+    "total_keywords": 10,
+    "successful_keywords": 10,
+    "failed_keywords": 0,
+    "total_discovered": 3047,
+    "total_candidates": 3047,
+    "total_passed": 52,
+    "total_rejected": 2995,
+    "total_parse_errors": 0
+  },
+  "rejection_reasons": {
+    "language": 25,
+    "min_subscribers": 1,
+    "min_views": 2504,
+    "min_viral_coeff": 465
+  },
+  "failed_keyword_details": []
+}

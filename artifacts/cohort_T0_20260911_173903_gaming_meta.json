@@ -1,0 +1,90 @@
+{
+  "keyword": "gaming",
+  "timestamp": "2026-09-11T17:39:03.883528+00:00",
+  "schema_version": "1.8",
+  "source": "run_radar_validation_cohort.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_gaming.jsonl",
+  "duration_seconds": 281.14,
+  "raw_candidates": 187,
+  "regular_candidates": 187,
+  "excluded_after_enrichment": 0,
+  "candidate_count": 187,
+  "passed": 17,
+  "rejected": 170,
+  "parse_errors": 0,
+  "format_violations": 0,
+  "regular_format_violations": 0,
+  "invariant_ok": true,
+  "enrichment_summary": {
+    "candidates_total": 187,
+    "enrichment_ok": 186,
+    "enrichment_partial": 1,
+    "enrichment_failed": 0,
+    "missing_video": 0,
+    "published_at_available": 187,
+    "duration_available": 187,
+    "age_hours_available": 187,
+    "vph_available": 186,
+    "final_subscribers_available": 111,
+    "views_per_subscriber_available": 111,
+    "regular_count": 187,
+    "short_count": 0,
+    "live_count": 0,
+    "unknown_count": 0
+  },
+  "regular_enrichment_summary": {
+    "candidates_total": 187,
+    "enrichment_ok": 186,
+    "enrichment_partial": 1,
+    "enrichment_failed": 0,
+    "missing_video": 0,
+    "published_at_available": 187,
+    "duration_available": 187,
+    "age_hours_available": 187,
+    "vph_available": 186,
+    "final_subscribers_available": 111,
+    "views_per_subscriber_available": 111,
+    "regular_count": 187,
+    "short_count": 0,
+    "live_count": 0,
+    "unknown_count": 0
+  },
+  "regular_qualification": {
+    "passed": 17,
+    "rejected": 170,
+    "parse_errors": 0
+  },
+  "distribution_regular": {
+    "discovery_views": {
+      "count": 187,
+      "min": 0.0,
+      "median": 14379.0,
+      "max": 970211.0
+    },
+    "vph_at_t0": {
+      "count": 186,
+      "min": 16.31,
+      "median": 985.8,
+      "max": 100182.07
+    },
+    "views_per_subscriber_at_t0": {
+      "count": 111,
+      "min": 0.0,
+      "median": 0.11,
+      "max": 658.75
+    },
+    "age_hours_at_t0": {
+      "count": 187,
+      "min": -0.775,
+      "median": 17.4941,
+      "max": 23.7904
+    },
+    "final_subscribers": {
+      "count": 111,
+      "min": 4.0,
+      "median": 311000.0,
+      "max": 20000000.0
+    }
+  },
+  "missing_video_count": 0
+}

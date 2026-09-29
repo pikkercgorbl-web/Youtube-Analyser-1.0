@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import random
+from dataclasses import dataclass
 
 from app.integrations.youtube.client import (
     RadarContentFormatFilters,
@@ -12,6 +14,18 @@ from app.integrations.youtube.client import (
     filter_radar_videos_by_format,
     iter_radar_search_pages,
 )
+from app.integrations.youtube.innertube_metrics import InnerTubeMetrics
+from app.services.radar_candidate import (
+    DISCOVERY_SOURCE_HTML_FALLBACK,
+    DISCOVERY_SOURCE_INNERTUBE,
+    RadarCandidate,
+    apply_signal_snapshot,
+    apply_subscriber_enrichment,
+    apply_video_outcomes,
+    build_candidate_summary,
+)
+from app.services.radar_candidate_distribution import build_candidate_distribution
+from app.services.radar_filter_metrics import RadarFilterMetrics
 from app.models.db import SessionLocal
 from app.services.explosive_channels_service import (
     DEFAULT_UPLOAD_PERIOD,
@@ -43,6 +57,16 @@ RADAR_CYCLE_PAUSE_MAX_SECONDS = 60
 TARGET_VIDEOS_COUNT = 60
 MAX_PAGES = 100
 SEARCH_PAGE_DELAY_SECONDS = 2
+
+
+@dataclass(frozen=True, slots=True)
+class AnalysisScanResult:
+    keyword: str
+    candidates: list[RadarCandidate]
+    pages_scanned: int
+    min_views: int
+    min_viral_coeff: float
+    upload_period: str
 
 
 def radar_log(message: str) -> None:
@@ -84,6 +108,10 @@ def get_radar_status() -> dict[str, bool | str]:
     try:
         radar_upload_period = ExplosiveChannelsService().get_upload_period(db)
         worker_status = TargetKeywordsService().get_worker_status(db)
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
     finally:
         db.close()
     return {
@@ -299,6 +327,58 @@ class ExplosiveChannelsRadarWorker:
                     upload_period=upload_period,
                     label="ручной запрос",
                 )
+                db.commit()
+            except Exception:
+                db.rollback()
+                raise
+            finally:
+                db.close()
+
+    async def run_analysis_scan(self, search_query: str) -> AnalysisScanResult:
+        """Dry-run keyword scan: collect candidates without explosive_channels registration."""
+        keyword = search_query.strip()
+        if not keyword:
+            radar_log("⚠️ [РАДАР] Пустой analysis запрос — сканирование пропущено")
+            return AnalysisScanResult(
+                keyword=keyword,
+                candidates=[],
+                pages_scanned=0,
+                min_views=0,
+                min_viral_coeff=0.0,
+                upload_period="all",
+            )
+
+        async with self._scan_lock:
+            db = SessionLocal()
+            try:
+                thresholds = self._explosive_channels.get_thresholds(db)
+                upload_period = self._explosive_channels.get_upload_period(db)
+                period_label = UPLOAD_PERIOD_LABELS.get(upload_period, upload_period)
+                radar_log(
+                    "📊 [РАДАР] Analysis scan (no DB registration): "
+                    f"просмотры ≥ {thresholds.min_views:,}, "
+                    f"виральность ≥ {thresholds.min_viral_coeff:.1f}×, "
+                    f"период видео: {period_label}",
+                )
+                _, candidates, pages_scanned = await self._scan_keyword(
+                    db,
+                    keyword,
+                    upload_period=upload_period,
+                    label="analysis scan",
+                    register_channels=False,
+                )
+                db.commit()
+                return AnalysisScanResult(
+                    keyword=keyword,
+                    candidates=candidates,
+                    pages_scanned=pages_scanned,
+                    min_views=thresholds.min_views,
+                    min_viral_coeff=thresholds.min_viral_coeff,
+                    upload_period=upload_period,
+                )
+            except Exception:
+                db.rollback()
+                raise
             finally:
                 db.close()
 
@@ -354,17 +434,22 @@ class ExplosiveChannelsRadarWorker:
                     f"'{keyword}' (последняя проверка: {last_checked_label})",
                 )
 
-                total_hits += await self._scan_keyword(
+                hits, _, _ = await self._scan_keyword(
                     db,
                     keyword,
                     upload_period=upload_period,
                     label=f"{index}/{len(batch)}",
                 )
+                total_hits += hits
 
             radar_log(
                 f"✅ [РАДАР] Пакет из {len(batch)} слов обработан "
                 f"(каналов сохранено: {total_hits})",
             )
+            db.commit()
+        except Exception:
+            db.rollback()
+            raise
         finally:
             db.close()
 
@@ -375,7 +460,8 @@ class ExplosiveChannelsRadarWorker:
         *,
         upload_period: str,
         label: str,
-    ) -> int:
+        register_channels: bool = True,
+    ) -> tuple[int, list[RadarCandidate], int]:
         """Fetch paginated InnerTube results and ingest qualifying channels."""
         self._target_keywords.set_worker_status(db, WORKER_STATUS_RUNNING)
 
@@ -387,6 +473,9 @@ class ExplosiveChannelsRadarWorker:
         parse_errors_total = 0
         subscriber_cache: dict[str, int | None] = {}
         stopped_early = False
+        innertube_metrics = InnerTubeMetrics.empty()
+        filter_metrics = RadarFilterMetrics.empty()
+        keyword_candidates: list[RadarCandidate] = []
 
         try:
             try:
@@ -394,6 +483,7 @@ class ExplosiveChannelsRadarWorker:
                     keyword,
                     sort_by_upload_date=True,
                     max_pages=MAX_PAGES,
+                    innertube_metrics=innertube_metrics,
                 ):
                     if _should_stop_scan(db):
                         radar_log("🛑 [РАДАР] Поиск остановлен — прерываю листание страниц")
@@ -403,10 +493,14 @@ class ExplosiveChannelsRadarWorker:
                     pages_fetched += 1
                     page_videos = page_batch.videos
                     renderer_counts = page_batch.renderer_counts
+                    filter_metrics.record_discovered(len(page_videos))
+                    if renderer_counts.get("htmlFallback", 0) > 0:
+                        filter_metrics.record_html_fallback()
                     content_filters = get_radar_content_filters()
                     filtered_videos = filter_radar_videos_by_format(page_videos, content_filters)
                     skipped_by_format = len(page_videos) - len(filtered_videos)
                     skipped_by_format_total += skipped_by_format
+                    filter_metrics.record_format_skip(skipped_by_format)
                     radar_log(
                         f"📄 [РАДАР] '{keyword}' ({label}): страница {pages_fetched}/{MAX_PAGES}, "
                         f"videoRenderer={renderer_counts.get('videoRenderer', 0)}, "
@@ -437,6 +531,22 @@ class ExplosiveChannelsRadarWorker:
                         await asyncio.sleep(SEARCH_PAGE_DELAY_SECONDS)
                         continue
 
+                    discovery_source = (
+                        DISCOVERY_SOURCE_HTML_FALLBACK
+                        if renderer_counts.get("htmlFallback", 0) > 0
+                        else DISCOVERY_SOURCE_INNERTUBE
+                    )
+                    page_candidates = [
+                        RadarCandidate.from_video_search(
+                            video,
+                            keyword=keyword,
+                            discovery_source=discovery_source,
+                        )
+                        for video in filtered_videos
+                    ]
+                    for candidate in page_candidates:
+                        apply_signal_snapshot(candidate)
+
                     result = await self._explosive_channels.process_radar_videos(
                         db,
                         filtered_videos,
@@ -445,7 +555,13 @@ class ExplosiveChannelsRadarWorker:
                         upload_period=upload_period,
                         blacklist_words=get_radar_blacklist_words(),
                         subscriber_cache=subscriber_cache,
+                        filter_metrics=filter_metrics,
+                        collect_video_outcomes=True,
+                        register_channels=register_channels,
                     )
+                    apply_video_outcomes(page_candidates, list(result.video_outcomes))
+                    apply_subscriber_enrichment(page_candidates, subscriber_cache)
+                    keyword_candidates.extend(page_candidates)
                     skipped_by_filters_total += result.skipped_count
                     parse_errors_total += result.parse_error_count
                     self._log_hits(result.hits)
@@ -491,7 +607,7 @@ class ExplosiveChannelsRadarWorker:
             except YouTubeApiError as exc:
                 radar_log(f"❌ [РАДАР] '{keyword}': ошибка YouTube — {exc}")
                 logger.exception("Radar scan failed for keyword=%r", keyword)
-                return total_hits
+                return total_hits, keyword_candidates, pages_fetched
 
             if total_hits:
                 radar_log(
@@ -516,8 +632,42 @@ class ExplosiveChannelsRadarWorker:
                 )
                 await asyncio.sleep(self._throttle_seconds)
 
-            return total_hits
+            return total_hits, keyword_candidates, pages_fetched
         finally:
+            radar_log(
+                "[RADAR_INNERTUBE_METRICS] "
+                + json.dumps(
+                    {
+                        "keyword": keyword,
+                        **innertube_metrics.to_summary_dict(),
+                    },
+                    ensure_ascii=False,
+                ),
+            )
+            radar_log(
+                "[RADAR_FILTER_METRICS] "
+                + json.dumps(
+                    {
+                        "keyword": keyword,
+                        **filter_metrics.to_summary_dict(),
+                    },
+                    ensure_ascii=False,
+                ),
+            )
+            radar_log(
+                "[RADAR_CANDIDATE_SUMMARY] "
+                + json.dumps(
+                    build_candidate_summary(keyword, keyword_candidates),
+                    ensure_ascii=False,
+                ),
+            )
+            radar_log(
+                "[RADAR_CANDIDATE_DISTRIBUTION] "
+                + json.dumps(
+                    build_candidate_distribution(keyword, keyword_candidates),
+                    ensure_ascii=False,
+                ),
+            )
             if not self._target_keywords.is_worker_stopped(db):
                 self._target_keywords.set_worker_status(db, WORKER_STATUS_IDLE)
 

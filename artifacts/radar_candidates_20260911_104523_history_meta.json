@@ -1,0 +1,18 @@
+{
+  "keyword": "history",
+  "timestamp": "2026-09-11T10:45:23.859783+00:00",
+  "min_views": 10000,
+  "min_viral_coeff": 3.0,
+  "upload_period": "all",
+  "register_channels": false,
+  "production_db_registration": false,
+  "total_candidates": 296,
+  "passed": 1,
+  "rejected": 295,
+  "parse_errors": 0,
+  "source": "run_radar_multi_keyword_dataset.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_104523_history.jsonl",
+  "duration_seconds": 152.58,
+  "pages_scanned": 18,
+  "schema_version": "1.7"
+}

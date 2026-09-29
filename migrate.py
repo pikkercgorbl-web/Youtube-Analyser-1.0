@@ -44,6 +44,7 @@ TABLES_IN_ORDER = [
     "target_keywords",
     "radar_worker_state",
     "extended_search_cache",
+    "video_snapshots",
 ]
 
 TABLES_WITH_SERIAL_ID = (
@@ -51,6 +52,7 @@ TABLES_WITH_SERIAL_ID = (
     "keywords",
     "saved_keywords",
     "target_keywords",
+    "video_snapshots",
 )
 
 

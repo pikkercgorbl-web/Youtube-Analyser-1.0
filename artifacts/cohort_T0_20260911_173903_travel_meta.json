@@ -1,0 +1,90 @@
+{
+  "keyword": "travel",
+  "timestamp": "2026-09-11T17:39:03.883528+00:00",
+  "schema_version": "1.8",
+  "source": "run_radar_validation_cohort.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_travel.jsonl",
+  "duration_seconds": 144.07,
+  "raw_candidates": 366,
+  "regular_candidates": 352,
+  "excluded_after_enrichment": 14,
+  "candidate_count": 366,
+  "passed": 1,
+  "rejected": 365,
+  "parse_errors": 0,
+  "format_violations": 0,
+  "regular_format_violations": 0,
+  "invariant_ok": true,
+  "enrichment_summary": {
+    "candidates_total": 366,
+    "enrichment_ok": 364,
+    "enrichment_partial": 2,
+    "enrichment_failed": 0,
+    "missing_video": 0,
+    "published_at_available": 366,
+    "duration_available": 366,
+    "age_hours_available": 366,
+    "vph_available": 364,
+    "final_subscribers_available": 28,
+    "views_per_subscriber_available": 28,
+    "regular_count": 352,
+    "short_count": 14,
+    "live_count": 0,
+    "unknown_count": 0
+  },
+  "regular_enrichment_summary": {
+    "candidates_total": 352,
+    "enrichment_ok": 350,
+    "enrichment_partial": 2,
+    "enrichment_failed": 0,
+    "missing_video": 0,
+    "published_at_available": 352,
+    "duration_available": 352,
+    "age_hours_available": 352,
+    "vph_available": 350,
+    "final_subscribers_available": 28,
+    "views_per_subscriber_available": 28,
+    "regular_count": 352,
+    "short_count": 0,
+    "live_count": 0,
+    "unknown_count": 0
+  },
+  "regular_qualification": {
+    "passed": 1,
+    "rejected": 351,
+    "parse_errors": 0
+  },
+  "distribution_regular": {
+    "discovery_views": {
+      "count": 352,
+      "min": 0.0,
+      "median": 105.5,
+      "max": 172698.0
+    },
+    "vph_at_t0": {
+      "count": 350,
+      "min": 0.0,
+      "median": 8.5,
+      "max": 31551.32
+    },
+    "views_per_subscriber_at_t0": {
+      "count": 28,
+      "min": 0.0,
+      "median": 0.11,
+      "max": 2.66
+    },
+    "age_hours_at_t0": {
+      "count": 352,
+      "min": -0.491,
+      "median": 14.1926,
+      "max": 24.0123
+    },
+    "final_subscribers": {
+      "count": 28,
+      "min": 141.0,
+      "median": 149000.0,
+      "max": 190000000.0
+    }
+  },
+  "missing_video_count": 0
+}

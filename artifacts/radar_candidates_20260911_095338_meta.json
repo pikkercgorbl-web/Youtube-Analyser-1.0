@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-09-11T09:53:38.910879+00:00",
+  "keywords": [
+    "gaming"
+  ],
+  "total_candidates": 290,
+  "total_passed": 38,
+  "total_rejected": 252,
+  "total_parse_errors": 0,
+  "source": "run_radar_candidate_dataset.py",
+  "schema_version": "1.5"
+}

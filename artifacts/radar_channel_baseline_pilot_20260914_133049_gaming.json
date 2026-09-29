@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.10A",
+  "keyword": "gaming",
+  "candidate_count": 189,
+  "unique_channels": 170,
+  "baseline_status_counts": {
+    "failed": 1,
+    "insufficient_history": 8,
+    "ok": 168,
+    "partial": 12
+  },
+  "median_history_count": 20.0,
+  "p10_history_count": 18.8,
+  "p50_history_count": 20.0,
+  "p90_history_count": 20.0,
+  "views_baseline_coverage": 180,
+  "relative_views_coverage": 188,
+  "velocity_baseline_coverage": 0,
+  "velocity_baseline_note": "Channel view baseline is available. Comparable historical velocity baseline is not yet available (no time-safe early-age snapshots for past uploads).",
+  "cache_hits": 19,
+  "channel_baseline_requests": 170,
+  "runtime_seconds": 533.42,
+  "leakage_violations": 20,
+  "format_exclusions": {
+    "shorts_excluded": 62,
+    "live_excluded": 60,
+    "unknown_format_excluded": 11,
+    "future_videos_excluded": 20,
+    "candidate_self_excluded": 148
+  },
+  "enrichment_missing_video_count": 0,
+  "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260914_133049_gaming_channel_baseline_pilot.jsonl",
+  "request_cost_note": "~170 InnerTube channel browse + batched videos.list per channel (cached per channel_id within run)."
+}

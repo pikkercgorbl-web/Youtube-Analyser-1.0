@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.10C_T48",
+  "experiment_id": "stage110_20260914_141029",
+  "checkpoint_label": "T48",
+  "target_checkpoint_hours": 48,
+  "t0_reference_timestamp": "2026-09-14T14:10:29.608646+00:00",
+  "snapshot_timestamp": "2026-09-16T14:12:06.954370+00:00",
+  "actual_elapsed_hours": 48.027,
+  "frozen_sample_count": 500,
+  "requested_video_count": 500,
+  "refreshed_count": 496,
+  "missing_count": 4,
+  "failed_count": 0,
+  "api_batch_count": 10,
+  "t0_sample_sha256": "7fcade5724ca2b556aa86317f3110f8cea0a91c58c8e74863abb76c4fa122cc7",
+  "invariants": {
+    "requested_ids_match_sample_order": true,
+    "sample_count_unchanged": true,
+    "no_duplicate_video_ids": true,
+    "accounting_ok": true,
+    "baseline_fields_unchanged": true,
+    "no_fake_zero_views_on_missing": true,
+    "all_ok": true
+  },
+  "t0_artifacts_unchanged": true,
+  "t0_artifact_fingerprints_before": [
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_broad.jsonl",
+      "sha256": "3ded1f61efdb4d2d7ac504bf078ebdb5799e7459cb44a58afaf50159075ffe0a",
+      "size_bytes": 2507100
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_sample.jsonl",
+      "sha256": "7fcade5724ca2b556aa86317f3110f8cea0a91c58c8e74863abb76c4fa122cc7",
+      "size_bytes": 1044165
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_manifest.json",
+      "sha256": "3034e8c1d049e6a0d43b596b258ede9734d60ce54b4673ee7f222e1671680ccd",
+      "size_bytes": 4429
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_freeze.json",
+      "sha256": "ed918ad2091e3dbbb2331a0827ac359e26765b496fa2432067952cd6f37995c3",
+      "size_bytes": 11663
+    }
+  ],
+  "t0_artifact_fingerprints_after": [
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_broad.jsonl",
+      "sha256": "3ded1f61efdb4d2d7ac504bf078ebdb5799e7459cb44a58afaf50159075ffe0a",
+      "size_bytes": 2507100
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_sample.jsonl",
+      "sha256": "7fcade5724ca2b556aa86317f3110f8cea0a91c58c8e74863abb76c4fa122cc7",
+      "size_bytes": 1044165
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_manifest.json",
+      "sha256": "3034e8c1d049e6a0d43b596b258ede9734d60ce54b4673ee7f222e1671680ccd",
+      "size_bytes": 4429
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_freeze.json",
+      "sha256": "ed918ad2091e3dbbb2331a0827ac359e26765b496fa2432067952cd6f37995c3",
+      "size_bytes": 11663
+    }
+  ],
+  "NO_DB_WRITES": true,
+  "NO_DISCOVERY": true,
+  "output_jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T48_stage110_20260914_141029_20260916_141206.jsonl",
+  "output_sha256": "f1aa8bbbbe5c340a5a43b1fb9c72219724885e66c7b86222e86bc888ada24f12"
+}

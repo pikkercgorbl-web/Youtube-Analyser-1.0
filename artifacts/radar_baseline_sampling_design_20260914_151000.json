@@ -1,0 +1,557 @@
+{
+  "schema_version": "1.10B",
+  "manifest_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_manifest.json",
+  "joined_path_used_for_retrospective_only": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_outcome_joined_T0_T67_20260914_124311.jsonl",
+  "source_distributions": {
+    "pool_size": 2673,
+    "unique_channels": 2503,
+    "unique_channel_rate": 0.9364,
+    "vph": {
+      "p10": 0.102,
+      "p25": 0.8,
+      "p50": 11.61,
+      "p75": 177.84,
+      "p90": 927.716
+    },
+    "views": {
+      "p50": 132.0,
+      "p90": 11436.0
+    },
+    "age_hours": {
+      "p50": 15.5048,
+      "p90": 22.9006
+    },
+    "keyword_counts": {
+      "AI tools": 329,
+      "fitness": 195,
+      "gaming": 186,
+      "history": 323,
+      "home improvement": 293,
+      "interesting facts": 249,
+      "productivity": 273,
+      "self improvement": 266,
+      "technology": 210,
+      "travel": 349
+    },
+    "vph_stratum_counts": {
+      "high": 401,
+      "low": 662,
+      "medium": 1342,
+      "very_high": 268
+    },
+    "channel_size_stratum_counts": {
+      "large": 109,
+      "medium": 108,
+      "small": 109,
+      "unknown": 2347
+    },
+    "subscriber_known_rate": 0.122
+  },
+  "vph_strata": {
+    "labels": [
+      "low",
+      "medium",
+      "high",
+      "very_high"
+    ],
+    "boundaries": {
+      "p25": 0.8,
+      "p50": 11.61,
+      "p75": 177.84,
+      "p90": 927.7160000000016,
+      "min": 0.0,
+      "max": 100182.07
+    },
+    "interpretation": {
+      "low": "vph < 0.8",
+      "medium": "0.8 <= vph < 177.84",
+      "high": "177.84 <= vph < 927.7160000000016",
+      "very_high": "vph >= 927.7160000000016"
+    }
+  },
+  "channel_size_strata": {
+    "labels": [
+      "small",
+      "medium",
+      "large",
+      "unknown"
+    ],
+    "boundaries": {
+      "p33": 89622.24999999996,
+      "p67": 518032.5,
+      "known_n": 326
+    }
+  },
+  "keyword_allocation": {
+    "proportional_n500": {
+      "AI tools": 62,
+      "fitness": 36,
+      "gaming": 35,
+      "history": 60,
+      "home improvement": 55,
+      "interesting facts": 47,
+      "productivity": 51,
+      "self improvement": 50,
+      "technology": 39,
+      "travel": 65
+    },
+    "capped_proportional_n500": {
+      "AI tools": 62,
+      "fitness": 36,
+      "gaming": 35,
+      "history": 60,
+      "home improvement": 55,
+      "interesting facts": 47,
+      "productivity": 51,
+      "self improvement": 50,
+      "technology": 39,
+      "travel": 65
+    },
+    "recommendation": "capped_proportional",
+    "rationale": "Prevents gaming-sized keywords from dominating baseline budget while keeping representation."
+  },
+  "designs": {
+    "A_vph_heavy_n300": {
+      "target_size": 300,
+      "selected_count": 300,
+      "unique_channels": 295,
+      "expected_baseline_requests": 295,
+      "expected_runtime_seconds": 885.0,
+      "keyword_counts": {
+        "AI tools": 37,
+        "fitness": 22,
+        "gaming": 21,
+        "history": 36,
+        "home improvement": 33,
+        "interesting facts": 28,
+        "productivity": 31,
+        "self improvement": 30,
+        "technology": 23,
+        "travel": 39
+      },
+      "vph_stratum_counts": {
+        "high": 82,
+        "low": 39,
+        "medium": 87,
+        "very_high": 92
+      },
+      "channel_size_counts": {
+        "large": 28,
+        "medium": 26,
+        "small": 32,
+        "unknown": 214
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 82,
+        "winner_recall": 0.3083,
+        "selected_non_winner_share": 0.7267
+      }
+    },
+    "B_balanced_n300": {
+      "target_size": 300,
+      "selected_count": 300,
+      "unique_channels": 294,
+      "expected_baseline_requests": 294,
+      "expected_runtime_seconds": 882.0,
+      "keyword_counts": {
+        "AI tools": 37,
+        "fitness": 22,
+        "gaming": 21,
+        "history": 36,
+        "home improvement": 33,
+        "interesting facts": 28,
+        "productivity": 31,
+        "self improvement": 30,
+        "technology": 23,
+        "travel": 39
+      },
+      "vph_stratum_counts": {
+        "high": 75,
+        "low": 67,
+        "medium": 84,
+        "very_high": 74
+      },
+      "channel_size_counts": {
+        "large": 20,
+        "medium": 20,
+        "small": 31,
+        "unknown": 229
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 70,
+        "winner_recall": 0.2632,
+        "selected_non_winner_share": 0.7667
+      }
+    },
+    "C_retrieval_first_n300": {
+      "target_size": 300,
+      "selected_count": 300,
+      "unique_channels": 293,
+      "expected_baseline_requests": 293,
+      "expected_runtime_seconds": 879.0,
+      "keyword_counts": {
+        "AI tools": 37,
+        "fitness": 22,
+        "gaming": 21,
+        "history": 36,
+        "home improvement": 33,
+        "interesting facts": 28,
+        "productivity": 31,
+        "self improvement": 30,
+        "technology": 23,
+        "travel": 39
+      },
+      "vph_stratum_counts": {
+        "high": 53,
+        "low": 28,
+        "medium": 70,
+        "very_high": 149
+      },
+      "channel_size_counts": {
+        "large": 51,
+        "medium": 50,
+        "small": 33,
+        "unknown": 166
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 123,
+        "winner_recall": 0.4624,
+        "selected_non_winner_share": 0.59
+      }
+    },
+    "A_vph_heavy_n500": {
+      "target_size": 500,
+      "selected_count": 498,
+      "unique_channels": 484,
+      "expected_baseline_requests": 484,
+      "expected_runtime_seconds": 1452.0,
+      "keyword_counts": {
+        "AI tools": 62,
+        "fitness": 36,
+        "gaming": 35,
+        "history": 60,
+        "home improvement": 53,
+        "interesting facts": 47,
+        "productivity": 51,
+        "self improvement": 50,
+        "technology": 39,
+        "travel": 65
+      },
+      "vph_stratum_counts": {
+        "high": 135,
+        "low": 69,
+        "medium": 158,
+        "very_high": 136
+      },
+      "channel_size_counts": {
+        "large": 42,
+        "medium": 49,
+        "small": 40,
+        "unknown": 367
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 119,
+        "winner_recall": 0.4474,
+        "selected_non_winner_share": 0.761
+      }
+    },
+    "B_balanced_n500": {
+      "target_size": 500,
+      "selected_count": 497,
+      "unique_channels": 485,
+      "expected_baseline_requests": 485,
+      "expected_runtime_seconds": 1455.0,
+      "keyword_counts": {
+        "AI tools": 62,
+        "fitness": 36,
+        "gaming": 35,
+        "history": 60,
+        "home improvement": 52,
+        "interesting facts": 47,
+        "productivity": 51,
+        "self improvement": 50,
+        "technology": 39,
+        "travel": 65
+      },
+      "vph_stratum_counts": {
+        "high": 126,
+        "low": 112,
+        "medium": 148,
+        "very_high": 111
+      },
+      "channel_size_counts": {
+        "large": 38,
+        "medium": 42,
+        "small": 32,
+        "unknown": 385
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 101,
+        "winner_recall": 0.3797,
+        "selected_non_winner_share": 0.7968
+      }
+    },
+    "C_retrieval_first_n500": {
+      "target_size": 500,
+      "selected_count": 499,
+      "unique_channels": 485,
+      "expected_baseline_requests": 485,
+      "expected_runtime_seconds": 1455.0,
+      "keyword_counts": {
+        "AI tools": 62,
+        "fitness": 36,
+        "gaming": 35,
+        "history": 60,
+        "home improvement": 55,
+        "interesting facts": 47,
+        "productivity": 50,
+        "self improvement": 50,
+        "technology": 39,
+        "travel": 65
+      },
+      "vph_stratum_counts": {
+        "high": 105,
+        "low": 55,
+        "medium": 157,
+        "very_high": 182
+      },
+      "channel_size_counts": {
+        "large": 59,
+        "medium": 59,
+        "small": 52,
+        "unknown": 329
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 152,
+        "winner_recall": 0.5714,
+        "selected_non_winner_share": 0.6954
+      }
+    },
+    "A_vph_heavy_n700": {
+      "target_size": 700,
+      "selected_count": 696,
+      "unique_channels": 678,
+      "expected_baseline_requests": 678,
+      "expected_runtime_seconds": 2034.0,
+      "keyword_counts": {
+        "AI tools": 86,
+        "fitness": 51,
+        "gaming": 49,
+        "history": 85,
+        "home improvement": 73,
+        "interesting facts": 65,
+        "productivity": 71,
+        "self improvement": 70,
+        "technology": 55,
+        "travel": 91
+      },
+      "vph_stratum_counts": {
+        "high": 180,
+        "low": 99,
+        "medium": 243,
+        "very_high": 174
+      },
+      "channel_size_counts": {
+        "large": 59,
+        "medium": 58,
+        "small": 51,
+        "unknown": 528
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 158,
+        "winner_recall": 0.594,
+        "selected_non_winner_share": 0.773
+      }
+    },
+    "B_balanced_n700": {
+      "target_size": 700,
+      "selected_count": 696,
+      "unique_channels": 682,
+      "expected_baseline_requests": 682,
+      "expected_runtime_seconds": 2046.0,
+      "keyword_counts": {
+        "AI tools": 86,
+        "fitness": 51,
+        "gaming": 49,
+        "history": 85,
+        "home improvement": 73,
+        "interesting facts": 65,
+        "productivity": 71,
+        "self improvement": 70,
+        "technology": 55,
+        "travel": 91
+      },
+      "vph_stratum_counts": {
+        "high": 168,
+        "low": 159,
+        "medium": 223,
+        "very_high": 146
+      },
+      "channel_size_counts": {
+        "large": 50,
+        "medium": 47,
+        "small": 47,
+        "unknown": 552
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 135,
+        "winner_recall": 0.5075,
+        "selected_non_winner_share": 0.806
+      }
+    },
+    "C_retrieval_first_n700": {
+      "target_size": 700,
+      "selected_count": 694,
+      "unique_channels": 674,
+      "expected_baseline_requests": 674,
+      "expected_runtime_seconds": 2022.0,
+      "keyword_counts": {
+        "AI tools": 86,
+        "fitness": 51,
+        "gaming": 49,
+        "history": 85,
+        "home improvement": 72,
+        "interesting facts": 64,
+        "productivity": 71,
+        "self improvement": 70,
+        "technology": 55,
+        "travel": 91
+      },
+      "vph_stratum_counts": {
+        "high": 119,
+        "low": 119,
+        "medium": 270,
+        "very_high": 186
+      },
+      "channel_size_counts": {
+        "large": 65,
+        "medium": 61,
+        "small": 54,
+        "unknown": 514
+      },
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 156,
+        "winner_recall": 0.5865,
+        "selected_non_winner_share": 0.7752
+      }
+    }
+  },
+  "channel_cap_analysis": {
+    "unlimited": {
+      "selected_count": 500,
+      "unique_channels": 488,
+      "expected_runtime_seconds": 1464.0,
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 122,
+        "winner_recall": 0.4586,
+        "selected_non_winner_share": 0.756
+      }
+    },
+    "max_2_per_channel": {
+      "selected_count": 500,
+      "unique_channels": 488,
+      "expected_runtime_seconds": 1464.0,
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 122,
+        "winner_recall": 0.4586,
+        "selected_non_winner_share": 0.756
+      }
+    },
+    "max_1_per_channel": {
+      "selected_count": 488,
+      "unique_channels": 488,
+      "expected_runtime_seconds": 1464.0,
+      "retrospective": {
+        "winners_in_pool": 266,
+        "winners_selected": 120,
+        "winner_recall": 0.4511,
+        "selected_non_winner_share": 0.7541
+      }
+    }
+  },
+  "runtime_estimates": {
+    "n300": {
+      "assumed_unique_channels": 270,
+      "baseline_seconds": 810.0,
+      "baseline_minutes": 13.5
+    },
+    "n500": {
+      "assumed_unique_channels": 484,
+      "baseline_seconds": 1452.0,
+      "baseline_minutes": 24.2
+    },
+    "n700": {
+      "assumed_unique_channels": 630,
+      "baseline_seconds": 1890.0,
+      "baseline_minutes": 31.5
+    }
+  },
+  "frozen_sampling_rule": {
+    "version": "1.10B",
+    "seed": 42,
+    "eligible_pool": "content_format=regular AND vph_at_t0 IS NOT NULL AND channel_id present",
+    "dedupe": "one row per video_id globally before sampling",
+    "vph_strata_boundaries": {
+      "p25": 0.8,
+      "p50": 11.61,
+      "p75": 177.84,
+      "p90": 927.7160000000016,
+      "min": 0.0,
+      "max": 100182.07
+    },
+    "vph_stratum_acceptance_probability": {
+      "very_high": 1.0,
+      "high": 0.85,
+      "medium": 0.45,
+      "low": 0.2
+    },
+    "keyword_allocation": "capped_proportional",
+    "keyword_cap_fraction": 0.18,
+    "max_candidates_per_channel": 2,
+    "target_baseline_sample_sizes": [
+      300,
+      500,
+      700
+    ],
+    "recommended_target": 500,
+    "recommended_design": "A_vph_heavy",
+    "t0_only_fields": [
+      "age_hours_at_t0",
+      "channel_id",
+      "content_format",
+      "discovered_at",
+      "discovery_subscribers",
+      "discovery_views",
+      "final_subscribers",
+      "keyword",
+      "video_id",
+      "vph_at_t0"
+    ],
+    "notes": [
+      "Acceptance uses vph_at_t0 strata only; no T67/outcome fields at execution time.",
+      "Process pool in random shuffle order within keyword after optional top-VPH pass.",
+      "Channel baseline fetched once per channel_id per run (cache)."
+    ]
+  },
+  "limitations": [
+    "Retrospective winner recall uses Stage 1.9 T67 outcomes — diagnostic only.",
+    "Subscriber strata sparse (~12% known in T0 cohort); size balancing is approximate.",
+    "Unique-channel ratio extrapolated from gaming pilot (1.10A).",
+    "Next cohort discovery mix may differ from 1.9A keyword distributions."
+  ],
+  "verification": {
+    "NO_NETWORK": true,
+    "NO_DB_WRITES": true
+  }
+}

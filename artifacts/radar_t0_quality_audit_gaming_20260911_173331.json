@@ -1,0 +1,519 @@
+{
+  "source_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_172900_gaming.jsonl",
+  "keyword": "gaming",
+  "overview": {
+    "total_records": 195,
+    "keyword": "gaming"
+  },
+  "integrity": {
+    "total_records": 195,
+    "unique_video_id": 195,
+    "duplicate_video_id_count": 0,
+    "passed": 19,
+    "rejected": 176,
+    "parse_errors": 0,
+    "invariant_ok": true,
+    "invariant": "195 == 19 + 176 + 0"
+  },
+  "time_quality": {
+    "published_at_gt_discovered_at": {
+      "count": 1,
+      "pct": 0.51
+    },
+    "age_hours_at_t0_lt_0": {
+      "count": 1,
+      "pct": 0.51
+    },
+    "age_hours_at_t0_eq_0": {
+      "count": 0,
+      "pct": 0.0
+    },
+    "age_hours_at_t0_lt_1": {
+      "count": 3,
+      "pct": 1.54
+    },
+    "age_hours_at_t0_lt_3": {
+      "count": 9,
+      "pct": 4.62
+    },
+    "age_hours_at_t0_lt_6": {
+      "count": 23,
+      "pct": 11.79
+    },
+    "age_hours_at_t0_lt_24": {
+      "count": 195,
+      "pct": 100.0
+    },
+    "age_hours_at_t0_gte_24": {
+      "count": 0,
+      "pct": 0.0
+    },
+    "age_hours_available": 195,
+    "age_hours_stats": {
+      "min": -0.8585,
+      "median": 17.3519,
+      "max": 23.4609
+    }
+  },
+  "vph_quality": {
+    "vph_available": 194,
+    "vph_missing": 1,
+    "vph_lte_0": 0,
+    "vph_stats": {
+      "min": 19.48,
+      "median": 959.36,
+      "max": 106105.61
+    },
+    "arithmetic_sanity": {
+      "checked": 194,
+      "mismatch_count": 0,
+      "mismatch_pct": 0.0,
+      "tolerance": 0.015,
+      "examples": []
+    }
+  },
+  "subscriber_enrichment": {
+    "final_subscribers_available": 117,
+    "final_subscribers_missing": 78,
+    "subscriber_fetch_status_breakdown": {
+      "discovery": 4,
+      "homepage_fetched": 113,
+      "unavailable": 0,
+      "not_attempted": 78
+    },
+    "by_group": {
+      "all": {
+        "available": 117,
+        "missing": 78,
+        "available_pct": 60.0,
+        "status_breakdown": {
+          "discovery": 4,
+          "homepage_fetched": 113,
+          "unavailable": 0,
+          "not_attempted": 78
+        }
+      },
+      "passed": {
+        "available": 19,
+        "missing": 0,
+        "available_pct": 100.0,
+        "status_breakdown": {
+          "discovery": 0,
+          "homepage_fetched": 19,
+          "unavailable": 0,
+          "not_attempted": 0
+        }
+      },
+      "rejected": {
+        "available": 98,
+        "missing": 78,
+        "available_pct": 55.68,
+        "status_breakdown": {
+          "discovery": 4,
+          "homepage_fetched": 94,
+          "unavailable": 0,
+          "not_attempted": 78
+        }
+      }
+    }
+  },
+  "views_per_subscriber": {
+    "views_per_subscriber_available": 117,
+    "views_per_subscriber_missing": 78,
+    "views_per_subscriber_lte_0": 5,
+    "views_per_subscriber_stats": {
+      "min": 0.0,
+      "median": 0.11,
+      "max": 658.75
+    },
+    "arithmetic_sanity": {
+      "checked": 117,
+      "mismatch_count": 0,
+      "mismatch_pct": 0.0,
+      "tolerance": 0.015,
+      "examples": []
+    }
+  },
+  "format": {
+    "content_format_breakdown": {
+      "regular": 195,
+      "short": 0,
+      "live": 0,
+      "unknown": 0
+    },
+    "format_violations": 0,
+    "expected_validation_cohort": {
+      "regular": 195,
+      "short": 0,
+      "live": 0,
+      "unknown": 0
+    },
+    "matches_expected_validation_cohort": true
+  },
+  "consistency": {
+    "discovery_views_present": 195,
+    "discovery_views_missing": 0,
+    "discovered_at_present": 195,
+    "discovered_at_missing": 0,
+    "video_id_present": 195,
+    "unique_keywords": [
+      "gaming"
+    ],
+    "schema_field_coverage": {
+      "video_id": 195,
+      "channel_id": 195,
+      "keyword": 195,
+      "video_title": 195,
+      "channel_title": 195,
+      "discovered_at": 195,
+      "discovery_views": 195,
+      "discovery_subscribers": 195,
+      "discovery_published_text": 195,
+      "discovery_source": 195,
+      "is_short": 195,
+      "is_live": 195,
+      "content_renderer": 195,
+      "final_subscribers": 195,
+      "subscriber_fetch_status": 195,
+      "published_at": 195,
+      "age_hours_at_t0": 195,
+      "vph_at_t0": 195,
+      "views_per_subscriber_at_t0": 195,
+      "duration_seconds": 195,
+      "content_format": 195,
+      "enrichment_status": 195,
+      "qualification_state": 195,
+      "first_failure_reason": 195
+    },
+    "enrichment_did_not_mutate_discovery_views": "cannot verify from dataset alone",
+    "enrichment_did_not_mutate_discovered_at": "cannot verify from dataset alone",
+    "video_id_immutable": "cannot verify from dataset alone",
+    "keyword_immutable": "cannot verify from dataset alone"
+  },
+  "outliers": {
+    "negative_age": {
+      "count": 1,
+      "examples": [
+        {
+          "video_id": "55acolzGZLU",
+          "reason": "negative_age",
+          "discovery_views": 5244,
+          "discovered_at": "2026-09-11T17:26:30.361103+00:00",
+          "published_at": "2026-09-11T18:18:01+00:00",
+          "age_hours_at_t0": -0.8585,
+          "vph_at_t0": null,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "partial"
+        }
+      ]
+    },
+    "extremely_high_vph": {
+      "threshold": 20000.0,
+      "count": 8,
+      "examples": [
+        {
+          "video_id": "56xrHGO_xHU",
+          "reason": "extremely_high_vph",
+          "discovery_views": 227288,
+          "discovered_at": "2026-09-11T17:24:46.532183+00:00",
+          "published_at": "2026-09-11T15:16:15+00:00",
+          "age_hours_at_t0": 2.1421,
+          "vph_at_t0": 106105.61,
+          "final_subscribers": 3810000,
+          "views_per_subscriber_at_t0": 0.06,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "9qf7RAQPHbY",
+          "reason": "extremely_high_vph",
+          "discovery_views": 454032,
+          "discovered_at": "2026-09-11T17:24:46.533181+00:00",
+          "published_at": "2026-09-11T12:11:50+00:00",
+          "age_hours_at_t0": 5.2157,
+          "vph_at_t0": 87050.96,
+          "final_subscribers": 478000,
+          "views_per_subscriber_at_t0": 0.95,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "uD_Mp4BOolU",
+          "reason": "extremely_high_vph",
+          "discovery_views": 970211,
+          "discovered_at": "2026-09-11T17:26:14.058288+00:00",
+          "published_at": "2026-09-10T23:59:29+00:00",
+          "age_hours_at_t0": 17.4458,
+          "vph_at_t0": 55612.71,
+          "final_subscribers": 138000,
+          "views_per_subscriber_at_t0": 7.03,
+          "qualification_state": "passed",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "D6X5VQuhSXI",
+          "reason": "extremely_high_vph",
+          "discovery_views": 741467,
+          "discovered_at": "2026-09-11T17:27:27.383647+00:00",
+          "published_at": "2026-09-11T02:00:08+00:00",
+          "age_hours_at_t0": 15.4554,
+          "vph_at_t0": 47974.67,
+          "final_subscribers": 6710000,
+          "views_per_subscriber_at_t0": 0.11,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "LA_-0JxG128",
+          "reason": "extremely_high_vph",
+          "discovery_views": 705352,
+          "discovered_at": "2026-09-11T17:26:30.361103+00:00",
+          "published_at": "2026-09-11T01:50:09+00:00",
+          "age_hours_at_t0": 15.6059,
+          "vph_at_t0": 45197.68,
+          "final_subscribers": 24900,
+          "views_per_subscriber_at_t0": 28.33,
+          "qualification_state": "passed",
+          "enrichment_status": "ok"
+        }
+      ]
+    },
+    "extremely_low_vph": {
+      "threshold": 500.0,
+      "count": 62,
+      "examples": [
+        {
+          "video_id": "Ey9pM5fY7kc",
+          "reason": "extremely_low_vph",
+          "discovery_views": 83,
+          "discovered_at": "2026-09-11T17:28:14.458823+00:00",
+          "published_at": "2026-09-11T13:12:32+00:00",
+          "age_hours_at_t0": 4.2618,
+          "vph_at_t0": 19.48,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "7k5X4bSPWWw",
+          "reason": "extremely_low_vph",
+          "discovery_views": 269,
+          "discovered_at": "2026-09-11T17:28:29.939123+00:00",
+          "published_at": "2026-09-11T04:37:16+00:00",
+          "age_hours_at_t0": 12.8539,
+          "vph_at_t0": 20.93,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "gdNsuVrd610",
+          "reason": "extremely_low_vph",
+          "discovery_views": 604,
+          "discovered_at": "2026-09-11T17:28:08.959804+00:00",
+          "published_at": "2026-09-10T18:15:01+00:00",
+          "age_hours_at_t0": 23.2189,
+          "vph_at_t0": 26.01,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "Qwys7GlJwoI",
+          "reason": "extremely_low_vph",
+          "discovery_views": 706,
+          "discovered_at": "2026-09-11T17:28:08.959804+00:00",
+          "published_at": "2026-09-10T21:15:04+00:00",
+          "age_hours_at_t0": 20.218,
+          "vph_at_t0": 34.92,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "fZbMuEHuZuo",
+          "reason": "extremely_low_vph",
+          "discovery_views": 991,
+          "discovered_at": "2026-09-11T17:28:08.959804+00:00",
+          "published_at": "2026-09-10T19:00:33+00:00",
+          "age_hours_at_t0": 22.46,
+          "vph_at_t0": 44.12,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        }
+      ]
+    },
+    "extremely_high_views_per_subscriber": {
+      "threshold": 2.0,
+      "count": 14,
+      "examples": [
+        {
+          "video_id": "vEhI441-85o",
+          "reason": "extremely_high_vps",
+          "discovery_views": 2635,
+          "discovered_at": "2026-09-11T17:27:38.791967+00:00",
+          "published_at": "2026-09-10T21:04:28+00:00",
+          "age_hours_at_t0": 20.3863,
+          "vph_at_t0": 129.25,
+          "final_subscribers": 4,
+          "views_per_subscriber_at_t0": 658.75,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "1iNyq08MbA0",
+          "reason": "extremely_high_vps",
+          "discovery_views": 173715,
+          "discovered_at": "2026-09-11T17:28:35.709594+00:00",
+          "published_at": "2026-09-11T01:00:06+00:00",
+          "age_hours_at_t0": 16.4749,
+          "vph_at_t0": 10544.21,
+          "final_subscribers": 923,
+          "views_per_subscriber_at_t0": 188.21,
+          "qualification_state": "passed",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "LA_-0JxG128",
+          "reason": "extremely_high_vps",
+          "discovery_views": 705352,
+          "discovered_at": "2026-09-11T17:26:30.361103+00:00",
+          "published_at": "2026-09-11T01:50:09+00:00",
+          "age_hours_at_t0": 15.6059,
+          "vph_at_t0": 45197.68,
+          "final_subscribers": 24900,
+          "views_per_subscriber_at_t0": 28.33,
+          "qualification_state": "passed",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "5VzyLKORwNQ",
+          "reason": "extremely_high_vps",
+          "discovery_views": 29545,
+          "discovered_at": "2026-09-11T17:28:35.709594+00:00",
+          "published_at": "2026-09-10T20:48:57+00:00",
+          "age_hours_at_t0": 20.6608,
+          "vph_at_t0": 1430.01,
+          "final_subscribers": 2550,
+          "views_per_subscriber_at_t0": 11.59,
+          "qualification_state": "passed",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "N0fk4twPOUc",
+          "reason": "extremely_high_vps",
+          "discovery_views": 315716,
+          "discovered_at": "2026-09-11T17:25:41.813546+00:00",
+          "published_at": "2026-09-11T01:00:06+00:00",
+          "age_hours_at_t0": 16.4266,
+          "vph_at_t0": 19219.78,
+          "final_subscribers": 27900,
+          "views_per_subscriber_at_t0": 11.32,
+          "qualification_state": "passed",
+          "enrichment_status": "ok"
+        }
+      ]
+    },
+    "zero_subscribers_with_nonnull_vps": {
+      "count": 0,
+      "examples": []
+    },
+    "missing_vph_despite_valid_age_views": {
+      "count": 0,
+      "examples": []
+    },
+    "missing_final_subscribers": {
+      "count": 78,
+      "examples": [
+        {
+          "video_id": "5mYAtPYg7Po",
+          "reason": "missing_final_subscribers",
+          "discovery_views": 6845,
+          "discovered_at": "2026-09-11T17:24:19.051565+00:00",
+          "published_at": "2026-09-11T15:00:31+00:00",
+          "age_hours_at_t0": 2.3967,
+          "vph_at_t0": 2856.03,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "zsPygpbzJcw",
+          "reason": "missing_final_subscribers",
+          "discovery_views": 9356,
+          "discovered_at": "2026-09-11T17:24:19.051565+00:00",
+          "published_at": "2026-09-11T13:00:36+00:00",
+          "age_hours_at_t0": 4.3953,
+          "vph_at_t0": 2128.64,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "w6TKr1jDiKI",
+          "reason": "missing_final_subscribers",
+          "discovery_views": 906,
+          "discovered_at": "2026-09-11T17:24:19.051565+00:00",
+          "published_at": "2026-09-11T15:21:23+00:00",
+          "age_hours_at_t0": 2.0489,
+          "vph_at_t0": 442.19,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "ZblrPfIZIdc",
+          "reason": "missing_final_subscribers",
+          "discovery_views": 5916,
+          "discovered_at": "2026-09-11T17:24:19.051565+00:00",
+          "published_at": "2026-09-11T09:30:23+00:00",
+          "age_hours_at_t0": 7.8989,
+          "vph_at_t0": 748.96,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        },
+        {
+          "video_id": "dDx-doD0cWI",
+          "reason": "missing_final_subscribers",
+          "discovery_views": 7993,
+          "discovered_at": "2026-09-11T17:24:19.051565+00:00",
+          "published_at": "2026-09-11T12:30:02+00:00",
+          "age_hours_at_t0": 4.9047,
+          "vph_at_t0": 1629.65,
+          "final_subscribers": null,
+          "views_per_subscriber_at_t0": null,
+          "qualification_state": "rejected",
+          "enrichment_status": "ok"
+        }
+      ]
+    }
+  },
+  "caveats": [
+    {
+      "problem": "Negative age or published_at after discovered_at (API/Innertube clock skew)",
+      "affected_records": 1,
+      "why_it_matters": "VPH is null or unreliable when publish time is after discovery snapshot",
+      "blocks_next_stage": false
+    },
+    {
+      "problem": "Subscriber fetch not attempted for many channels",
+      "affected_records": 78,
+      "why_it_matters": "final_subscribers and views_per_subscriber_at_t0 unavailable for viral coefficient at T0",
+      "blocks_next_stage": false
+    }
+  ],
+  "final_verdict": "READY_WITH_CAVEATS"
+}

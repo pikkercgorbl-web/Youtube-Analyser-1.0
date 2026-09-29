@@ -1,0 +1,18 @@
+{
+  "keyword": "AI tools",
+  "timestamp": "2026-09-11T10:32:27.310001+00:00",
+  "min_views": 10000,
+  "min_viral_coeff": 3.0,
+  "upload_period": "all",
+  "register_channels": false,
+  "production_db_registration": false,
+  "total_candidates": 218,
+  "passed": 3,
+  "rejected": 215,
+  "parse_errors": 0,
+  "source": "run_radar_multi_keyword_dataset.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103227_ai_tools.jsonl",
+  "duration_seconds": 100.78,
+  "pages_scanned": 14,
+  "schema_version": "1.7"
+}

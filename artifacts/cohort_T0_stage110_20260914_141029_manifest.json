@@ -1,0 +1,169 @@
+{
+  "schema_version": "1.10C",
+  "cohort_run_id": "stage110_20260914_141029",
+  "discovery_timestamp": "2026-09-14T14:10:29.608646+00:00",
+  "keywords": [
+    "AI tools",
+    "productivity",
+    "fitness",
+    "gaming",
+    "history",
+    "technology",
+    "self improvement",
+    "interesting facts",
+    "home improvement",
+    "travel"
+  ],
+  "datasets": {
+    "broad_t0_jsonl": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_broad.jsonl",
+    "experimental_sample_jsonl": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_sample.jsonl"
+  },
+  "sampling": {
+    "seed": 42,
+    "eligible_count": 2747,
+    "target_size": 500,
+    "vph_boundaries": {
+      "p25": 0.615,
+      "p50": 7.38,
+      "p75": 234.10000000000002,
+      "p90": 1128.53,
+      "min": 0.0,
+      "max": 756871.6
+    },
+    "keyword_quotas_requested": {
+      "AI tools": 74,
+      "productivity": 48,
+      "fitness": 23,
+      "gaming": 45,
+      "history": 55,
+      "technology": 33,
+      "self improvement": 59,
+      "interesting facts": 30,
+      "home improvement": 57,
+      "travel": 76
+    },
+    "keyword_quotas_filled": {
+      "AI tools": 74,
+      "productivity": 48,
+      "fitness": 23,
+      "gaming": 45,
+      "history": 55,
+      "technology": 33,
+      "self improvement": 59,
+      "interesting facts": 30,
+      "home improvement": 57,
+      "travel": 76
+    },
+    "vph_stratum_target": {
+      "very_high": 175,
+      "high": 125,
+      "medium": 125,
+      "low": 75
+    },
+    "vph_stratum_actual": {
+      "very_high": 124,
+      "high": 151,
+      "medium": 158,
+      "low": 67
+    },
+    "top_up_added": 0,
+    "per_channel_dropped": 0,
+    "keyword_shortfalls": {
+      "AI tools": 0,
+      "productivity": 0,
+      "fitness": 0,
+      "gaming": 0,
+      "history": 0,
+      "technology": 0,
+      "self improvement": 0,
+      "interesting facts": 0,
+      "home improvement": 0,
+      "travel": 0
+    },
+    "design": "A_vph_heavy",
+    "strata_mix": {
+      "very_high": 0.35,
+      "high": 0.25,
+      "medium": 0.25,
+      "low": 0.15
+    },
+    "keyword_cap_fraction": 0.18,
+    "max_per_channel": 2
+  },
+  "overlap_with_stage19_t0": {
+    "old_manifest": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_manifest.json",
+    "new_unique_videos": 2747,
+    "new_unique_channels": 2621,
+    "overlap_video_count": 0,
+    "overlap_channel_count": 182,
+    "new_only_video_count": 2747,
+    "overlap_video_ids_sample": []
+  },
+  "discovery": {
+    "duration_seconds": 1538.21,
+    "raw_candidate_rows": 2919,
+    "eligible_count": 2747,
+    "selected_count": 500
+  },
+  "baseline": {
+    "duration_seconds": 1774.43,
+    "channel_baseline_requests": 491,
+    "cache_hits": 9,
+    "retained_history_leakage_violations": 0,
+    "excluded_future_tab_videos": 72
+  },
+  "quality": {
+    "broad_pool": {
+      "raw_scan_rows": 2919,
+      "unique_videos_deduped": 2902,
+      "regular_count": 2783,
+      "vph_available": 2863,
+      "eligible_for_sampling": 2747,
+      "unique_channels_eligible": 2621
+    },
+    "sample": {
+      "target_n": 500,
+      "actual_n": 500,
+      "vph_stratum_counts": {
+        "very_high": 124,
+        "high": 151,
+        "medium": 158,
+        "low": 67
+      },
+      "keyword_counts": {
+        "AI tools": 74,
+        "productivity": 48,
+        "fitness": 23,
+        "gaming": 45,
+        "history": 55,
+        "technology": 33,
+        "self improvement": 59,
+        "interesting facts": 30,
+        "home improvement": 57,
+        "travel": 76
+      },
+      "unique_channels": 491,
+      "subscriber_coverage": 164,
+      "baseline_status_counts": {
+        "ok": 413,
+        "partial": 50,
+        "insufficient_history": 31,
+        "failed": 6
+      },
+      "baseline_ok_or_partial": 463,
+      "views_vs_channel_median_coverage": 480,
+      "views_vs_channel_p75_coverage": 484
+    },
+    "baseline_stats_summary": {
+      "channel_baseline_requests": 491,
+      "cache_hits": 9,
+      "retained_history_leakage_violations": 0
+    }
+  },
+  "verification": {
+    "NO_OUTCOME_USAGE": true,
+    "NO_DB_WRITES": true,
+    "NO_T72_YET": true,
+    "production_db_registration": false
+  }
+}

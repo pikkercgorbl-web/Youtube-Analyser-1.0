@@ -5,11 +5,13 @@ from __future__ import annotations
 from datetime import timedelta
 
 from sqlalchemy import func, select, update
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.orm import RadarWorkerState, TargetKeyword
 from app.models.schemas import RadarStatsResponse, TargetKeywordCreate
+from app.services.discovery_keyword_selection import select_discovery_keywords
+from app.services.keyword_lifecycle_service import create_keyword, normalize_keyword_text
+from app.services.keyword_scheduling_policy import LIFECYCLE_ACTIVE, SOURCE_SEED
 from app.services.metrics import utc_now
 
 DEFAULT_BATCH_SIZE = 5
@@ -23,15 +25,14 @@ class TargetKeywordsService:
     """Manage keywords scanned by the explosive-channels background worker."""
 
     def create(self, db: Session, payload: TargetKeywordCreate) -> TargetKeyword:
-        normalized = payload.keyword.strip()
-        record = TargetKeyword(keyword=normalized)
-        db.add(record)
-        try:
-            db.commit()
-        except IntegrityError as exc:
-            db.rollback()
-            msg = f"Keyword already exists: {normalized!r}"
-            raise ValueError(msg) from exc
+        normalized = normalize_keyword_text(payload.keyword)
+        record = create_keyword(
+            db,
+            normalized,
+            source_type=SOURCE_SEED,
+            lifecycle_status=LIFECYCLE_ACTIVE,
+        )
+        db.commit()
         db.refresh(record)
         return record
 
@@ -47,35 +48,24 @@ class TargetKeywordsService:
         db: Session,
         batch_size: int = DEFAULT_BATCH_SIZE,
     ) -> list[TargetKeyword]:
-        """Return keywords that were checked longest ago; never-checked go first."""
-        total = db.scalar(select(func.count()).select_from(TargetKeyword)) or 0
-        if total == 0:
-            return []
-
-        limit = max(1, min(batch_size, total))
-        return list(
-            db.scalars(
-                select(TargetKeyword)
-                .order_by(
-                    TargetKeyword.last_checked.is_(None).desc(),
-                    TargetKeyword.last_checked.asc(),
-                    TargetKeyword.id.asc(),
-                )
-                .limit(limit),
-            ).all(),
-        )
+        """Return lifecycle-due keywords (Stage 1.16B scheduling)."""
+        return select_discovery_keywords(db, batch_size=batch_size)
 
     def mark_checked(self, db: Session, keyword_ids: list[int]) -> None:
-        """Stamp last_checked for keywords processed by the radar worker."""
+        """Stamp last_checked and next_scan_at after successful processing."""
         if not keyword_ids:
             return
 
+        from app.services.keyword_lifecycle_service import apply_post_scan_schedule
+
         now = utc_now()
-        db.execute(
-            update(TargetKeyword)
-            .where(TargetKeyword.id.in_(keyword_ids))
-            .values(last_checked=now),
-        )
+        for keyword_id in keyword_ids:
+            apply_post_scan_schedule(
+                db,
+                keyword_id,
+                finished_at=now,
+                scan_succeeded=True,
+            )
         db.commit()
 
     def get_radar_stats(self, db: Session) -> RadarStatsResponse:

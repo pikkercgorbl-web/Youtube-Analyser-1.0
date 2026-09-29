@@ -1,0 +1,776 @@
+{
+  "confirmed_breakout_count": {
+    "current_mapping": "confirmed_breakout_count == top_decile_breakout_count (live global pool at evaluated_at)",
+    "not_delayed_confirmation": true,
+    "optional_future_rename": "top_decile_breakout_count_live",
+    "recommendation": "B",
+    "recommendation_text": "Retain API field for backward compatibility but document explicitly as top_decile_breakout_count alias; do not use the word 'confirmed' in historical validation or lifecycle copy."
+  },
+  "data_sources": {
+    "A_frozen_experiment_cohorts": {
+      "cohort_1": {
+        "all_hits_keyword_aggregates_sample": [
+          {
+            "attributed_video_count": 329,
+            "cross_keyword_duplicate_rate": 0.0152,
+            "delayed_top_decile_growth_rate": 0.076,
+            "early_top_decile_count": 17,
+            "early_top_decile_rate": 0.0517,
+            "keyword_key": "AI tools",
+            "median_absolute_view_growth_72h": 154.0,
+            "median_vph_at_discovery": 11.545,
+            "median_vs_mean_growth_gap": 5277.4286,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 329,
+            "outlier_dominated": false,
+            "p90_absolute_view_growth_72h": 10335.0,
+            "p90_vph_at_discovery": 449.218,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 0.2711,
+            "top_video_share_of_total_growth": 0.1509,
+            "unique_videos_per_scan_median": null
+          },
+          {
+            "attributed_video_count": 196,
+            "cross_keyword_duplicate_rate": 0.0051,
+            "delayed_top_decile_growth_rate": 0.0663,
+            "early_top_decile_count": 15,
+            "early_top_decile_rate": 0.0765,
+            "keyword_key": "fitness",
+            "median_absolute_view_growth_72h": 115.0,
+            "median_vph_at_discovery": 8.95,
+            "median_vs_mean_growth_gap": 3315.2143,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 196,
+            "outlier_dominated": false,
+            "p90_absolute_view_growth_72h": 6899.0,
+            "p90_vph_at_discovery": 529.946,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 0.2192,
+            "top_video_share_of_total_growth": 0.117,
+            "unique_videos_per_scan_median": null
+          },
+          {
+            "attributed_video_count": 184,
+            "cross_keyword_duplicate_rate": 0.0054,
+            "delayed_top_decile_growth_rate": 0.413,
+            "early_top_decile_count": 97,
+            "early_top_decile_rate": 0.5272,
+            "keyword_key": "gaming",
+            "median_absolute_view_growth_72h": 8573.0,
+            "median_vph_at_discovery": 1015.8,
+            "median_vs_mean_growth_gap": 32519.875,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 184,
+            "outlier_dominated": false,
+            "p90_absolute_view_growth_72h": 94918.7,
+            "p90_vph_at_discovery": 14174.004,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 0.0894,
+            "top_video_share_of_total_growth": 0.0837,
+            "unique_videos_per_scan_median": null
+          },
+          {
+            "attributed_video_count": 326,
+            "cross_keyword_duplicate_rate": 0.0092,
+            "delayed_top_decile_growth_rate": 0.1135,
+            "early_top_decile_count": 33,
+            "early_top_decile_rate": 0.1012,
+            "keyword_key": "history",
+            "median_absolute_view_growth_72h": 813.5,
+            "median_vph_at_discovery": 58.91,
+            "median_vs_mean_growth_gap": 7895.5337,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 326,
+            "outlier_dominated": false,
+            "p90_absolute_view_growth_72h": 19552.5,
+            "p90_vph_at_discovery": 910.622,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 0.1989,
+            "top_video_share_of_total_growth": 0.1374,
+            "unique_videos_per_scan_median": null
+          },
+          {
+            "attributed_video_count": 296,
+            "cross_keyword_duplicate_rate": 0.0068,
+            "delayed_top_decile_growth_rate": 0.0338,
+            "early_top_decile_count": 9,
+            "early_top_decile_rate": 0.0304,
+            "keyword_key": "home improvement",
+            "median_absolute_view_growth_72h": 37.0,
+            "median_vph_at_discovery": 3.48,
+            "median_vs_mean_growth_gap": 1672.098,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 296,
+            "outlier_dominated": false,
+            "p90_absolute_view_growth_72h": 4516.0,
+            "p90_vph_at_discovery": 230.406,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 0.3251,
+            "top_video_share_of_total_growth": 0.087,
+            "unique_videos_per_scan_median": null
+          }
+        ],
+        "attribution_comparison": {
+          "all_hits": {
+            "keyword_count": 10,
+            "observation_count": 2694,
+            "q1": {
+              "early_top_decile_rate_vs_delayed_top_decile_growth_rate": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.8701,
+                  "n": 10,
+                  "point_rho": 0.9879,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.9879
+                },
+                "usable_keyword_n": 10
+              },
+              "early_top_decile_rate_vs_median_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.8113,
+                  "n": 10,
+                  "point_rho": 0.9758,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.9758
+                },
+                "usable_keyword_n": 10
+              },
+              "keywords_total": 10,
+              "keywords_with_any_72h_outcome": 10,
+              "median_vph_at_discovery_vs_median_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.6625,
+                  "n": 10,
+                  "point_rho": 0.9394,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.9394
+                },
+                "usable_keyword_n": 10
+              },
+              "p90_vph_at_discovery_vs_p90_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.8113,
+                  "n": 10,
+                  "point_rho": 0.9758,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.9758
+                },
+                "usable_keyword_n": 10
+              }
+            },
+            "redundancy": {
+              "cross_keyword_duplicate_observation_rate": 0.0082,
+              "mean_keywords_per_multi_video": 2.0,
+              "observation_count": 2694,
+              "unique_videos": 2683,
+              "videos_with_multiple_keywords": 11
+            }
+          },
+          "first_discovery": {
+            "keyword_count": 10,
+            "observation_count": 2683,
+            "q1": {
+              "early_top_decile_rate_vs_delayed_top_decile_growth_rate": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.8701,
+                  "n": 10,
+                  "point_rho": 0.9879,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.9879
+                },
+                "usable_keyword_n": 10
+              },
+              "early_top_decile_rate_vs_median_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.8113,
+                  "n": 10,
+                  "point_rho": 0.9758,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.9758
+                },
+                "usable_keyword_n": 10
+              },
+              "keywords_total": 10,
+              "keywords_with_any_72h_outcome": 10,
+              "median_vph_at_discovery_vs_median_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.6625,
+                  "n": 10,
+                  "point_rho": 0.9394,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.9394
+                },
+                "usable_keyword_n": 10
+              },
+              "p90_vph_at_discovery_vs_p90_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.8113,
+                  "n": 10,
+                  "point_rho": 0.9758,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.9758
+                },
+                "usable_keyword_n": 10
+              }
+            },
+            "redundancy": {
+              "cross_keyword_duplicate_observation_rate": 0.0041,
+              "mean_keywords_per_multi_video": null,
+              "observation_count": 2683,
+              "unique_videos": 2683,
+              "videos_with_multiple_keywords": 0
+            },
+            "scan_order_bias_note": "Frozen cohort credits first label in t0_keywords[] only; order is export metadata, not production scan order."
+          },
+          "median_vph_abs_delta_on_shared": 0.0075,
+          "shared_keyword_labels": 10
+        },
+        "cohort_id": "T0_T67_20260914",
+        "elapsed_hours_from_t0": 67.0,
+        "evidence_strata_all_hits": {
+          "scan_1|attr_50_plus|obs_10_plus": {
+            "early_top_decile_rate_mean": 0.1154,
+            "early_top_decile_rate_std": 0.1434,
+            "keyword_count": 10,
+            "median_growth_mean": 1222.25
+          }
+        },
+        "joined_path": "radar_outcome_joined_T0_T67_20260914_124311.jsonl",
+        "joined_sha256": "4ad54a3725a8a777e63436bba26308fbcccb8e17227355f9c8d3380c8412dc11",
+        "limitations": [
+          "Pseudo-keywords from t0_keywords[] are not TargetKeyword.id.",
+          "No KeywordScanRun / rescan timeline in join file.",
+          "Outcome is pre-joined ~72h growth, not recomputed from VideoSnapshot.",
+          "first_discovery uses first array element only (export order)."
+        ],
+        "outlier_all_hits": {
+          "outlier_dominated_keyword_count": 0,
+          "outlier_dominated_keywords_sample": [],
+          "top_video_share_of_total_growth_median": 0.1442,
+          "top_video_share_of_total_growth_p90": 0.4136
+        },
+        "row_counts": {
+          "early_top_decile_video_count": 266,
+          "joined_total": 2794,
+          "signal_validation_rows": 2683
+        },
+        "scan_stability": {
+          "keywords_with_multiple_scans": 0,
+          "note": "Frozen pseudo-keywords lack KeywordScanRun granularity; use production block.",
+          "sample": []
+        }
+      },
+      "cohort_2": {
+        "all_hits_keyword_aggregates_sample": [
+          {
+            "attributed_video_count": 73,
+            "cross_keyword_duplicate_rate": 0.0,
+            "delayed_top_decile_growth_rate": 0.0959,
+            "early_top_decile_count": 1,
+            "early_top_decile_rate": 0.0137,
+            "keyword_key": "AI tools",
+            "median_absolute_view_growth_72h": 3607.0,
+            "median_vph_at_discovery": 351.19,
+            "median_vs_mean_growth_gap": 15873.3288,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 73,
+            "outlier_dominated": false,
+            "p90_absolute_view_growth_72h": 36567.6,
+            "p90_vph_at_discovery": 2025.432,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 1.0,
+            "top_video_share_of_total_growth": 0.2377,
+            "unique_videos_per_scan_median": null
+          },
+          {
+            "attributed_video_count": 23,
+            "cross_keyword_duplicate_rate": 0.0,
+            "delayed_top_decile_growth_rate": 0.0435,
+            "early_top_decile_count": 3,
+            "early_top_decile_rate": 0.1304,
+            "keyword_key": "fitness",
+            "median_absolute_view_growth_72h": 6479.0,
+            "median_vph_at_discovery": 263.61,
+            "median_vs_mean_growth_gap": 78088.0435,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 23,
+            "outlier_dominated": true,
+            "p90_absolute_view_growth_72h": 28096.0,
+            "p90_vph_at_discovery": 12758.068,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 1.0175,
+            "top_video_share_of_total_growth": 0.9197,
+            "unique_videos_per_scan_median": null
+          },
+          {
+            "attributed_video_count": 45,
+            "cross_keyword_duplicate_rate": 0.0,
+            "delayed_top_decile_growth_rate": 0.1778,
+            "early_top_decile_count": 17,
+            "early_top_decile_rate": 0.3778,
+            "keyword_key": "gaming",
+            "median_absolute_view_growth_72h": 7103.0,
+            "median_vph_at_discovery": 1188.32,
+            "median_vs_mean_growth_gap": 85254.3556,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 45,
+            "outlier_dominated": true,
+            "p90_absolute_view_growth_72h": 140666.4,
+            "p90_vph_at_discovery": 28917.292,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 0.5554,
+            "top_video_share_of_total_growth": 0.5341,
+            "unique_videos_per_scan_median": null
+          },
+          {
+            "attributed_video_count": 55,
+            "cross_keyword_duplicate_rate": 0.0,
+            "delayed_top_decile_growth_rate": 0.1636,
+            "early_top_decile_count": 6,
+            "early_top_decile_rate": 0.1091,
+            "keyword_key": "history",
+            "median_absolute_view_growth_72h": 3319.0,
+            "median_vph_at_discovery": 269.32,
+            "median_vs_mean_growth_gap": 24381.6727,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 55,
+            "outlier_dominated": false,
+            "p90_absolute_view_growth_72h": 76024.6,
+            "p90_vph_at_discovery": 3808.642,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 0.3531,
+            "top_video_share_of_total_growth": 0.2238,
+            "unique_videos_per_scan_median": null
+          },
+          {
+            "attributed_video_count": 56,
+            "cross_keyword_duplicate_rate": 0.0,
+            "delayed_top_decile_growth_rate": 0.0357,
+            "early_top_decile_count": 1,
+            "early_top_decile_rate": 0.0179,
+            "keyword_key": "home improvement",
+            "median_absolute_view_growth_72h": 3702.0,
+            "median_vph_at_discovery": 331.425,
+            "median_vs_mean_growth_gap": 5265.0357,
+            "new_to_corpus_rate": null,
+            "observed_72h_video_count": 56,
+            "outlier_dominated": false,
+            "p90_absolute_view_growth_72h": 22651.5,
+            "p90_vph_at_discovery": 1801.77,
+            "scan_count": 1,
+            "source": "frozen_pseudo_keyword",
+            "top_video_share_of_top_decile_breakouts": 1.0,
+            "top_video_share_of_total_growth": 0.1714,
+            "unique_videos_per_scan_median": null
+          }
+        ],
+        "attribution_comparison": {
+          "all_hits": {
+            "keyword_count": 10,
+            "observation_count": 496,
+            "q1": {
+              "early_top_decile_rate_vs_delayed_top_decile_growth_rate": {
+                "bootstrap_ci": {
+                  "ci95_high": 0.9868,
+                  "ci95_low": 0.1748,
+                  "n": 10,
+                  "point_rho": 0.7295,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.7295
+                },
+                "usable_keyword_n": 10
+              },
+              "early_top_decile_rate_vs_median_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": -0.0508,
+                  "n": 10,
+                  "point_rho": 0.6444,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.6444
+                },
+                "usable_keyword_n": 10
+              },
+              "keywords_total": 10,
+              "keywords_with_any_72h_outcome": 10,
+              "median_vph_at_discovery_vs_median_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 0.9245,
+                  "ci95_low": -0.2346,
+                  "n": 10,
+                  "point_rho": 0.4909,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.4909
+                },
+                "usable_keyword_n": 10
+              },
+              "p90_vph_at_discovery_vs_p90_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": 0.0728,
+                  "n": 10,
+                  "point_rho": 0.7455,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.7455
+                },
+                "usable_keyword_n": 10
+              }
+            },
+            "redundancy": {
+              "cross_keyword_duplicate_observation_rate": 0.0081,
+              "mean_keywords_per_multi_video": 2.0,
+              "observation_count": 496,
+              "unique_videos": 494,
+              "videos_with_multiple_keywords": 2
+            }
+          },
+          "first_discovery": {
+            "keyword_count": 10,
+            "observation_count": 494,
+            "q1": {
+              "early_top_decile_rate_vs_delayed_top_decile_growth_rate": {
+                "bootstrap_ci": {
+                  "ci95_high": 0.9623,
+                  "ci95_low": 0.1495,
+                  "n": 10,
+                  "point_rho": 0.7295,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.7295
+                },
+                "usable_keyword_n": 10
+              },
+              "early_top_decile_rate_vs_median_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 0.95,
+                  "ci95_low": -0.153,
+                  "n": 10,
+                  "point_rho": 0.6079,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.6079
+                },
+                "usable_keyword_n": 10
+              },
+              "keywords_total": 10,
+              "keywords_with_any_72h_outcome": 10,
+              "median_vph_at_discovery_vs_median_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 0.9875,
+                  "ci95_low": -0.2075,
+                  "n": 10,
+                  "point_rho": 0.5636,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.5636
+                },
+                "usable_keyword_n": 10
+              },
+              "p90_vph_at_discovery_vs_p90_absolute_view_growth_72h": {
+                "bootstrap_ci": {
+                  "ci95_high": 1.0,
+                  "ci95_low": -0.0519,
+                  "n": 10,
+                  "point_rho": 0.7455,
+                  "resamples": 500
+                },
+                "spearman": {
+                  "n": 10,
+                  "rho": 0.7455
+                },
+                "usable_keyword_n": 10
+              }
+            },
+            "redundancy": {
+              "cross_keyword_duplicate_observation_rate": 0.004,
+              "mean_keywords_per_multi_video": null,
+              "observation_count": 494,
+              "unique_videos": 494,
+              "videos_with_multiple_keywords": 0
+            },
+            "scan_order_bias_note": "Frozen cohort credits first label in t0_keywords[] only; order is export metadata, not production scan order."
+          },
+          "median_vph_abs_delta_on_shared": 0.0,
+          "shared_keyword_labels": 10
+        },
+        "cohort_id": "stage110_T0_T72_20260914",
+        "elapsed_hours_from_t0": 71.9567,
+        "evidence_strata_all_hits": {
+          "scan_1|attr_10_49|obs_10_plus": {
+            "early_top_decile_rate_mean": 0.1835,
+            "early_top_decile_rate_std": 0.1249,
+            "keyword_count": 5,
+            "median_growth_mean": 4794.3
+          },
+          "scan_1|attr_50_plus|obs_10_plus": {
+            "early_top_decile_rate_mean": 0.0518,
+            "early_top_decile_rate_std": 0.051,
+            "keyword_count": 5,
+            "median_growth_mean": 4161.6
+          }
+        },
+        "joined_path": "radar_outcome_joined_stage110_T0_to_T72_stage110_20260914_141029.jsonl",
+        "joined_sha256": "69613d88581a8f2c45bee441ddd5e40cec64c1ca06a79022d9412dc30e26e504",
+        "limitations": [
+          "Pseudo-keywords from t0_keywords[] are not TargetKeyword.id.",
+          "No KeywordScanRun / rescan timeline in join file.",
+          "Outcome is pre-joined ~72h growth, not recomputed from VideoSnapshot.",
+          "first_discovery uses first array element only (export order)."
+        ],
+        "outlier_all_hits": {
+          "outlier_dominated_keyword_count": 2,
+          "outlier_dominated_keywords_sample": [
+            "fitness",
+            "gaming"
+          ],
+          "top_video_share_of_total_growth_median": 0.3377,
+          "top_video_share_of_total_growth_p90": 0.5727
+        },
+        "row_counts": {
+          "early_top_decile_video_count": 50,
+          "joined_total": 494,
+          "signal_validation_rows": 494
+        },
+        "scan_stability": {
+          "keywords_with_multiple_scans": 0,
+          "note": "Frozen pseudo-keywords lack KeywordScanRun granularity; use production block.",
+          "sample": []
+        }
+      }
+    },
+    "B_production_provenance": {
+      "all_hits_q1": {
+        "early_top_decile_rate_vs_delayed_top_decile_growth_rate": {
+          "spearman": {
+            "n": 0,
+            "rho": null
+          },
+          "usable_keyword_n": 0
+        },
+        "early_top_decile_rate_vs_median_absolute_view_growth_72h": {
+          "spearman": {
+            "n": 0,
+            "rho": null
+          },
+          "usable_keyword_n": 0
+        },
+        "keywords_total": 27,
+        "keywords_with_any_72h_outcome": 0,
+        "median_vph_at_discovery_vs_median_absolute_view_growth_72h": {
+          "spearman": {
+            "n": 0,
+            "rho": null
+          },
+          "usable_keyword_n": 0
+        },
+        "p90_vph_at_discovery_vs_p90_absolute_view_growth_72h": {
+          "spearman": {
+            "n": 0,
+            "rho": null
+          },
+          "usable_keyword_n": 0
+        }
+      },
+      "attempted": true,
+      "coverage": {
+        "all_hits_observations": 8461,
+        "first_discovery_observations": 7362,
+        "keywords_all_hits": 27,
+        "keywords_with_72h_outcomes": 0,
+        "load_elapsed_seconds": 8.046
+      },
+      "evidence_strata": {
+        "scan_1|attr_50_plus|obs_0": {
+          "early_top_decile_rate_mean": 0.0957,
+          "early_top_decile_rate_std": 0.1281,
+          "keyword_count": 27,
+          "median_growth_mean": null
+        }
+      },
+      "first_discovery_q1": {
+        "early_top_decile_rate_vs_delayed_top_decile_growth_rate": {
+          "spearman": {
+            "n": 0,
+            "rho": null
+          },
+          "usable_keyword_n": 0
+        },
+        "early_top_decile_rate_vs_median_absolute_view_growth_72h": {
+          "spearman": {
+            "n": 0,
+            "rho": null
+          },
+          "usable_keyword_n": 0
+        },
+        "keywords_total": 27,
+        "keywords_with_any_72h_outcome": 0,
+        "median_vph_at_discovery_vs_median_absolute_view_growth_72h": {
+          "spearman": {
+            "n": 0,
+            "rho": null
+          },
+          "usable_keyword_n": 0
+        },
+        "p90_vph_at_discovery_vs_p90_absolute_view_growth_72h": {
+          "spearman": {
+            "n": 0,
+            "rho": null
+          },
+          "usable_keyword_n": 0
+        }
+      },
+      "limitations": [
+        "Requires KeywordDiscoveryHit + VideoSnapshot coverage for 72h horizons.",
+        "Early top decile uses discovery VPH across unique videos in window (not breakout_v1)."
+      ],
+      "outlier": {
+        "outlier_dominated_keyword_count": 0,
+        "outlier_dominated_keywords_sample": [],
+        "top_video_share_of_total_growth_median": null,
+        "top_video_share_of_total_growth_p90": null
+      },
+      "redundancy_all_hits": {
+        "cross_keyword_duplicate_observation_rate": 0.228,
+        "mean_keywords_per_multi_video": 2.3241,
+        "observation_count": 8461,
+        "unique_videos": 7362,
+        "videos_with_multiple_keywords": 830
+      },
+      "scan_stability": {
+        "keywords_with_multiple_scans": 0,
+        "note": "Frozen pseudo-keywords lack KeywordScanRun granularity; use production block.",
+        "sample": []
+      }
+    },
+    "C_pseudo_keyword_t0_keywords": {
+      "equivalent_to_target_keyword_id": false,
+      "used_in": [
+        "frozen cohort attribution expansion"
+      ]
+    }
+  },
+  "delayed_outcome_contract": {
+    "first_hit_per_keyword_video": true,
+    "horizon_hours": 72,
+    "no_imputation": true,
+    "target": "absolute_view_growth_72h",
+    "tolerance_hours": 12
+  },
+  "evidence_threshold_design_input": {
+    "empirical_noise": "Keyword-level Spearman usable N often <15 on stage110 pseudo-keywords; bootstrap CIs wide when attr_lt_10.",
+    "no_thresholds_set": true,
+    "scan_vs_video_evidence": "Production scan_stability requires discovery_run_id; video-count strata more informative than scan_count=1 frozen exports.",
+    "stability_improves": "Frozen cohort 1 (broader multi-keyword export) increases keyword N vs cohort 2; strata attr_50_plus not populated for pseudo-keywords."
+  },
+  "generated_at": "2026-09-28T11:18:14.190780+00:00",
+  "implications_lifecycle_design": [
+    "Prefer leakage-safe early_top_decile_by_discovery_vph over live breakout rank for feedback loops.",
+    "Require minimum observed_72h_video_count before keyword promotion decisions (threshold TBD in 1.18E).",
+    "Report scan-order sensitivity when showing first_discovery metrics alongside all_hits.",
+    "Treat high duplicate rate as contextual (popular topics), not automatically penalized."
+  ],
+  "leakage_safe_feature_contract": {
+    "allowed_early": [
+      "vph_at_discovery",
+      "views_at_discovery",
+      "early_global_vph_rank",
+      "early_top_decile_by_discovery_vph",
+      "discovery_yield_counts",
+      "new_to_corpus",
+      "duplicate_flags",
+      "scan_run_metadata"
+    ],
+    "delayed_target": "absolute_view_growth_72h",
+    "forbidden_leaky": [
+      "current_vph_after_horizon",
+      "current_breakout_rank_after_outcome",
+      "future_snapshots",
+      "future_lifecycle_state",
+      "outcome_derived_features",
+      "production_breakout_leaderboard_at_evaluated_at"
+    ],
+    "horizon_hours": 72,
+    "horizon_tolerance_hours": 12
+  },
+  "limitations": [
+    "Pseudo-keywords ≠ production TargetKeyword scheduling entities.",
+    "Frozen outcomes fixed at join time; production path depends on snapshot density.",
+    "Keyword-level N small; do not overclaim weak Spearman estimates.",
+    "No keyword score or lifecycle automation produced in this stage."
+  ],
+  "metric_decision_matrix": {
+    "confirmed_breakout_count_api_field": "legacy_alias_document_only",
+    "cross_keyword_duplicate_rate": "promising_but_insufficient_evidence",
+    "current_breakout_rank_live": "weak_or_redundant_for_historical_prediction",
+    "early_top_decile_rate": "useful_evidence",
+    "median_vph_at_discovery": "useful_evidence",
+    "new_to_corpus_rate": "not_testable_with_current_data",
+    "p90_vph_at_discovery": "useful_evidence"
+  },
+  "runtime_seconds": 10.447,
+  "schema_version": "1.18C",
+  "verification": {
+    "NO_DB_WRITES": true,
+    "NO_NETWORK": true
+  }
+}

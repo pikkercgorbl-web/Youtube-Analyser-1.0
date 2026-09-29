@@ -1,0 +1,90 @@
+{
+  "keyword": "home improvement",
+  "timestamp": "2026-09-11T17:39:03.883528+00:00",
+  "schema_version": "1.8",
+  "source": "run_radar_validation_cohort.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_home_improvement.jsonl",
+  "duration_seconds": 96.52,
+  "raw_candidates": 330,
+  "regular_candidates": 297,
+  "excluded_after_enrichment": 33,
+  "candidate_count": 330,
+  "passed": 4,
+  "rejected": 326,
+  "parse_errors": 0,
+  "format_violations": 0,
+  "regular_format_violations": 0,
+  "invariant_ok": true,
+  "enrichment_summary": {
+    "candidates_total": 330,
+    "enrichment_ok": 324,
+    "enrichment_partial": 6,
+    "enrichment_failed": 0,
+    "missing_video": 0,
+    "published_at_available": 330,
+    "duration_available": 330,
+    "age_hours_available": 330,
+    "vph_available": 324,
+    "final_subscribers_available": 18,
+    "views_per_subscriber_available": 18,
+    "regular_count": 297,
+    "short_count": 33,
+    "live_count": 0,
+    "unknown_count": 0
+  },
+  "regular_enrichment_summary": {
+    "candidates_total": 297,
+    "enrichment_ok": 294,
+    "enrichment_partial": 3,
+    "enrichment_failed": 0,
+    "missing_video": 0,
+    "published_at_available": 297,
+    "duration_available": 297,
+    "age_hours_available": 297,
+    "vph_available": 294,
+    "final_subscribers_available": 18,
+    "views_per_subscriber_available": 18,
+    "regular_count": 297,
+    "short_count": 0,
+    "live_count": 0,
+    "unknown_count": 0
+  },
+  "regular_qualification": {
+    "passed": 4,
+    "rejected": 293,
+    "parse_errors": 0
+  },
+  "distribution_regular": {
+    "discovery_views": {
+      "count": 297,
+      "min": 0.0,
+      "median": 57.0,
+      "max": 366628.0
+    },
+    "vph_at_t0": {
+      "count": 294,
+      "min": 0.0,
+      "median": 3.46,
+      "max": 81620.0
+    },
+    "views_per_subscriber_at_t0": {
+      "count": 18,
+      "min": 0.0,
+      "median": 0.175,
+      "max": 246.06
+    },
+    "age_hours_at_t0": {
+      "count": 297,
+      "min": -0.2895,
+      "median": 18.1774,
+      "max": 23.9716
+    },
+    "final_subscribers": {
+      "count": 18,
+      "min": 601.0,
+      "median": 39250.0,
+      "max": 4059999.0
+    }
+  },
+  "missing_video_count": 0
+}

@@ -1,0 +1,1744 @@
+{
+  "schema_version": "1.9B",
+  "manifest_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_manifest.json",
+  "cohort_run_id": "20260911_173903",
+  "cohort_timestamp": "2026-09-11T17:39:03.883528+00:00",
+  "keywords": [
+    "AI tools",
+    "productivity",
+    "fitness",
+    "gaming",
+    "history",
+    "technology",
+    "self improvement",
+    "interesting facts",
+    "home improvement",
+    "travel"
+  ],
+  "source_files_read": [
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_ai_tools.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_productivity.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_fitness.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_gaming.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_history.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_technology.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_self_improvement.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_interesting_facts.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_home_improvement.jsonl",
+    "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_travel.jsonl"
+  ],
+  "overview": {
+    "raw_records": 2830,
+    "regular_records": 2716,
+    "manifest_totals": {
+      "raw_candidates": 2830,
+      "regular_candidates": 2716,
+      "passed": 42,
+      "rejected": 2788,
+      "parse_errors": 0,
+      "format_exclusions": 114,
+      "format_violations": 0,
+      "enrichment_summary": {
+        "candidates_total": 2830,
+        "enrichment_ok": 2795,
+        "enrichment_partial": 35,
+        "enrichment_failed": 0,
+        "missing_video": 0,
+        "published_at_available": 2830,
+        "duration_available": 2830,
+        "age_hours_available": 2830,
+        "vph_available": 2795,
+        "final_subscribers_available": 336,
+        "views_per_subscriber_available": 336,
+        "regular_count": 2716,
+        "short_count": 111,
+        "live_count": 0,
+        "unknown_count": 3
+      }
+    }
+  },
+  "data_quality": {
+    "global_invariants": {
+      "raw_count": 2830,
+      "regular_count": 2716,
+      "excluded_after_enrichment": 114,
+      "passed": 42,
+      "rejected": 2788,
+      "parse_errors": 0,
+      "unique_video_id_regular": 2705,
+      "duplicate_video_id_regular": 11,
+      "invariant_qualification_ok": true,
+      "invariant_regular_split_ok": true,
+      "parse_errors_zero": true,
+      "all_ok": false,
+      "unique_video_id_regular_global": 2705,
+      "duplicate_video_id_regular_global": 11
+    },
+    "nullable_enrichment_global": {
+      "issue_count": 0,
+      "examples": []
+    },
+    "format_raw_all": {
+      "regular": 2716,
+      "short": 111,
+      "live": 0,
+      "unknown": 3
+    },
+    "format_regular_only": {
+      "regular": 2716,
+      "short": 0,
+      "live": 0,
+      "unknown": 0
+    }
+  },
+  "global_distributions_regular": {
+    "count": 2716,
+    "views": {
+      "count": 2716,
+      "min": 0.0,
+      "median": 124.0,
+      "p75": 2231.5,
+      "p90": 11395.5,
+      "p95": 26570.75,
+      "max": 970211.0
+    },
+    "vph": {
+      "available_count": 2684,
+      "missing_count": 32,
+      "min": 0.0,
+      "median": 11.63,
+      "p75": 179.59,
+      "p90": 926.829,
+      "p95": 2539.279,
+      "max": 100182.07,
+      "bins": {
+        "<=100": 1829,
+        "100-500": 466,
+        "500-1k": 137,
+        "1k-5k": 183,
+        "5k-10k": 31,
+        "10k-25k": 28,
+        "25k-50k": 6,
+        "50k-100k": 3,
+        ">100k": 1
+      }
+    },
+    "views_per_subscriber": {
+      "available_count": 331,
+      "missing_count": 2385,
+      "min": 0.0,
+      "median": 0.12,
+      "p75": 0.425,
+      "p90": 1.79,
+      "p95": 5.745,
+      "max": 2230.0
+    },
+    "age_hours_at_t0": {
+      "available_count": 2716,
+      "missing_count": 0,
+      "min": -0.9404,
+      "median": 15.4493,
+      "p75": 20.6384,
+      "p90": 22.8987,
+      "p95": 23.4408,
+      "max": 24.0123,
+      "p25": 8.7733,
+      "buckets": {
+        "negative_or_zero": 32,
+        "<=1h": 45,
+        "1-3h": 126,
+        "3-6h": 279,
+        "6-12h": 473,
+        "12-18h": 732,
+        "18-24h": 1026,
+        ">24h": 3
+      }
+    },
+    "subscribers": {
+      "final_subscribers_available": 331,
+      "final_subscribers_missing": 2385,
+      "subscriber_fetch_status": {
+        "discovery": 51,
+        "homepage_fetched": 280,
+        "unavailable": 1,
+        "not_attempted": 2384
+      }
+    },
+    "format": {
+      "regular": 2716,
+      "short": 0,
+      "live": 0,
+      "unknown": 0
+    },
+    "vph_tail": {
+      ">=1000": 252,
+      ">=5000": 69,
+      ">=10000": 38,
+      ">=25000": 10,
+      ">=50000": 4,
+      ">=100000": 1
+    },
+    "nullable_enrichment": {
+      "issue_count": 0,
+      "examples": []
+    }
+  },
+  "keyword_comparison": [
+    {
+      "keyword": "AI tools",
+      "regular_count": 334,
+      "median_views": 112.0,
+      "median_vph": 10.73,
+      "p90_vph": 442.95,
+      "p95_vph": 932.11,
+      "vph_available": 329,
+      "vph_missing": 5,
+      "v_s_available": 27,
+      "v_s_missing": 307,
+      "median_age_hours": 14.34
+    },
+    {
+      "keyword": "productivity",
+      "regular_count": 280,
+      "median_views": 9.5,
+      "median_vph": 0.93,
+      "p90_vph": 55.51,
+      "p95_vph": 135.72,
+      "vph_available": 276,
+      "vph_missing": 4,
+      "v_s_available": 3,
+      "v_s_missing": 277,
+      "median_age_hours": 13.2
+    },
+    {
+      "keyword": "fitness",
+      "regular_count": 197,
+      "median_views": 79.0,
+      "median_vph": 8.48,
+      "p90_vph": 528.54,
+      "p95_vph": 1414.64,
+      "vph_available": 195,
+      "vph_missing": 2,
+      "v_s_available": 15,
+      "v_s_missing": 182,
+      "median_age_hours": 14.24
+    },
+    {
+      "keyword": "gaming",
+      "regular_count": 187,
+      "median_views": 14379.0,
+      "median_vph": 985.8,
+      "p90_vph": 13941.94,
+      "p95_vph": 20523.1,
+      "vph_available": 186,
+      "vph_missing": 1,
+      "v_s_available": 111,
+      "v_s_missing": 76,
+      "median_age_hours": 17.49
+    },
+    {
+      "keyword": "history",
+      "regular_count": 326,
+      "median_views": 623.0,
+      "median_vph": 58.91,
+      "p90_vph": 910.62,
+      "p95_vph": 1511.87,
+      "vph_available": 325,
+      "vph_missing": 1,
+      "v_s_available": 39,
+      "v_s_missing": 287,
+      "median_age_hours": 16.91
+    },
+    {
+      "keyword": "technology",
+      "regular_count": 213,
+      "median_views": 510.0,
+      "median_vph": 61.67,
+      "p90_vph": 2180.74,
+      "p95_vph": 3345.36,
+      "vph_available": 211,
+      "vph_missing": 2,
+      "v_s_available": 34,
+      "v_s_missing": 179,
+      "median_age_hours": 16.95
+    },
+    {
+      "keyword": "self improvement",
+      "regular_count": 275,
+      "median_views": 8.0,
+      "median_vph": 0.8,
+      "p90_vph": 133.26,
+      "p95_vph": 291.51,
+      "vph_available": 268,
+      "vph_missing": 7,
+      "v_s_available": 9,
+      "v_s_missing": 266,
+      "median_age_hours": 15.4
+    },
+    {
+      "keyword": "interesting facts",
+      "regular_count": 255,
+      "median_views": 909.0,
+      "median_vph": 70.8,
+      "p90_vph": 1511.3,
+      "p95_vph": 2469.23,
+      "vph_available": 250,
+      "vph_missing": 5,
+      "v_s_available": 47,
+      "v_s_missing": 208,
+      "median_age_hours": 13.96
+    },
+    {
+      "keyword": "home improvement",
+      "regular_count": 297,
+      "median_views": 57.0,
+      "median_vph": 3.46,
+      "p90_vph": 228.08,
+      "p95_vph": 589.44,
+      "vph_available": 294,
+      "vph_missing": 3,
+      "v_s_available": 18,
+      "v_s_missing": 279,
+      "median_age_hours": 18.18
+    },
+    {
+      "keyword": "travel",
+      "regular_count": 352,
+      "median_views": 105.5,
+      "median_vph": 8.5,
+      "p90_vph": 695.71,
+      "p95_vph": 1867.98,
+      "vph_available": 350,
+      "vph_missing": 2,
+      "v_s_available": 28,
+      "v_s_missing": 324,
+      "median_age_hours": 14.19
+    }
+  ],
+  "per_keyword": [
+    {
+      "keyword": "AI tools",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_ai_tools.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_ai_tools_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 346,
+        "regular_count": 334,
+        "excluded_after_enrichment": 12,
+        "passed": 1,
+        "rejected": 345,
+        "parse_errors": 0,
+        "unique_video_id_regular": 334,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "AI tools",
+        "regular_count": 334,
+        "median_views": 112.0,
+        "median_vph": 10.73,
+        "p90_vph": 442.95,
+        "p95_vph": 932.11,
+        "vph_available": 329,
+        "vph_missing": 5,
+        "v_s_available": 27,
+        "v_s_missing": 307,
+        "median_age_hours": 14.34
+      },
+      "distributions_regular": {
+        "count": 334,
+        "views": {
+          "count": 334,
+          "min": 0.0,
+          "median": 112.0,
+          "p75": 2118.25,
+          "p90": 6253.0,
+          "p95": 10813.55,
+          "max": 62084.0
+        },
+        "vph": {
+          "available_count": 329,
+          "missing_count": 5,
+          "min": 0.0,
+          "median": 10.73,
+          "p75": 148.8,
+          "p90": 442.948,
+          "p95": 932.112,
+          "max": 5493.99,
+          "bins": {
+            "<=100": 227,
+            "100-500": 73,
+            "500-1k": 14,
+            "1k-5k": 14,
+            "5k-10k": 1,
+            "10k-25k": 0,
+            "25k-50k": 0,
+            "50k-100k": 0,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 27,
+          "missing_count": 307,
+          "min": 0.0,
+          "median": 0.07,
+          "p75": 0.25,
+          "p90": 1.294,
+          "p95": 6.962,
+          "max": 1691.0
+        },
+        "age_hours_at_t0": {
+          "available_count": 334,
+          "missing_count": 0,
+          "min": -0.6462,
+          "median": 14.342,
+          "p75": 20.0191,
+          "p90": 22.6913,
+          "p95": 23.3804,
+          "max": 23.6821,
+          "p25": 7.9628,
+          "buckets": {
+            "negative_or_zero": 5,
+            "<=1h": 3,
+            "1-3h": 15,
+            "3-6h": 38,
+            "6-12h": 74,
+            "12-18h": 85,
+            "18-24h": 114,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 27,
+          "final_subscribers_missing": 307,
+          "subscriber_fetch_status": {
+            "discovery": 10,
+            "homepage_fetched": 17,
+            "unavailable": 1,
+            "not_attempted": 306
+          }
+        },
+        "format": {
+          "regular": 334,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 15,
+          ">=5000": 1,
+          ">=10000": 0,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "productivity",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_productivity.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_productivity_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 285,
+        "regular_count": 280,
+        "excluded_after_enrichment": 5,
+        "passed": 1,
+        "rejected": 284,
+        "parse_errors": 0,
+        "unique_video_id_regular": 280,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "productivity",
+        "regular_count": 280,
+        "median_views": 9.5,
+        "median_vph": 0.93,
+        "p90_vph": 55.51,
+        "p95_vph": 135.72,
+        "vph_available": 276,
+        "vph_missing": 4,
+        "v_s_available": 3,
+        "v_s_missing": 277,
+        "median_age_hours": 13.2
+      },
+      "distributions_regular": {
+        "count": 280,
+        "views": {
+          "count": 280,
+          "min": 0.0,
+          "median": 9.5,
+          "p75": 64.75,
+          "p90": 500.4,
+          "p95": 1444.0,
+          "max": 11903.0
+        },
+        "vph": {
+          "available_count": 276,
+          "missing_count": 4,
+          "min": 0.0,
+          "median": 0.93,
+          "p75": 6.705,
+          "p90": 55.51,
+          "p95": 135.725,
+          "max": 1125.1,
+          "bins": {
+            "<=100": 259,
+            "100-500": 15,
+            "500-1k": 1,
+            "1k-5k": 1,
+            "5k-10k": 0,
+            "10k-25k": 0,
+            "25k-50k": 0,
+            "50k-100k": 0,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 3,
+          "missing_count": 277,
+          "min": 0.02,
+          "median": 0.42,
+          "p75": 1.435,
+          "p90": 2.044,
+          "p95": 2.247,
+          "max": 2.45
+        },
+        "age_hours_at_t0": {
+          "available_count": 280,
+          "missing_count": 0,
+          "min": -0.5633,
+          "median": 13.1991,
+          "p75": 18.652,
+          "p90": 21.6937,
+          "p95": 22.867,
+          "max": 23.6977,
+          "p25": 6.4853,
+          "buckets": {
+            "negative_or_zero": 4,
+            "<=1h": 7,
+            "1-3h": 15,
+            "3-6h": 40,
+            "6-12h": 53,
+            "12-18h": 83,
+            "18-24h": 78,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 3,
+          "final_subscribers_missing": 277,
+          "subscriber_fetch_status": {
+            "discovery": 1,
+            "homepage_fetched": 2,
+            "unavailable": 0,
+            "not_attempted": 277
+          }
+        },
+        "format": {
+          "regular": 280,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 1,
+          ">=5000": 0,
+          ">=10000": 0,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "fitness",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_fitness.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_fitness_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 208,
+        "regular_count": 197,
+        "excluded_after_enrichment": 11,
+        "passed": 4,
+        "rejected": 204,
+        "parse_errors": 0,
+        "unique_video_id_regular": 197,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "fitness",
+        "regular_count": 197,
+        "median_views": 79.0,
+        "median_vph": 8.48,
+        "p90_vph": 528.54,
+        "p95_vph": 1414.64,
+        "vph_available": 195,
+        "vph_missing": 2,
+        "v_s_available": 15,
+        "v_s_missing": 182,
+        "median_age_hours": 14.24
+      },
+      "distributions_regular": {
+        "count": 197,
+        "views": {
+          "count": 197,
+          "min": 0.0,
+          "median": 79.0,
+          "p75": 923.0,
+          "p90": 4548.6,
+          "p95": 15860.8,
+          "max": 298027.0
+        },
+        "vph": {
+          "available_count": 195,
+          "missing_count": 2,
+          "min": 0.0,
+          "median": 8.48,
+          "p75": 102.31,
+          "p90": 528.538,
+          "p95": 1414.644,
+          "max": 15099.18,
+          "bins": {
+            "<=100": 145,
+            "100-500": 29,
+            "500-1k": 7,
+            "1k-5k": 12,
+            "5k-10k": 1,
+            "10k-25k": 1,
+            "25k-50k": 0,
+            "50k-100k": 0,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 15,
+          "missing_count": 182,
+          "min": 0.01,
+          "median": 0.37,
+          "p75": 1.245,
+          "p90": 1.59,
+          "p95": 4.469,
+          "max": 11.0
+        },
+        "age_hours_at_t0": {
+          "available_count": 197,
+          "missing_count": 0,
+          "min": -0.9404,
+          "median": 14.236,
+          "p75": 19.434,
+          "p90": 22.4411,
+          "p95": 23.2259,
+          "max": 23.725,
+          "p25": 9.4924,
+          "buckets": {
+            "negative_or_zero": 2,
+            "<=1h": 7,
+            "1-3h": 10,
+            "3-6h": 21,
+            "6-12h": 34,
+            "12-18h": 60,
+            "18-24h": 63,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 15,
+          "final_subscribers_missing": 182,
+          "subscriber_fetch_status": {
+            "discovery": 2,
+            "homepage_fetched": 13,
+            "unavailable": 0,
+            "not_attempted": 182
+          }
+        },
+        "format": {
+          "regular": 197,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 14,
+          ">=5000": 2,
+          ">=10000": 1,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "gaming",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_gaming.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_gaming_meta.json",
+      "status": "SUCCESS",
+      "invariants": {
+        "raw_count": 187,
+        "regular_count": 187,
+        "excluded_after_enrichment": 0,
+        "passed": 17,
+        "rejected": 170,
+        "parse_errors": 0,
+        "unique_video_id_regular": 187,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "gaming",
+        "regular_count": 187,
+        "median_views": 14379.0,
+        "median_vph": 985.8,
+        "p90_vph": 13941.94,
+        "p95_vph": 20523.1,
+        "vph_available": 186,
+        "vph_missing": 1,
+        "v_s_available": 111,
+        "v_s_missing": 76,
+        "median_age_hours": 17.49
+      },
+      "distributions_regular": {
+        "count": 187,
+        "views": {
+          "count": 187,
+          "min": 0.0,
+          "median": 14379.0,
+          "p75": 54855.0,
+          "p90": 175534.2,
+          "p95": 306025.7,
+          "max": 970211.0
+        },
+        "vph": {
+          "available_count": 186,
+          "missing_count": 1,
+          "min": 16.31,
+          "median": 985.8,
+          "p75": 3480.7675,
+          "p90": 13941.945,
+          "p95": 20523.0975,
+          "max": 100182.07,
+          "bins": {
+            "<=100": 11,
+            "100-500": 51,
+            "500-1k": 32,
+            "1k-5k": 53,
+            "5k-10k": 12,
+            "10k-25k": 19,
+            "25k-50k": 5,
+            "50k-100k": 2,
+            ">100k": 1
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 111,
+          "missing_count": 76,
+          "min": 0.0,
+          "median": 0.11,
+          "p75": 0.45,
+          "p90": 2.31,
+          "p95": 7.205,
+          "max": 658.75
+        },
+        "age_hours_at_t0": {
+          "available_count": 187,
+          "missing_count": 0,
+          "min": -0.775,
+          "median": 17.4941,
+          "p75": 21.7122,
+          "p90": 22.8926,
+          "p95": 23.4945,
+          "max": 23.7904,
+          "p25": 11.417,
+          "buckets": {
+            "negative_or_zero": 1,
+            "<=1h": 3,
+            "1-3h": 6,
+            "3-6h": 9,
+            "6-12h": 31,
+            "12-18h": 53,
+            "18-24h": 84,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 111,
+          "final_subscribers_missing": 76,
+          "subscriber_fetch_status": {
+            "discovery": 4,
+            "homepage_fetched": 107,
+            "unavailable": 0,
+            "not_attempted": 76
+          }
+        },
+        "format": {
+          "regular": 187,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 92,
+          ">=5000": 39,
+          ">=10000": 27,
+          ">=25000": 8,
+          ">=50000": 3,
+          ">=100000": 1
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "history",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_history.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_history_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 328,
+        "regular_count": 326,
+        "excluded_after_enrichment": 2,
+        "passed": 3,
+        "rejected": 325,
+        "parse_errors": 0,
+        "unique_video_id_regular": 326,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "history",
+        "regular_count": 326,
+        "median_views": 623.0,
+        "median_vph": 58.91,
+        "p90_vph": 910.62,
+        "p95_vph": 1511.87,
+        "vph_available": 325,
+        "vph_missing": 1,
+        "v_s_available": 39,
+        "v_s_missing": 287,
+        "median_age_hours": 16.91
+      },
+      "distributions_regular": {
+        "count": 326,
+        "views": {
+          "count": 326,
+          "min": 0.0,
+          "median": 623.0,
+          "p75": 3037.25,
+          "p90": 10120.5,
+          "p95": 21114.25,
+          "max": 213652.0
+        },
+        "vph": {
+          "available_count": 325,
+          "missing_count": 1,
+          "min": 0.0,
+          "median": 58.91,
+          "p75": 203.48,
+          "p90": 910.622,
+          "p95": 1511.87,
+          "max": 21127.06,
+          "bins": {
+            "<=100": 196,
+            "100-500": 81,
+            "500-1k": 17,
+            "1k-5k": 23,
+            "5k-10k": 6,
+            "10k-25k": 2,
+            "25k-50k": 0,
+            "50k-100k": 0,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 39,
+          "missing_count": 287,
+          "min": 0.0,
+          "median": 0.13,
+          "p75": 0.285,
+          "p90": 2.254,
+          "p95": 10.091,
+          "max": 2230.0
+        },
+        "age_hours_at_t0": {
+          "available_count": 326,
+          "missing_count": 0,
+          "min": -0.5175,
+          "median": 16.9113,
+          "p75": 20.6203,
+          "p90": 22.831,
+          "p95": 23.3311,
+          "max": 23.8449,
+          "p25": 10.1531,
+          "buckets": {
+            "negative_or_zero": 1,
+            "<=1h": 5,
+            "1-3h": 11,
+            "3-6h": 34,
+            "6-12h": 48,
+            "12-18h": 92,
+            "18-24h": 135,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 39,
+          "final_subscribers_missing": 287,
+          "subscriber_fetch_status": {
+            "discovery": 14,
+            "homepage_fetched": 25,
+            "unavailable": 0,
+            "not_attempted": 287
+          }
+        },
+        "format": {
+          "regular": 326,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 31,
+          ">=5000": 8,
+          ">=10000": 2,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "technology",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_technology.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_technology_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 238,
+        "regular_count": 213,
+        "excluded_after_enrichment": 25,
+        "passed": 5,
+        "rejected": 233,
+        "parse_errors": 0,
+        "unique_video_id_regular": 213,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "technology",
+        "regular_count": 213,
+        "median_views": 510.0,
+        "median_vph": 61.67,
+        "p90_vph": 2180.74,
+        "p95_vph": 3345.36,
+        "vph_available": 211,
+        "vph_missing": 2,
+        "v_s_available": 34,
+        "v_s_missing": 179,
+        "median_age_hours": 16.95
+      },
+      "distributions_regular": {
+        "count": 213,
+        "views": {
+          "count": 213,
+          "min": 0.0,
+          "median": 510.0,
+          "p75": 4354.0,
+          "p90": 17598.2,
+          "p95": 57169.0,
+          "max": 432343.0
+        },
+        "vph": {
+          "available_count": 211,
+          "missing_count": 2,
+          "min": 0.0,
+          "median": 61.67,
+          "p75": 326.15,
+          "p90": 2180.74,
+          "p95": 3345.355,
+          "max": 19478.99,
+          "bins": {
+            "<=100": 120,
+            "100-500": 53,
+            "500-1k": 12,
+            "1k-5k": 19,
+            "5k-10k": 2,
+            "10k-25k": 5,
+            "25k-50k": 0,
+            "50k-100k": 0,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 34,
+          "missing_count": 179,
+          "min": 0.0,
+          "median": 0.145,
+          "p75": 0.47,
+          "p90": 1.155,
+          "p95": 2.2355,
+          "max": 4.46
+        },
+        "age_hours_at_t0": {
+          "available_count": 213,
+          "missing_count": 0,
+          "min": -0.3515,
+          "median": 16.945,
+          "p75": 20.982,
+          "p90": 22.8705,
+          "p95": 23.4951,
+          "max": 23.8787,
+          "p25": 9.8956,
+          "buckets": {
+            "negative_or_zero": 2,
+            "<=1h": 3,
+            "1-3h": 12,
+            "3-6h": 16,
+            "6-12h": 30,
+            "12-18h": 52,
+            "18-24h": 98,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 34,
+          "final_subscribers_missing": 179,
+          "subscriber_fetch_status": {
+            "discovery": 5,
+            "homepage_fetched": 29,
+            "unavailable": 0,
+            "not_attempted": 179
+          }
+        },
+        "format": {
+          "regular": 213,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 26,
+          ">=5000": 7,
+          ">=10000": 5,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "self improvement",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_self_improvement.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_self_improvement_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 280,
+        "regular_count": 275,
+        "excluded_after_enrichment": 5,
+        "passed": 1,
+        "rejected": 279,
+        "parse_errors": 0,
+        "unique_video_id_regular": 275,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "self improvement",
+        "regular_count": 275,
+        "median_views": 8.0,
+        "median_vph": 0.8,
+        "p90_vph": 133.26,
+        "p95_vph": 291.51,
+        "vph_available": 268,
+        "vph_missing": 7,
+        "v_s_available": 9,
+        "v_s_missing": 266,
+        "median_age_hours": 15.4
+      },
+      "distributions_regular": {
+        "count": 275,
+        "views": {
+          "count": 275,
+          "min": 0.0,
+          "median": 8.0,
+          "p75": 84.0,
+          "p90": 1295.2,
+          "p95": 4432.0,
+          "max": 44515.0
+        },
+        "vph": {
+          "available_count": 268,
+          "missing_count": 7,
+          "min": 0.0,
+          "median": 0.8,
+          "p75": 11.205,
+          "p90": 133.257,
+          "p95": 291.5105,
+          "max": 9779.78,
+          "bins": {
+            "<=100": 236,
+            "100-500": 22,
+            "500-1k": 5,
+            "1k-5k": 4,
+            "5k-10k": 1,
+            "10k-25k": 0,
+            "25k-50k": 0,
+            "50k-100k": 0,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 9,
+          "missing_count": 266,
+          "min": 0.01,
+          "median": 0.17,
+          "p75": 0.21,
+          "p90": 4.652,
+          "p95": 13.096,
+          "max": 21.54
+        },
+        "age_hours_at_t0": {
+          "available_count": 275,
+          "missing_count": 0,
+          "min": -0.6112,
+          "median": 15.3954,
+          "p75": 19.9666,
+          "p90": 22.9002,
+          "p95": 23.4423,
+          "max": 23.8935,
+          "p25": 7.4614,
+          "buckets": {
+            "negative_or_zero": 7,
+            "<=1h": 8,
+            "1-3h": 12,
+            "3-6h": 32,
+            "6-12h": 42,
+            "12-18h": 82,
+            "18-24h": 92,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 9,
+          "final_subscribers_missing": 266,
+          "subscriber_fetch_status": {
+            "discovery": 5,
+            "homepage_fetched": 4,
+            "unavailable": 0,
+            "not_attempted": 266
+          }
+        },
+        "format": {
+          "regular": 275,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 5,
+          ">=5000": 1,
+          ">=10000": 0,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "interesting facts",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_interesting_facts.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_interesting_facts_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 262,
+        "regular_count": 255,
+        "excluded_after_enrichment": 7,
+        "passed": 5,
+        "rejected": 257,
+        "parse_errors": 0,
+        "unique_video_id_regular": 255,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "interesting facts",
+        "regular_count": 255,
+        "median_views": 909.0,
+        "median_vph": 70.8,
+        "p90_vph": 1511.3,
+        "p95_vph": 2469.23,
+        "vph_available": 250,
+        "vph_missing": 5,
+        "v_s_available": 47,
+        "v_s_missing": 208,
+        "median_age_hours": 13.96
+      },
+      "distributions_regular": {
+        "count": 255,
+        "views": {
+          "count": 255,
+          "min": 0.0,
+          "median": 909.0,
+          "p75": 4639.5,
+          "p90": 16207.0,
+          "p95": 25436.3,
+          "max": 170872.0
+        },
+        "vph": {
+          "available_count": 250,
+          "missing_count": 5,
+          "min": 0.0,
+          "median": 70.8,
+          "p75": 394.5425,
+          "p90": 1511.299,
+          "p95": 2469.2335,
+          "max": 9880.64,
+          "bins": {
+            "<=100": 131,
+            "100-500": 62,
+            "500-1k": 23,
+            "1k-5k": 30,
+            "5k-10k": 4,
+            "10k-25k": 0,
+            "25k-50k": 0,
+            "50k-100k": 0,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 47,
+          "missing_count": 208,
+          "min": 0.0,
+          "median": 0.1,
+          "p75": 0.305,
+          "p90": 0.728,
+          "p95": 1.54,
+          "max": 14.97
+        },
+        "age_hours_at_t0": {
+          "available_count": 255,
+          "missing_count": 0,
+          "min": -0.6163,
+          "median": 13.9618,
+          "p75": 19.9289,
+          "p90": 22.4651,
+          "p95": 23.3545,
+          "max": 23.9455,
+          "p25": 8.3793,
+          "buckets": {
+            "negative_or_zero": 5,
+            "<=1h": 3,
+            "1-3h": 9,
+            "3-6h": 28,
+            "6-12h": 56,
+            "12-18h": 67,
+            "18-24h": 87,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 47,
+          "final_subscribers_missing": 208,
+          "subscriber_fetch_status": {
+            "discovery": 3,
+            "homepage_fetched": 44,
+            "unavailable": 0,
+            "not_attempted": 208
+          }
+        },
+        "format": {
+          "regular": 255,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 34,
+          ">=5000": 4,
+          ">=10000": 0,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "home improvement",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_home_improvement.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_home_improvement_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 330,
+        "regular_count": 297,
+        "excluded_after_enrichment": 33,
+        "passed": 4,
+        "rejected": 326,
+        "parse_errors": 0,
+        "unique_video_id_regular": 297,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "home improvement",
+        "regular_count": 297,
+        "median_views": 57.0,
+        "median_vph": 3.46,
+        "p90_vph": 228.08,
+        "p95_vph": 589.44,
+        "vph_available": 294,
+        "vph_missing": 3,
+        "v_s_available": 18,
+        "v_s_missing": 279,
+        "median_age_hours": 18.18
+      },
+      "distributions_regular": {
+        "count": 297,
+        "views": {
+          "count": 297,
+          "min": 0.0,
+          "median": 57.0,
+          "p75": 266.0,
+          "p90": 2586.6,
+          "p95": 9025.6,
+          "max": 366628.0
+        },
+        "vph": {
+          "available_count": 294,
+          "missing_count": 3,
+          "min": 0.0,
+          "median": 3.46,
+          "p75": 23.115,
+          "p90": 228.079,
+          "p95": 589.439,
+          "max": 81620.0,
+          "bins": {
+            "<=100": 248,
+            "100-500": 30,
+            "500-1k": 11,
+            "1k-5k": 4,
+            "5k-10k": 0,
+            "10k-25k": 0,
+            "25k-50k": 0,
+            "50k-100k": 1,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 18,
+          "missing_count": 279,
+          "min": 0.0,
+          "median": 0.175,
+          "p75": 0.7425,
+          "p90": 4.368,
+          "p95": 44.287,
+          "max": 246.06
+        },
+        "age_hours_at_t0": {
+          "available_count": 297,
+          "missing_count": 0,
+          "min": -0.2895,
+          "median": 18.1774,
+          "p75": 22.5905,
+          "p90": 23.4344,
+          "p95": 23.728,
+          "max": 23.9716,
+          "p25": 11.9555,
+          "buckets": {
+            "negative_or_zero": 3,
+            "<=1h": 3,
+            "1-3h": 10,
+            "3-6h": 21,
+            "6-12h": 38,
+            "12-18h": 68,
+            "18-24h": 154,
+            ">24h": 0
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 18,
+          "final_subscribers_missing": 279,
+          "subscriber_fetch_status": {
+            "discovery": 4,
+            "homepage_fetched": 14,
+            "unavailable": 0,
+            "not_attempted": 279
+          }
+        },
+        "format": {
+          "regular": 297,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 5,
+          ">=5000": 1,
+          ">=10000": 1,
+          ">=25000": 1,
+          ">=50000": 1,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    },
+    {
+      "keyword": "travel",
+      "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_travel.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_travel_meta.json",
+      "status": "PARTIAL",
+      "invariants": {
+        "raw_count": 366,
+        "regular_count": 352,
+        "excluded_after_enrichment": 14,
+        "passed": 1,
+        "rejected": 365,
+        "parse_errors": 0,
+        "unique_video_id_regular": 352,
+        "duplicate_video_id_regular": 0,
+        "invariant_qualification_ok": true,
+        "invariant_regular_split_ok": true,
+        "parse_errors_zero": true,
+        "matches_manifest_raw": true,
+        "matches_manifest_regular": true,
+        "matches_manifest_excluded": true,
+        "all_ok": true
+      },
+      "comparison": {
+        "keyword": "travel",
+        "regular_count": 352,
+        "median_views": 105.5,
+        "median_vph": 8.5,
+        "p90_vph": 695.71,
+        "p95_vph": 1867.98,
+        "vph_available": 350,
+        "vph_missing": 2,
+        "v_s_available": 28,
+        "v_s_missing": 324,
+        "median_age_hours": 14.19
+      },
+      "distributions_regular": {
+        "count": 352,
+        "views": {
+          "count": 352,
+          "min": 0.0,
+          "median": 105.5,
+          "p75": 1396.75,
+          "p90": 8270.3,
+          "p95": 15979.95,
+          "max": 172698.0
+        },
+        "vph": {
+          "available_count": 350,
+          "missing_count": 2,
+          "min": 0.0,
+          "median": 8.5,
+          "p75": 119.845,
+          "p90": 695.706,
+          "p95": 1867.98,
+          "max": 31551.32,
+          "bins": {
+            "<=100": 256,
+            "100-500": 50,
+            "500-1k": 15,
+            "1k-5k": 23,
+            "5k-10k": 4,
+            "10k-25k": 1,
+            "25k-50k": 1,
+            "50k-100k": 0,
+            ">100k": 0
+          }
+        },
+        "views_per_subscriber": {
+          "available_count": 28,
+          "missing_count": 324,
+          "min": 0.0,
+          "median": 0.11,
+          "p75": 0.3475,
+          "p90": 0.532,
+          "p95": 0.638,
+          "max": 2.66
+        },
+        "age_hours_at_t0": {
+          "available_count": 352,
+          "missing_count": 0,
+          "min": -0.491,
+          "median": 14.1926,
+          "p75": 20.3227,
+          "p90": 22.9854,
+          "p95": 23.4559,
+          "max": 24.0123,
+          "p25": 7.495,
+          "buckets": {
+            "negative_or_zero": 2,
+            "<=1h": 3,
+            "1-3h": 26,
+            "3-6h": 40,
+            "6-12h": 67,
+            "12-18h": 90,
+            "18-24h": 121,
+            ">24h": 3
+          }
+        },
+        "subscribers": {
+          "final_subscribers_available": 28,
+          "final_subscribers_missing": 324,
+          "subscriber_fetch_status": {
+            "discovery": 3,
+            "homepage_fetched": 25,
+            "unavailable": 0,
+            "not_attempted": 324
+          }
+        },
+        "format": {
+          "regular": 352,
+          "short": 0,
+          "live": 0,
+          "unknown": 0
+        },
+        "vph_tail": {
+          ">=1000": 29,
+          ">=5000": 6,
+          ">=10000": 2,
+          ">=25000": 1,
+          ">=50000": 0,
+          ">=100000": 0
+        },
+        "nullable_enrichment": {
+          "issue_count": 0,
+          "examples": []
+        }
+      }
+    }
+  ],
+  "vph_tail_analysis": {
+    "global": {
+      ">=1000": 252,
+      ">=5000": 69,
+      ">=10000": 38,
+      ">=25000": 10,
+      ">=50000": 4,
+      ">=100000": 1
+    },
+    "by_keyword": {
+      "AI tools": {
+        "regular_count": 334,
+        "tail": {
+          ">=1000": 15,
+          ">=5000": 1,
+          ">=10000": 0,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        }
+      },
+      "productivity": {
+        "regular_count": 280,
+        "tail": {
+          ">=1000": 1,
+          ">=5000": 0,
+          ">=10000": 0,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        }
+      },
+      "fitness": {
+        "regular_count": 197,
+        "tail": {
+          ">=1000": 14,
+          ">=5000": 2,
+          ">=10000": 1,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        }
+      },
+      "gaming": {
+        "regular_count": 187,
+        "tail": {
+          ">=1000": 92,
+          ">=5000": 39,
+          ">=10000": 27,
+          ">=25000": 8,
+          ">=50000": 3,
+          ">=100000": 1
+        }
+      },
+      "history": {
+        "regular_count": 326,
+        "tail": {
+          ">=1000": 31,
+          ">=5000": 8,
+          ">=10000": 2,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        }
+      },
+      "technology": {
+        "regular_count": 213,
+        "tail": {
+          ">=1000": 26,
+          ">=5000": 7,
+          ">=10000": 5,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        }
+      },
+      "self improvement": {
+        "regular_count": 275,
+        "tail": {
+          ">=1000": 5,
+          ">=5000": 1,
+          ">=10000": 0,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        }
+      },
+      "interesting facts": {
+        "regular_count": 255,
+        "tail": {
+          ">=1000": 34,
+          ">=5000": 4,
+          ">=10000": 0,
+          ">=25000": 0,
+          ">=50000": 0,
+          ">=100000": 0
+        }
+      },
+      "home improvement": {
+        "regular_count": 297,
+        "tail": {
+          ">=1000": 5,
+          ">=5000": 1,
+          ">=10000": 1,
+          ">=25000": 1,
+          ">=50000": 1,
+          ">=100000": 0
+        }
+      },
+      "travel": {
+        "regular_count": 352,
+        "tail": {
+          ">=1000": 29,
+          ">=5000": 6,
+          ">=10000": 2,
+          ">=25000": 1,
+          ">=50000": 0,
+          ">=100000": 0
+        }
+      }
+    }
+  },
+  "limitations": [
+    "T0 snapshot only; no T24/T72 outcomes exist yet.",
+    "VPH is discovery-time velocity, not a validated predictor.",
+    "V/S coverage is limited to records with final_subscribers (mostly passed candidates).",
+    "not_attempted subscriber_fetch is not equivalent to zero subscribers.",
+    "Immutability of discovery fields cannot be verified from JSONL alone."
+  ],
+  "sampling_recommendations": [
+    "Stratify by keyword: distributions differ materially across the 10 niches; avoid pooling without keyword strata.",
+    "Consider VPH strata using tail bins (e.g. <=1k, 1k–10k, >=10k); ~38 regular records have VPH >= 10k.",
+    "Consider age_hours_at_t0 strata (e.g. <=6h vs 6–18h vs >18h); counts ~450 / 1237 / ~1029.",
+    "Consider discovery_views strata aligned with qualification threshold (10k+) vs sub-threshold rejected band.",
+    "V/S strata apply only to 331 regular records with subscribers; keep missing V/S as its own stratum.",
+    "Keywords below ~200 regular records may need proportional caps rather than fixed N: fitness, gaming.",
+    "Do not auto-select final experimental N until stratified sampling rules are agreed offline."
+  ],
+  "verification": {
+    "NO_NETWORK_REQUESTS": true,
+    "NO_DB_WRITES": true,
+    "records_processed_raw": 2830,
+    "records_processed_regular": 2716
+  }
+}

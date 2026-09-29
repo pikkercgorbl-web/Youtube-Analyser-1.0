@@ -1,5 +1,16 @@
 import axios from "axios";
 
+import type {
+  MonitoringCycleListResponse,
+  MonitoringCyclesParams,
+  MonitoringOverview,
+  MonitoringSnapshotsParams,
+  MonitoringVideoDetail,
+  MonitoringVideoListResponse,
+  MonitoringVideosParams,
+  MonitoringWorkerStatus,
+  MonitoringSnapshot,
+} from "./monitoring-types";
 import type {  AnomalySearchParams,
   EnrichedVideoModel,
   ExplosiveChannelFilters,
@@ -19,6 +30,16 @@ import type {  AnomalySearchParams,
   SavedKeywordPayload,
   YouTubeLeadersResponse,
 } from "./types";
+import type {
+  KeywordPerformanceListParams,
+  KeywordPerformanceListResponse,
+  KeywordPerformanceMetrics,
+} from "./keyword-performance-types";
+import type { TargetKeywordItem } from "./keyword-pool-types";
+import type {
+  OperationsOverviewParams,
+  OperationsOverviewResponse,
+} from "./operations-types";
 import type { SearchRequestPayload } from "./search-filters";
 
 const api = axios.create({
@@ -214,6 +235,99 @@ export async function fetchYouTubeLeaders(
 ): Promise<YouTubeLeadersResponse> {
   const { data } = await api.get<YouTubeLeadersResponse>("/api/analysis/leaders", {
     params: { window_days: windowDays, limit },
+  });
+  return data;
+}
+
+export async function getMonitoringStatus(): Promise<MonitoringWorkerStatus> {
+  const { data } = await api.get<MonitoringWorkerStatus>("/api/monitoring/status");
+  return data;
+}
+
+export async function getMonitoringOverview(): Promise<MonitoringOverview> {
+  const { data } = await api.get<MonitoringOverview>("/api/monitoring/overview");
+  return data;
+}
+
+export async function getMonitoringVideos(
+  params: MonitoringVideosParams = {},
+): Promise<MonitoringVideoListResponse> {
+  const { data } = await api.get<MonitoringVideoListResponse>("/api/monitoring/videos", {
+    params,
+  });
+  return data;
+}
+
+export async function getMonitoringVideo(videoId: string): Promise<MonitoringVideoDetail> {
+  const { data } = await api.get<MonitoringVideoDetail>(`/api/monitoring/videos/${videoId}`);
+  return data;
+}
+
+export async function getMonitoringSnapshots(
+  videoId: string,
+  params: MonitoringSnapshotsParams = {},
+): Promise<MonitoringSnapshot[]> {
+  const { data } = await api.get<MonitoringSnapshot[]>(
+    `/api/monitoring/videos/${videoId}/snapshots`,
+    { params },
+  );
+  return data;
+}
+
+export async function getMonitoringCycles(
+  params: MonitoringCyclesParams = {},
+): Promise<MonitoringCycleListResponse> {
+  const { data } = await api.get<MonitoringCycleListResponse>("/api/monitoring/cycles", {
+    params,
+  });
+  return data;
+}
+
+export type TargetKeywordsListParams = {
+  lifecycle_status?: string;
+  source_type?: string;
+  due_only?: boolean;
+};
+
+export async function fetchTargetKeywords(
+  params: TargetKeywordsListParams = {},
+): Promise<TargetKeywordItem[]> {
+  const { data } = await api.get<TargetKeywordItem[]>("/api/keywords", { params });
+  return data;
+}
+
+export async function fetchKeywordPerformanceList(
+  params: KeywordPerformanceListParams = {},
+): Promise<KeywordPerformanceListResponse> {
+  const { data } = await api.get<KeywordPerformanceListResponse>("/api/keywords/performance", {
+    params,
+    timeout: 120_000,
+  });
+  return data;
+}
+
+export async function fetchKeywordPerformanceDetail(
+  keywordId: number,
+  params: Omit<KeywordPerformanceListParams, "limit"> = {},
+): Promise<KeywordPerformanceMetrics> {
+  const { data } = await api.get<KeywordPerformanceMetrics>(
+    `/api/keywords/${keywordId}/performance`,
+    { params, timeout: 120_000 },
+  );
+  return data;
+}
+
+export async function getOperationsOverview(
+  params: OperationsOverviewParams = {},
+): Promise<OperationsOverviewResponse> {
+  const { data } = await api.get<OperationsOverviewResponse>("/api/operations/overview", {
+    params: {
+      include_live_monitoring_planner: params.include_live_monitoring_planner ?? false,
+      outcome_attribution_mode: params.outcome_attribution_mode ?? "all_hits",
+      discovery_history_limit: params.discovery_history_limit ?? 10,
+      monitoring_history_limit: params.monitoring_history_limit ?? 10,
+    },
+    timeout: params.include_live_monitoring_planner ? 120_000 : 90_000,
   });
   return data;
 }

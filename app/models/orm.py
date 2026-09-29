@@ -5,13 +5,16 @@ from datetime import datetime
 
 from sqlalchemy import (
     BigInteger,
+    Boolean,
     DateTime,
     Enum,
     ForeignKey,
+    Index,
     Integer,
     JSON,
     String,
     Text,
+    UniqueConstraint,
     func,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -234,6 +237,250 @@ class TargetKeyword(Base):
         nullable=True,
         default=None,
     )
+    lifecycle_status: Mapped[str] = mapped_column(
+        String(16),
+        nullable=False,
+        default="active",
+        index=True,
+    )
+    scan_interval_seconds: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    next_scan_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+        index=True,
+    )
+    status_changed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    status_reason: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    source_type: Mapped[str] = mapped_column(String(16), nullable=False, default="seed")
+    parent_keyword_id: Mapped[int | None] = mapped_column(
+        ForeignKey("target_keywords.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+
+    scan_runs: Mapped[list[KeywordScanRun]] = relationship(
+        back_populates="keyword",
+        cascade="all, delete-orphan",
+    )
+    discovery_hits: Mapped[list[KeywordDiscoveryHit]] = relationship(
+        back_populates="keyword",
+        cascade="all, delete-orphan",
+    )
+    lifecycle_events: Mapped[list[KeywordLifecycleEvent]] = relationship(
+        back_populates="keyword",
+        cascade="all, delete-orphan",
+    )
+
+
+class KeywordLifecycleEvent(Base):
+    """Audit trail for keyword lifecycle transitions (Stage 1.16B)."""
+
+    __tablename__ = "keyword_lifecycle_events"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    keyword_id: Mapped[int] = mapped_column(
+        ForeignKey("target_keywords.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    from_status: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    to_status: Mapped[str] = mapped_column(String(16), nullable=False)
+    changed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    reason: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    actor_source: Mapped[str] = mapped_column(String(32), nullable=False, default="system")
+
+    keyword: Mapped[TargetKeyword] = relationship(back_populates="lifecycle_events")
+
+
+class KeywordExpansionEvent(Base):
+    """Audit trail for keyword expansion attempts (Stage 1.16C)."""
+
+    __tablename__ = "keyword_expansion_events"
+    __table_args__ = (
+        Index("ix_keyword_expansion_parent_source_at", "parent_keyword_id", "source_type", "discovered_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    parent_keyword_id: Mapped[int] = mapped_column(
+        ForeignKey("target_keywords.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    candidate_text: Mapped[str] = mapped_column(String(256), nullable=False)
+    normalized_candidate: Mapped[str] = mapped_column(String(256), nullable=False)
+    source_type: Mapped[str] = mapped_column(String(16), nullable=False)
+    discovered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    outcome: Mapped[str] = mapped_column(String(16), nullable=False)
+    created_keyword_id: Mapped[int | None] = mapped_column(
+        ForeignKey("target_keywords.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    rejection_reason: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    discovery_run_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
+
+class KeywordScanRun(Base):
+    """One keyword scan within a discovery cycle (Stage 1.16A)."""
+
+    __tablename__ = "keyword_scan_runs"
+    __table_args__ = (
+        UniqueConstraint(
+            "keyword_id",
+            "discovery_run_id",
+            name="uq_keyword_scan_run_keyword_cycle",
+        ),
+        Index("ix_keyword_scan_runs_keyword_started", "keyword_id", "started_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    keyword_id: Mapped[int] = mapped_column(
+        ForeignKey("target_keywords.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    discovery_run_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    finished_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False)
+    raw_candidates: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    unique_candidates: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    within_keyword_duplicate_candidates: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        default=0,
+    )
+    cross_keyword_duplicate_candidates: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        default=0,
+    )
+    persisted_videos: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    qualification_passed: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    qualification_rejected: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    error_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    runtime_seconds: Mapped[float] = mapped_column(nullable=False, default=0.0)
+
+    keyword: Mapped[TargetKeyword] = relationship(back_populates="scan_runs")
+
+
+class KeywordDiscoveryHit(Base):
+    """Keyword-to-video discovery attribution for one cycle (Stage 1.16A)."""
+
+    __tablename__ = "keyword_discovery_hits"
+    __table_args__ = (
+        UniqueConstraint(
+            "keyword_id",
+            "video_id",
+            "discovery_run_id",
+            name="uq_keyword_discovery_hit_keyword_video_cycle",
+        ),
+        Index("ix_keyword_discovery_hits_video", "video_id"),
+        Index("ix_keyword_discovery_hits_keyword_discovered", "keyword_id", "discovered_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    keyword_id: Mapped[int] = mapped_column(
+        ForeignKey("target_keywords.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    discovery_run_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    discovered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    channel_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    was_within_keyword_duplicate: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    was_cross_keyword_duplicate: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    video_existed_before_discovery: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    content_format: Mapped[str] = mapped_column(String(16), nullable=False, default="unknown")
+    views_at_discovery: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    vph_at_discovery: Mapped[float | None] = mapped_column(nullable=True)
+    qualification_state: Mapped[str] = mapped_column(String(16), nullable=False, default="pending")
+    first_failure_reason: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    persisted_for_monitoring: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    keyword: Mapped[TargetKeyword] = relationship(back_populates="discovery_hits")
+
+
+class MonitoringCycleRun(Base):
+    """Append-only summary of one monitoring worker cycle (Stage 1.14A)."""
+
+    __tablename__ = "monitoring_cycle_runs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(String(128), nullable=False, unique=True, index=True)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    runtime_seconds: Mapped[float] = mapped_column(nullable=False, default=0.0)
+    cycle_status: Mapped[str] = mapped_column(String(16), nullable=False)
+    loaded_video_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    eligible_video_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    tier_a_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    tier_b_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    tier_c_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    due_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    overdue_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    selected_request_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    deferred_request_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    inserted_snapshot_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    duplicate_snapshot_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    missing_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    fetch_failed_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    validation_failed_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    persistence_failed_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    error_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class MonitoringWorkerState(Base):
+    """Singleton lock/state for the automatic snapshot monitoring worker (Stage 1.13C)."""
+
+    __tablename__ = "monitoring_worker_state"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, default=1)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="idle")
+    lock_holder: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    lock_acquired_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class DiscoveryWorkerState(Base):
+    """Singleton lock/state for the automatic discovery worker (Stage 1.15B)."""
+
+    __tablename__ = "discovery_worker_state"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, default=1)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="idle")
+    lock_holder: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    lock_acquired_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    last_cycle_started_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    last_cycle_finished_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    last_cycle_status: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    last_run_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
 
 
 class RadarWorkerState(Base):
@@ -250,6 +497,56 @@ class RadarWorkerState(Base):
         onupdate=func.now(),
         nullable=False,
     )
+
+
+class VideoSnapshot(Base):
+    """Append-only observation of one video at one capture moment (Stage 1.11)."""
+
+    __tablename__ = "video_snapshots"
+    __table_args__ = (
+        UniqueConstraint(
+            "video_id",
+            "captured_at",
+            "source",
+            "run_id",
+            name="uq_video_snapshot_capture",
+        ),
+        Index("ix_video_snapshots_video_captured", "video_id", "captured_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    channel_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    captured_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        index=True,
+    )
+    published_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    age_hours: Mapped[float | None] = mapped_column(nullable=True)
+    views: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    likes: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    comments: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    subscribers: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    vph: Mapped[float | None] = mapped_column(nullable=True)
+    views_per_subscriber: Mapped[float | None] = mapped_column(nullable=True)
+    source: Mapped[str] = mapped_column(String(64), nullable=False)
+    run_id: Mapped[str] = mapped_column(
+        String(128),
+        nullable=False,
+        default="",
+        index=True,
+    )
+    experiment_id: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
+    keyword: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    content_format: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    is_short: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    is_live: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    fetch_status: Mapped[str] = mapped_column(String(32), nullable=False, default="ok")
+    raw_metadata: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class ExtendedSearchCache(Base):

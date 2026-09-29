@@ -22,6 +22,24 @@ from app.integrations.youtube.client import (
 from app.models.db import SessionLocal
 from app.models.orm import ExplosiveChannel, ExplosiveChannelSettings
 from app.services.metrics import calc_vph, utc_now
+from app.services.radar_candidate import (
+    QUALIFICATION_PARSE_ERROR,
+    QUALIFICATION_PASSED,
+    QUALIFICATION_REJECTED,
+    RadarVideoOutcome,
+)
+from app.services.radar_filter_metrics import (
+    FILTER_SKIP_BLACKLIST,
+    FILTER_SKIP_DATE,
+    FILTER_SKIP_LANGUAGE,
+    FILTER_SKIP_MIN_SUBSCRIBERS,
+    FILTER_SKIP_MIN_VIRAL_COEFF,
+    FILTER_SKIP_MIN_VIEWS,
+    FILTER_SKIP_MISSING_CHANNEL_ID,
+    FILTER_SKIP_PARSE_ERROR,
+    NULL_RADAR_FILTER_METRICS,
+    RadarFilterMetrics,
+)
 from app.services.video_filter_service import (
     parse_relative_published_date,
     parse_relative_time_to_days,
@@ -188,6 +206,7 @@ class RadarProcessResult:
     passed_count: int
     skipped_count: int = 0
     parse_error_count: int = 0
+    video_outcomes: tuple[RadarVideoOutcome, ...] = ()
 
 
 class ExplosiveChannelsService:
@@ -469,9 +488,14 @@ class ExplosiveChannelsService:
         subscriber_fetch_delay_seconds: float = RADAR_SUBSCRIBER_FETCH_DELAY_SECONDS,
         blacklist_words: list[str] | None = None,
         subscriber_cache: dict[str, int | None] | None = None,
+        filter_metrics: RadarFilterMetrics | None = None,
+        collect_video_outcomes: bool = False,
+        register_channels: bool = True,
     ) -> RadarProcessResult:
         """
         Radar pipeline using search shelf data with a fast homepage fallback for subscribers.
+
+        Caller owns ``commit``/``rollback``; this method only ``flush``es when registering channels.
         """
         thresholds = self.get_thresholds(db)
         effective_upload_period = upload_period or self.get_upload_period(db)
@@ -482,6 +506,8 @@ class ExplosiveChannelsService:
         skipped_count = 0
         parse_error_count = 0
         cache = subscriber_cache if subscriber_cache is not None else {}
+        metrics = filter_metrics if filter_metrics is not None else NULL_RADAR_FILTER_METRICS
+        video_outcomes: list[RadarVideoOutcome] = []
 
         for video in videos:
             try:
@@ -498,6 +524,15 @@ class ExplosiveChannelsService:
                         xray_log(
                             f"❌ [ОТКАЗ] Видео слишком старое ({upload_date_text}): {video.title}",
                         )
+                    if collect_video_outcomes:
+                        video_outcomes.append(
+                            RadarVideoOutcome(
+                                video.video_id,
+                                QUALIFICATION_REJECTED,
+                                FILTER_SKIP_DATE,
+                            ),
+                        )
+                    metrics.record_skip(FILTER_SKIP_DATE)
                     skipped_count += 1
                     continue
 
@@ -510,6 +545,15 @@ class ExplosiveChannelsService:
                             f"< {thresholds.min_views:,}",
                         )
                         rejection_logs += 1
+                    if collect_video_outcomes:
+                        video_outcomes.append(
+                            RadarVideoOutcome(
+                                video.video_id,
+                                QUALIFICATION_REJECTED,
+                                FILTER_SKIP_MIN_VIEWS,
+                            ),
+                        )
+                    metrics.record_skip(FILTER_SKIP_MIN_VIEWS)
                     skipped_count += 1
                     continue
 
@@ -517,6 +561,15 @@ class ExplosiveChannelsService:
                     if log_rejections and rejection_logs < MAX_REJECTION_LOGS:
                         xray_log("❌ [ОТКАЗ] Видео без channel_id — пропуск")
                         rejection_logs += 1
+                    if collect_video_outcomes:
+                        video_outcomes.append(
+                            RadarVideoOutcome(
+                                video.video_id,
+                                QUALIFICATION_REJECTED,
+                                FILTER_SKIP_MISSING_CHANNEL_ID,
+                            ),
+                        )
+                    metrics.record_skip(FILTER_SKIP_MISSING_CHANNEL_ID)
                     skipped_count += 1
                     continue
 
@@ -528,12 +581,30 @@ class ExplosiveChannelsService:
                             xray_log(
                                 f"❌ [ОТКАЗ] Индийские символы в названии: {video.title}",
                             )
+                        if collect_video_outcomes:
+                            video_outcomes.append(
+                                RadarVideoOutcome(
+                                    video.video_id,
+                                    QUALIFICATION_REJECTED,
+                                    FILTER_SKIP_LANGUAGE,
+                                ),
+                            )
+                        metrics.record_skip(FILTER_SKIP_LANGUAGE)
                         skipped_count += 1
                         continue
 
                 if title_matches_blacklist(video.title, blacklist_words):
                     if log_rejections:
                         xray_log(f"❌ [ОТКАЗ] Минус-слово в названии: {video.title}")
+                    if collect_video_outcomes:
+                        video_outcomes.append(
+                            RadarVideoOutcome(
+                                video.video_id,
+                                QUALIFICATION_REJECTED,
+                                FILTER_SKIP_BLACKLIST,
+                            ),
+                        )
+                    metrics.record_skip(FILTER_SKIP_BLACKLIST)
                     skipped_count += 1
                     continue
 
@@ -569,6 +640,15 @@ class ExplosiveChannelsService:
                     if log_rejections and rejection and rejection_logs < MAX_REJECTION_LOGS:
                         xray_log(f"❌ [ОТКАЗ] {rejection}")
                         rejection_logs += 1
+                    if collect_video_outcomes:
+                        video_outcomes.append(
+                            RadarVideoOutcome(
+                                video.video_id,
+                                QUALIFICATION_REJECTED,
+                                FILTER_SKIP_MIN_SUBSCRIBERS,
+                            ),
+                        )
+                    metrics.record_skip(FILTER_SKIP_MIN_SUBSCRIBERS)
                     skipped_count += 1
                     continue
 
@@ -585,33 +665,61 @@ class ExplosiveChannelsService:
                     if log_rejections and rejection_logs < MAX_REJECTION_LOGS:
                         xray_log(f"❌ [ОТКАЗ] {rejection}")
                         rejection_logs += 1
+                    if collect_video_outcomes:
+                        video_outcomes.append(
+                            RadarVideoOutcome(
+                                video.video_id,
+                                QUALIFICATION_REJECTED,
+                                FILTER_SKIP_MIN_VIRAL_COEFF,
+                            ),
+                        )
+                    metrics.record_skip(FILTER_SKIP_MIN_VIRAL_COEFF)
                     skipped_count += 1
                     continue
 
                 vph = calc_vph_from_published_text(video_views, video.published_text)
+                if collect_video_outcomes:
+                    video_outcomes.append(
+                        RadarVideoOutcome(
+                            video.video_id,
+                            QUALIFICATION_PASSED,
+                            None,
+                        ),
+                    )
                 passed_count += 1
+                metrics.record_pass(video.channel_id)
 
-                hit = self._register_channel_video(
-                    db,
-                    thresholds,
-                    channel_id=video.channel_id,
-                    channel_name=channel_name,
-                    avatar_url=video.channel_avatar_url,
-                    subscribers=subscribers,
-                    channel_age_days=DEFAULT_CHANNEL_AGE_DAYS,
-                    total_views=0,
-                    viral_coefficient=viral_coefficient,
-                    representative_video_title=video.title,
-                    representative_video_thumbnail=video.thumbnail_url,
-                    representative_video_views=video_views,
-                    representative_video_id=video.video_id,
-                    vph=vph,
-                    skip_qualify_check=True,
-                )
-                if hit is not None:
-                    hits.append(hit)
+                if register_channels:
+                    hit = self._register_channel_video(
+                        db,
+                        thresholds,
+                        channel_id=video.channel_id,
+                        channel_name=channel_name,
+                        avatar_url=video.channel_avatar_url,
+                        subscribers=subscribers,
+                        channel_age_days=DEFAULT_CHANNEL_AGE_DAYS,
+                        total_views=0,
+                        viral_coefficient=viral_coefficient,
+                        representative_video_title=video.title,
+                        representative_video_thumbnail=video.thumbnail_url,
+                        representative_video_views=video_views,
+                        representative_video_id=video.video_id,
+                        vph=vph,
+                        skip_qualify_check=True,
+                    )
+                    if hit is not None:
+                        hits.append(hit)
             except Exception as exc:
                 parse_error_count += 1
+                if collect_video_outcomes:
+                    video_outcomes.append(
+                        RadarVideoOutcome(
+                            getattr(video, "video_id", ""),
+                            QUALIFICATION_PARSE_ERROR,
+                            FILTER_SKIP_PARSE_ERROR,
+                        ),
+                    )
+                metrics.record_parse_error()
                 logger.warning(
                     "Пропуск видео %r из-за ошибки обработки: %s",
                     getattr(video, "video_id", "?"),
@@ -619,12 +727,14 @@ class ExplosiveChannelsService:
                 )
                 continue
 
-        db.commit()
+        if register_channels:
+            db.flush()
         return RadarProcessResult(
             hits=hits,
             passed_count=passed_count,
             skipped_count=skipped_count,
             parse_error_count=parse_error_count,
+            video_outcomes=tuple(video_outcomes) if collect_video_outcomes else (),
         )
 
     def process_channel_analysis(self, db: Session, analysis: ChannelAnalysisModel) -> None:
@@ -696,7 +806,7 @@ class ExplosiveChannelsService:
             updated_at=utc_now(),
         )
         db.add(settings)
-        db.commit()
+        db.flush()
         db.refresh(settings)
         return settings
 

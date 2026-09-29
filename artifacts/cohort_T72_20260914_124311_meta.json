@@ -1,0 +1,238 @@
+{
+  "schema_version": "1.9C",
+  "t0_manifest_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_manifest.json",
+  "t0_reference_at": "2026-09-11T17:39:03.883528+00:00",
+  "snapshot_at": "2026-09-14T12:43:11.774362+00:00",
+  "elapsed_hours_from_t0": 67.0689,
+  "t0_rows": 2830,
+  "unique_video_ids": 2819,
+  "cross_keyword_duplicates_collapsed": 11,
+  "refreshed": 2794,
+  "missing": 25,
+  "failed": 0,
+  "api_batch_count": 57,
+  "invariants": {
+    "output_rows_equals_unique_video_ids": true,
+    "accounting_ok": true,
+    "growth_sanity_ok": true,
+    "growth_sanity_violations": 0,
+    "all_ok": true
+  },
+  "NO_DB_WRITES": true,
+  "T0_ARTIFACTS_MODIFIED": false,
+  "t0_artifact_fingerprints_before": [
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_manifest.json",
+      "sha256": "4fe9096c58502fce0e62843684009da9af0f6f6885cd5101217fcef78ce97c63",
+      "size_bytes": 15225
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_ai_tools.jsonl",
+      "sha256": "52e695b527594b74f4da8bfde3f36fa27b2bcfabc5822b3e8eb85bd2442345fa",
+      "size_bytes": 285435
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_ai_tools_meta.json",
+      "sha256": "e64688931031ff8cb228a3729027faa1b0b5ae05be353e4977149808637391e4",
+      "size_bytes": 2316
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_productivity.jsonl",
+      "sha256": "1ae5b0c5a33a5169e761b0c3566ff98d50fb76e865e79317f9b811190230b543",
+      "size_bytes": 239300
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_productivity_meta.json",
+      "sha256": "15d3b507bc9583386d99ffc8b1bab9f5e38159457753848eb4fb7d7b64e4811c",
+      "size_bytes": 2311
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_fitness.jsonl",
+      "sha256": "4a81d1f292a1f427a8b38f5f58cd5f00ddec572d6d0b756f3a5ebe597fb365d1",
+      "size_bytes": 171947
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_fitness_meta.json",
+      "sha256": "ca645ded5263688e9da9d67b972d8cd1265021f3244e9afc48e1677b5987de63",
+      "size_bytes": 2312
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_gaming.jsonl",
+      "sha256": "bd8e6f297e40dc69f0d82ef66a368ac68a75eea547184e299330dd4635132def",
+      "size_bytes": 155165
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_gaming_meta.json",
+      "sha256": "95565aae3c776ce58a7b8817b849ce403f1fe9e41e20282cd4fa4b4ace91a3d4",
+      "size_bytes": 2326
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_history.jsonl",
+      "sha256": "abc460b2a6f2be02f0f4173b0ad098ed466714d63c9465db3fa3fa44726df9d2",
+      "size_bytes": 276347
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_history_meta.json",
+      "sha256": "823ab8415019ce8b603b208123f7f50621d2fe2b47540d20a4efac40ed8c801e",
+      "size_bytes": 2316
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_technology.jsonl",
+      "sha256": "8fbbfd3d124bd43e76b63a8fbbd7fe43f936a1b27da9204a4925a3195923c18c",
+      "size_bytes": 199061
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_technology_meta.json",
+      "sha256": "411a55590a2e264679ccb11561fb9d2a80af1eb4ac5757f164cffdb6d786f2eb",
+      "size_bytes": 2324
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_self_improvement.jsonl",
+      "sha256": "0fff80ae90fd30021dfe73a7efb738d97db85825615f50b2bbe8ce1c5e1a1b6f",
+      "size_bytes": 233510
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_self_improvement_meta.json",
+      "sha256": "48d1de3d3f111d1cb252e6e16d3f1bf1c62a2dfdab3c3457e71d951540434545",
+      "size_bytes": 2319
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_interesting_facts.jsonl",
+      "sha256": "cfdef881a6b50da762ee5ea35e3ff9fd447f67efa3b0995df96c1d6cfb1971ca",
+      "size_bytes": 221660
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_interesting_facts_meta.json",
+      "sha256": "76c65dffbed45ca92e9312b8dc22357aed9a181ba82b8c4687c517d67d091171",
+      "size_bytes": 2333
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_home_improvement.jsonl",
+      "sha256": "e3bb1864ce3ee5b28a85ecb9ed5628399db28dc3f9e72a9dda1009e2b17fa60e",
+      "size_bytes": 274741
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_home_improvement_meta.json",
+      "sha256": "68dd91acd2b4492e6f6427f94d4d46f9cd2e1b5b59b022afd4cb08d7f3f91361",
+      "size_bytes": 2333
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_travel.jsonl",
+      "sha256": "9edf4f4995e947808b530ca1f2b39311723ff4a098cbf4b6a06bb27743c23d34",
+      "size_bytes": 303737
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_travel_meta.json",
+      "sha256": "03230cfda796ff18c331db57258d4bbeca0a56f180d4d59a9b40d7f812b20f48",
+      "size_bytes": 2314
+    }
+  ],
+  "t0_artifact_fingerprints_after": [
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_manifest.json",
+      "sha256": "4fe9096c58502fce0e62843684009da9af0f6f6885cd5101217fcef78ce97c63",
+      "size_bytes": 15225
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_ai_tools.jsonl",
+      "sha256": "52e695b527594b74f4da8bfde3f36fa27b2bcfabc5822b3e8eb85bd2442345fa",
+      "size_bytes": 285435
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_ai_tools_meta.json",
+      "sha256": "e64688931031ff8cb228a3729027faa1b0b5ae05be353e4977149808637391e4",
+      "size_bytes": 2316
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_productivity.jsonl",
+      "sha256": "1ae5b0c5a33a5169e761b0c3566ff98d50fb76e865e79317f9b811190230b543",
+      "size_bytes": 239300
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_productivity_meta.json",
+      "sha256": "15d3b507bc9583386d99ffc8b1bab9f5e38159457753848eb4fb7d7b64e4811c",
+      "size_bytes": 2311
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_fitness.jsonl",
+      "sha256": "4a81d1f292a1f427a8b38f5f58cd5f00ddec572d6d0b756f3a5ebe597fb365d1",
+      "size_bytes": 171947
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_fitness_meta.json",
+      "sha256": "ca645ded5263688e9da9d67b972d8cd1265021f3244e9afc48e1677b5987de63",
+      "size_bytes": 2312
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_gaming.jsonl",
+      "sha256": "bd8e6f297e40dc69f0d82ef66a368ac68a75eea547184e299330dd4635132def",
+      "size_bytes": 155165
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_gaming_meta.json",
+      "sha256": "95565aae3c776ce58a7b8817b849ce403f1fe9e41e20282cd4fa4b4ace91a3d4",
+      "size_bytes": 2326
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_history.jsonl",
+      "sha256": "abc460b2a6f2be02f0f4173b0ad098ed466714d63c9465db3fa3fa44726df9d2",
+      "size_bytes": 276347
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_history_meta.json",
+      "sha256": "823ab8415019ce8b603b208123f7f50621d2fe2b47540d20a4efac40ed8c801e",
+      "size_bytes": 2316
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_technology.jsonl",
+      "sha256": "8fbbfd3d124bd43e76b63a8fbbd7fe43f936a1b27da9204a4925a3195923c18c",
+      "size_bytes": 199061
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_technology_meta.json",
+      "sha256": "411a55590a2e264679ccb11561fb9d2a80af1eb4ac5757f164cffdb6d786f2eb",
+      "size_bytes": 2324
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_self_improvement.jsonl",
+      "sha256": "0fff80ae90fd30021dfe73a7efb738d97db85825615f50b2bbe8ce1c5e1a1b6f",
+      "size_bytes": 233510
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_self_improvement_meta.json",
+      "sha256": "48d1de3d3f111d1cb252e6e16d3f1bf1c62a2dfdab3c3457e71d951540434545",
+      "size_bytes": 2319
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_interesting_facts.jsonl",
+      "sha256": "cfdef881a6b50da762ee5ea35e3ff9fd447f67efa3b0995df96c1d6cfb1971ca",
+      "size_bytes": 221660
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_interesting_facts_meta.json",
+      "sha256": "76c65dffbed45ca92e9312b8dc22357aed9a181ba82b8c4687c517d67d091171",
+      "size_bytes": 2333
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_home_improvement.jsonl",
+      "sha256": "e3bb1864ce3ee5b28a85ecb9ed5628399db28dc3f9e72a9dda1009e2b17fa60e",
+      "size_bytes": 274741
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_home_improvement_meta.json",
+      "sha256": "68dd91acd2b4492e6f6427f94d4d46f9cd2e1b5b59b022afd4cb08d7f3f91361",
+      "size_bytes": 2333
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_travel.jsonl",
+      "sha256": "9edf4f4995e947808b530ca1f2b39311723ff4a098cbf4b6a06bb27743c23d34",
+      "size_bytes": 303737
+    },
+    {
+      "path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_travel_meta.json",
+      "sha256": "03230cfda796ff18c331db57258d4bbeca0a56f180d4d59a9b40d7f812b20f48",
+      "size_bytes": 2314
+    }
+  ],
+  "snapshot_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T72_20260914_124311_snapshot.jsonl"
+}

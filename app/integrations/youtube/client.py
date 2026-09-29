@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import logging
 import re
+import time
 from pathlib import Path
 from typing import Any
 from collections.abc import AsyncIterator
@@ -16,6 +17,11 @@ from urllib.parse import quote_plus
 import httpx
 from pydantic import BaseModel, Field
 
+from app.integrations.youtube.innertube_metrics import (
+    NULL_INNERTUBE_METRICS,
+    InnerTubeMetrics,
+    innertube_endpoint_key,
+)
 from app.integrations.youtube.key_manager import YouTubeApiKeyManager
 from app.utils.duration import parse_iso8601_duration
 
@@ -192,9 +198,18 @@ class YouTubeApiClient:
     _INNERTUBE_SUGGESTIONS_TIMEOUT = 8.0
     _SEARCH_SUGGESTIONS_LIMIT = 10
 
-    def __init__(self, key_manager: YouTubeApiKeyManager, *, timeout: float = 20.0) -> None:
+    def __init__(
+        self,
+        key_manager: YouTubeApiKeyManager,
+        *,
+        timeout: float = 20.0,
+        innertube_metrics: InnerTubeMetrics | None = None,
+    ) -> None:
         self._key_manager = key_manager
         self._timeout = timeout
+        self._innertube_metrics = (
+            innertube_metrics if innertube_metrics is not None else NULL_INNERTUBE_METRICS
+        )
 
     def search_videos(
         self,
@@ -793,34 +808,37 @@ class YouTubeApiClient:
         msg = f"Unsupported channel identifier: {identifier!r}"
         raise ValueError(msg)
 
-    async def get_channel_videos_tab(
+    async def iter_channel_videos_tab(
         self,
         channel_id: str,
         *,
-        max_results: int = 100,
-    ) -> tuple[str, list[ChannelVideoBrowseModel]]:
-        """Fetch recent uploads from the channel Videos tab via InnerTube browse."""
+        max_pages: int | None = None,
+        request_timeout: float | None = None,
+    ) -> AsyncIterator[list[ChannelVideoBrowseModel]]:
+        """Yield one page of channel Videos tab uploads at a time (InnerTube browse)."""
         if not channel_id.strip():
             msg = "channel_id must not be empty"
             raise ValueError(msg)
 
-        limit = max(1, min(max_results, 100))
         context = _build_innertube_context()
         initial_response = await self._innertube_request(
             {"context": context, "browseId": channel_id},
+            timeout=request_timeout,
         )
-        channel_title = _extract_channel_title_from_browse(initial_response)
         videos_params = _find_tab_params(initial_response, ("videos", "видео"))
         if not videos_params:
             msg = f"Videos tab not found for channel {channel_id}"
             raise YouTubeApiError(msg)
 
-        videos: list[ChannelVideoBrowseModel] = []
         seen_ids: set[str] = set()
         continuation: str | None = None
         first_page = True
+        pages_fetched = 0
 
-        while len(videos) < limit:
+        while True:
+            if max_pages is not None and pages_fetched >= max_pages:
+                return
+
             if first_page:
                 payload: dict[str, Any] = {
                     "context": context,
@@ -831,8 +849,47 @@ class YouTubeApiClient:
             else:
                 payload = {"context": context, "continuation": continuation}
 
-            response = await self._innertube_request(payload)
+            response = await self._innertube_request(payload, timeout=request_timeout)
             page_videos = _parse_channel_browse_videos(response, channel_id=channel_id)
+            pages_fetched += 1
+
+            deduped_page: list[ChannelVideoBrowseModel] = []
+            for video in page_videos:
+                if video.video_id in seen_ids:
+                    continue
+                seen_ids.add(video.video_id)
+                deduped_page.append(video)
+            if deduped_page:
+                yield deduped_page
+
+            continuation = _extract_search_continuation(response)
+            if not continuation or not page_videos:
+                return
+
+    async def get_channel_videos_tab(
+        self,
+        channel_id: str,
+        *,
+        max_results: int = 100,
+        max_pages: int | None = None,
+        request_timeout: float | None = None,
+    ) -> tuple[str, list[ChannelVideoBrowseModel]]:
+        """Fetch recent uploads from the channel Videos tab via InnerTube browse."""
+        if not channel_id.strip():
+            msg = "channel_id must not be empty"
+            raise ValueError(msg)
+
+        limit = max(1, min(max_results, 100))
+        channel_title = ""
+        videos: list[ChannelVideoBrowseModel] = []
+        seen_ids: set[str] = set()
+        pages_fetched = 0
+        async for page_videos in self.iter_channel_videos_tab(
+            channel_id,
+            max_pages=max_pages,
+            request_timeout=request_timeout,
+        ):
+            pages_fetched += 1
             for video in page_videos:
                 if video.video_id in seen_ids:
                     continue
@@ -840,14 +897,13 @@ class YouTubeApiClient:
                 videos.append(video)
                 if len(videos) >= limit:
                     break
-
             if len(videos) >= limit:
                 break
-
-            continuation = _extract_search_continuation(response)
-            if not continuation or not page_videos:
+            if max_pages is not None and pages_fetched >= max_pages:
                 break
 
+        if not channel_title:
+            channel_title = channel_id
         return channel_title, videos[:limit]
 
     async def analyze_channel(
@@ -973,6 +1029,7 @@ class YouTubeApiClient:
         timeout: float | None = None,
     ) -> dict[str, Any]:
         endpoint = url or self.INNERTUBE_BROWSE_URL
+        endpoint_key = innertube_endpoint_key(endpoint)
         request_timeout = self._timeout if timeout is None else timeout
         locale_text = _extract_innertube_locale_text(payload)
         hl, _gl = _innertube_locale_for_text(locale_text)
@@ -993,21 +1050,49 @@ class YouTubeApiClient:
                 "Chrome/125.0.0.0 Safari/537.36"
             ),
         }
-        body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
-        async with httpx.AsyncClient(timeout=request_timeout, headers=headers) as client:
-            response = await client.post(
-                endpoint,
-                params={"prettyPrint": "false"},
-                content=body,
+        started = time.perf_counter()
+        status_code: int | None = None
+        success = False
+        error_kind: str | None = None
+        try:
+            body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+            async with httpx.AsyncClient(timeout=request_timeout, headers=headers) as client:
+                response = await client.post(
+                    endpoint,
+                    params={"prettyPrint": "false"},
+                    content=body,
+                )
+            status_code = response.status_code
+            if response.status_code != 200:
+                error_kind = "http_status"
+                raise YouTubeApiError(
+                    f"InnerTube request error {response.status_code} on {endpoint}: {response.text}",
+                )
+            data = response.json()
+            _persist_innertube_debug_response(data)
+            _warn_innertube_response_blockers(data, endpoint=endpoint)
+            success = True
+            return data
+        except YouTubeApiError:
+            raise
+        except json.JSONDecodeError:
+            error_kind = "json"
+            raise
+        except httpx.HTTPError:
+            error_kind = "network"
+            raise
+        except Exception:
+            error_kind = "other"
+            raise
+        finally:
+            duration_ms = (time.perf_counter() - started) * 1000
+            self._innertube_metrics.record_request(
+                endpoint_key=endpoint_key,
+                duration_ms=duration_ms,
+                success=success,
+                status_code=status_code,
+                error_kind=error_kind,
             )
-        if response.status_code != 200:
-            raise YouTubeApiError(
-                f"InnerTube request error {response.status_code} on {endpoint}: {response.text}",
-            )
-        data = response.json()
-        _persist_innertube_debug_response(data)
-        _warn_innertube_response_blockers(data, endpoint=endpoint)
-        return data
 
     async def _fetch_search_via_html_page(
         self,
@@ -3361,9 +3446,10 @@ async def iter_radar_search_pages(
     *,
     sort_by_upload_date: bool = False,
     max_pages: int = MAX_SEARCH_PAGES,
+    innertube_metrics: InnerTubeMetrics | None = None,
 ) -> AsyncIterator[SearchPageBatch]:
     """Paginated InnerTube search for radar with per-page channel metadata fill."""
-    client = _get_innertube_client()
+    client = _get_innertube_client(innertube_metrics=innertube_metrics)
     async for page in client.iter_search_pages(
         query,
         sort_by_upload_date=sort_by_upload_date,
@@ -3438,8 +3524,14 @@ async def analyze_channel_from_url(
     return await client.analyze_channel(url, max_results=max_results)
 
 
-def _get_innertube_client() -> YouTubeApiClient:
-    return YouTubeApiClient(YouTubeApiKeyManager(["unused-for-innertube"]))
+def _get_innertube_client(
+    *,
+    innertube_metrics: InnerTubeMetrics | None = None,
+) -> YouTubeApiClient:
+    return YouTubeApiClient(
+        YouTubeApiKeyManager(["unused-for-innertube"]),
+        innertube_metrics=innertube_metrics,
+    )
 
 
 async def _demo_enriched_search() -> None:

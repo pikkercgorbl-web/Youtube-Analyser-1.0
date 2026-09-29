@@ -1,0 +1,172 @@
+{
+  "schema_version": "1.10C_failed_audit",
+  "experiment_id": "stage110_20260914_141029",
+  "audited_at": "2026-09-14T15:11:34.279078+00:00",
+  "source_sample_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_sample.jsonl",
+  "source_manifest_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_stage110_20260914_141029_manifest.json",
+  "failed_total": 6,
+  "reason_counts": {
+    "no_usable_response": 6
+  },
+  "failed_by_keyword": {
+    "fitness": 1,
+    "gaming": 1,
+    "history": 1,
+    "home improvement": 1,
+    "productivity": 1,
+    "travel": 1
+  },
+  "unique_failed_channels": 6,
+  "failed_channel_ids": [
+    "UCWWx6stANS0-71gpMxTBpAw",
+    "UCWHIycBdKYMY8-DVeSmmFsQ",
+    "UCzB4J_xnHoYUPDR0aD2L-Kw",
+    "UCXFf7OgCuOdcygnWp32Xk6g",
+    "UCNa9XYK_ccd1UrJvVio6Q4A",
+    "UCEZKpVw6ldXNVU4Ua6IFwTw"
+  ],
+  "duplicate_failed_channel_ids": [],
+  "all_failures_share_one_artifact_pattern": true,
+  "consent_linked_from_persisted_evidence": false,
+  "consent_link_notes": "Sample rows and manifest do not persist consent flags or browse anomaly markers. A run-time consent log line is not attributable to individual failed rows.",
+  "decision_classification": {
+    "failure_mode": "B. POSSIBLE_SYSTEMIC_PATTERN",
+    "consent_to_failures": "C. INSUFFICIENT_EVIDENCE",
+    "operational": "A. RANDOM/NON-SYSTEMIC",
+    "rationale": "All six failures share the same persisted signature (failed, found_count=0). No row-level evidence links consent. Rate is 6/500 (1.2%) on unique channels."
+  },
+  "failed_rows": [
+    {
+      "video_id": "5dkvBgnNTdo",
+      "channel_id": "UCWWx6stANS0-71gpMxTBpAw",
+      "keyword": "productivity",
+      "video_title": "Smooth Jazz Instrumentals – Luxury Lounge Vibes for Productivity & Relaxation",
+      "channel_title": "Raraandini",
+      "channel_baseline_status": "failed",
+      "baseline_error_persisted": null,
+      "baseline_fetch_metadata_persisted": {
+        "channel_baseline_source": "innertube_videos_tab+youtube_videos_list",
+        "channel_baseline_collected_at": "2026-09-14T14:42:36.921947+00:00",
+        "channel_baseline_requested_count": 20,
+        "channel_baseline_found_count": 0,
+        "channel_baseline_eligible_count": 0,
+        "channel_baseline_leakage_violations": 0,
+        "pages_fetched_persisted": null
+      },
+      "channel_history_count": 0,
+      "consent_evidence_in_persisted_metadata": false,
+      "failure_reason_class": "no_usable_response",
+      "failure_reason_notes": "Artifacts record failed status with zero browse/history counts; no error text, pages, or consent flags are stored on the row."
+    },
+    {
+      "video_id": "M-iTHa1-U-I",
+      "channel_id": "UCWHIycBdKYMY8-DVeSmmFsQ",
+      "keyword": "fitness",
+      "video_title": "Fitness Fun 07 💪🔥 | Full Body Workout | Gym Motivation | Today 2026 | #Shorts #workout",
+      "channel_title": "Fitness Fun 07",
+      "channel_baseline_status": "failed",
+      "baseline_error_persisted": null,
+      "baseline_fetch_metadata_persisted": {
+        "channel_baseline_source": "innertube_videos_tab+youtube_videos_list",
+        "channel_baseline_collected_at": "2026-09-14T14:43:58.089064+00:00",
+        "channel_baseline_requested_count": 20,
+        "channel_baseline_found_count": 0,
+        "channel_baseline_eligible_count": 0,
+        "channel_baseline_leakage_violations": 0,
+        "pages_fetched_persisted": null
+      },
+      "channel_history_count": 0,
+      "consent_evidence_in_persisted_metadata": false,
+      "failure_reason_class": "no_usable_response",
+      "failure_reason_notes": "Artifacts record failed status with zero browse/history counts; no error text, pages, or consent flags are stored on the row."
+    },
+    {
+      "video_id": "TCRrv-NRISI",
+      "channel_id": "UCzB4J_xnHoYUPDR0aD2L-Kw",
+      "keyword": "gaming",
+      "video_title": "Slice Master Gameplay #shortsfeed #viral#shorts #gaming #games #part2",
+      "channel_title": "Vamika playz",
+      "channel_baseline_status": "failed",
+      "baseline_error_persisted": null,
+      "baseline_fetch_metadata_persisted": {
+        "channel_baseline_source": "innertube_videos_tab+youtube_videos_list",
+        "channel_baseline_collected_at": "2026-09-14T14:44:54.149943+00:00",
+        "channel_baseline_requested_count": 20,
+        "channel_baseline_found_count": 0,
+        "channel_baseline_eligible_count": 0,
+        "channel_baseline_leakage_violations": 0,
+        "pages_fetched_persisted": null
+      },
+      "channel_history_count": 0,
+      "consent_evidence_in_persisted_metadata": false,
+      "failure_reason_class": "no_usable_response",
+      "failure_reason_notes": "Artifacts record failed status with zero browse/history counts; no error text, pages, or consent flags are stored on the row."
+    },
+    {
+      "video_id": "0jMe6fDqUDE",
+      "channel_id": "UCXFf7OgCuOdcygnWp32Xk6g",
+      "keyword": "history",
+      "video_title": "Occult History for 9 Nonstop Hours | Human Voiced, No Ads",
+      "channel_title": "ASMR Historian",
+      "channel_baseline_status": "failed",
+      "baseline_error_persisted": null,
+      "baseline_fetch_metadata_persisted": {
+        "channel_baseline_source": "innertube_videos_tab+youtube_videos_list",
+        "channel_baseline_collected_at": "2026-09-14T14:46:43.843879+00:00",
+        "channel_baseline_requested_count": 20,
+        "channel_baseline_found_count": 0,
+        "channel_baseline_eligible_count": 0,
+        "channel_baseline_leakage_violations": 0,
+        "pages_fetched_persisted": null
+      },
+      "channel_history_count": 0,
+      "consent_evidence_in_persisted_metadata": false,
+      "failure_reason_class": "no_usable_response",
+      "failure_reason_notes": "Artifacts record failed status with zero browse/history counts; no error text, pages, or consent flags are stored on the row."
+    },
+    {
+      "video_id": "AO19XGqPK8I",
+      "channel_id": "UCNa9XYK_ccd1UrJvVio6Q4A",
+      "keyword": "home improvement",
+      "video_title": "POWERFUL RUST REMOVAL TOOL! UNLOCKING SEIZED RUSTY BOLTS WITH ROTARY MACHINE!",
+      "channel_title": "BION Channel",
+      "channel_baseline_status": "failed",
+      "baseline_error_persisted": null,
+      "baseline_fetch_metadata_persisted": {
+        "channel_baseline_source": "innertube_videos_tab+youtube_videos_list",
+        "channel_baseline_collected_at": "2026-09-14T14:59:16.529260+00:00",
+        "channel_baseline_requested_count": 20,
+        "channel_baseline_found_count": 0,
+        "channel_baseline_eligible_count": 0,
+        "channel_baseline_leakage_violations": 0,
+        "pages_fetched_persisted": null
+      },
+      "channel_history_count": 0,
+      "consent_evidence_in_persisted_metadata": false,
+      "failure_reason_class": "no_usable_response",
+      "failure_reason_notes": "Artifacts record failed status with zero browse/history counts; no error text, pages, or consent flags are stored on the row."
+    },
+    {
+      "video_id": "5PBTyiByGBA",
+      "channel_id": "UCEZKpVw6ldXNVU4Ua6IFwTw",
+      "keyword": "travel",
+      "video_title": "Under-Seat Backpack vs. Tote: 7 Hidden Features to Avoid",
+      "channel_title": "Travel Tips by Laurie",
+      "channel_baseline_status": "failed",
+      "baseline_error_persisted": null,
+      "baseline_fetch_metadata_persisted": {
+        "channel_baseline_source": "innertube_videos_tab+youtube_videos_list",
+        "channel_baseline_collected_at": "2026-09-14T15:02:49.386293+00:00",
+        "channel_baseline_requested_count": 20,
+        "channel_baseline_found_count": 0,
+        "channel_baseline_eligible_count": 0,
+        "channel_baseline_leakage_violations": 0,
+        "pages_fetched_persisted": null
+      },
+      "channel_history_count": 0,
+      "consent_evidence_in_persisted_metadata": false,
+      "failure_reason_class": "no_usable_response",
+      "failure_reason_notes": "Artifacts record failed status with zero browse/history counts; no error text, pages, or consent flags are stored on the row."
+    }
+  ]
+}

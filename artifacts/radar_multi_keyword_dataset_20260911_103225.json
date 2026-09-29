@@ -1,0 +1,511 @@
+{
+  "generated_at": "2026-09-11T10:32:25.155294+00:00",
+  "experiment_settings": {
+    "min_views": 10000,
+    "min_viral_coeff": 3.0,
+    "upload_period": "all",
+    "register_channels": false,
+    "production_db_registration": false
+  },
+  "settings_match_expected": true,
+  "keywords_requested": 10,
+  "keywords_successful": 10,
+  "keywords_failed": 0,
+  "explosive_channels_before": 145,
+  "explosive_channels_after": 145,
+  "production_db_registration_occurred": false,
+  "results": [
+    {
+      "keyword": "AI tools",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103227_ai_tools.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103227_ai_tools_meta.json",
+      "duration_seconds": 100.784671,
+      "pages_scanned": 14,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 3,
+        "rejected": 215,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 218
+      },
+      "rejection_reasons": {
+        "language": 1,
+        "min_views": 190,
+        "min_viral_coeff": 24
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 218,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 218,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 9,
+          "availability_pct": 4.13
+        },
+        "vph": {
+          "available_count": 217,
+          "availability_pct": 99.54
+        },
+        "video_age_days": {
+          "available_count": 217,
+          "availability_pct": 99.54
+        },
+        "viral_coefficient": {
+          "available_count": 9,
+          "availability_pct": 4.13
+        }
+      }
+    },
+    {
+      "keyword": "productivity",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103408_productivity.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103408_productivity_meta.json",
+      "duration_seconds": 73.466266,
+      "pages_scanned": 17,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 0,
+        "rejected": 304,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 304
+      },
+      "rejection_reasons": {
+        "min_views": 297,
+        "min_viral_coeff": 7
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 304,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 304,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 1,
+          "availability_pct": 0.33
+        },
+        "vph": {
+          "available_count": 271,
+          "availability_pct": 89.14
+        },
+        "video_age_days": {
+          "available_count": 271,
+          "availability_pct": 89.14
+        },
+        "viral_coefficient": {
+          "available_count": 1,
+          "availability_pct": 0.33
+        }
+      }
+    },
+    {
+      "keyword": "fitness",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103521_fitness.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103521_fitness_meta.json",
+      "duration_seconds": 143.840167,
+      "pages_scanned": 25,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 9,
+        "rejected": 420,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 429
+      },
+      "rejection_reasons": {
+        "language": 1,
+        "min_views": 393,
+        "min_viral_coeff": 26
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 429,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 429,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 4,
+          "availability_pct": 0.93
+        },
+        "vph": {
+          "available_count": 429,
+          "availability_pct": 100.0
+        },
+        "video_age_days": {
+          "available_count": 429,
+          "availability_pct": 100.0
+        },
+        "viral_coefficient": {
+          "available_count": 4,
+          "availability_pct": 0.93
+        }
+      }
+    },
+    {
+      "keyword": "gaming",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103745_gaming.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103745_gaming_meta.json",
+      "duration_seconds": 458.437668,
+      "pages_scanned": 19,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 46,
+        "rejected": 288,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 334
+      },
+      "rejection_reasons": {
+        "language": 5,
+        "min_subscribers": 1,
+        "min_views": 100,
+        "min_viral_coeff": 182
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 334,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 334,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 11,
+          "availability_pct": 3.29
+        },
+        "vph": {
+          "available_count": 326,
+          "availability_pct": 97.6
+        },
+        "video_age_days": {
+          "available_count": 326,
+          "availability_pct": 97.6
+        },
+        "viral_coefficient": {
+          "available_count": 11,
+          "availability_pct": 3.29
+        }
+      }
+    },
+    {
+      "keyword": "history",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_104523_history.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_104523_history_meta.json",
+      "duration_seconds": 152.581183,
+      "pages_scanned": 18,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 1,
+        "rejected": 295,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 296
+      },
+      "rejection_reasons": {
+        "language": 6,
+        "min_views": 245,
+        "min_viral_coeff": 44
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 296,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 296,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 10,
+          "availability_pct": 3.38
+        },
+        "vph": {
+          "available_count": 296,
+          "availability_pct": 100.0
+        },
+        "video_age_days": {
+          "available_count": 296,
+          "availability_pct": 100.0
+        },
+        "viral_coefficient": {
+          "available_count": 10,
+          "availability_pct": 3.38
+        }
+      }
+    },
+    {
+      "keyword": "technology",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_104756_technology.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_104756_technology_meta.json",
+      "duration_seconds": 124.180533,
+      "pages_scanned": 13,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 1,
+        "rejected": 200,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 201
+      },
+      "rejection_reasons": {
+        "language": 4,
+        "min_views": 158,
+        "min_viral_coeff": 38
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 201,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 201,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 3,
+          "availability_pct": 1.49
+        },
+        "vph": {
+          "available_count": 201,
+          "availability_pct": 100.0
+        },
+        "video_age_days": {
+          "available_count": 201,
+          "availability_pct": 100.0
+        },
+        "viral_coefficient": {
+          "available_count": 3,
+          "availability_pct": 1.49
+        }
+      }
+    },
+    {
+      "keyword": "self improvement",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_105000_self_improvement.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_105000_self_improvement_meta.json",
+      "duration_seconds": 100.968627,
+      "pages_scanned": 22,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 3,
+        "rejected": 356,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 359
+      },
+      "rejection_reasons": {
+        "language": 2,
+        "min_views": 344,
+        "min_viral_coeff": 10
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 359,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 359,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 13,
+          "availability_pct": 3.62
+        },
+        "vph": {
+          "available_count": 359,
+          "availability_pct": 100.0
+        },
+        "video_age_days": {
+          "available_count": 359,
+          "availability_pct": 100.0
+        },
+        "viral_coefficient": {
+          "available_count": 13,
+          "availability_pct": 3.62
+        }
+      }
+    },
+    {
+      "keyword": "interesting facts",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_105141_interesting_facts.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_105141_interesting_facts_meta.json",
+      "duration_seconds": 151.048816,
+      "pages_scanned": 15,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 7,
+        "rejected": 231,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 238
+      },
+      "rejection_reasons": {
+        "language": 2,
+        "min_views": 180,
+        "min_viral_coeff": 49
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 238,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 238,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 5,
+          "availability_pct": 2.1
+        },
+        "vph": {
+          "available_count": 238,
+          "availability_pct": 100.0
+        },
+        "video_age_days": {
+          "available_count": 238,
+          "availability_pct": 100.0
+        },
+        "viral_coefficient": {
+          "available_count": 5,
+          "availability_pct": 2.1
+        }
+      }
+    },
+    {
+      "keyword": "home improvement",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_105412_home_improvement.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_105412_home_improvement_meta.json",
+      "duration_seconds": 92.754138,
+      "pages_scanned": 16,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 4,
+        "rejected": 280,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 284
+      },
+      "rejection_reasons": {
+        "language": 1,
+        "min_views": 260,
+        "min_viral_coeff": 19
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 284,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 284,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 5,
+          "availability_pct": 1.76
+        },
+        "vph": {
+          "available_count": 284,
+          "availability_pct": 100.0
+        },
+        "video_age_days": {
+          "available_count": 284,
+          "availability_pct": 100.0
+        },
+        "viral_coefficient": {
+          "available_count": 5,
+          "availability_pct": 1.76
+        }
+      }
+    },
+    {
+      "keyword": "travel",
+      "status": "success",
+      "jsonl_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_105545_travel.jsonl",
+      "meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_105545_travel_meta.json",
+      "duration_seconds": 150.628595,
+      "pages_scanned": 26,
+      "error_type": null,
+      "error_message": null,
+      "counts": {
+        "passed": 3,
+        "rejected": 437,
+        "parse_errors": 0,
+        "pending": 0,
+        "total": 440
+      },
+      "rejection_reasons": {
+        "language": 10,
+        "min_views": 399,
+        "min_viral_coeff": 28
+      },
+      "signal_availability": {
+        "views": {
+          "available_count": 440,
+          "availability_pct": 100.0
+        },
+        "subscribers_field_present": {
+          "available_count": 440,
+          "availability_pct": 100.0
+        },
+        "subscribers_gt_zero": {
+          "available_count": 7,
+          "availability_pct": 1.59
+        },
+        "vph": {
+          "available_count": 437,
+          "availability_pct": 99.32
+        },
+        "video_age_days": {
+          "available_count": 437,
+          "availability_pct": 99.32
+        },
+        "viral_coefficient": {
+          "available_count": 7,
+          "availability_pct": 1.59
+        }
+      }
+    }
+  ],
+  "totals": {
+    "total_candidates": 3103,
+    "total_passed": 77,
+    "total_rejected": 3026,
+    "total_parse_errors": 0
+  },
+  "aggregate_rejection_reasons": {
+    "language": 32,
+    "min_subscribers": 1,
+    "min_views": 2566,
+    "min_viral_coeff": 427
+  }
+}

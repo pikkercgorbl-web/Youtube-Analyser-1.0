@@ -21,7 +21,22 @@ from fastapi import FastAPI, HTTPException, Query, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.api.routes import analytics, explosive_channels, keywords, radar, radar_stats, saved_keywords, search, target_keywords, videos
+from app.api.routes import (
+    analytics,
+    explosive_channels,
+    keyword_expansion,
+    keyword_lifecycle,
+    keyword_performance,
+    keywords,
+    monitoring,
+    operations,
+    radar,
+    radar_stats,
+    saved_keywords,
+    search,
+    target_keywords,
+    videos,
+)
 from app.core.config import settings
 from app.integrations.youtube.client import (
     EnrichedVideoModel,
@@ -127,11 +142,16 @@ app.include_router(videos.router, prefix="/api/v1/videos", tags=["videos"])
 app.include_router(analytics.router, prefix="/api/analysis", tags=["analysis"])
 app.include_router(search.router, prefix="/api/youtube-search", tags=["search"])
 app.include_router(keywords.router, prefix="/api/keywords", tags=["keywords"])
+app.include_router(keyword_expansion.router, prefix="/api/keywords", tags=["keywords"])
+app.include_router(keyword_lifecycle.router, prefix="/api/keywords", tags=["keywords"])
+app.include_router(keyword_performance.router, prefix="/api/keywords", tags=["keywords"])
 app.include_router(saved_keywords.router, prefix="/api/saved-keywords", tags=["keywords"])
 app.include_router(explosive_channels.router, prefix="/api/explosive-channels", tags=["analysis"])
 app.include_router(radar.router, prefix="/api/radar", tags=["analysis"])
 app.include_router(target_keywords.router, prefix="/api/target-keywords", tags=["analysis"])
 app.include_router(radar_stats.router, prefix="/api/radar-stats", tags=["analysis"])
+app.include_router(monitoring.router, prefix="/api/monitoring", tags=["monitoring"])
+app.include_router(operations.router, prefix="/api/operations", tags=["operations"])
 
 
 @app.post("/api/force-radar-scan", response_model=ForceRadarScanResponse, tags=["analysis"])

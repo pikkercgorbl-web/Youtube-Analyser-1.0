@@ -1,0 +1,18 @@
+{
+  "keyword": "gaming",
+  "timestamp": "2026-09-11T10:37:45.415104+00:00",
+  "min_views": 10000,
+  "min_viral_coeff": 3.0,
+  "upload_period": "all",
+  "register_channels": false,
+  "production_db_registration": false,
+  "total_candidates": 334,
+  "passed": 46,
+  "rejected": 288,
+  "parse_errors": 0,
+  "source": "run_radar_multi_keyword_dataset.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103745_gaming.jsonl",
+  "duration_seconds": 458.44,
+  "pages_scanned": 19,
+  "schema_version": "1.7"
+}

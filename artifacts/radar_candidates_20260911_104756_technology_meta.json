@@ -1,0 +1,18 @@
+{
+  "keyword": "technology",
+  "timestamp": "2026-09-11T10:47:56.447967+00:00",
+  "min_views": 10000,
+  "min_viral_coeff": 3.0,
+  "upload_period": "all",
+  "register_channels": false,
+  "production_db_registration": false,
+  "total_candidates": 201,
+  "passed": 1,
+  "rejected": 200,
+  "parse_errors": 0,
+  "source": "run_radar_multi_keyword_dataset.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_104756_technology.jsonl",
+  "duration_seconds": 124.18,
+  "pages_scanned": 13,
+  "schema_version": "1.7"
+}

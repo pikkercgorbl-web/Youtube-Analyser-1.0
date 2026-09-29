@@ -1,0 +1,2295 @@
+{
+  "schema_version": "1.9D",
+  "elapsed_hours_from_t0": 67.0689,
+  "t0_manifest_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_manifest.json",
+  "snapshot_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T72_20260914_124311_snapshot.jsonl",
+  "snapshot_meta_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T72_20260914_124311_meta.json",
+  "data_quality": {
+    "snapshot_rows": 2819,
+    "joined_refreshed_rows": 2794,
+    "missing_refresh_excluded": 25,
+    "duplicate_video_id_in_joined": 0,
+    "negative_absolute_growth_count": 22,
+    "zero_absolute_growth_count": 177,
+    "t0_vph_available": 2760,
+    "t0_vph_missing": 34,
+    "t0_v_s_available": 327,
+    "t0_v_s_missing": 2467,
+    "t0_subscribers_available": 327,
+    "t0_age_available": 2794
+  },
+  "outcome_distributions": {
+    "absolute_view_growth": {
+      "count": 2794,
+      "min": -46599.0,
+      "median": 151.5,
+      "p75": 3110.25,
+      "p90": 15041.7,
+      "p95": 38318.65,
+      "max": 5816102.0,
+      "p99": 156266.33,
+      "thresholds": {
+        "p50": 151.5,
+        "p75": 3110.25,
+        "p90": 15041.7,
+        "p95": 38318.65,
+        "p99": 156266.33
+      },
+      "top_50_pct": {
+        "threshold": 151.5,
+        "count": 1397
+      },
+      "top_25_pct": {
+        "threshold": 3110.25,
+        "count": 699
+      },
+      "top_10_pct": {
+        "threshold": 15041.7,
+        "count": 280
+      },
+      "top_5_pct": {
+        "threshold": 38318.65,
+        "count": 140
+      },
+      "top_1_pct": {
+        "threshold": 156266.33,
+        "count": 28
+      }
+    },
+    "view_growth_multiple": {
+      "count": 2582,
+      "min": 0.0,
+      "median": 2.4236,
+      "p75": 5.5931,
+      "p90": 16.9952,
+      "p95": 34.4401,
+      "max": 12909.0,
+      "p99": 119.6724
+    },
+    "avg_growth_views_per_hour": {
+      "count": 2794,
+      "min": -694.793,
+      "median": 2.2588,
+      "p75": 46.3739,
+      "p90": 224.2723,
+      "p95": 571.3326,
+      "max": 86718.315,
+      "p99": 2329.9373
+    }
+  },
+  "hypotheses": {
+    "H0_initial_views": {
+      "spearman": {
+        "n": 2794,
+        "rho": 0.7966
+      },
+      "decile_bins": {
+        "D1": {
+          "n": 344,
+          "median_growth": 2.0,
+          "mean_growth": 108.2703
+        },
+        "D10": {
+          "n": 280,
+          "median_growth": 24604.0,
+          "mean_growth": 82229.5393
+        },
+        "D2": {
+          "n": 224,
+          "median_growth": 9.5,
+          "mean_growth": 61.9777
+        },
+        "D3": {
+          "n": 271,
+          "median_growth": 27.0,
+          "mean_growth": 131.7011
+        },
+        "D4": {
+          "n": 279,
+          "median_growth": 51.0,
+          "mean_growth": 250.2186
+        },
+        "D5": {
+          "n": 281,
+          "median_growth": 101.0,
+          "mean_growth": 647.7758
+        },
+        "D6": {
+          "n": 278,
+          "median_growth": 279.0,
+          "mean_growth": 1953.723
+        },
+        "D7": {
+          "n": 279,
+          "median_growth": 791.0,
+          "mean_growth": 3983.1613
+        },
+        "D8": {
+          "n": 279,
+          "median_growth": 2319.0,
+          "mean_growth": 5270.0968
+        },
+        "D9": {
+          "n": 279,
+          "median_growth": 5242.0,
+          "mean_growth": 13298.3118
+        }
+      },
+      "top10_capture": {
+        "top_n": 280,
+        "captured_in_predictor_top_bin": 174,
+        "capture_rate": 0.6214
+      }
+    },
+    "H1_t0_vph": {
+      "spearman": {
+        "n": 2760,
+        "rho": 0.8275
+      },
+      "vph_bins": {
+        "100-1k": {
+          "n": 598,
+          "median_growth": 4512.5,
+          "mean_growth": 8540.8562
+        },
+        "10k-25k": {
+          "n": 28,
+          "median_growth": 142026.0,
+          "mean_growth": 179267.4286
+        },
+        "1k-5k": {
+          "n": 182,
+          "median_growth": 27126.0,
+          "mean_growth": 75798.1978
+        },
+        "25k-50k": {
+          "n": 6,
+          "median_growth": 112066.0,
+          "mean_growth": 357885.3333
+        },
+        "5k-10k": {
+          "n": 32,
+          "median_growth": 59984.5,
+          "mean_growth": 97328.5938
+        },
+        "<=100": {
+          "n": 1910,
+          "median_growth": 46.0,
+          "mean_growth": 526.6429
+        },
+        ">50k": {
+          "n": 4,
+          "median_growth": -14264.5,
+          "mean_growth": -14429.0
+        },
+        "missing": {
+          "n": 34,
+          "median_growth": 26.0,
+          "mean_growth": 1934.0588
+        }
+      },
+      "top10_capture": {
+        "top_n": 276,
+        "captured_in_predictor_top_bin": 194,
+        "capture_rate": 0.7029
+      }
+    },
+    "H2_views_per_subscriber": {
+      "sample_size": 327,
+      "selection_bias_note": "T0 V/S is only available where subscriber fetch succeeded; historically concentrated among passed / homepage_fetched channels.",
+      "spearman": {
+        "n": 327,
+        "rho": -0.0884
+      },
+      "v_s_bins": {
+        "0.1-0.5": {
+          "n": 110,
+          "median_growth": 25111.0,
+          "mean_growth": 114097.0545
+        },
+        "0.5-1": {
+          "n": 28,
+          "median_growth": 21073.0,
+          "mean_growth": 40880.7143
+        },
+        "1-2": {
+          "n": 17,
+          "median_growth": 2799.0,
+          "mean_growth": 34833.5294
+        },
+        "2-5": {
+          "n": 13,
+          "median_growth": 20755.0,
+          "mean_growth": 35497.5385
+        },
+        "<0.1": {
+          "n": 142,
+          "median_growth": 18500.0,
+          "mean_growth": 52634.3521
+        },
+        ">=5": {
+          "n": 17,
+          "median_growth": 2655.0,
+          "mean_growth": 35824.0588
+        }
+      },
+      "top10_capture": {
+        "top_n": 33,
+        "captured_in_predictor_top_bin": 3,
+        "capture_rate": 0.0909
+      }
+    },
+    "H3_vph_v_s_age": {
+      "vph_cutoffs": {
+        "p33": 1.4957,
+        "p67": 75.4171
+      },
+      "v_s_cutoffs": {
+        "p33": 0.05,
+        "p67": 0.2534
+      },
+      "combinations": {
+        "low|missing|18-24h": {
+          "n": 404,
+          "median_absolute_growth": 8.0,
+          "p90_growth": 114.7,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|missing|18-24h": {
+          "n": 328,
+          "median_absolute_growth": 143.5,
+          "p90_growth": 1778.6,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|missing|12-18h": {
+          "n": 262,
+          "median_absolute_growth": 119.5,
+          "p90_growth": 1034.1,
+          "top_10pct_hit_rate": 0.0038
+        },
+        "low|missing|12-18h": {
+          "n": 248,
+          "median_absolute_growth": 11.0,
+          "p90_growth": 125.4,
+          "top_10pct_hit_rate": 0.0
+        },
+        "high|missing|18-24h": {
+          "n": 189,
+          "median_absolute_growth": 2878.0,
+          "p90_growth": 7249.2,
+          "top_10pct_hit_rate": 0.0265
+        },
+        "medium|missing|6-12h": {
+          "n": 167,
+          "median_absolute_growth": 171.0,
+          "p90_growth": 2122.4,
+          "top_10pct_hit_rate": 0.0
+        },
+        "high|missing|12-18h": {
+          "n": 152,
+          "median_absolute_growth": 2963.5,
+          "p90_growth": 9745.2,
+          "top_10pct_hit_rate": 0.0592
+        },
+        "high|missing|<6h": {
+          "n": 144,
+          "median_absolute_growth": 11069.0,
+          "p90_growth": 49060.0,
+          "top_10pct_hit_rate": 0.4375
+        },
+        "medium|missing|<6h": {
+          "n": 143,
+          "median_absolute_growth": 270.0,
+          "p90_growth": 5231.0,
+          "top_10pct_hit_rate": 0.014
+        },
+        "low|missing|6-12h": {
+          "n": 134,
+          "median_absolute_growth": 12.0,
+          "p90_growth": 138.4,
+          "top_10pct_hit_rate": 0.0
+        },
+        "low|missing|<6h": {
+          "n": 133,
+          "median_absolute_growth": 12.0,
+          "p90_growth": 109.4,
+          "top_10pct_hit_rate": 0.0
+        },
+        "high|missing|6-12h": {
+          "n": 126,
+          "median_absolute_growth": 4297.5,
+          "p90_growth": 22882.5,
+          "top_10pct_hit_rate": 0.1825
+        },
+        "high|high|18-24h": {
+          "n": 50,
+          "median_absolute_growth": 19473.0,
+          "p90_growth": 103651.7,
+          "top_10pct_hit_rate": 0.52
+        },
+        "high|medium|18-24h": {
+          "n": 50,
+          "median_absolute_growth": 17053.5,
+          "p90_growth": 104775.2,
+          "top_10pct_hit_rate": 0.54
+        },
+        "high|low|18-24h": {
+          "n": 39,
+          "median_absolute_growth": 11352.0,
+          "p90_growth": 57853.0,
+          "top_10pct_hit_rate": 0.3846
+        },
+        "missing|missing|invalid_or_zero": {
+          "n": 34,
+          "median_absolute_growth": 26.0,
+          "p90_growth": 9010.4,
+          "top_10pct_hit_rate": 0.0
+        },
+        "high|high|12-18h": {
+          "n": 29,
+          "median_absolute_growth": 20755.0,
+          "p90_growth": 149800.4,
+          "top_10pct_hit_rate": 0.5172
+        },
+        "high|low|6-12h": {
+          "n": 26,
+          "median_absolute_growth": 25560.5,
+          "p90_growth": 184194.0,
+          "top_10pct_hit_rate": 0.7308
+        },
+        "high|medium|12-18h": {
+          "n": 26,
+          "median_absolute_growth": 30302.0,
+          "p90_growth": 150459.0,
+          "top_10pct_hit_rate": 0.8077
+        },
+        "high|low|12-18h": {
+          "n": 24,
+          "median_absolute_growth": 11605.0,
+          "p90_growth": 64990.0,
+          "top_10pct_hit_rate": 0.4583
+        },
+        "high|high|6-12h": {
+          "n": 19,
+          "median_absolute_growth": 26185.0,
+          "p90_growth": 149727.6,
+          "top_10pct_hit_rate": 0.6316
+        },
+        "high|low|<6h": {
+          "n": 16,
+          "median_absolute_growth": 71217.0,
+          "p90_growth": 511516.0,
+          "top_10pct_hit_rate": 0.875
+        },
+        "high|medium|6-12h": {
+          "n": 16,
+          "median_absolute_growth": 57877.5,
+          "p90_growth": 143046.0,
+          "top_10pct_hit_rate": 0.6875
+        },
+        "high|high|<6h": {
+          "n": 7,
+          "median_absolute_growth": 3965.0,
+          "p90_growth": 87617.6,
+          "top_10pct_hit_rate": 0.4286
+        },
+        "high|medium|<6h": {
+          "n": 7,
+          "median_absolute_growth": 13822.0,
+          "p90_growth": 56337.6,
+          "top_10pct_hit_rate": 0.4286
+        },
+        "medium|low|12-18h": {
+          "n": 4,
+          "median_absolute_growth": 334.0,
+          "p90_growth": 891.1,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|medium|12-18h": {
+          "n": 4,
+          "median_absolute_growth": 1217.5,
+          "p90_growth": 2169.7,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|low|18-24h": {
+          "n": 3,
+          "median_absolute_growth": 207.0,
+          "p90_growth": 1394.2,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|high|<6h": {
+          "n": 2,
+          "median_absolute_growth": 3136.0,
+          "p90_growth": 5540.0,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|missing|>24h": {
+          "n": 2,
+          "median_absolute_growth": 136.0,
+          "p90_growth": 206.4,
+          "top_10pct_hit_rate": 0.0
+        },
+        "low|missing|>24h": {
+          "n": 1,
+          "median_absolute_growth": 66.0,
+          "p90_growth": 66.0,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|high|12-18h": {
+          "n": 1,
+          "median_absolute_growth": 75.0,
+          "p90_growth": 75.0,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|high|18-24h": {
+          "n": 1,
+          "median_absolute_growth": 2799.0,
+          "p90_growth": 2799.0,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|low|<6h": {
+          "n": 1,
+          "median_absolute_growth": 67.0,
+          "p90_growth": 67.0,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|medium|18-24h": {
+          "n": 1,
+          "median_absolute_growth": 178.0,
+          "p90_growth": 178.0,
+          "top_10pct_hit_rate": 0.0
+        },
+        "medium|medium|6-12h": {
+          "n": 1,
+          "median_absolute_growth": 738.0,
+          "p90_growth": 738.0,
+          "top_10pct_hit_rate": 0.0
+        }
+      }
+    },
+    "H4_high_velocity_v_s_channel_size": {
+      "n_with_subscribers_vph_vps": 327,
+      "subscriber_bands": {
+        "p33": 93055.8,
+        "p67": 535442.0
+      },
+      "high_vph_cutoff": 3121.0874,
+      "high_v_s_cutoff": 0.26,
+      "cohorts": {
+        "baseline_all_with_subs": {
+          "n": 327,
+          "median_absolute_growth": 19502.0,
+          "p90_absolute_growth": 124887.8
+        },
+        "high_vph_only": {
+          "n": 108,
+          "median_absolute_growth": 57779.5,
+          "p90_absolute_growth": 302433.2
+        },
+        "high_v_s_only": {
+          "n": 109,
+          "median_absolute_growth": 19444.0,
+          "p90_absolute_growth": 128873.2
+        },
+        "high_vph_high_v_s_small_or_medium_channel": {
+          "n": 42,
+          "median_absolute_growth": 29127.0,
+          "p90_absolute_growth": 228880.1
+        },
+        "large_channel_high_vph": {
+          "n": 51,
+          "median_absolute_growth": 71821.0,
+          "p90_absolute_growth": 438582.0
+        }
+      }
+    }
+  },
+  "qualification_comparison": {
+    "passed": {
+      "n": 40,
+      "median_absolute_growth": 4922.5,
+      "p90_absolute_growth": 153836.1,
+      "top_10pct_share": 0.375,
+      "top_5pct_share": 0.225
+    },
+    "rejected": {
+      "n": 2754,
+      "median_absolute_growth": 150.0,
+      "p90_absolute_growth": 14143.7,
+      "top_10pct_share": 0.0962,
+      "top_5pct_share": 0.0476
+    },
+    "rejected_in_top_10pct_future_growth": {
+      "count": 265,
+      "by_filter_reason": {
+        "language": 6,
+        "min_subscribers": 1,
+        "min_views": 99,
+        "min_viral_coeff": 159
+      }
+    }
+  },
+  "keyword_analysis": {
+    "multi_keyword_membership_allowed": true,
+    "keywords": {
+      "AI tools": {
+        "n_membership_rows": 341,
+        "median_t0_vph": 9.665,
+        "median_absolute_growth": 134.0,
+        "p90_absolute_growth": 9034.0,
+        "top_10pct_winner_count": 25,
+        "winner_rate": 0.0733
+      },
+      "fitness": {
+        "n_membership_rows": 206,
+        "median_t0_vph": 6.565,
+        "median_absolute_growth": 109.0,
+        "p90_absolute_growth": 6863.0,
+        "top_10pct_winner_count": 14,
+        "winner_rate": 0.068
+      },
+      "gaming": {
+        "n_membership_rows": 184,
+        "median_t0_vph": 1015.8,
+        "median_absolute_growth": 8573.0,
+        "p90_absolute_growth": 94918.7,
+        "top_10pct_winner_count": 77,
+        "winner_rate": 0.4185
+      },
+      "history": {
+        "n_membership_rows": 328,
+        "median_t0_vph": 59.98,
+        "median_absolute_growth": 827.5,
+        "p90_absolute_growth": 19884.0,
+        "top_10pct_winner_count": 40,
+        "winner_rate": 0.122
+      },
+      "home improvement": {
+        "n_membership_rows": 329,
+        "median_t0_vph": 2.43,
+        "median_absolute_growth": 27.0,
+        "p90_absolute_growth": 3885.2,
+        "top_10pct_winner_count": 10,
+        "winner_rate": 0.0304
+      },
+      "interesting facts": {
+        "n_membership_rows": 257,
+        "median_t0_vph": 68.25,
+        "median_absolute_growth": 1510.0,
+        "p90_absolute_growth": 27101.0,
+        "top_10pct_winner_count": 38,
+        "winner_rate": 0.1479
+      },
+      "productivity": {
+        "n_membership_rows": 283,
+        "median_t0_vph": 0.9,
+        "median_absolute_growth": 20.0,
+        "p90_absolute_growth": 964.4,
+        "top_10pct_winner_count": 4,
+        "winner_rate": 0.0141
+      },
+      "self improvement": {
+        "n_membership_rows": 278,
+        "median_t0_vph": 0.77,
+        "median_absolute_growth": 27.5,
+        "p90_absolute_growth": 3166.9,
+        "top_10pct_winner_count": 8,
+        "winner_rate": 0.0288
+      },
+      "technology": {
+        "n_membership_rows": 236,
+        "median_t0_vph": 38.935,
+        "median_absolute_growth": 486.5,
+        "p90_absolute_growth": 26675.5,
+        "top_10pct_winner_count": 32,
+        "winner_rate": 0.1356
+      },
+      "travel": {
+        "n_membership_rows": 363,
+        "median_t0_vph": 8.12,
+        "median_absolute_growth": 194.0,
+        "p90_absolute_growth": 14160.8,
+        "top_10pct_winner_count": 33,
+        "winner_rate": 0.0909
+      }
+    }
+  },
+  "top_winners": [
+    {
+      "video_id": "_2hlMsgs4aE",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 32435,
+      "t0_vph": 3181.01,
+      "t0_v_s": 0.36,
+      "subscribers": 90300,
+      "age": 10.1964,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 5848537,
+      "absolute_growth": 5816102,
+      "growth_multiple": 180.3156
+    },
+    {
+      "video_id": "5rhQGVR3HgI",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 172698,
+      "t0_vph": 31551.32,
+      "t0_v_s": 0.01,
+      "subscribers": 12100000,
+      "age": 5.4736,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 1680158,
+      "absolute_growth": 1507460,
+      "growth_multiple": 9.7289
+    },
+    {
+      "video_id": "4F29ZB3U6IY",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 23292,
+      "t0_vph": 15472.48,
+      "t0_v_s": 0.01,
+      "subscribers": 4480000,
+      "age": 1.5054,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 656315,
+      "absolute_growth": 633023,
+      "growth_multiple": 28.1777
+    },
+    {
+      "video_id": "fveNvHCoqKs",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 283415,
+      "t0_vph": 14328.71,
+      "t0_v_s": 0.47,
+      "subscribers": 606000,
+      "age": 19.7795,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 891860,
+      "absolute_growth": 608445,
+      "growth_multiple": 3.1468
+    },
+    {
+      "video_id": "PCkZ5pfo-pI",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 237491,
+      "t0_vph": 11388.52,
+      "t0_v_s": 0.11,
+      "subscribers": 2260000,
+      "age": 20.8535,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 759486,
+      "absolute_growth": 521995,
+      "growth_multiple": 3.198
+    },
+    {
+      "video_id": "SCo9kesuoX8",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 91477,
+      "t0_vph": 13555.18,
+      "t0_v_s": 0.14,
+      "subscribers": 645000,
+      "age": 6.7485,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 590175,
+      "absolute_growth": 498698,
+      "growth_multiple": 6.4516
+    },
+    {
+      "video_id": "x7C5KUzNqEA",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 178263,
+      "t0_vph": 12908.45,
+      "t0_v_s": 0.21,
+      "subscribers": 842000,
+      "age": 13.8098,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 616845,
+      "absolute_growth": 438582,
+      "growth_multiple": 3.4603
+    },
+    {
+      "video_id": "u13E1qsIrDo",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 528691,
+      "t0_vph": 36886.88,
+      "t0_v_s": 0.39,
+      "subscribers": 1370000,
+      "age": 14.3328,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 944411,
+      "absolute_growth": 415720,
+      "growth_multiple": 1.7863
+    },
+    {
+      "video_id": "KIn-1EuXx78",
+      "keywords": [
+        "history"
+      ],
+      "t0_views": 17298,
+      "t0_vph": 6164.54,
+      "t0_v_s": 0.03,
+      "subscribers": 556000,
+      "age": 2.806,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 407307,
+      "absolute_growth": 390009,
+      "growth_multiple": 23.5465
+    },
+    {
+      "video_id": "5mYAtPYg7Po",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 8206,
+      "t0_vph": 3008.95,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 2.7272,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 375725,
+      "absolute_growth": 367519,
+      "growth_multiple": 45.7866
+    },
+    {
+      "video_id": "PrSf7IOYu-I",
+      "keywords": [
+        "self improvement"
+      ],
+      "t0_views": 9536,
+      "t0_vph": 9779.78,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 0.9751,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 363214,
+      "absolute_growth": 353678,
+      "growth_multiple": 38.0887
+    },
+    {
+      "video_id": "glQhQrMpDbk",
+      "keywords": [
+        "history"
+      ],
+      "t0_views": 207075,
+      "t0_vph": 8980.72,
+      "t0_v_s": 8.12,
+      "subscribers": 25500,
+      "age": 23.0577,
+      "qualification_outcome": "passed",
+      "filter_reason": null,
+      "current_views": 542246,
+      "absolute_growth": 335171,
+      "growth_multiple": 2.6186
+    },
+    {
+      "video_id": "bCZ86e-J-R8",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 432343,
+      "t0_vph": 19369.93,
+      "t0_v_s": 1.17,
+      "subscribers": 368000,
+      "age": 22.3203,
+      "qualification_outcome": "passed",
+      "filter_reason": null,
+      "current_views": 739777,
+      "absolute_growth": 307434,
+      "growth_multiple": 1.7111
+    },
+    {
+      "video_id": "hKsu5WG_x24",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 320331,
+      "t0_vph": 15417.85,
+      "t0_v_s": 0.06,
+      "subscribers": 5120000,
+      "age": 20.7766,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 620621,
+      "absolute_growth": 300290,
+      "growth_multiple": 1.9374
+    },
+    {
+      "video_id": "U9yq1iGJS6I",
+      "keywords": [
+        "AI tools"
+      ],
+      "t0_views": 62084,
+      "t0_vph": 2681.39,
+      "t0_v_s": 0.72,
+      "subscribers": 86700,
+      "age": 23.1537,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 331767,
+      "absolute_growth": 269683,
+      "growth_multiple": 5.3438
+    },
+    {
+      "video_id": "XzKyya1sH7s",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 29714,
+      "t0_vph": 4484.28,
+      "t0_v_s": 2.22,
+      "subscribers": 13400,
+      "age": 6.6263,
+      "qualification_outcome": "passed",
+      "filter_reason": null,
+      "current_views": 273268,
+      "absolute_growth": 243554,
+      "growth_multiple": 9.1966
+    },
+    {
+      "video_id": "0i9PnxjTu_U",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 215851,
+      "t0_vph": 21084.2,
+      "t0_v_s": 0.02,
+      "subscribers": 8890000,
+      "age": 10.2376,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 455408,
+      "absolute_growth": 239557,
+      "growth_multiple": 2.1098
+    },
+    {
+      "video_id": "zwHRlafr-Qg",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 45061,
+      "t0_vph": 3708.83,
+      "t0_v_s": 14.97,
+      "subscribers": 3010,
+      "age": 12.1497,
+      "qualification_outcome": "passed",
+      "filter_reason": null,
+      "current_views": 280492,
+      "absolute_growth": 235431,
+      "growth_multiple": 6.2247
+    },
+    {
+      "video_id": "71FkCkskmcc",
+      "keywords": [
+        "history"
+      ],
+      "t0_views": 122431,
+      "t0_vph": 18321.54,
+      "t0_v_s": 0.01,
+      "subscribers": 13100000,
+      "age": 6.6824,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 354097,
+      "absolute_growth": 231666,
+      "growth_multiple": 2.8922
+    },
+    {
+      "video_id": "OFKVf1QNhKs",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 147289,
+      "t0_vph": 17337.35,
+      "t0_v_s": 0.03,
+      "subscribers": 5000000,
+      "age": 8.4955,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 350465,
+      "absolute_growth": 203176,
+      "growth_multiple": 2.3794
+    },
+    {
+      "video_id": "G_HJ9WO03RA",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 20123,
+      "t0_vph": 7146.94,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 2.8156,
+      "qualification_outcome": "rejected",
+      "filter_reason": "language",
+      "current_views": 222717,
+      "absolute_growth": 202594,
+      "growth_multiple": 11.0678
+    },
+    {
+      "video_id": "MrJaMm0G300",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 181603,
+      "t0_vph": 9781.75,
+      "t0_v_s": 0.21,
+      "subscribers": 862000,
+      "age": 18.5655,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 371704,
+      "absolute_growth": 190101,
+      "growth_multiple": 2.0468
+    },
+    {
+      "video_id": "Umc1HJyNBAU",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 125438,
+      "t0_vph": 5320.14,
+      "t0_v_s": 0.03,
+      "subscribers": 3610000,
+      "age": 23.5779,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 313612,
+      "absolute_growth": 188174,
+      "growth_multiple": 2.5001
+    },
+    {
+      "video_id": "TC1eZvEorRo",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 31395,
+      "t0_vph": 4443.99,
+      "t0_v_s": 0.1,
+      "subscribers": 305000,
+      "age": 7.0646,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 213567,
+      "absolute_growth": 182172,
+      "growth_multiple": 6.8026
+    },
+    {
+      "video_id": "AEAosESLypQ",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 225082,
+      "t0_vph": 24331.03,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 9.2508,
+      "qualification_outcome": "rejected",
+      "filter_reason": "language",
+      "current_views": 405148,
+      "absolute_growth": 180066,
+      "growth_multiple": 1.8
+    },
+    {
+      "video_id": "312ZpVnaUHE",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 36783,
+      "t0_vph": 2742.43,
+      "t0_v_s": 0.23,
+      "subscribers": 159000,
+      "age": 13.4126,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 213506,
+      "absolute_growth": 176723,
+      "growth_multiple": 5.8045
+    },
+    {
+      "video_id": "7bmUiiUuAdE",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 152184,
+      "t0_vph": 11499.83,
+      "t0_v_s": 0.4,
+      "subscribers": 381000,
+      "age": 13.2336,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 322106,
+      "absolute_growth": 169922,
+      "growth_multiple": 2.1166
+    },
+    {
+      "video_id": "p4S2H8QAGYM",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 12633,
+      "t0_vph": 1823.24,
+      "t0_v_s": 0.0,
+      "subscribers": 5570000,
+      "age": 6.9289,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 177845,
+      "absolute_growth": 165212,
+      "growth_multiple": 14.0778
+    },
+    {
+      "video_id": "jJZkNMn11Xk",
+      "keywords": [
+        "AI tools"
+      ],
+      "t0_views": 12212,
+      "t0_vph": 2624.8,
+      "t0_v_s": 0.01,
+      "subscribers": 1890000,
+      "age": 4.6525,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 167805,
+      "absolute_growth": 155593,
+      "growth_multiple": 13.741
+    },
+    {
+      "video_id": "GltlkrChtfI",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 134046,
+      "t0_vph": 9880.64,
+      "t0_v_s": 0.22,
+      "subscribers": 620000,
+      "age": 13.5665,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 286923,
+      "absolute_growth": 152877,
+      "growth_multiple": 2.1405
+    },
+    {
+      "video_id": "C7TP7yG9bDo",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 9264,
+      "t0_vph": 3354.56,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 2.7616,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 158723,
+      "absolute_growth": 149459,
+      "growth_multiple": 17.1333
+    },
+    {
+      "video_id": "9aVPk0c0m0A",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 165775,
+      "t0_vph": 12512.39,
+      "t0_v_s": 0.11,
+      "subscribers": 1560000,
+      "age": 13.2489,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 313816,
+      "absolute_growth": 148041,
+      "growth_multiple": 1.893
+    },
+    {
+      "video_id": "vWRzEKPs6xw",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 160208,
+      "t0_vph": 11472.97,
+      "t0_v_s": 1.12,
+      "subscribers": 143000,
+      "age": 13.964,
+      "qualification_outcome": "passed",
+      "filter_reason": null,
+      "current_views": 304978,
+      "absolute_growth": 144770,
+      "growth_multiple": 1.9036
+    },
+    {
+      "video_id": "K3Ha-hMiqYw",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 373937,
+      "t0_vph": 27899.75,
+      "t0_v_s": 0.03,
+      "subscribers": 14500000,
+      "age": 13.4029,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 516604,
+      "absolute_growth": 142667,
+      "growth_multiple": 1.3815
+    },
+    {
+      "video_id": "rnmXBJ3KFP0",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 275921,
+      "t0_vph": 16283.29,
+      "t0_v_s": 0.32,
+      "subscribers": 857000,
+      "age": 16.945,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 415203,
+      "absolute_growth": 139282,
+      "growth_multiple": 1.5048
+    },
+    {
+      "video_id": "o8nANPd7Tlo",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 37484,
+      "t0_vph": 6890.34,
+      "t0_v_s": 0.0,
+      "subscribers": 31400000,
+      "age": 5.4401,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 167713,
+      "absolute_growth": 130229,
+      "growth_multiple": 4.4743
+    },
+    {
+      "video_id": "Ek1fkW8v3iQ",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 35268,
+      "t0_vph": 5054.9,
+      "t0_v_s": 0.37,
+      "subscribers": 95600,
+      "age": 6.977,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 161539,
+      "absolute_growth": 126271,
+      "growth_multiple": 4.5803
+    },
+    {
+      "video_id": "hhUL8dZLhQY",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 62915,
+      "t0_vph": 3265.98,
+      "t0_v_s": 0.52,
+      "subscribers": 120000,
+      "age": 19.2637,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 189082,
+      "absolute_growth": 126167,
+      "growth_multiple": 3.0054
+    },
+    {
+      "video_id": "fMZ4M9PEoH8",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 4536,
+      "t0_vph": 1460.77,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 3.1052,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 129966,
+      "absolute_growth": 125430,
+      "growth_multiple": 28.6521
+    },
+    {
+      "video_id": "HWg75OAmJLc",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 82665,
+      "t0_vph": 4091.13,
+      "t0_v_s": 0.18,
+      "subscribers": 457000,
+      "age": 20.2059,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 206700,
+      "absolute_growth": 124035,
+      "growth_multiple": 2.5005
+    },
+    {
+      "video_id": "_wTOWh4m84k",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 24847,
+      "t0_vph": 2373.0,
+      "t0_v_s": 0.0,
+      "subscribers": 31400000,
+      "age": 10.4707,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 144230,
+      "absolute_growth": 119383,
+      "growth_multiple": 5.8047
+    },
+    {
+      "video_id": "Uhsleh6XHuk",
+      "keywords": [
+        "productivity"
+      ],
+      "t0_views": 2268,
+      "t0_vph": 144.5,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 15.695,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 120746,
+      "absolute_growth": 118478,
+      "growth_multiple": 53.239
+    },
+    {
+      "video_id": "X4RaIsj_Xhg",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 81353,
+      "t0_vph": 3437.14,
+      "t0_v_s": 0.15,
+      "subscribers": 543000,
+      "age": 23.6688,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 192241,
+      "absolute_growth": 110888,
+      "growth_multiple": 2.363
+    },
+    {
+      "video_id": "di8YnciPHJ4",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 14134,
+      "t0_vph": 2985.54,
+      "t0_v_s": 0.0,
+      "subscribers": 3260000,
+      "age": 4.7341,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 118564,
+      "absolute_growth": 104430,
+      "growth_multiple": 8.3886
+    },
+    {
+      "video_id": "P5-q5XSS3D8",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 90549,
+      "t0_vph": 4131.65,
+      "t0_v_s": 0.19,
+      "subscribers": 475000,
+      "age": 21.9159,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 194645,
+      "absolute_growth": 104096,
+      "growth_multiple": 2.1496
+    },
+    {
+      "video_id": "9viz1DOVYN0",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 26320,
+      "t0_vph": 3250.62,
+      "t0_v_s": 0.12,
+      "subscribers": 223000,
+      "age": 8.0969,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 130240,
+      "absolute_growth": 103920,
+      "growth_multiple": 4.9483
+    },
+    {
+      "video_id": "OUox71BlOkg",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 48692,
+      "t0_vph": 2331.52,
+      "t0_v_s": 0.34,
+      "subscribers": 143000,
+      "age": 20.8842,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 149842,
+      "absolute_growth": 101150,
+      "growth_multiple": 3.0773
+    },
+    {
+      "video_id": "zsPygpbzJcw",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 12416,
+      "t0_vph": 2627.27,
+      "t0_v_s": 0.28,
+      "subscribers": 45000,
+      "age": 4.7258,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 109726,
+      "absolute_growth": 97310,
+      "growth_multiple": 8.8375
+    },
+    {
+      "video_id": "-o5HxK4kTKI",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 88993,
+      "t0_vph": 5033.94,
+      "t0_v_s": 0.55,
+      "subscribers": 163000,
+      "age": 17.6786,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 185247,
+      "absolute_growth": 96254,
+      "growth_multiple": 2.0816
+    },
+    {
+      "video_id": "XTXq4EIHh2E",
+      "keywords": [
+        "history"
+      ],
+      "t0_views": 213652,
+      "t0_vph": 21127.06,
+      "t0_v_s": 0.14,
+      "subscribers": 1500000,
+      "age": 10.1127,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 306741,
+      "absolute_growth": 93089,
+      "growth_multiple": 1.4357
+    }
+  ],
+  "top_surprises": [
+    {
+      "video_id": "_2hlMsgs4aE",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 32435,
+      "t0_vph": 3181.01,
+      "t0_v_s": 0.36,
+      "subscribers": 90300,
+      "age": 10.1964,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 5848537,
+      "absolute_growth": 5816102,
+      "growth_multiple": 180.3156,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "5rhQGVR3HgI",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 172698,
+      "t0_vph": 31551.32,
+      "t0_v_s": 0.01,
+      "subscribers": 12100000,
+      "age": 5.4736,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 1680158,
+      "absolute_growth": 1507460,
+      "growth_multiple": 9.7289,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "4F29ZB3U6IY",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 23292,
+      "t0_vph": 15472.48,
+      "t0_v_s": 0.01,
+      "subscribers": 4480000,
+      "age": 1.5054,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 656315,
+      "absolute_growth": 633023,
+      "growth_multiple": 28.1777,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "fveNvHCoqKs",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 283415,
+      "t0_vph": 14328.71,
+      "t0_v_s": 0.47,
+      "subscribers": 606000,
+      "age": 19.7795,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 891860,
+      "absolute_growth": 608445,
+      "growth_multiple": 3.1468,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "PCkZ5pfo-pI",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 237491,
+      "t0_vph": 11388.52,
+      "t0_v_s": 0.11,
+      "subscribers": 2260000,
+      "age": 20.8535,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 759486,
+      "absolute_growth": 521995,
+      "growth_multiple": 3.198,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "SCo9kesuoX8",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 91477,
+      "t0_vph": 13555.18,
+      "t0_v_s": 0.14,
+      "subscribers": 645000,
+      "age": 6.7485,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 590175,
+      "absolute_growth": 498698,
+      "growth_multiple": 6.4516,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "x7C5KUzNqEA",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 178263,
+      "t0_vph": 12908.45,
+      "t0_v_s": 0.21,
+      "subscribers": 842000,
+      "age": 13.8098,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 616845,
+      "absolute_growth": 438582,
+      "growth_multiple": 3.4603,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "u13E1qsIrDo",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 528691,
+      "t0_vph": 36886.88,
+      "t0_v_s": 0.39,
+      "subscribers": 1370000,
+      "age": 14.3328,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 944411,
+      "absolute_growth": 415720,
+      "growth_multiple": 1.7863,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "KIn-1EuXx78",
+      "keywords": [
+        "history"
+      ],
+      "t0_views": 17298,
+      "t0_vph": 6164.54,
+      "t0_v_s": 0.03,
+      "subscribers": 556000,
+      "age": 2.806,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 407307,
+      "absolute_growth": 390009,
+      "growth_multiple": 23.5465,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "5mYAtPYg7Po",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 8206,
+      "t0_vph": 3008.95,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 2.7272,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 375725,
+      "absolute_growth": 367519,
+      "growth_multiple": 45.7866,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "PrSf7IOYu-I",
+      "keywords": [
+        "self improvement"
+      ],
+      "t0_views": 9536,
+      "t0_vph": 9779.78,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 0.9751,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 363214,
+      "absolute_growth": 353678,
+      "growth_multiple": 38.0887,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "hKsu5WG_x24",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 320331,
+      "t0_vph": 15417.85,
+      "t0_v_s": 0.06,
+      "subscribers": 5120000,
+      "age": 20.7766,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 620621,
+      "absolute_growth": 300290,
+      "growth_multiple": 1.9374,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "U9yq1iGJS6I",
+      "keywords": [
+        "AI tools"
+      ],
+      "t0_views": 62084,
+      "t0_vph": 2681.39,
+      "t0_v_s": 0.72,
+      "subscribers": 86700,
+      "age": 23.1537,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 331767,
+      "absolute_growth": 269683,
+      "growth_multiple": 5.3438,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "0i9PnxjTu_U",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 215851,
+      "t0_vph": 21084.2,
+      "t0_v_s": 0.02,
+      "subscribers": 8890000,
+      "age": 10.2376,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 455408,
+      "absolute_growth": 239557,
+      "growth_multiple": 2.1098,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "71FkCkskmcc",
+      "keywords": [
+        "history"
+      ],
+      "t0_views": 122431,
+      "t0_vph": 18321.54,
+      "t0_v_s": 0.01,
+      "subscribers": 13100000,
+      "age": 6.6824,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 354097,
+      "absolute_growth": 231666,
+      "growth_multiple": 2.8922,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "OFKVf1QNhKs",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 147289,
+      "t0_vph": 17337.35,
+      "t0_v_s": 0.03,
+      "subscribers": 5000000,
+      "age": 8.4955,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 350465,
+      "absolute_growth": 203176,
+      "growth_multiple": 2.3794,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "G_HJ9WO03RA",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 20123,
+      "t0_vph": 7146.94,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 2.8156,
+      "qualification_outcome": "rejected",
+      "filter_reason": "language",
+      "current_views": 222717,
+      "absolute_growth": 202594,
+      "growth_multiple": 11.0678,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "MrJaMm0G300",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 181603,
+      "t0_vph": 9781.75,
+      "t0_v_s": 0.21,
+      "subscribers": 862000,
+      "age": 18.5655,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 371704,
+      "absolute_growth": 190101,
+      "growth_multiple": 2.0468,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "Umc1HJyNBAU",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 125438,
+      "t0_vph": 5320.14,
+      "t0_v_s": 0.03,
+      "subscribers": 3610000,
+      "age": 23.5779,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 313612,
+      "absolute_growth": 188174,
+      "growth_multiple": 2.5001,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "TC1eZvEorRo",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 31395,
+      "t0_vph": 4443.99,
+      "t0_v_s": 0.1,
+      "subscribers": 305000,
+      "age": 7.0646,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 213567,
+      "absolute_growth": 182172,
+      "growth_multiple": 6.8026,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "AEAosESLypQ",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 225082,
+      "t0_vph": 24331.03,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 9.2508,
+      "qualification_outcome": "rejected",
+      "filter_reason": "language",
+      "current_views": 405148,
+      "absolute_growth": 180066,
+      "growth_multiple": 1.8,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "312ZpVnaUHE",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 36783,
+      "t0_vph": 2742.43,
+      "t0_v_s": 0.23,
+      "subscribers": 159000,
+      "age": 13.4126,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 213506,
+      "absolute_growth": 176723,
+      "growth_multiple": 5.8045,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "7bmUiiUuAdE",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 152184,
+      "t0_vph": 11499.83,
+      "t0_v_s": 0.4,
+      "subscribers": 381000,
+      "age": 13.2336,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 322106,
+      "absolute_growth": 169922,
+      "growth_multiple": 2.1166,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "p4S2H8QAGYM",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 12633,
+      "t0_vph": 1823.24,
+      "t0_v_s": 0.0,
+      "subscribers": 5570000,
+      "age": 6.9289,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 177845,
+      "absolute_growth": 165212,
+      "growth_multiple": 14.0778,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "jJZkNMn11Xk",
+      "keywords": [
+        "AI tools"
+      ],
+      "t0_views": 12212,
+      "t0_vph": 2624.8,
+      "t0_v_s": 0.01,
+      "subscribers": 1890000,
+      "age": 4.6525,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 167805,
+      "absolute_growth": 155593,
+      "growth_multiple": 13.741,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "GltlkrChtfI",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 134046,
+      "t0_vph": 9880.64,
+      "t0_v_s": 0.22,
+      "subscribers": 620000,
+      "age": 13.5665,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 286923,
+      "absolute_growth": 152877,
+      "growth_multiple": 2.1405,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "C7TP7yG9bDo",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 9264,
+      "t0_vph": 3354.56,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 2.7616,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 158723,
+      "absolute_growth": 149459,
+      "growth_multiple": 17.1333,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "9aVPk0c0m0A",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 165775,
+      "t0_vph": 12512.39,
+      "t0_v_s": 0.11,
+      "subscribers": 1560000,
+      "age": 13.2489,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 313816,
+      "absolute_growth": 148041,
+      "growth_multiple": 1.893,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "K3Ha-hMiqYw",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 373937,
+      "t0_vph": 27899.75,
+      "t0_v_s": 0.03,
+      "subscribers": 14500000,
+      "age": 13.4029,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 516604,
+      "absolute_growth": 142667,
+      "growth_multiple": 1.3815,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "rnmXBJ3KFP0",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 275921,
+      "t0_vph": 16283.29,
+      "t0_v_s": 0.32,
+      "subscribers": 857000,
+      "age": 16.945,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 415203,
+      "absolute_growth": 139282,
+      "growth_multiple": 1.5048,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "o8nANPd7Tlo",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 37484,
+      "t0_vph": 6890.34,
+      "t0_v_s": 0.0,
+      "subscribers": 31400000,
+      "age": 5.4401,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 167713,
+      "absolute_growth": 130229,
+      "growth_multiple": 4.4743,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "Ek1fkW8v3iQ",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 35268,
+      "t0_vph": 5054.9,
+      "t0_v_s": 0.37,
+      "subscribers": 95600,
+      "age": 6.977,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 161539,
+      "absolute_growth": 126271,
+      "growth_multiple": 4.5803,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "hhUL8dZLhQY",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 62915,
+      "t0_vph": 3265.98,
+      "t0_v_s": 0.52,
+      "subscribers": 120000,
+      "age": 19.2637,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 189082,
+      "absolute_growth": 126167,
+      "growth_multiple": 3.0054,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "fMZ4M9PEoH8",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 4536,
+      "t0_vph": 1460.77,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 3.1052,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 129966,
+      "absolute_growth": 125430,
+      "growth_multiple": 28.6521,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "HWg75OAmJLc",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 82665,
+      "t0_vph": 4091.13,
+      "t0_v_s": 0.18,
+      "subscribers": 457000,
+      "age": 20.2059,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 206700,
+      "absolute_growth": 124035,
+      "growth_multiple": 2.5005,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "_wTOWh4m84k",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 24847,
+      "t0_vph": 2373.0,
+      "t0_v_s": 0.0,
+      "subscribers": 31400000,
+      "age": 10.4707,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 144230,
+      "absolute_growth": 119383,
+      "growth_multiple": 5.8047,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "Uhsleh6XHuk",
+      "keywords": [
+        "productivity"
+      ],
+      "t0_views": 2268,
+      "t0_vph": 144.5,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 15.695,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 120746,
+      "absolute_growth": 118478,
+      "growth_multiple": 53.239,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "X4RaIsj_Xhg",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 81353,
+      "t0_vph": 3437.14,
+      "t0_v_s": 0.15,
+      "subscribers": 543000,
+      "age": 23.6688,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 192241,
+      "absolute_growth": 110888,
+      "growth_multiple": 2.363,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "di8YnciPHJ4",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 14134,
+      "t0_vph": 2985.54,
+      "t0_v_s": 0.0,
+      "subscribers": 3260000,
+      "age": 4.7341,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 118564,
+      "absolute_growth": 104430,
+      "growth_multiple": 8.3886,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "P5-q5XSS3D8",
+      "keywords": [
+        "interesting facts"
+      ],
+      "t0_views": 90549,
+      "t0_vph": 4131.65,
+      "t0_v_s": 0.19,
+      "subscribers": 475000,
+      "age": 21.9159,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 194645,
+      "absolute_growth": 104096,
+      "growth_multiple": 2.1496,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "9viz1DOVYN0",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 26320,
+      "t0_vph": 3250.62,
+      "t0_v_s": 0.12,
+      "subscribers": 223000,
+      "age": 8.0969,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 130240,
+      "absolute_growth": 103920,
+      "growth_multiple": 4.9483,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "OUox71BlOkg",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 48692,
+      "t0_vph": 2331.52,
+      "t0_v_s": 0.34,
+      "subscribers": 143000,
+      "age": 20.8842,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 149842,
+      "absolute_growth": 101150,
+      "growth_multiple": 3.0773,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "zsPygpbzJcw",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 12416,
+      "t0_vph": 2627.27,
+      "t0_v_s": 0.28,
+      "subscribers": 45000,
+      "age": 4.7258,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 109726,
+      "absolute_growth": 97310,
+      "growth_multiple": 8.8375,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "-o5HxK4kTKI",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 88993,
+      "t0_vph": 5033.94,
+      "t0_v_s": 0.55,
+      "subscribers": 163000,
+      "age": 17.6786,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 185247,
+      "absolute_growth": 96254,
+      "growth_multiple": 2.0816,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "XTXq4EIHh2E",
+      "keywords": [
+        "history"
+      ],
+      "t0_views": 213652,
+      "t0_vph": 21127.06,
+      "t0_v_s": 0.14,
+      "subscribers": 1500000,
+      "age": 10.1127,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 306741,
+      "absolute_growth": 93089,
+      "growth_multiple": 1.4357,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "fhmcGc93H9g",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 49807,
+      "t0_vph": 5531.67,
+      "t0_v_s": 0.12,
+      "subscribers": 415000,
+      "age": 9.004,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 139303,
+      "absolute_growth": 89496,
+      "growth_multiple": 2.7969,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "LEfk7mqUOzc",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 56733,
+      "t0_vph": 4086.65,
+      "t0_v_s": 0.13,
+      "subscribers": 424000,
+      "age": 13.8825,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 143219,
+      "absolute_growth": 86486,
+      "growth_multiple": 2.5244,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "77eC3GFJ_58",
+      "keywords": [
+        "gaming"
+      ],
+      "t0_views": 111671,
+      "t0_vph": 4901.96,
+      "t0_v_s": 0.02,
+      "subscribers": 7020000,
+      "age": 22.7809,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 197667,
+      "absolute_growth": 85996,
+      "growth_multiple": 1.7701,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "AzOTQZ93g8M",
+      "keywords": [
+        "travel"
+      ],
+      "t0_views": 2455,
+      "t0_vph": 1299.74,
+      "t0_v_s": null,
+      "subscribers": null,
+      "age": 1.8888,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_views",
+      "current_views": 88332,
+      "absolute_growth": 85877,
+      "growth_multiple": 35.9804,
+      "surprise_reason": "rejected"
+    },
+    {
+      "video_id": "RLY7thhC2-0",
+      "keywords": [
+        "technology"
+      ],
+      "t0_views": 215510,
+      "t0_vph": 9293.14,
+      "t0_v_s": 0.14,
+      "subscribers": 1530000,
+      "age": 23.1902,
+      "qualification_outcome": "rejected",
+      "filter_reason": "min_viral_coeff",
+      "current_views": 299453,
+      "absolute_growth": 83943,
+      "growth_multiple": 1.3895,
+      "surprise_reason": "rejected"
+    }
+  ],
+  "conclusions": {
+    "H0_summary": "Initial T0 views were strong associated with absolute growth (Spearman rho=0.7966).",
+    "H1_summary": "T0 VPH was strong associated with absolute growth (Spearman rho=0.8275).",
+    "H2_summary": "T0 V/S was weak associated with absolute growth among V/S-available rows (Spearman rho=-0.0884); exploratory only.",
+    "strongest_observed_signal": "H1_t0_vph",
+    "strongest_rho": 0.8275
+  },
+  "limitations": [
+    "Observational snapshot over ~67h; not causal.",
+    "Missing refresh videos excluded; not counted as zero growth.",
+    "V/S coverage is sparse and selection-biased.",
+    "Cross-keyword duplicates collapsed in snapshot; keyword analysis uses multi-membership.",
+    "Negative growth preserved and may reflect YouTube view count corrections."
+  ],
+  "recommended_next_experiment": [
+    "Define stratified sampling using keyword + VPH + age; keep missing V/S explicit.",
+    "Re-run outcome window at >=72h if a longer horizon is needed.",
+    "Compare qualification rule changes using rejected top-growth cohort as audit set."
+  ],
+  "verification": {
+    "NO_NETWORK_REQUESTS": true,
+    "NO_DB_WRITES": true,
+    "joined_rows": 2794
+  }
+}

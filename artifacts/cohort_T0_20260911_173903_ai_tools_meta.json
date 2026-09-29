@@ -1,0 +1,90 @@
+{
+  "keyword": "AI tools",
+  "timestamp": "2026-09-11T17:39:03.883528+00:00",
+  "schema_version": "1.8",
+  "source": "run_radar_validation_cohort.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\cohort_T0_20260911_173903_ai_tools.jsonl",
+  "duration_seconds": 127.52,
+  "raw_candidates": 346,
+  "regular_candidates": 334,
+  "excluded_after_enrichment": 12,
+  "candidate_count": 346,
+  "passed": 1,
+  "rejected": 345,
+  "parse_errors": 0,
+  "format_violations": 0,
+  "regular_format_violations": 0,
+  "invariant_ok": true,
+  "enrichment_summary": {
+    "candidates_total": 346,
+    "enrichment_ok": 341,
+    "enrichment_partial": 5,
+    "enrichment_failed": 0,
+    "missing_video": 0,
+    "published_at_available": 346,
+    "duration_available": 346,
+    "age_hours_available": 346,
+    "vph_available": 341,
+    "final_subscribers_available": 27,
+    "views_per_subscriber_available": 27,
+    "regular_count": 334,
+    "short_count": 11,
+    "live_count": 0,
+    "unknown_count": 1
+  },
+  "regular_enrichment_summary": {
+    "candidates_total": 334,
+    "enrichment_ok": 329,
+    "enrichment_partial": 5,
+    "enrichment_failed": 0,
+    "missing_video": 0,
+    "published_at_available": 334,
+    "duration_available": 334,
+    "age_hours_available": 334,
+    "vph_available": 329,
+    "final_subscribers_available": 27,
+    "views_per_subscriber_available": 27,
+    "regular_count": 334,
+    "short_count": 0,
+    "live_count": 0,
+    "unknown_count": 0
+  },
+  "regular_qualification": {
+    "passed": 1,
+    "rejected": 333,
+    "parse_errors": 0
+  },
+  "distribution_regular": {
+    "discovery_views": {
+      "count": 334,
+      "min": 0.0,
+      "median": 112.0,
+      "max": 62084.0
+    },
+    "vph_at_t0": {
+      "count": 329,
+      "min": 0.0,
+      "median": 10.73,
+      "max": 5493.99
+    },
+    "views_per_subscriber_at_t0": {
+      "count": 27,
+      "min": 0.0,
+      "median": 0.07,
+      "max": 1691.0
+    },
+    "age_hours_at_t0": {
+      "count": 334,
+      "min": -0.6462,
+      "median": 14.342,
+      "max": 23.6821
+    },
+    "final_subscribers": {
+      "count": 27,
+      "min": 1.0,
+      "median": 132000.0,
+      "max": 6730000.0
+    }
+  },
+  "missing_video_count": 0
+}

@@ -1,0 +1,18 @@
+{
+  "keyword": "fitness",
+  "timestamp": "2026-09-11T10:35:21.569938+00:00",
+  "min_views": 10000,
+  "min_viral_coeff": 3.0,
+  "upload_period": "all",
+  "register_channels": false,
+  "production_db_registration": false,
+  "total_candidates": 429,
+  "passed": 9,
+  "rejected": 420,
+  "parse_errors": 0,
+  "source": "run_radar_multi_keyword_dataset.py",
+  "dataset_path": "C:\\Projects\\Сайт анализ ниш1\\artifacts\\radar_candidates_20260911_103521_fitness.jsonl",
+  "duration_seconds": 143.84,
+  "pages_scanned": 25,
+  "schema_version": "1.7"
+}

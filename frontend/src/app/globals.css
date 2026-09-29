@@ -22,6 +22,33 @@
     --input: 215 28% 16%;
     --ring: 263 70% 58%;
     --radius: 0.625rem;
+
+    /* Surfaces (design system 1.21B) */
+    --surface-raised: 224 71% 7%;
+    --surface-sunken: 215 28% 10%;
+
+    /* Semantic status — system / worker */
+    --status-ok: 152 45% 42%;
+    --status-warn: 38 70% 48%;
+    --status-error: 0 62% 52%;
+    --status-unknown: 217 10% 55%;
+
+    /* Lifecycle */
+    --lifecycle-probation: 215 50% 52%;
+    --lifecycle-active: 152 40% 45%;
+    --lifecycle-weak: 38 55% 50%;
+    --lifecycle-archived: 217 10% 50%;
+
+    /* Evidence */
+    --evidence-insufficient: 217 10% 55%;
+    --evidence-early: 38 55% 50%;
+    --evidence-established: 152 40% 45%;
+
+    /* Checkpoint */
+    --checkpoint-due: 38 70% 48%;
+    --checkpoint-overdue: 0 62% 52%;
+    --checkpoint-pending: 217 15% 58%;
+    --checkpoint-done: 152 35% 42%;
   }
 
   * {

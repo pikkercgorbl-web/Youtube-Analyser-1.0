@@ -37,6 +37,173 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_explosive_channels_video_id(engine)
     ensure_explosive_channels_vph(engine)
     ensure_radar_worker_state_status(engine)
+    ensure_video_snapshots_table(engine)
+    ensure_monitoring_worker_state_table(engine)
+    ensure_monitoring_cycle_runs_table(engine)
+    ensure_discovery_worker_state_table(engine)
+    ensure_keyword_performance_tables(engine)
+    ensure_target_keywords_lifecycle_columns(engine)
+    ensure_keyword_lifecycle_events_table(engine)
+    ensure_keyword_expansion_events_table(engine)
+
+
+def ensure_monitoring_cycle_runs_table(engine: Engine) -> None:
+    """Create monitoring_cycle_runs table when missing (Stage 1.14A)."""
+    inspector = inspect(engine)
+    if "monitoring_cycle_runs" in inspector.get_table_names():
+        return
+
+    from app.models.orm import MonitoringCycleRun
+
+    MonitoringCycleRun.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created monitoring_cycle_runs table")
+
+
+def ensure_monitoring_worker_state_table(engine: Engine) -> None:
+    """Create monitoring_worker_state table when missing (Stage 1.13C)."""
+    inspector = inspect(engine)
+    if "monitoring_worker_state" in inspector.get_table_names():
+        return
+
+    from app.models.orm import MonitoringWorkerState
+
+    MonitoringWorkerState.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created monitoring_worker_state table")
+
+
+def ensure_target_keywords_lifecycle_columns(engine: Engine) -> None:
+    """Add lifecycle/scheduling columns and backfill (Stage 1.16B)."""
+    inspector = inspect(engine)
+    if "target_keywords" not in inspector.get_table_names():
+        return
+
+    column_names = {column["name"] for column in inspector.get_columns("target_keywords")}
+    alters: list[str] = []
+    if "lifecycle_status" not in column_names:
+        alters.append("ALTER TABLE target_keywords ADD COLUMN lifecycle_status VARCHAR(16) NOT NULL DEFAULT 'active'")
+    if "scan_interval_seconds" not in column_names:
+        alters.append("ALTER TABLE target_keywords ADD COLUMN scan_interval_seconds INTEGER DEFAULT NULL")
+    if "next_scan_at" not in column_names:
+        alters.append("ALTER TABLE target_keywords ADD COLUMN next_scan_at TIMESTAMP DEFAULT NULL")
+    if "status_changed_at" not in column_names:
+        alters.append("ALTER TABLE target_keywords ADD COLUMN status_changed_at TIMESTAMP DEFAULT NULL")
+    if "status_reason" not in column_names:
+        alters.append("ALTER TABLE target_keywords ADD COLUMN status_reason VARCHAR(256) DEFAULT NULL")
+    if "source_type" not in column_names:
+        alters.append("ALTER TABLE target_keywords ADD COLUMN source_type VARCHAR(16) NOT NULL DEFAULT 'seed'")
+    if "parent_keyword_id" not in column_names:
+        alters.append("ALTER TABLE target_keywords ADD COLUMN parent_keyword_id INTEGER DEFAULT NULL")
+
+    if alters:
+        with engine.begin() as connection:
+            for statement in alters:
+                connection.execute(text(statement))
+        logger.info("Added target_keywords lifecycle columns")
+
+    _backfill_target_keyword_scheduling(engine)
+
+
+def _backfill_target_keyword_scheduling(engine: Engine) -> None:
+    from datetime import timedelta
+
+    from sqlalchemy.orm import Session
+
+    from app.models.db import SessionLocal
+    from app.models.orm import TargetKeyword
+    from app.services.keyword_scheduling_policy import DEFAULT_SCHEDULING_POLICY
+    from app.services.metrics import utc_now
+
+    session = Session(engine)
+    try:
+        now = utc_now()
+        policy = DEFAULT_SCHEDULING_POLICY
+        from sqlalchemy import select
+
+        rows = session.scalars(select(TargetKeyword)).all()
+        changed = False
+        for row in rows:
+            if not row.lifecycle_status:
+                row.lifecycle_status = "active"
+                changed = True
+            if not row.source_type:
+                row.source_type = "seed"
+                changed = True
+            interval = policy.interval_seconds_for(row.lifecycle_status)
+            if row.scan_interval_seconds is None and interval is not None:
+                row.scan_interval_seconds = interval
+                changed = True
+            if row.next_scan_at is None and row.lifecycle_status != "archived":
+                if row.last_checked is not None:
+                    row.next_scan_at = row.last_checked + timedelta(
+                        hours=policy.active_interval_hours,
+                    )
+                else:
+                    row.next_scan_at = now
+                changed = True
+            if row.status_changed_at is None:
+                row.status_changed_at = row.created_at or now
+                changed = True
+        if changed:
+            session.commit()
+    finally:
+        session.close()
+
+
+def ensure_keyword_expansion_events_table(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "keyword_expansion_events" in inspector.get_table_names():
+        return
+    from app.models.orm import KeywordExpansionEvent
+
+    KeywordExpansionEvent.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created keyword_expansion_events table")
+
+
+def ensure_keyword_lifecycle_events_table(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "keyword_lifecycle_events" in inspector.get_table_names():
+        return
+    from app.models.orm import KeywordLifecycleEvent
+
+    KeywordLifecycleEvent.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created keyword_lifecycle_events table")
+
+
+def ensure_keyword_performance_tables(engine: Engine) -> None:
+    """Create keyword scan/hit tables when missing (Stage 1.16A)."""
+    inspector = inspect(engine)
+    from app.models.orm import KeywordDiscoveryHit, KeywordScanRun
+
+    if "keyword_scan_runs" not in inspector.get_table_names():
+        KeywordScanRun.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created keyword_scan_runs table")
+    if "keyword_discovery_hits" not in inspector.get_table_names():
+        KeywordDiscoveryHit.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created keyword_discovery_hits table")
+
+
+def ensure_discovery_worker_state_table(engine: Engine) -> None:
+    """Create discovery_worker_state table when missing (Stage 1.15B)."""
+    inspector = inspect(engine)
+    if "discovery_worker_state" in inspector.get_table_names():
+        return
+
+    from app.models.orm import DiscoveryWorkerState
+
+    DiscoveryWorkerState.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created discovery_worker_state table")
+
+
+def ensure_video_snapshots_table(engine: Engine) -> None:
+    """Create video_snapshots table when missing (Stage 1.11)."""
+    inspector = inspect(engine)
+    if "video_snapshots" in inspector.get_table_names():
+        return
+
+    from app.models.orm import VideoSnapshot
+
+    VideoSnapshot.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created video_snapshots table")
 
 
 def ensure_radar_worker_state_status(engine: Engine) -> None:

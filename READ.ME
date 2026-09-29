@@ -185,3 +185,21 @@ npm run dev
 ```
 
 Удачной работы с NicheScope.
+
+
+Бэк 
+pip install -r requirements.txt
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+
+ngrok
+# Терминал 3
+ngrok http 3000
+
+frontend
+cd frontend
+npm install
+npm run dev
+
+python scripts/run_discovery_worker.py
+
+python scripts/run_monitoring_worker.py

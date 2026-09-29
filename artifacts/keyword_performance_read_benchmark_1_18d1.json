@@ -1,0 +1,63 @@
+{
+  "schema": "1.18D1",
+  "dataset": {
+    "keyword_count": 89,
+    "hit_count": 8461,
+    "limit": 89
+  },
+  "benchmarks": {
+    "A_base_only": {
+      "include_breakout": false,
+      "include_delayed": false,
+      "runtime_seconds": 2.7409,
+      "sql_query_count": 4,
+      "keywords_returned": 89,
+      "global_eligible_video_count": 0,
+      "attributed_videos_sum": 8461
+    },
+    "B_base_breakout": {
+      "include_breakout": true,
+      "include_delayed": false,
+      "runtime_seconds": 4.719,
+      "sql_query_count": 22,
+      "keywords_returned": 89,
+      "global_eligible_video_count": 0,
+      "attributed_videos_sum": 8461
+    },
+    "C_base_delayed": {
+      "include_breakout": false,
+      "include_delayed": true,
+      "runtime_seconds": 1.2153,
+      "sql_query_count": 5,
+      "keywords_returned": 89,
+      "global_eligible_video_count": 0,
+      "attributed_videos_sum": 8461
+    },
+    "D_full": {
+      "include_breakout": true,
+      "include_delayed": true,
+      "runtime_seconds": 3.9607,
+      "sql_query_count": 23,
+      "keywords_returned": 89,
+      "global_eligible_video_count": 0,
+      "attributed_videos_sum": 8461
+    }
+  },
+  "profile_full": {
+    "phases_seconds": {
+      "keyword_load": 0.14263329992536455,
+      "breakout_monitoring_pool": 3.0895780000137165,
+      "batch_evaluation": 1.0648721000179648,
+      "serialization_prep": 0.001702300040051341,
+      "total": 4.298785699997097
+    },
+    "sql_query_count": 24,
+    "row_counts": {
+      "keywords_loaded": 89,
+      "global_monitoring_videos": 6641,
+      "global_breakout_eligible": 0,
+      "discovery_hits_total": 8461,
+      "attributed_videos_sum": 8461
+    }
+  }
+}

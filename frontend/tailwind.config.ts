@@ -39,6 +39,33 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        surface: {
+          raised: "hsl(var(--surface-raised))",
+          sunken: "hsl(var(--surface-sunken))",
+        },
+        status: {
+          ok: "hsl(var(--status-ok))",
+          warn: "hsl(var(--status-warn))",
+          error: "hsl(var(--status-error))",
+          unknown: "hsl(var(--status-unknown))",
+        },
+        lifecycle: {
+          probation: "hsl(var(--lifecycle-probation))",
+          active: "hsl(var(--lifecycle-active))",
+          weak: "hsl(var(--lifecycle-weak))",
+          archived: "hsl(var(--lifecycle-archived))",
+        },
+        evidence: {
+          insufficient: "hsl(var(--evidence-insufficient))",
+          early: "hsl(var(--evidence-early))",
+          established: "hsl(var(--evidence-established))",
+        },
+        checkpoint: {
+          due: "hsl(var(--checkpoint-due))",
+          overdue: "hsl(var(--checkpoint-overdue))",
+          pending: "hsl(var(--checkpoint-pending))",
+          done: "hsl(var(--checkpoint-done))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
