@@ -1,22 +1,8 @@
 /**
- * Stage 1.22C integration point — Saved Topics / Watchlist.
- *
- * Bookmark identity is backend `family_key` (Pattern Family).
- * Underlying Pattern rows remain audit-only (`pattern_key`).
- *
- * Future SavedTopic must support:
- * - Frozen Snapshot (Attention run_id + family_key at save time)
- * - Live State
- * - History
- * - User status
- * - Notes / tags
- *
- * Do not persist in localStorage.
+ * Stage 1.22C — Saved Topics / Watchlist (backend `family_key`).
  */
 
 export const SAVED_TOPICS_STAGE = "1.22C";
-
-export const SAVED_TOPIC_DISABLED_HINT = "Закладки будут подключены на следующем этапе";
 
 export type SavedTopicDraft = {
   familyKey: string;
@@ -27,5 +13,35 @@ export function savedTopicAffordance(_draft: SavedTopicDraft): {
   enabled: boolean;
   hint: string;
 } {
-  return { enabled: false, hint: SAVED_TOPIC_DISABLED_HINT };
+  return { enabled: true, hint: "Сохранить тему в watchlist" };
 }
+
+export const SAVED_TOPIC_STATUS_LABELS: Record<string, string> = {
+  WATCHING: "Наблюдаю",
+  WANT_TO_TEST: "Хочу протестировать",
+  TESTING: "Тестирую",
+  DROPPED: "Отложил",
+};
+
+export const FAMILY_ABSENCE_MESSAGE =
+  "Тема не представлена в текущей выборке Attention Engine";
+
+export const FINDING_RATING_LABELS: Record<string, string> = {
+  USEFUL: "Полезно",
+  NOT_USEFUL: "Не полезно",
+  UNCLEAR: "Пока неясно",
+};
+
+export const OWN_TEST_OUTCOME_LABELS: Record<string, string> = {
+  UNKNOWN: "Результат неизвестен",
+  BETTER: "Лучше ожиданий",
+  AS_EXPECTED: "Примерно как ожидалось",
+  WORSE: "Хуже ожиданий",
+};
+
+export const EVENT_TYPE_LABELS: Record<string, string> = {
+  status_changed: "Смена статуса",
+  archived: "Архив",
+  restored: "Восстановление",
+  feedback_added: "Новая оценка",
+};

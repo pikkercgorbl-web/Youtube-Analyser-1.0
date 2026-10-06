@@ -57,6 +57,7 @@ class FakeYouTubeClient:
                 channel_id=channel_id,
                 title=f"Channel {channel_id}",
                 subscribers_count=self._subscribers.get(channel_id, 100_000),
+                subscribers_known=True,
             )
             for channel_id in channel_ids
         }

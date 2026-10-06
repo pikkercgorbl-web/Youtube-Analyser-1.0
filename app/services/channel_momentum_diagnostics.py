@@ -1,0 +1,13 @@
+"""Diagnostic codes when Channel Momentum signal is not published."""
+
+from __future__ import annotations
+
+DIAG_SUBSCRIBER_UNAVAILABLE = "subscriber_count_unavailable_or_above_cap"
+DIAG_INSUFFICIENT_RECENT_ELIGIBLE = "insufficient_recent_eligible_videos"
+DIAG_INSUFFICIENT_PREVIOUS_IN_WINDOW = "insufficient_previous_videos_in_window"
+DIAG_FORMAT_NOT_CONFIRMED = "format_not_confirmed"
+DIAG_NO_SNAPSHOT_AT_HORIZON = "missing_snapshot_at_configured_age"
+DIAG_INSUFFICIENT_MEASURABLE_PREVIOUS = "insufficient_previous_age_aligned_measurements"
+DIAG_INSUFFICIENT_MEASURABLE_RECENT = "insufficient_recent_age_aligned_measurements"
+DIAG_ZERO_PREVIOUS_BASELINE = "previous_median_vph_zero"
+DIAG_INSUFFICIENT_REPEATED_IMPROVEMENT = "insufficient_recent_videos_beating_previous_median"

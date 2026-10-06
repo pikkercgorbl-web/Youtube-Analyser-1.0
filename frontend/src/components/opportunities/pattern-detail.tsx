@@ -159,9 +159,9 @@ export function PatternDetailView({ patternKey }: { patternKey: string }) {
             <p className="text-lg font-semibold">{pattern.keyword_count}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Выборка Breakout</p>
+            <p className="text-xs text-muted-foreground">Breakout</p>
             <p className="text-sm">
-              {pattern.breakout_video_count} видео входят в выборку Breakout
+              {pattern.breakout_video_count} видео подходят для анализа Breakout
             </p>
           </div>
         </div>

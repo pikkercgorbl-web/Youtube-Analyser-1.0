@@ -17,6 +17,8 @@ from app.services.metrics import ensure_utc
 from app.services.radar_candidate import RadarCandidate
 from app.services.radar_candidate_analysis import _percentile
 from app.services.radar_candidate_enrichment import SHORT_DURATION_SECONDS
+from app.services.video_format_from_api import infer_video_format_from_details
+from app.models.orm import VideoFormat
 from app.services.video_filter_service import parse_duration_text
 
 BASELINE_SCHEMA_VERSION = "1.10A"
@@ -191,6 +193,16 @@ def build_eligible_history(
             else parse_duration_text(browse.duration_text)
         )
         fmt = classify_history_format(duration_seconds=duration, browse=browse)
+        if details is not None:
+            api_fmt = infer_video_format_from_details(details)
+            if api_fmt == VideoFormat.SHORT:
+                fmt = "short"
+            elif api_fmt == VideoFormat.LIVE:
+                fmt = "live"
+            elif api_fmt in (VideoFormat.MEDIUM, VideoFormat.LONG):
+                fmt = "regular"
+            elif api_fmt == VideoFormat.UNKNOWN:
+                fmt = "unknown"
         if fmt == "short":
             exclusion_counts["shorts_excluded"] = exclusion_counts.get("shorts_excluded", 0) + 1
             continue

@@ -49,8 +49,8 @@ export function PatternCard({
           <dd className="inline">{pattern.keyword_count}</dd>
         </div>
         <div>
-          <dt className="inline">Выборка Breakout: </dt>
-          <dd className="inline">{pattern.breakout_video_count} видео входят в выборку Breakout</dd>
+          <dt className="inline">Breakout: </dt>
+          <dd className="inline">{pattern.breakout_video_count} видео подходят для анализа Breakout</dd>
         </div>
         <div className="col-span-2" data-testid="pattern-activity">
           <dt>Активность по периодам</dt>

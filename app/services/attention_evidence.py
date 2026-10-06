@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.orm import Channel, ChannelSnapshot, KeywordDiscoveryHit, TargetKeyword, Video, VideoFormat, VideoSnapshot
+from app.services.radar_target_eligibility import resolve_known_subscribers
 from app.services.breakout_ranking_service import breakout_fundamental_eligibility, rank_breakout_v1
 from app.services.metrics import ensure_utc
 from app.services.monitoring_tier_budget_policy import DEFAULT_MAX_AGE_MONITORING_HOURS
@@ -48,6 +49,7 @@ class AttentionEvidenceBundle:
     hits_by_keyword: dict[int, list[KeywordDiscoveryHit]]
     keyword_text: dict[int, str]
     channel_snapshots: dict[str, list[ChannelSnapshot]]
+    channels_by_id: dict[str, Channel]
     extra_channel_videos: dict[str, list[Video]]
     extra_video_states: dict[str, MonitoredVideoState]
     extra_latest_snapshots: dict[str, VideoSnapshot]
@@ -61,13 +63,7 @@ def resolve_subscribers(
     latest_snapshot: VideoSnapshot | None,
 ) -> int | None:
     """Missing subscriber observations stay None. Stored 0 on Channel is not treated as known."""
-    if latest_snapshot is not None and latest_snapshot.subscribers is not None:
-        return int(latest_snapshot.subscribers)
-    if channel is None:
-        return None
-    if channel.subscribers_count and channel.subscribers_count > 0:
-        return int(channel.subscribers_count)
-    return None
+    return resolve_known_subscribers(channel=channel, latest_snapshot=latest_snapshot)
 
 
 def load_candidate_video_ids(
@@ -88,7 +84,7 @@ def load_candidate_video_ids(
         select(Video.id).where(
             Video.published_at >= start,
             Video.published_at <= end,
-            Video.content_format.not_in((VideoFormat.SHORT, VideoFormat.LIVE)),
+            Video.content_format.not_in((VideoFormat.SHORT, VideoFormat.LIVE, VideoFormat.UNKNOWN)),
         ),
     ).all()
     return list(dict.fromkeys([*hit_ids, *published_ids]))
@@ -117,7 +113,7 @@ def load_attention_evidence(
                     Video.channel_id.in_(chunk),
                     Video.published_at >= lookback,
                     Video.published_at <= end,
-                    Video.content_format.not_in((VideoFormat.SHORT, VideoFormat.LIVE)),
+                    Video.content_format.not_in((VideoFormat.SHORT, VideoFormat.LIVE, VideoFormat.UNKNOWN)),
                 ),
             ).all(),
         )
@@ -232,6 +228,7 @@ def load_attention_evidence(
         hits_by_keyword=dict(hits_by_keyword),
         keyword_text=keyword_text,
         channel_snapshots=dict(channel_snaps),
+        channels_by_id=channel_by_id,
         extra_channel_videos=dict(extra_videos_by_channel),
         extra_video_states=extra_states,
         extra_latest_snapshots=extra_latest,

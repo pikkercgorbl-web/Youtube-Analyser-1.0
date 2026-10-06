@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import enum
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import (
     BigInteger,
     Boolean,
+    Date,
     DateTime,
     Enum,
     ForeignKey,
@@ -48,6 +49,15 @@ class Channel(Base):
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     subscribers_count: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
+    subscribers_api_status: Mapped[str | None] = mapped_column(
+        String(16),
+        nullable=True,
+        comment="channels.list: known | hidden | missing | failed",
+    )
+    subscribers_api_checked_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
     topic: Mapped[str | None] = mapped_column(String(128), nullable=True)
     custom_url: Mapped[str | None] = mapped_column(
         String(128),
@@ -114,6 +124,11 @@ class Video(Base):
         DateTime(timezone=True),
         nullable=False,
         comment="Video upload date on YouTube",
+    )
+    published_at_source: Mapped[str | None] = mapped_column(
+        String(32),
+        nullable=True,
+        comment="innertube_relative | api_snippet",
     )
     duration_seconds: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     content_format: Mapped[VideoFormat] = mapped_column(
@@ -845,6 +860,132 @@ class AttentionFamilyIdentity(Base):
     pattern_key: Mapped[str] = mapped_column(String(128), primary_key=True)
     family_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ChannelSubscriberEnrichmentAttempt(Base):
+    """channels.list subscriber checks when Channel row may be absent (Stage 2.5)."""
+
+    __tablename__ = "channel_subscriber_enrichment_attempts"
+
+    channel_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    last_attempt_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        index=True,
+    )
+    last_outcome: Mapped[str] = mapped_column(String(32), nullable=False)
+
+
+class RadarApiBudgetDay(Base):
+    """UTC-day reserved ID units and HTTP batch counts for enrichment API caps (Stage 2.5)."""
+
+    __tablename__ = "radar_api_budget_daily"
+
+    budget_kind: Mapped[str] = mapped_column(String(32), primary_key=True)
+    utc_day: Mapped[date] = mapped_column(Date, primary_key=True)
+    id_units_reserved: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    http_requests: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+
+
+class VideoFormatEnrichmentAttempt(Base):
+    """Tracks videos.list format checks for daily budget and queue rotation (Stage 2.1)."""
+
+    __tablename__ = "video_format_enrichment_attempts"
+
+    video_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    last_attempt_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        index=True,
+    )
+    last_outcome: Mapped[str] = mapped_column(String(32), nullable=False, default="planned")
+
+
+class SavedTopicStatus(str, enum.Enum):
+    WATCHING = "WATCHING"
+    WANT_TO_TEST = "WANT_TO_TEST"
+    TESTING = "TESTING"
+    DROPPED = "DROPPED"
+
+
+class SavedTopic(Base):
+    """User watchlist entry keyed by Pattern Family (Stage 1.22C)."""
+
+    __tablename__ = "saved_topics"
+    __table_args__ = (UniqueConstraint("family_key", name="uq_saved_topics_family_key"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    family_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default=SavedTopicStatus.WATCHING.value)
+    notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    tags_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    frozen_snapshot_json: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+    archived_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+
+
+class SavedTopicEvent(Base):
+    """Append-only user decision log for a saved topic (Stage 1.22D)."""
+
+    __tablename__ = "saved_topic_events"
+    __table_args__ = (Index("ix_saved_topic_events_topic_occurred", "saved_topic_id", "occurred_at"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_topic_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_topics.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    event_type: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
+class SavedTopicFeedback(Base):
+    """Append-only analyst feedback on a saved topic (Stage 1.22D)."""
+
+    __tablename__ = "saved_topic_feedback"
+    __table_args__ = (Index("ix_saved_topic_feedback_topic_recorded", "saved_topic_id", "recorded_at"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_topic_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_topics.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    recorded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    finding_rating: Mapped[str] = mapped_column(String(16), nullable=False)
+    reason_comment: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    own_test_video_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    own_test_video_published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    own_test_outcome: Mapped[str] = mapped_column(String(24), nullable=False, default="UNKNOWN")
+    manual_metrics_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
+class SavedTopicObservation(Base):
+    """Append-only live-state capture per Attention publication (Stage 1.22C)."""
+
+    __tablename__ = "saved_topic_observations"
+    __table_args__ = (
+        UniqueConstraint("saved_topic_id", "attention_run_id", name="uq_saved_topic_observation_run"),
+        Index("ix_saved_topic_observations_topic_captured", "saved_topic_id", "captured_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_topic_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_topics.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    attention_run_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
 
 
 class AttentionChannelMomentumRow(Base):

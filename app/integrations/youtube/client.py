@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import enum
 import json
 import logging
 import re
@@ -15,7 +16,7 @@ from collections.abc import AsyncIterator
 from urllib.parse import quote_plus
 
 import httpx
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from app.integrations.youtube.innertube_metrics import (
     NULL_INNERTUBE_METRICS,
@@ -98,13 +99,17 @@ class YouTubeVideoDetails:
     comments_count: int
     duration_seconds: int
     tags: tuple[str, ...] = ()
+    live_broadcast_content: str | None = None
+    has_live_streaming_details: bool = False
 
 
 @dataclass(frozen=True, slots=True)
 class YouTubeChannelDetails:
     channel_id: str
     title: str
-    subscribers_count: int
+    subscribers_count: int | None
+    subscribers_known: bool = False
+    subscribers_hidden: bool = False
 
 
 class ChannelDetailModel(BaseModel):
@@ -119,6 +124,16 @@ class ChannelDetailModel(BaseModel):
     is_artist: bool = False
     is_kids: bool = False
     channel_avatar_url: str = ""
+
+
+class LiveBroadcastStatus(str, enum.Enum):
+    """Structured live-stream state from InnerTube search cards (not title heuristics)."""
+
+    NONE = "none"
+    UPCOMING = "upcoming"
+    LIVE = "live"
+    COMPLETED = "completed"
+    UNKNOWN = "unknown"
 
 
 class VideoSearchModel(BaseModel):
@@ -136,7 +151,20 @@ class VideoSearchModel(BaseModel):
     subscribers_count: int = Field(default=0, ge=0)
     is_short: bool = False
     is_live: bool = False
+    live_broadcast_status: LiveBroadcastStatus = LiveBroadcastStatus.NONE
     content_renderer: str = "videoRenderer"
+
+    @model_validator(mode="after")
+    def _sync_live_fields(self) -> VideoSearchModel:
+        status = self.live_broadcast_status
+        if self.is_live and status == LiveBroadcastStatus.NONE:
+            object.__setattr__(self, "live_broadcast_status", LiveBroadcastStatus.LIVE)
+            status = LiveBroadcastStatus.LIVE
+        if status in (LiveBroadcastStatus.UPCOMING, LiveBroadcastStatus.LIVE):
+            object.__setattr__(self, "is_live", True)
+        elif status == LiveBroadcastStatus.NONE:
+            object.__setattr__(self, "is_live", False)
+        return self
 
 
 @dataclass(frozen=True, slots=True)
@@ -299,7 +327,7 @@ class YouTubeApiClient:
             payload = self._request(
                 "videos",
                 {
-                    "part": "snippet,statistics,contentDetails",
+                    "part": "snippet,statistics,contentDetails,liveStreamingDetails",
                     "id": ",".join(chunk),
                     "maxResults": len(chunk),
                 },
@@ -311,6 +339,10 @@ class YouTubeApiClient:
                 content_details = item.get("contentDetails", {})
                 if not video_id:
                     continue
+                lbc_raw = snippet.get("liveBroadcastContent")
+                live_bc = str(lbc_raw).strip().lower() if lbc_raw is not None else None
+                streaming = item.get("liveStreamingDetails")
+                has_streaming = isinstance(streaming, dict) and bool(streaming)
                 results.append(
                     YouTubeVideoDetails(
                         video_id=video_id,
@@ -324,6 +356,8 @@ class YouTubeApiClient:
                             content_details.get("duration", "PT0S"),
                         ),
                         tags=tuple(snippet.get("tags") or []),
+                        live_broadcast_content=live_bc,
+                        has_live_streaming_details=has_streaming,
                     ),
                 )
         return results
@@ -980,11 +1014,24 @@ class YouTubeApiClient:
                     continue
                 snippet = item.get("snippet", {})
                 statistics = item.get("statistics", {})
-                channels[channel_id] = YouTubeChannelDetails(
-                    channel_id=channel_id,
-                    title=snippet.get("title", ""),
-                    subscribers_count=_safe_int(statistics.get("subscriberCount")),
-                )
+                hidden = statistics.get("hiddenSubscriberCount") is True
+                raw_subs = statistics.get("subscriberCount")
+                if hidden or raw_subs is None:
+                    channels[channel_id] = YouTubeChannelDetails(
+                        channel_id=channel_id,
+                        title=snippet.get("title", ""),
+                        subscribers_count=None,
+                        subscribers_known=False,
+                        subscribers_hidden=hidden,
+                    )
+                else:
+                    channels[channel_id] = YouTubeChannelDetails(
+                        channel_id=channel_id,
+                        title=snippet.get("title", ""),
+                        subscribers_count=_safe_int(raw_subs),
+                        subscribers_known=True,
+                        subscribers_hidden=False,
+                    )
         return channels
 
     def _request(self, endpoint: str, params: dict[str, str | int]) -> dict[str, Any]:
@@ -1755,22 +1802,24 @@ def _parse_playlist_video_search_renderer(renderer: dict[str, Any]) -> VideoSear
         return None
 
     channel_id, channel_title = _extract_channel_metadata_from_renderer(renderer)
-    return VideoSearchModel(
-        video_id=video_id,
-        channel_id=channel_id,
-        channel_title=channel_title,
-        title=title,
-        views_count=parse_compact_int(
-            renderer.get("shortViewCountText") or renderer.get("viewCountText"),
+    return _apply_live_broadcast_classification(
+        VideoSearchModel(
+            video_id=video_id,
+            channel_id=channel_id,
+            channel_title=channel_title,
+            title=title,
+            views_count=parse_compact_int(
+                renderer.get("shortViewCountText") or renderer.get("viewCountText"),
+            ),
+            published_text=_extract_published_text_from_renderer(renderer),
+            duration_text=_text_from_node(renderer.get("lengthText")),
+            thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
+            channel_avatar_url=_extract_video_channel_avatar_url(renderer),
+            subscribers_count=_extract_subscribers_from_renderer(renderer),
+            is_short=False,
+            content_renderer="playlistVideoRenderer",
         ),
-        published_text=_extract_published_text_from_renderer(renderer),
-        duration_text=_text_from_node(renderer.get("lengthText")),
-        thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
-        channel_avatar_url=_extract_video_channel_avatar_url(renderer),
-        subscribers_count=_extract_subscribers_from_renderer(renderer),
-        is_short=False,
-        is_live=False,
-        content_renderer="playlistVideoRenderer",
+        renderer,
     )
 
 
@@ -1895,24 +1944,25 @@ def _parse_video_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
     )
     duration_text = _text_from_node(renderer.get("lengthText"))
     is_short = _video_renderer_is_short(renderer) or "/shorts/" in _renderer_navigation_url(renderer)
-    is_live = _video_renderer_is_live(renderer)
     if is_short and not duration_text:
         duration_text = "0:00"
 
-    return VideoSearchModel(
-        video_id=video_id,
-        channel_id=channel_id,
-        channel_title=channel_title,
-        title=title,
-        views_count=parse_compact_int(renderer.get("viewCountText")),
-        published_text=_extract_published_text_from_renderer(renderer),
-        duration_text=duration_text,
-        thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
-        channel_avatar_url=_extract_video_channel_avatar_url(renderer),
-        subscribers_count=_extract_subscribers_from_renderer(renderer),
-        is_short=is_short,
-        is_live=is_live,
-        content_renderer="videoRenderer",
+    return _apply_live_broadcast_classification(
+        VideoSearchModel(
+            video_id=video_id,
+            channel_id=channel_id,
+            channel_title=channel_title,
+            title=title,
+            views_count=parse_compact_int(renderer.get("viewCountText")),
+            published_text=_extract_published_text_from_renderer(renderer),
+            duration_text=duration_text,
+            thumbnail_url=_extract_largest_thumbnail_url(renderer.get("thumbnail")),
+            channel_avatar_url=_extract_video_channel_avatar_url(renderer),
+            subscribers_count=_extract_subscribers_from_renderer(renderer),
+            is_short=is_short,
+            content_renderer="videoRenderer",
+        ),
+        renderer,
     )
 
 
@@ -1935,15 +1985,6 @@ def _video_renderer_is_short(renderer: dict[str, Any]) -> bool:
     return False
 
 
-_LIVE_BADGE_NEEDLES = (
-    "live",
-    "в эфире",
-    "на эфире",
-    "прямая трансляция",
-    "прямой эфир",
-)
-
-
 def _renderer_navigation_url(renderer: dict[str, Any]) -> str:
     navigation = renderer.get("navigationEndpoint")
     if not isinstance(navigation, dict):
@@ -1958,40 +1999,150 @@ def _renderer_navigation_url(renderer: dict[str, Any]) -> str:
     return url if isinstance(url, str) else ""
 
 
-def _video_renderer_is_live(renderer: dict[str, Any]) -> bool:
-    """Detect live/upcoming streams from InnerTube search card badges."""
+_LIVE_BADGE_LABELS_ACTIVE = frozenset(
+    {
+        "live",
+        "live now",
+        "в эфире",
+        "на эфире",
+    },
+)
+_LIVE_BADGE_LABELS_UPCOMING = frozenset(
+    {
+        "upcoming",
+        "premiere",
+        "premieres",
+        "ожидается",
+        "премьера",
+    },
+)
+_LIVE_BADGE_LABELS_COMPLETED_PREFIXES = (
+    "streamed live",
+    "was live",
+    "запись трансляции",
+    "трансляция записана",
+    "запись эфира",
+)
+
+
+def _normalize_badge_label(label: str) -> str:
+    return " ".join(label.strip().lower().split())
+
+
+def _badge_label_indicates_completed(label: str) -> bool:
+    normalized = _normalize_badge_label(label)
+    return any(normalized.startswith(prefix) for prefix in _LIVE_BADGE_LABELS_COMPLETED_PREFIXES)
+
+
+def _classify_from_metadata_badge(metadata_badge: dict[str, Any]) -> LiveBroadcastStatus | None:
+    label = _normalize_badge_label(_text_from_node(metadata_badge.get("label")))
+    if not label:
+        return None
+    style = str(metadata_badge.get("style", "")).upper()
+    if label in _LIVE_BADGE_LABELS_UPCOMING or "UPCOMING" in style or "PREMIERE" in style:
+        return LiveBroadcastStatus.UPCOMING
+    if _badge_label_indicates_completed(label):
+        return LiveBroadcastStatus.COMPLETED
+    if label in _LIVE_BADGE_LABELS_ACTIVE or "LIVE_NOW" in style or style == "LIVE":
+        return LiveBroadcastStatus.LIVE
+    return None
+
+
+def _classify_from_time_status_overlay(time_status: dict[str, Any]) -> LiveBroadcastStatus | None:
+    style = str(time_status.get("style", "")).upper()
+    if style == "LIVE":
+        return LiveBroadcastStatus.LIVE
+    label = _normalize_badge_label(_text_from_node(time_status.get("text")))
+    if label in _LIVE_BADGE_LABELS_ACTIVE:
+        return LiveBroadcastStatus.LIVE
+    return None
+
+
+def _iter_metadata_badges(renderer: dict[str, Any]) -> list[dict[str, Any]]:
+    badges: list[dict[str, Any]] = []
+    for badge in renderer.get("badges") or []:
+        if isinstance(badge, dict) and isinstance(badge.get("metadataBadgeRenderer"), dict):
+            badges.append(badge["metadataBadgeRenderer"])
+
+    metadata_root = renderer.get("metadata", {})
+    if isinstance(metadata_root, dict):
+        metadata_root = metadata_root.get("lockupMetadataViewModel", metadata_root)
+    if isinstance(metadata_root, dict):
+        for badge in metadata_root.get("badges") or []:
+            if isinstance(badge, dict) and isinstance(badge.get("metadataBadgeRenderer"), dict):
+                badges.append(badge["metadataBadgeRenderer"])
+    return badges
+
+
+def _renderer_exposes_live_metadata(renderer: dict[str, Any]) -> bool:
     if renderer.get("upcomingEventData"):
         return True
+    if renderer.get("thumbnailOverlays") is not None:
+        return True
+    if renderer.get("badges"):
+        return True
+    metadata_root = renderer.get("metadata", {})
+    if isinstance(metadata_root, dict):
+        lockup_meta = metadata_root.get("lockupMetadataViewModel", metadata_root)
+        if isinstance(lockup_meta, dict) and lockup_meta.get("badges"):
+            return True
+    return False
+
+
+def classify_live_broadcast_from_renderer(renderer: dict[str, Any]) -> LiveBroadcastStatus:
+    """
+    Classify stream state from structured InnerTube fields only.
+
+    Sufficient signals:
+    - UPCOMING: ``upcomingEventData`` or premiere/upcoming badge labels/styles.
+    - LIVE: ``thumbnailOverlayTimeStatusRenderer.style == LIVE`` or live-now badge.
+    - COMPLETED: badge labels such as ``Streamed live`` (metadataBadgeRenderer only).
+    - NONE: inspected card with no stream signals (treat as regular VOD).
+    - UNKNOWN: sparse renderer without live metadata slots (e.g. some playlist cards).
+    """
+    if isinstance(renderer.get("upcomingEventData"), dict):
+        return LiveBroadcastStatus.UPCOMING
 
     for overlay in renderer.get("thumbnailOverlays") or []:
         if not isinstance(overlay, dict):
             continue
         time_status = overlay.get("thumbnailOverlayTimeStatusRenderer")
-        if not isinstance(time_status, dict):
-            continue
-        style = str(time_status.get("style", "")).upper()
-        if style == "LIVE":
-            return True
-        label = _text_from_node(time_status.get("text")).lower()
-        if any(needle in label for needle in _LIVE_BADGE_NEEDLES):
-            return True
+        if isinstance(time_status, dict):
+            found = _classify_from_time_status_overlay(time_status)
+            if found is not None:
+                return found
 
-    for badge in renderer.get("badges") or []:
-        if not isinstance(badge, dict):
-            continue
-        metadata_badge = badge.get("metadataBadgeRenderer")
-        if not isinstance(metadata_badge, dict):
-            continue
-        label = _text_from_node(metadata_badge.get("label")).lower()
-        if any(needle in label for needle in _LIVE_BADGE_NEEDLES):
-            return True
+    for metadata_badge in _iter_metadata_badges(renderer):
+        found = _classify_from_metadata_badge(metadata_badge)
+        if found is not None:
+            return found
 
-    for text in _iter_texts(renderer):
-        lowered = text.lower()
-        if any(needle in lowered for needle in _LIVE_BADGE_NEEDLES):
-            return True
+    if not _renderer_exposes_live_metadata(renderer):
+        return LiveBroadcastStatus.UNKNOWN
+    return LiveBroadcastStatus.NONE
 
-    return False
+
+def _apply_live_broadcast_classification(
+    video: VideoSearchModel,
+    renderer: dict[str, Any],
+) -> VideoSearchModel:
+    status = classify_live_broadcast_from_renderer(renderer)
+    is_active = status in (LiveBroadcastStatus.UPCOMING, LiveBroadcastStatus.LIVE)
+    merged = video.model_dump()
+    merged["live_broadcast_status"] = status
+    merged["is_live"] = is_active
+    return VideoSearchModel.model_validate(merged)
+
+
+def video_is_stream_content(video: VideoSearchModel) -> bool:
+    """True for upcoming, active, or completed broadcast recordings."""
+    if video.live_broadcast_status in (
+        LiveBroadcastStatus.UPCOMING,
+        LiveBroadcastStatus.LIVE,
+        LiveBroadcastStatus.COMPLETED,
+    ):
+        return True
+    return bool(video.is_live)
 
 
 def _parse_reel_item_renderer(renderer: dict[str, Any]) -> VideoSearchModel | None:
@@ -2133,20 +2284,22 @@ def _parse_search_lockup_view_model(lockup: dict[str, Any]) -> VideoSearchModel 
         if not thumbnail_url:
             thumbnail_url = _extract_largest_thumbnail_url(content_image)
 
-    return VideoSearchModel(
-        video_id=video_id,
-        channel_id=channel_id,
-        channel_title=channel_title,
-        title=title,
-        views_count=parse_compact_int(views_text),
-        published_text=published_text,
-        duration_text=duration_text,
-        thumbnail_url=thumbnail_url or f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
-        channel_avatar_url=_extract_video_channel_avatar_url(lockup),
-        subscribers_count=_extract_subscribers_from_renderer(lockup),
-        is_short=is_short,
-        is_live=False,
-        content_renderer="lockupViewModel",
+    return _apply_live_broadcast_classification(
+        VideoSearchModel(
+            video_id=video_id,
+            channel_id=channel_id,
+            channel_title=channel_title,
+            title=title,
+            views_count=parse_compact_int(views_text),
+            published_text=published_text,
+            duration_text=duration_text,
+            thumbnail_url=thumbnail_url or f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
+            channel_avatar_url=_extract_video_channel_avatar_url(lockup),
+            subscribers_count=_extract_subscribers_from_renderer(lockup),
+            is_short=is_short,
+            content_renderer="lockupViewModel",
+        ),
+        lockup,
     )
 
 
@@ -3413,7 +3566,13 @@ def video_is_short_item(video: VideoSearchModel) -> bool:
 
 
 def video_is_regular_item(video: VideoSearchModel) -> bool:
-    return not video_is_short_item(video) and not video.is_live
+    if video_is_short_item(video):
+        return False
+    if video_is_stream_content(video):
+        return False
+    if video.live_broadcast_status == LiveBroadcastStatus.UNKNOWN:
+        return False
+    return True
 
 
 def should_exclude_radar_video(
@@ -3422,7 +3581,7 @@ def should_exclude_radar_video(
 ) -> bool:
     if filters.exclude_shorts and video_is_short_item(video):
         return True
-    if filters.exclude_streams and video.is_live:
+    if filters.exclude_streams and video_is_stream_content(video):
         return True
     if filters.exclude_videos and video_is_regular_item(video):
         return True

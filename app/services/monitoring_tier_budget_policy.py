@@ -117,6 +117,8 @@ class CaptureRequestBudgetContext:
     raw_vph: float | None
     is_overdue: bool
     time_to_checkpoint_expiry_hours: float | None
+    # Hours until published_at + momentum VPH horizon tolerance (30h); cp24 only.
+    time_to_momentum_vph_deadline_hours: float | None = None
 
 
 def checkpoint_hours_for_tier(tier: MonitoringTier, policy: MonitoringTierPolicy) -> tuple[int, ...]:
@@ -446,13 +448,18 @@ def _capture_budget_sort_key(ctx: CaptureRequestBudgetContext) -> tuple:
         MonitoringTier.C: 2,
         MonitoringTier.UNMONITORED: 99,
     }[ctx.tier]
-    overdue_rank = 0 if ctx.is_overdue else 1
     expiry = ctx.time_to_checkpoint_expiry_hours
     expiry_key = expiry if expiry is not None else 999999.0
+    mom = ctx.time_to_momentum_vph_deadline_hours
+    if mom is not None:
+        deadline_key = mom
+    else:
+        deadline_key = expiry_key
+    overdue_rank = 0 if ctx.is_overdue else 1
     vph = ctx.raw_vph if ctx.raw_vph is not None else -1.0
     return (
+        deadline_key,
         overdue_rank,
-        expiry_key,
         tier_rank,
         ctx.request.checkpoint_age_hours,
         -vph,

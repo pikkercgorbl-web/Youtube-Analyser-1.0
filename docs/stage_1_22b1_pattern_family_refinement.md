@@ -113,6 +113,6 @@ Attention refresh wall time ~105s (similar to prior evidence-load dominated run;
 - Split of a family mints a new key for the smaller side.
 - Particles are a conservative list, not a language model.
 
-## P. Next stage 1.22C
+## P. Stage 1.22C (done)
 
-Saved Topics: frozen snapshot + live state + history + user status + notes, keyed by `family_key`.
+Saved Topics / Watchlist — see [stage_1_22c_saved_topics.md](./stage_1_22c_saved_topics.md).

@@ -47,12 +47,30 @@ Dry-run is **only** supported on the one-shot CLI. The continuous worker always 
 - Second process fails safely if lock is held.
 - Stale lock takeover default: **90 minutes** (same pattern as monitoring worker).
 
+## Radar enrichment pass (Stage 2.5)
+
+When `RADAR_ENRICHMENT_AFTER_DISCOVERY=1`, each completed discovery iteration runs a **small enrichment pass** in a **separate DB session** (failures do not roll back discovery):
+
+1. `channels.list` — unknown / due subscriber checks (budget: `CHANNEL_SUBSCRIBER_ENRICHMENT_*`)
+2. `videos.list` — UNKNOWN and unconfirmed MEDIUM/LONG on channels with known subs ≤100k (`UNKNOWN_FORMAT_ENRICHMENT_DAILY_VIDEO_LIMIT`, `VIDEO_FORMAT_ENRICHMENT_PASS_LIMIT`)
+
+Runs even when no keywords were due or no new videos were persisted. HTTP calls happen **after** commit (no long open transactions).
+
+One-shot (same orchestrator, supports `--dry-run`):
+
+```bash
+python scripts/run_radar_enrichment_pass.py
+python scripts/run_radar_enrichment_pass.py --dry-run
+```
+
+Attention refresh remains a separate one-shot (`scripts/refresh_attention_engine.py`); it reads the DB only.
+
 ## What it does NOT do
 
 - LLM or keyword expansion
 - Keyword scoring, archive, or deletion
 - Related-query expansion
-- Monitoring cycles or `VideoSnapshot` writes
+- Monitoring cycles or `VideoSnapshot` writes (monitoring worker still separate)
 - Alerts or ranking changes
 
 ## Architecture
@@ -61,6 +79,10 @@ Dry-run is **only** supported on the one-shot CLI. The continuous worker always 
 TargetKeyword (seeds)
       ↓
 Discovery Worker → videos
+      ↓ (optional enrichment pass)
+channels.list + videos.list → eligibility metadata
       ↓
 Monitoring Worker → video_snapshots → dashboard
+      ↓
+Attention refresh (snapshot) → /api/attention
 ```

@@ -7,7 +7,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import Session
 
-from app.integrations.youtube.client import VideoSearchModel
+from app.integrations.youtube.client import LiveBroadcastStatus, VideoSearchModel, video_is_stream_content
 from app.models.orm import KeywordDiscoveryHit, KeywordScanRun
 from app.services.discovery_keyword_scan import KeywordDiscoveryScanResult
 from app.services.radar_candidate import RadarCandidate
@@ -16,8 +16,10 @@ from app.services.radar_candidate import RadarCandidate
 def _content_format_label(video: VideoSearchModel) -> str:
     if video.is_short:
         return "short"
-    if video.is_live:
+    if video.is_live or video_is_stream_content(video):
         return "live"
+    if video.live_broadcast_status == LiveBroadcastStatus.UNKNOWN:
+        return "unknown"
     return "regular"
 
 

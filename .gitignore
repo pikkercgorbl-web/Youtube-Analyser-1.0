@@ -4,6 +4,7 @@
 !.env.example
 !.env.docker.example
 .env.docker
+.env.supabase.remote
 
 # Локальные дампы перед миграцией с Supabase
 backups/

@@ -49,6 +49,114 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_keyword_expansion_events_table(engine)
     ensure_outcome_capture_tables(engine)
     ensure_attention_engine_tables(engine)
+    ensure_video_format_enrichment_attempts_table(engine)
+    ensure_channels_subscribers_api_columns(engine)
+    ensure_radar_api_budget_daily_table(engine)
+    ensure_channel_subscriber_enrichment_attempts_table(engine)
+    ensure_videos_published_at_source_column(engine)
+    ensure_saved_topics_tables(engine)
+    ensure_saved_topics_1_22d_tables(engine)
+
+
+def ensure_videos_published_at_source_column(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "videos" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("videos")}
+    if "published_at_source" in column_names:
+        return
+    dialect = engine.dialect.name
+    col_type = "VARCHAR(32)" if dialect == "postgresql" else "VARCHAR(32)"
+    with engine.begin() as connection:
+        connection.execute(
+            text(f"ALTER TABLE videos ADD COLUMN published_at_source {col_type}"),
+        )
+    logger.info("Added videos.published_at_source column")
+
+
+def ensure_channels_subscribers_api_columns(engine: Engine) -> None:
+    """Add channels.subscribers_api_* columns when missing (Stage 2.3)."""
+    inspector = inspect(engine)
+    if "channels" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("channels")}
+    with engine.begin() as connection:
+        if "subscribers_api_status" not in column_names:
+            connection.execute(
+                text(
+                    "ALTER TABLE channels "
+                    "ADD COLUMN subscribers_api_status VARCHAR(16)",
+                ),
+            )
+            logger.info("Added channels.subscribers_api_status column")
+        if "subscribers_api_checked_at" not in column_names:
+            connection.execute(
+                text(
+                    "ALTER TABLE channels "
+                    "ADD COLUMN subscribers_api_checked_at TIMESTAMPTZ",
+                ),
+            )
+            logger.info("Added channels.subscribers_api_checked_at column")
+
+
+def ensure_channel_subscriber_enrichment_attempts_table(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "channel_subscriber_enrichment_attempts" in inspector.get_table_names():
+        return
+    from app.models.orm import ChannelSubscriberEnrichmentAttempt
+
+    ChannelSubscriberEnrichmentAttempt.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created channel_subscriber_enrichment_attempts table")
+
+
+def ensure_radar_api_budget_daily_table(engine: Engine) -> None:
+    """Create radar_api_budget_daily when missing (Stage 2.5)."""
+    inspector = inspect(engine)
+    if "radar_api_budget_daily" in inspector.get_table_names():
+        return
+    from app.models.orm import RadarApiBudgetDay
+
+    RadarApiBudgetDay.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created radar_api_budget_daily table")
+
+
+def ensure_video_format_enrichment_attempts_table(engine: Engine) -> None:
+    """Create video_format_enrichment_attempts when missing (Stage 2.1)."""
+    inspector = inspect(engine)
+    if "video_format_enrichment_attempts" in inspector.get_table_names():
+        return
+    from app.models.orm import VideoFormatEnrichmentAttempt
+
+    VideoFormatEnrichmentAttempt.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created video_format_enrichment_attempts table")
+
+
+def ensure_saved_topics_tables(engine: Engine) -> None:
+    """Create Saved Topics / Watchlist tables when missing (Stage 1.22C)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import SavedTopic, SavedTopicObservation
+
+    if "saved_topics" not in names:
+        SavedTopic.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created saved_topics table")
+    if "saved_topic_observations" not in names:
+        SavedTopicObservation.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created saved_topic_observations table")
+
+
+def ensure_saved_topics_1_22d_tables(engine: Engine) -> None:
+    """Create Saved Topic events and feedback tables (Stage 1.22D)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import SavedTopicEvent, SavedTopicFeedback
+
+    if "saved_topic_events" not in names:
+        SavedTopicEvent.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created saved_topic_events table")
+    if "saved_topic_feedback" not in names:
+        SavedTopicFeedback.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created saved_topic_feedback table")
 
 
 def ensure_attention_engine_tables(engine: Engine) -> None:

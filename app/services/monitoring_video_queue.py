@@ -13,6 +13,9 @@ from sqlalchemy.orm import Session
 from app.models.orm import Channel, MonitoringVideoQueueEntry, Video, VideoSnapshot
 from app.services.metrics import ensure_utc
 from app.services.monitoring_cycle_run_storage import get_latest_monitoring_cycle_run
+from app.services.monitoring_radar_eligibility import monitoring_video_eligible
+from app.services.video_format_api_verification import load_api_format_confirmed_video_ids
+from app.services.video_snapshot_storage import get_latest_snapshots_for_videos
 
 MonitoringListStatus = Literal["due", "overdue", "pending", "active", "stopped"]
 MonitoringSort = Literal[
@@ -23,7 +26,6 @@ MonitoringSort = Literal[
     "age_asc",
     "latest_snapshot_desc",
 ]
-from app.services.video_snapshot_storage import get_latest_snapshots_for_videos
 
 QueueListSource = Literal["cycle_snapshot", "live_planner", "unavailable"]
 
@@ -148,6 +150,27 @@ def _apply_sort(stmt, sort: MonitoringSort):
     return stmt.order_by(q.priority_rank.asc(), q.video_id.asc())
 
 
+def _filter_eligible_queue_rows(
+    session: Session,
+    rows: list[tuple[MonitoringVideoQueueEntry, Video, Channel]],
+) -> list[tuple[MonitoringVideoQueueEntry, Video, Channel]]:
+    if not rows:
+        return []
+    video_ids = [entry.video_id for entry, _, _ in rows]
+    latest_by_video = get_latest_snapshots_for_videos(session, video_ids)
+    confirmed = load_api_format_confirmed_video_ids(session, video_ids)
+    kept: list[tuple[MonitoringVideoQueueEntry, Video, Channel]] = []
+    for entry, video, channel in rows:
+        if monitoring_video_eligible(
+            video=video,
+            channel=channel,
+            latest_snapshot=latest_by_video.get(entry.video_id),
+            confirmed_regular_ids=confirmed,
+        ):
+            kept.append((entry, video, channel))
+    return kept
+
+
 def count_queue_videos(
     session: Session,
     run_id: str,
@@ -157,14 +180,10 @@ def count_queue_videos(
     channel_id: str | None = None,
     keyword: str | None = None,
 ) -> int:
-    inner = _filtered_queue_stmt(
-        run_id,
-        tier=tier,
-        status=status,
-        channel_id=channel_id,
-        keyword=keyword,
-    )
-    return int(session.scalar(select(func.count()).select_from(inner.subquery())) or 0)
+    stmt = _queue_base_stmt(run_id)
+    stmt = _apply_filters(stmt, tier=tier, status=status, channel_id=channel_id, keyword=keyword)
+    rows = list(session.execute(stmt).all())
+    return len(_filter_eligible_queue_rows(session, rows))
 
 
 def list_queue_videos_page(
@@ -193,10 +212,10 @@ def list_queue_videos_page(
     stmt = _queue_base_stmt(run_id)
     stmt = _apply_filters(stmt, tier=tier, status=status, channel_id=channel_id, keyword=keyword)
     stmt = _apply_sort(stmt, sort)
+    all_rows: list[tuple[MonitoringVideoQueueEntry, Video, Channel]] = list(session.execute(stmt).all())
+    eligible_rows = _filter_eligible_queue_rows(session, all_rows)
     page_limit = max(1, min(limit, 200))
-    stmt = stmt.offset(max(0, offset)).limit(page_limit)
-
-    page_entries: list[tuple[MonitoringVideoQueueEntry, Video, Channel]] = list(session.execute(stmt).all())
+    page_entries = eligible_rows[max(0, offset) : max(0, offset) + page_limit]
     video_ids = [entry.video_id for entry, _, _ in page_entries]
     latest_by_video = get_latest_snapshots_for_videos(session, video_ids) if video_ids else {}
 

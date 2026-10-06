@@ -1,0 +1,76 @@
+{
+  "eligibility_current_policy": {
+    "over_subscriber_limit": 83,
+    "unknown_subscribers": 6910,
+    "stream": 14,
+    "eligible": 483
+  },
+  "subscriber_sources_in_window": {
+    "known_channel_api": 572,
+    "known_snapshot": 0,
+    "unknown": 6918
+  },
+  "compute_unfiltered": {
+    "winner_count_capped_at_50": 50,
+    "unverified_in_top50": 6
+  },
+  "format_verification_batch": {
+    "requested": 6,
+    "video_ids": [
+      "VW89aRmnoow",
+      "LphSdGpOMbU",
+      "9WXfagwNRyU",
+      "cJUmHR4MiJQ",
+      "uXDZOfuHReA",
+      "doJuqyZBI1c"
+    ],
+    "api_batches": 1,
+    "confirmed_regular": 5,
+    "live_or_broadcast": 1,
+    "missing": 0,
+    "unresolved": 0,
+    "outcomes_by_video_id": {
+      "VW89aRmnoow": "confirmed_regular",
+      "LphSdGpOMbU": "confirmed_regular",
+      "9WXfagwNRyU": "live_or_broadcast",
+      "cJUmHR4MiJQ": "confirmed_regular",
+      "uXDZOfuHReA": "confirmed_regular",
+      "doJuqyZBI1c": "confirmed_regular"
+    }
+  },
+  "published_refresh": {
+    "run_id": "attention_20261006T104939Z",
+    "published_winners_gating": {
+      "require_confirmed_regular_before_rank_cap": true,
+      "publishable_pool_before_cap": 49,
+      "published_after_cap": 49,
+      "video_limit": 50
+    },
+    "published_winner_count": 49,
+    "pattern_count": 4,
+    "family_count": 4
+  },
+  "patterns_participants": {
+    "participants_total": 15,
+    "medium_long_confirmed": 15,
+    "medium_long_unverified": 0,
+    "non_medium_long": 0
+  },
+  "families_participants": {
+    "participants_total": 15,
+    "medium_long_confirmed": 15,
+    "medium_long_unverified": 0,
+    "non_medium_long": 0
+  },
+  "channels_without_known_subscribers": {
+    "unique_in_attention_window": 6286,
+    "backfill_queue_next_500": 500
+  },
+  "snapshot_api": {
+    "http_ok": true,
+    "api_run_id": "attention_20261006T104939Z",
+    "api_winner_count": 49,
+    "api_data_source": "snapshot",
+    "matches_persisted_run_id": true
+  }
+}

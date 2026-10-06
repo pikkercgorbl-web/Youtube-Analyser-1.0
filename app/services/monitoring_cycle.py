@@ -33,6 +33,10 @@ from app.services.revisit_executor import (
     VideoBatchFetchClient,
     execute_snapshot_capture_requests,
 )
+from app.services.channel_momentum_age_vph import (
+    DEFAULT_MOMENTUM_HORIZON_HOURS,
+    DEFAULT_MOMENTUM_HORIZON_TOLERANCE_HOURS,
+)
 from app.services.snapshot_collection_policy import (
     SnapshotCaptureRequest,
     VideoRevisitPlan,
@@ -40,6 +44,8 @@ from app.services.snapshot_collection_policy import (
     load_snapshots_by_video_id,
     plan_video_revisits,
 )
+
+MOMENTUM_VPH_MAX_AGE_HOURS = DEFAULT_MOMENTUM_HORIZON_HOURS + DEFAULT_MOMENTUM_HORIZON_TOLERANCE_HOURS
 
 logger = logging.getLogger(__name__)
 
@@ -130,12 +136,20 @@ def _budget_context(
     expiry: float | None = None
     if checkpoint is not None and plan.current_age_hours is not None:
         expiry = round(checkpoint.expires_at_age_hours - plan.current_age_hours, 4)
+    mom_deadline: float | None = None
+    if (
+        request.checkpoint_age_hours == DEFAULT_MOMENTUM_HORIZON_HOURS
+        and plan.current_age_hours is not None
+        and plan.current_age_hours < MOMENTUM_VPH_MAX_AGE_HOURS
+    ):
+        mom_deadline = round(MOMENTUM_VPH_MAX_AGE_HOURS - plan.current_age_hours, 4)
     return CaptureRequestBudgetContext(
         request=request,
         tier=decision.tier,
         raw_vph=decision.raw_vph,
         is_overdue=request.reason == "overdue",
         time_to_checkpoint_expiry_hours=expiry,
+        time_to_momentum_vph_deadline_hours=mom_deadline,
     )
 
 

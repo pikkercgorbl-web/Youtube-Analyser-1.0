@@ -4,6 +4,9 @@ $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $Root
 
 Write-Host "=== YouTube Analytics: Backend ===" -ForegroundColor Cyan
+if ($env:DATABASE_URL) {
+    Write-Host "Note: `$env:DATABASE_URL in this shell overrides .env — Remove-Item Env:DATABASE_URL" -ForegroundColor Yellow
+}
 
 if (-not (Test-Path ".env")) {
     Copy-Item ".env.example" ".env"

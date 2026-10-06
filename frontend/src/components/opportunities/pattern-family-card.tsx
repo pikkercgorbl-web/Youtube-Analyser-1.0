@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Bookmark } from "lucide-react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -13,7 +12,7 @@ import {
 } from "@/lib/attention-format";
 import type { AttentionPatternFamily } from "@/lib/attention-types";
 import { surfaces } from "@/lib/design-system/layout";
-import { savedTopicAffordance } from "@/lib/saved-topics";
+import { SaveTopicButton } from "@/components/saved-topics/save-topic-button";
 import { cn } from "@/lib/utils";
 
 export function PatternFamilyCard({
@@ -25,7 +24,6 @@ export function PatternFamilyCard({
 }) {
   const [showMembers, setShowMembers] = useState(false);
   const activity = patternActivity(family);
-  const save = savedTopicAffordance({ familyKey: family.family_key, runId });
   const variants = family.member_labels.length;
   return (
     <article className={cn(surfaces.sectionMuted, "flex flex-col p-4")} data-testid="pattern-family-card">
@@ -62,7 +60,7 @@ export function PatternFamilyCard({
         Активность по периодам: {activity.available ? activity.label : "Недостаточно истории"}
       </p>
       <p className="text-xs text-muted-foreground">
-        {family.breakout_eligible_count} видео входят в выборку Breakout
+        {family.breakout_eligible_count} из {family.video_count} видео — подходят для анализа Breakout (не топ Winners)
       </p>
       <div className="mt-auto flex flex-wrap gap-2 pt-4">
         <Link
@@ -80,18 +78,7 @@ export function PatternFamilyCard({
         >
           {showMembers ? "Скрыть исходные паттерны" : "Показать исходные паттерны"}
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled
-          title={save.hint}
-          aria-label={save.hint}
-          data-testid="save-pattern"
-        >
-          <Bookmark className="h-3.5 w-3.5" />
-          Сохранить
-        </Button>
+        <SaveTopicButton familyKey={family.family_key} runId={runId} />
       </div>
       {showMembers ? (
         <ul className="mt-3 space-y-1 text-xs" data-testid="family-member-patterns">

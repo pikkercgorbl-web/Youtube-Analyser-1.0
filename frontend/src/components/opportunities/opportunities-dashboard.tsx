@@ -14,7 +14,6 @@ import {
 } from "@/components/design-system";
 import { PatternFamilyCard } from "@/components/opportunities/pattern-family-card";
 import { RisingChannelsSection } from "@/components/opportunities/rising-channels";
-import { WinnerCard } from "@/components/opportunities/winner-card";
 import { WinnersTable } from "@/components/opportunities/winners-table";
 import {
   getAttentionChannels,
@@ -37,8 +36,6 @@ import type {
 import { surfaces } from "@/lib/design-system/layout";
 import { formatDateTimeLocal } from "@/lib/monitoring-format";
 import { cn } from "@/lib/utils";
-
-const PREVIEW_COUNT = 8;
 
 type FeedState =
   | { status: "loading" }
@@ -96,7 +93,7 @@ export function OpportunitiesDashboard() {
         <PageHeader
           icon={<Flame className="h-6 w-6 text-primary" />}
           title="Возможности"
-          lead="Radar сжимает тысячи найденных видео до сигналов, которые стоит проверить вручную."
+          lead="Три типа сигналов Radar: ранние видео, динамика канала и повторяющиеся форматы. Данные из сохранённого снимка Attention."
         />
         <LoadingState title="Загрузка снимка Attention…" />
       </PageShell>
@@ -109,7 +106,7 @@ export function OpportunitiesDashboard() {
         <PageHeader
           icon={<Flame className="h-6 w-6 text-primary" />}
           title="Возможности"
-          lead="Radar сжимает тысячи найденных видео до сигналов, которые стоит проверить вручную."
+          lead="Три типа сигналов Radar: ранние видео, динамика канала и повторяющиеся форматы."
         />
         <ErrorState title="Не удалось загрузить Attention snapshot" description={state.message} onRetry={load} />
       </PageShell>
@@ -122,7 +119,7 @@ export function OpportunitiesDashboard() {
         <PageHeader
           icon={<Flame className="h-6 w-6 text-primary" />}
           title="Возможности"
-          lead="Radar сжимает тысячи найденных видео до сигналов, которые стоит проверить вручную."
+          lead="Три типа сигналов Radar: ранние видео, динамика канала и повторяющиеся форматы."
         />
         <UnavailableState
           title="Attention Engine ещё не рассчитан."
@@ -137,67 +134,88 @@ export function OpportunitiesDashboard() {
 
   const { summary, videos, families, channels, dataSource } = state;
   const confirmed = confirmed72hCount(videos);
-  const preview = videos.slice(0, PREVIEW_COUNT);
 
   return (
     <PageShell>
       <PageHeader
         icon={<Flame className="h-6 w-6 text-primary" />}
         title="Возможности"
-        lead="Radar сжимает тысячи найденных видео до сигналов, которые стоит проверить вручную."
+        lead="Три независимых блока без общего рейтинга: Video Winners (ранний сигнал по видео), Channel Momentum (сравнение канала с самим собой), Pattern Families (похожие форматы на разных каналах)."
       />
 
       <div className={cn(surfaces.section, "space-y-3 p-4")} data-testid="snapshot-meta">
-        <p className="text-sm">{snapshotFreshnessLabel(summary.computed_at)}</p>
+        <p className="text-sm font-medium">{snapshotFreshnessLabel(summary.computed_at)}</p>
         <p className="text-sm text-muted-foreground">
           {windowHoursLabel(summary.window_hours)} · {candidateCountLabel(summary.candidate_video_count)}
         </p>
         <p className="text-xs text-muted-foreground">
-          source={dataSource} · computed_at={formatDateTimeLocal(summary.computed_at)} ({summary.timezone_name})
-          {summary.run_id ? ` · ${summary.run_id}` : ""}
+          Снимок: {formatDateTimeLocal(summary.computed_at)} ({summary.timezone_name})
+          {summary.run_id ? ` · ${summary.run_id}` : ""} · source={dataSource}
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Окно 72&nbsp;ч для delayed outcome — накопление наблюдений после discovery, а не задержка показа ранних
+          Winners. VPH в таблице — средняя с публикации по последнему snapshot; ускорение между snapshots показывается
+          только при acceleration_state=accelerating (≥3 точек VPH).
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4" data-testid="summary-cards">
-        <a href="#winners" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
-          <Metric label="🔥 Winners" value={summary.winner_count} testId="metric-winners" />
-        </a>
-        <a href="#patterns" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
-          <Metric label="📈 Patterns" value={families.length || summary.pattern_count} testId="metric-patterns" />
-        </a>
-        <a href="#channels" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
-          <Metric label="🌱 Rising Channels" value={summary.channel_momentum_count} testId="metric-channels" />
-        </a>
-        <div className={cn(surfaces.sectionMuted, "p-4")}>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3" data-testid="summary-cards">
+        <a href="#video-winners" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
           <Metric
-            label="✅ 72h confirmed"
-            value={confirmed}
-            helper="по видео текущего топа, delayed_outcome_state=confirmed"
-            testId="metric-72h"
+            label="Видео набирают обороты"
+            value={summary.winner_count}
+            helper="Video Winners в снимке"
+            testId="metric-winners"
           />
-        </div>
+        </a>
+        <a href="#channel-momentum" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
+          <Metric
+            label="Растущие каналы"
+            value={summary.channel_momentum_count}
+            helper="Channel Momentum"
+            testId="metric-channels"
+          />
+        </a>
+        <a href="#pattern-families" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
+          <Metric
+            label="Повторяющиеся форматы"
+            value={families.length || summary.pattern_count}
+            helper="Pattern Families"
+            testId="metric-patterns"
+          />
+        </a>
       </div>
 
-      <SectionPanel title="🔥 Победители" description="Короткий превью топа, затем полная таблица снимка.">
-        <div id="winners" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {preview.map((video) => (
-            <WinnerCard key={video.video_id} video={video} />
-          ))}
+      <SectionPanel
+        title="Видео набирают обороты"
+        description="Отдельные Video Winners — ранний сигнал по одному ролику, не доказательство роста всего канала. Поиск, сортировка и ссылки на YouTube — в таблице ниже."
+      >
+        <div id="video-winners" className="space-y-2">
+          <p className="text-xs text-muted-foreground">
+            Подтверждённый рост views за 72&nbsp;ч после discovery (delayed outcome): {confirmed} из {videos.length} в
+            текущем топе — только где есть hit и snapshot в tolerance-окне.
+          </p>
+          <WinnersTable videos={videos} />
         </div>
-      </SectionPanel>
-
-      <SectionPanel title="Все видео сегодняшнего топа" description="Все сохранённые VideoWinners текущего снимка. Без live-пересчёта.">
-        <WinnersTable videos={videos} />
       </SectionPanel>
 
       <SectionPanel
-        title="📈 Паттерны"
-        description="Семейства паттернов: каноническая группа поверх исходных Pattern. Исходные строки не удаляются."
+        title="Растущие каналы"
+        description="Channel Momentum: ≥2 recent и ≥2 previous с confirmed regular и snapshots ~24h от публикации; минимум два recent каждый ≥1.5× median previous на том же горизонте. Breakout / keyword 72h / подписчики — только контекст."
       >
-        <div id="patterns">
+        <div id="channel-momentum">
+          <RisingChannelsSection channels={channels} winnerLookup={videos} />
+        </div>
+      </SectionPanel>
+
+      <SectionPanel
+        title="Повторяющиеся форматы"
+        description="Pattern Families группируют похожие title/keyword/topic на разных каналах. Совпадение тем или фраз само по себе не доказывает успешность — смотрите breakout_eligible_count и исходные patterns."
+      >
+        <div id="pattern-families">
           {families.length === 0 ? (
             <p className="text-sm text-muted-foreground" data-testid="patterns-empty">
-              В текущем снимке паттернов нет.
+              В текущем снимке семейств паттернов нет.
             </p>
           ) : (
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -206,12 +224,6 @@ export function OpportunitiesDashboard() {
               ))}
             </div>
           )}
-        </div>
-      </SectionPanel>
-
-      <SectionPanel title="🌱 Растущие каналы" description="Сравнение недавнего окна канала с его собственным предыдущим периодом.">
-        <div id="channels">
-          <RisingChannelsSection channels={channels} />
         </div>
       </SectionPanel>
     </PageShell>

@@ -1,0 +1,157 @@
+﻿{"db_check": {"host": "127.0.0.1", "port": 5433, "database": "youtube_radar_restore_check"}}
+initial_plan {'video_ids': 66, 'batches': 2}
+{
+  "verification": {
+    "unique_videos_checked": 66,
+    "api_requests_videos_list": 2,
+    "confirmed_regular": 64,
+    "live_or_broadcast": 2,
+    "missing": 0,
+    "unresolved": 0,
+    "medium_long_to_live": 2,
+    "transitions_to_live": [
+      [
+        "6CBb87vemtM",
+        "medium",
+        "live"
+      ],
+      [
+        "cq-G-Hz3AhM",
+        "medium",
+        "live"
+      ]
+    ]
+  },
+  "winners_publish": {
+    "computed_before_filter": 50,
+    "published": 50,
+    "unverified_still_in_compute": [],
+    "blocked_by_format_check": [],
+    "all_published_verified_regular": true,
+    "cap_reached": false
+  },
+  "subscriber_backfill_dry_run": {
+    "unique_unknown_subscriber_channels": 6626,
+    "planned_channels": 500,
+    "planned_channels_list_batches": 10,
+    "api": "YouTubeApiClient.get_channels (channels.list part=snippet,statistics)",
+    "note": "subscriberCount absent/hidden must not be stored as 0"
+  },
+  "before": {
+    "run_id": "attention_20261006T103751Z",
+    "winners": 50,
+    "patterns": 20,
+    "families": 20,
+    "channels": 0
+  },
+  "after": {
+    "run_id": "attention_20261006T103843Z",
+    "winners": 50,
+    "patterns": 20,
+    "families": 20,
+    "channels": 0,
+    "eligibility": {
+      "unknown_subscribers": 7309,
+      "over_subscriber_limit": 27,
+      "stream": 8,
+      "eligible": 146
+    },
+    "filter_notes": {
+      "before": 50,
+      "after": 50,
+      "allowlist_size": 50
+    }
+  },
+  "top10_published_winners": [
+    {
+      "video_id": "zKt5IyhaToM",
+      "title": "Kusum 06 October 2026 | \u09ae\u09c3\u09a4\u09cd\u09af\u09c1\u09b0 \u09ae\u09c1\u0996\u09c7 \u0988\u09b6\u09be\u09a8! \u09b6\u09c7\u09b7 \u09ae\u09c1\u09b9\u09c2\u09b0\u09cd\u09a4\u09c7 \u0995\u09c1\u09b8\u09c1\u09ae\u09c7\u09b0 \u098f\u0987 \u0995\u09be\u09a3\u09cd\u09a1 \u09a6\u09c7\u0996\u09c7 \u0985\u09ac\u09be\u0995 \u0986\u09af\u09bc\u09c1\u09b7",
+      "channel_title": "\u09b8\u09bf\u09b0\u09bf\u09df\u09be\u09b2 \u0997\u09b2\u09cd\u09aa and 2 more",
+      "subscribers": 827,
+      "vph": 1767.0885,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "u7Gyz1Mt_sM",
+      "title": "\u041a\u0430\u043a \u0441\u043e\u0437\u0434\u0430\u0432\u0430\u0442\u044c \u0431\u043b\u0430\u0433\u043e\u043f\u0440\u0438\u044f\u0442\u043d\u044b\u0435 \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u0438 \u0432 \u0441\u0432\u043e\u0435\u0439 \u0436\u0438\u0437\u043d\u0438",
+      "channel_title": "\u041a\u0432\u0430\u043d\u0442\u043e\u0432\u044b\u0439 \u043f\u0441\u0438\u0445\u043e\u043b\u043e\u0433",
+      "subscribers": 53,
+      "vph": 1117.3639,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "wwOgExsmCSc",
+      "title": "\u0422\u044b \u0442\u043e\u0447\u043d\u043e \u044d\u0442\u043e\u0433\u043e \u0445\u043e\u0447\u0435\u0448\u044c? \u041a\u0430\u043a \u042f \u041f\u0420\u041e\u0412\u0415\u0420\u042f\u042e \u0441\u0432\u043e\u0438 \u041c\u0415\u0427\u0422\u042b",
+      "channel_title": "\u041e\u0441\u043a\u0430\u0440 \u0425\u0430\u0440\u0442\u043c\u0430\u043d\u043d: \u0418\u0434\u0435\u0438, \u043c\u0435\u043d\u044f\u044e\u0449\u0438\u0435 \u0416\u0438\u0437\u043d\u044c \u0438 \u041e\u0441\u043a\u0430\u0440 \u0425\u0430\u0440\u0442\u043c\u0430\u043d\u043d",
+      "subscribers": 72300,
+      "vph": 1034.9774,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "Q479_8toz18",
+      "title": "I Watched Every SpongeTruths \"What If\" Video",
+      "channel_title": "Jackson Fanelli Podcast and Jackson Fanelli",
+      "subscribers": 5330,
+      "vph": 863.3776,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "fHQ-7TANXYU",
+      "title": "EP920",
+      "channel_title": "KORELATE \u0438 NEXOR",
+      "subscribers": 8510,
+      "vph": 816.1509,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "pWqcwzXkqNU",
+      "title": "\u0426\u0420\u0423 \u0425\u041e\u0427\u0415\u0422 \u0412\u0415\u0420\u0411\u041e\u0412\u0410\u0422\u042c \u0422\u0415\u0411\u042f... \u0422\u0412\u041e\u0415 \u041c\u042b\u0428\u041b\u0415\u041d\u0418\u0415 \u041d\u0410\u0421\u0422\u041e\u041b\u042c\u041a\u041e \u0421\u0418\u041b\u042c\u041d\u041e | \u0420\u0415\u0427\u042c \u0414\u0416\u041e\u041a\u0415\u0420\u0410 \u0422\u0415\u041c\u041d\u0410\u042f \u041c\u041e\u0422\u0418\u0412\u0410\u0426\u0418\u042f",
+      "channel_title": "Chaos Dominion \u0438 Beyond The Smile",
+      "subscribers": 4140,
+      "vph": 480.7064,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "Oc9kq_hvcD0",
+      "title": "\u099c\u09c7\u09b2 \u09a5\u09c7\u0995\u09c7 \u09ab\u09bf\u09b0\u09c7\u0987 \u0995\u09c1\u09b8\u09c1\u09ae\u09c7\u09b0 \u09b9\u09be\u09a4\u09c7 \u09aa\u09c1\u09b0\u09cb \u0997\u09be\u0999\u09cd\u0997\u09c1\u09b2\u09c0 \u09ac\u09be\u09a1\u09bc\u09bf\u09b0 \u09a6\u09be\u09af\u09bc\u09bf\u09a4\u09cd\u09ac \u09a6\u09bf\u09b2\u09c7\u09a8 \u0987\u09a8\u09cd\u09a6\u09cd\u09b0\u09be\u09a3\u09c0 | Kusum 06 October Episode",
+      "channel_title": "\u09b8\u09bf\u09b0\u09bf\u09df\u09be\u09b2 \u0997\u09b2\u09cd\u09aa and 2 more",
+      "subscribers": 827,
+      "vph": 470.3579,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "asBoESPZNgw",
+      "title": "FlyDubai: What If the Next Terror Attack Comes From Inside? Aviation Safety Expert Explains",
+      "channel_title": "Times Axis and Times Of India",
+      "subscribers": 26200,
+      "vph": 424.249,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "TbGZoHK_pJE",
+      "title": "What If YOU Had The Omnitrix?",
+      "channel_title": "Specular YOU and 2 more",
+      "subscribers": 1970,
+      "vph": 371.5045,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    },
+    {
+      "video_id": "R4giRUqHP38",
+      "title": "Everfall",
+      "channel_title": "Pitch White and ank1re",
+      "subscribers": 961,
+      "vph": 370.5158,
+      "format_outcome": "confirmed_regular",
+      "content_format": "medium"
+    }
+  ]
+}

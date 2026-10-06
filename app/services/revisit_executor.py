@@ -7,9 +7,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Literal, Protocol, Sequence
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.integrations.youtube.client import YouTubeVideoDetails
+from app.models.orm import Video
+from app.services.video_format_from_api import snapshot_format_flags_from_details
+from app.services.video_format_persistence import apply_api_details_to_video_content_format
 from app.services.metrics import utc_now
 from app.services.radar_candidate_enrichment import SHORT_DURATION_SECONDS
 from app.services.snapshot_collection_policy import SnapshotCaptureRequest
@@ -129,7 +133,9 @@ def _details_to_observation(
     captured_at: datetime,
     subscribers: int | None,
 ) -> VideoSnapshotObservation:
-    content_format, is_short, is_live = _classify_format(details.duration_seconds)
+    content_format, is_short, is_live = snapshot_format_flags_from_details(details)
+    if content_format is None:
+        content_format, is_short, is_live = _classify_format(details.duration_seconds)
     views = details.views_count if details.views_count >= 0 else None
     likes = details.likes_count if details.likes_count >= 0 else None
     comments = details.comments_count if details.comments_count >= 0 else None
@@ -229,6 +235,12 @@ def execute_snapshot_capture_requests(
     details_by_id: dict[str, YouTubeVideoDetails] = {}
     batch_errors: list[str] = []
     failed_video_ids: set[str] = set()
+    videos_by_id: dict[str, Video] = {}
+    if ordered_video_ids:
+        videos_by_id = {
+            row.id: row
+            for row in session.scalars(select(Video).where(Video.id.in_(ordered_video_ids))).all()
+        }
 
     for batch_index, batch_ids in enumerate(video_batches):
         try:
@@ -279,6 +291,10 @@ def execute_snapshot_capture_requests(
             summary.missing_video_count += 1
             results.append(_result_from_request(request, status="missing"))
             continue
+
+        video_row = videos_by_id.get(request.video_id)
+        if video_row is not None:
+            apply_api_details_to_video_content_format(video_row, details)
 
         captured_at = utc_now()
         subscribers = subs_map.get(details.channel_id) if details.channel_id else None

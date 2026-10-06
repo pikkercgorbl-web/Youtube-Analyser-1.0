@@ -50,6 +50,17 @@ import type {
   AttentionSummaryApiResponse,
   AttentionVideoListResponse,
 } from "./attention-types";
+import type {
+  SavedTopicDetail,
+  SavedTopicFeedback,
+  SavedTopicFeedbackPayload,
+  SavedTopicHistoryResponse,
+  SavedTopicListResponse,
+  SavedTopicPatchPayload,
+  SavedTopicSaveResponse,
+  SavedTopicTimelineResponse,
+} from "./saved-topics-types";
+import type { ValidationReport } from "./validation-types";
 
 const api = axios.create({
   baseURL: "",
@@ -389,6 +400,72 @@ export async function getAttentionPatternFamilyDetail(
   const { data } = await api.get<AttentionPatternFamilyDetailResponse>(
     `/api/attention/pattern-families/${encodeURIComponent(familyKey)}`,
   );
+  return data;
+}
+
+export async function saveSavedTopic(familyKey: string): Promise<SavedTopicSaveResponse> {
+  const { data } = await api.post<SavedTopicSaveResponse>("/api/saved-topics", { family_key: familyKey });
+  return data;
+}
+
+export async function listSavedTopics(params?: {
+  archived?: "active" | "archived" | "all";
+  q?: string;
+  family_key?: string;
+}): Promise<SavedTopicListResponse> {
+  const { data } = await api.get<SavedTopicListResponse>("/api/saved-topics", { params });
+  return data;
+}
+
+export async function getSavedTopic(topicId: number): Promise<SavedTopicDetail> {
+  const { data } = await api.get<SavedTopicDetail>(`/api/saved-topics/${topicId}`);
+  return data;
+}
+
+export async function patchSavedTopic(topicId: number, payload: SavedTopicPatchPayload): Promise<SavedTopicDetail> {
+  const { data } = await api.patch<SavedTopicDetail>(`/api/saved-topics/${topicId}`, payload);
+  return data;
+}
+
+export async function archiveSavedTopic(topicId: number): Promise<SavedTopicDetail> {
+  const { data } = await api.post<SavedTopicDetail>(`/api/saved-topics/${topicId}/archive`);
+  return data;
+}
+
+export async function restoreSavedTopic(topicId: number): Promise<SavedTopicDetail> {
+  const { data } = await api.post<SavedTopicDetail>(`/api/saved-topics/${topicId}/restore`);
+  return data;
+}
+
+export async function getSavedTopicHistory(
+  topicId: number,
+  params?: { limit?: number; offset?: number },
+): Promise<SavedTopicHistoryResponse> {
+  const { data } = await api.get<SavedTopicHistoryResponse>(`/api/saved-topics/${topicId}/history`, { params });
+  return data;
+}
+
+export async function getSavedTopicTimeline(
+  topicId: number,
+  params?: { limit?: number; offset?: number },
+): Promise<SavedTopicTimelineResponse> {
+  const { data } = await api.get<SavedTopicTimelineResponse>(`/api/saved-topics/${topicId}/timeline`, { params });
+  return data;
+}
+
+export async function addSavedTopicFeedback(
+  topicId: number,
+  payload: SavedTopicFeedbackPayload,
+): Promise<SavedTopicFeedback> {
+  const { data } = await api.post<SavedTopicFeedback>(`/api/saved-topics/${topicId}/feedback`, payload);
+  return data;
+}
+
+export async function getValidationReport(params?: {
+  period_start?: string;
+  period_end?: string;
+}): Promise<ValidationReport> {
+  const { data } = await api.get<ValidationReport>("/api/validation/report", { params });
   return data;
 }
 

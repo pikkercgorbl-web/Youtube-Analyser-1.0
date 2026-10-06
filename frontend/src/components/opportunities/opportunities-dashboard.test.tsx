@@ -196,7 +196,7 @@ describe("Opportunities feed", () => {
     expect(screen.getByTestId("metric-patterns")).toHaveTextContent("1");
     expect(screen.getByText(/source=snapshot/)).toBeInTheDocument();
     expect(screen.getByText(/14[^\d]?553/)).toBeInTheDocument();
-    expect(screen.getAllByTestId("winner-card").length).toBeGreaterThan(0);
+    expect(screen.queryByTestId("winner-card")).not.toBeInTheDocument();
     expect(screen.getAllByTestId("winner-row").length).toBeGreaterThanOrEqual(2);
     expect(screen.getAllByRole("link", { name: /AI cartoon tutorial/ })[0]).toHaveAttribute(
       "href",
@@ -206,12 +206,10 @@ describe("Opportunities feed", () => {
     expect(screen.getByTestId("pattern-family-card")).toHaveTextContent("ai se kaise banaye");
     expect(screen.getByTestId("pattern-channel-diversity")).toHaveTextContent("56");
     expect(screen.getByTestId("family-grouping")).toHaveTextContent("фраз");
-    expect(screen.getAllByText(/57 видео входят в выборку Breakout/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/подходят для анализа Breakout/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/breakout winner/i)).not.toBeInTheDocument();
     expect(screen.getByTestId("pattern-activity")).toHaveTextContent("2 → 6 → 14");
-    expect(screen.getByTestId("channels-insufficient-history")).toHaveTextContent(
-      "накапливает сравнительную историю",
-    );
+    expect(screen.getByTestId("channels-empty")).toHaveTextContent("нет каналов с Channel Momentum");
     expect(screen.queryByText("Растущих каналов нет")).not.toBeInTheDocument();
     expect(screen.queryByText(/магическ/i)).not.toBeInTheDocument();
     const save = screen.getByTestId("save-pattern");
