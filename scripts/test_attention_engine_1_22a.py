@@ -30,8 +30,10 @@ from app.models.orm import (
     TargetKeyword,
     Video,
     VideoFormat,
+    VideoFormatEnrichmentAttempt,
     VideoSnapshot,
 )
+from app.services.video_format_outcomes import OUTCOME_CONFIRMED_REGULAR
 from app.services.attention_acceleration import classify_acceleration
 from app.services.attention_engine_service import compute_attention_engine
 from app.services.attention_engine_types import AttentionEngineConfig, youtube_watch_url
@@ -166,6 +168,14 @@ def _seed_pair(session: Session) -> tuple[Video, Video, TargetKeyword]:
     _snap(session, v2, views=40_000, captured_hours_after_publish=17, subscribers=12_000, vph=2300)
     _hit(session, kw.id, v1, views=1000)
     _hit(session, kw.id, v2, views=800)
+    for vid in (v1.id, v2.id):
+        session.add(
+            VideoFormatEnrichmentAttempt(
+                video_id=vid,
+                last_attempt_at=NOW,
+                last_outcome=OUTCOME_CONFIRMED_REGULAR,
+            ),
+        )
     session.commit()
     return v1, v2, kw
 
@@ -182,8 +192,9 @@ def test_missing_subscribers_not_zero() -> None:
     session.commit()
     result = compute_attention_engine(session, now=NOW, config=AttentionEngineConfig(video_limit=50))
     winners = [w for w in result.video_winners if w.video_id == "vz"]
-    assert winners
-    assert winners[0].subscribers is None
+    assert not winners
+    elig = result.summary.notes.get("radar_target_eligibility", {})
+    assert elig.get("unknown_subscribers", 0) >= 1
 
 
 def test_one_snapshot_acceleration_unavailable() -> None:
@@ -328,7 +339,7 @@ def test_no_subscriber_growth_without_history() -> None:
         if not row.subscriber_growth_available:
             assert row.subscriber_growth_absolute is None
             assert row.subscriber_growth_pct is None
-            assert "subscriber_growth" not in row.reason_codes
+            assert "context_subscriber_growth" not in row.reason_codes
 
 
 def test_subscriber_growth_when_snapshots_exist() -> None:

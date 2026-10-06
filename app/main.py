@@ -37,6 +37,8 @@ from app.api.routes import (
     radar,
     radar_stats,
     saved_keywords,
+    saved_topics,
+    validation,
     search,
     target_keywords,
     videos,
@@ -160,6 +162,8 @@ app.include_router(radar_stats.router, prefix="/api/radar-stats", tags=["analysi
 app.include_router(monitoring.router, prefix="/api/monitoring", tags=["monitoring"])
 app.include_router(operations.router, prefix="/api/operations", tags=["operations"])
 app.include_router(attention.router, prefix="/api/attention", tags=["attention"])
+app.include_router(saved_topics.router, prefix="/api/saved-topics", tags=["saved-topics"])
+app.include_router(validation.router, prefix="/api/validation", tags=["validation"])
 
 
 @app.post("/api/force-radar-scan", response_model=ForceRadarScanResponse, tags=["analysis"])

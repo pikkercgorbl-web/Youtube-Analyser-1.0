@@ -26,8 +26,33 @@ from app.services.attention_title_normalization import (
     topic_pattern_key,
 )
 from app.services.metrics import ensure_utc
+from app.models.orm import VideoFormat
+from app.services.radar_target_eligibility import radar_target_rejection_reason
+from app.services.video_format_api_verification import video_id_publishable_with_confirmed_set
 
 _PHRASE_JACCARD_MERGE = 0.8
+
+
+def _eligible(
+    rec: AttentionVideoRecord,
+    *,
+    publishable_confirmed_ids: frozenset[str] | None = None,
+) -> bool:
+    if radar_target_rejection_reason(
+        content_format=rec.video.content_format,
+        channel=rec.channel,
+        latest_snapshot=rec.latest_snapshot,
+    ) is not None:
+        return False
+    if publishable_confirmed_ids is None:
+        return True
+    if rec.video.content_format not in (VideoFormat.MEDIUM, VideoFormat.LONG):
+        return False
+    return video_id_publishable_with_confirmed_set(
+        content_format=rec.video.content_format,
+        video_id=rec.video.id,
+        confirmed_ids=publishable_confirmed_ids,
+    )
 
 
 def _first_seen(rec: AttentionVideoRecord) -> datetime | None:
@@ -156,6 +181,7 @@ def build_pattern_candidates(
     *,
     winners: list[VideoWinner],
     now: datetime,
+    publishable_confirmed_ids: frozenset[str] | None = None,
 ) -> list[PatternCandidate]:
     """
     Conservative grouping: keyword provenance, then title ngrams, then Video.topic.
@@ -163,7 +189,11 @@ def build_pattern_candidates(
     Prefers false negatives. Requires ≥2 videos and ≥2 channels.
     Title phrases are merged when token-subset or Jaccard ≥ 0.8.
     """
-    records = bundle.records
+    records = {
+        vid: rec
+        for vid, rec in bundle.records.items()
+        if _eligible(rec, publishable_confirmed_ids=publishable_confirmed_ids)
+    }
     small_ids = _small_channel_ids(winners)
     patterns: list[PatternCandidate] = []
     used_keys: set[str] = set()

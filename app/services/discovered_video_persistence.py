@@ -8,10 +8,19 @@ from typing import Literal
 
 from sqlalchemy.orm import Session
 
-from app.integrations.youtube.client import VideoSearchModel
+from app.integrations.youtube.client import (
+    LiveBroadcastStatus,
+    VideoSearchModel,
+    YouTubeChannelDetails,
+    video_is_stream_content,
+)
 from app.models.orm import Channel, Video, VideoFormat
 from app.services.metrics import ensure_utc, utc_now
 from app.services.video_filter_service import parse_relative_published_date
+from app.services.video_published_at import (
+    PUBLISHED_AT_SOURCE_INNERTUBE,
+    apply_innertube_published_at,
+)
 
 PersistOutcome = Literal["inserted", "updated", "skipped_invalid", "skipped_short", "skipped_live"]
 
@@ -27,9 +36,33 @@ class VideoPersistResult:
 def _infer_content_format(video: VideoSearchModel) -> VideoFormat:
     if video.is_short:
         return VideoFormat.SHORT
-    if video.is_live:
+    status = video.live_broadcast_status
+    if status in (
+        LiveBroadcastStatus.UPCOMING,
+        LiveBroadcastStatus.LIVE,
+        LiveBroadcastStatus.COMPLETED,
+    ):
+        return VideoFormat.LIVE
+    if status == LiveBroadcastStatus.UNKNOWN:
+        return VideoFormat.UNKNOWN
+    if video.is_live or video_is_stream_content(video):
         return VideoFormat.LIVE
     return VideoFormat.MEDIUM
+
+
+def _merge_content_format(existing: VideoFormat, inferred: VideoFormat) -> VideoFormat:
+    """Do not downgrade a confirmed stream format on a weaker later card."""
+    if inferred == VideoFormat.SHORT:
+        return VideoFormat.SHORT
+    if existing == VideoFormat.LIVE and inferred in (
+        VideoFormat.MEDIUM,
+        VideoFormat.LONG,
+        VideoFormat.UNKNOWN,
+    ):
+        return VideoFormat.LIVE
+    if inferred == VideoFormat.UNKNOWN and existing != VideoFormat.UNKNOWN:
+        return existing
+    return inferred
 
 
 def _parse_duration_seconds(duration_text: str) -> int:
@@ -122,6 +155,21 @@ def _upsert_discovered_channel(
     )
 
 
+def upsert_channel_from_youtube_api(
+    session: Session,
+    details: YouTubeChannelDetails,
+    *,
+    created_at: datetime,
+) -> None:
+    _upsert_discovered_channel(
+        session,
+        details.channel_id,
+        title=details.title,
+        subscribers_count=int(details.subscribers_count or 0),
+        created_at=created_at,
+    )
+
+
 def persist_discovered_video(
     session: Session,
     video: VideoSearchModel,
@@ -176,6 +224,7 @@ def persist_discovered_video(
                 likes_count=0,
                 comments_count=0,
                 published_at=published_at,
+                published_at_source=PUBLISHED_AT_SOURCE_INNERTUBE,
                 duration_seconds=duration_seconds,
                 content_format=content_format,
                 topic=discovery_keyword.strip() or None,
@@ -190,10 +239,10 @@ def persist_discovered_video(
         existing.title = new_title
     if views > 0:
         existing.views_count = views
-    existing.published_at = published_at
+    apply_innertube_published_at(existing, published_at)
     if duration_seconds > 0:
         existing.duration_seconds = duration_seconds
-    existing.content_format = content_format
+    existing.content_format = _merge_content_format(existing.content_format, content_format)
     existing.channel_id = channel_id
     if not (existing.topic or "").strip() and discovery_keyword.strip():
         existing.topic = discovery_keyword.strip()

@@ -1,0 +1,709 @@
+{
+  "computed_at_utc": "2026-10-06T12:45:00+00:00",
+  "fixed_now_utc": "2026-10-06T12:45:00+00:00",
+  "section_0_published_at": {
+    "pipeline": {
+      "chain": [
+        "InnerTube published_text",
+        "parse_relative_published_date (video_filter_service)",
+        "persist_discovered_video (discovered_video_persistence)",
+        "videos.list snippet.publishedAt (format enrichment / monitoring capture)",
+        "apply_api_published_at (video_published_at) \u2014 does not downgrade API"
+      ],
+      "known_issues_fixed_in_code": [
+        "hours/minutes labels previously mapped to age_days=0 \u2192 datetime.now()",
+        "re-discovery overwrote Video.published_at with InnerTube parse even after API"
+      ],
+      "precision_storage": "videos.published_at_source: innertube_relative | api_snippet"
+    },
+    "contradiction_examples_discovered_before_published": [
+      {
+        "video_id": "OT6f5r1LM2I",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-06T11:33:02.470264+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-10-01T22:12:19.638226+00:00",
+        "discovery_run_id": "discovery_20261001T221217Z_0dbe4c3e",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "yDiyUMzmkVw",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-06T11:43:17.337332+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-10-01T22:25:33.691280+00:00",
+        "discovery_run_id": "discovery_20261001T222341Z_4684966f",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "8sFFwLrN0ro",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-04T03:23:17.064808+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T18:34:43.327560+00:00",
+        "discovery_run_id": "discovery_20260929T182042Z_3156f10a",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "9iJ9Uc7eQsQ",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-05T15:32:34.716868+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-10-01T06:47:55.376604+00:00",
+        "discovery_run_id": "discovery_20261001T064753Z_fb00205a",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": "2026-09-30T15:35:44+00:00",
+        "inferred_root_cause": "stored_innertube_after_api_available_in_snapshots"
+      },
+      {
+        "video_id": "DaekdDyKkjs",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-03T22:44:14.021744+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T16:59:18.481488+00:00",
+        "discovery_run_id": "discovery_20260929T165228Z_e66e82f8",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "Kg5fJtOoSgs",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-03T23:21:30.998724+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T18:03:17.801545+00:00",
+        "discovery_run_id": "discovery_20260929T180316Z_8ea5222f",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": "2026-09-28T19:28:04+00:00",
+        "inferred_root_cause": "stored_innertube_after_api_available_in_snapshots"
+      },
+      {
+        "video_id": "z9Rm9-uC0YY",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-03T22:32:21.193972+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T17:24:05.472787+00:00",
+        "discovery_run_id": "discovery_20260929T172238Z_ba0d92b2",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "EMFMrhUUO-g",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-04T01:05:06.314241+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T20:58:39.596808+00:00",
+        "discovery_run_id": "discovery_20260929T205838Z_e423883e",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "8RAO2n1o7Mw",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-05T15:00:29.492523+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-10-01T20:19:50.798170+00:00",
+        "discovery_run_id": "discovery_20261001T200533Z_24bf7424",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "GfJxxXb8uqY",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-05T11:50:18.624722+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-10-01T22:29:47.214255+00:00",
+        "discovery_run_id": "discovery_20261001T222341Z_4684966f",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "pjpzwuCh9H8",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-01T20:21:34.446732+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-28T12:17:54.109521+00:00",
+        "discovery_run_id": "discovery_20260928T121126Z_987bb2df",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "18lDoSmdFKc",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-06T12:24:19.120221+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-10-03T04:39:44.328267+00:00",
+        "discovery_run_id": "discovery_20261003T043942Z_aae5a8fe",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "aArnClFL1x4",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-02T23:42:43.193781+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T16:52:31.691745+00:00",
+        "discovery_run_id": "discovery_20260929T165228Z_e66e82f8",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "QeTZdjtQS-c",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-02T21:15:47.816446+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T16:23:41.486495+00:00",
+        "discovery_run_id": "discovery_20260929T161011Z_e28ee69f",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "IRmtreZSqw0",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-02T21:00:24.402864+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T16:18:08.965845+00:00",
+        "discovery_run_id": "discovery_20260929T161011Z_e28ee69f",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "yYDZ-Cu10uk",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-03T01:15:35.391986+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T21:06:32.929958+00:00",
+        "discovery_run_id": "discovery_20260929T205838Z_e423883e",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "IDSt7HN-FTQ",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-03T00:46:17.320620+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-29T20:46:10.497132+00:00",
+        "discovery_run_id": "discovery_20260929T203024Z_95679224",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "xIdcU6lne8E",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-03T23:44:52.483408+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-30T20:48:05.403830+00:00",
+        "discovery_run_id": "discovery_20260930T204446Z_567b59b9",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": "2026-10-03T04:00:10+00:00",
+        "inferred_root_cause": "innertube_overwrite_before_api_merge_fix"
+      },
+      {
+        "video_id": "AUGjeVEl7KM",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-03T22:16:54.700702+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-30T19:50:00.952803+00:00",
+        "discovery_run_id": "discovery_20260930T194959Z_ac102263",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": null,
+        "inferred_root_cause": "unknown"
+      },
+      {
+        "video_id": "lumnHI3wh_w",
+        "raw_published_text": null,
+        "raw_published_text_note": "Not persisted on discovery path (InnerTube card only).",
+        "stored_published_at": "2026-10-03T09:48:12.617491+00:00",
+        "stored_published_at_source": null,
+        "first_discovered_at": "2026-09-30T07:29:25.657373+00:00",
+        "discovery_run_id": "discovery_20260930T072408Z_32210794",
+        "discovery_source": "discovery_worker",
+        "api_published_at_from_snapshots": "2026-10-03T10:30:08+00:00",
+        "inferred_root_cause": "innertube_overwrite_before_api_merge_fix"
+      }
+    ],
+    "impact": {
+      "vph": "calc_vph uses Video.published_at \u2014 skewed when publish after discovery",
+      "monitoring_checkpoints": "age_hours from Video.published_at \u2014 wrong checkpoint windows",
+      "channel_momentum": "age-aligned VPH requires published_at_source=api_snippet after fix"
+    }
+  },
+  "section_1_provenance": {
+    "recent_published_72h_count": 34955,
+    "top_published_at_minutes": [
+      {
+        "minute": "2026-10-06T12:32",
+        "count": 411
+      },
+      {
+        "minute": "2026-10-06T12:48",
+        "count": 369
+      },
+      {
+        "minute": "2026-10-06T12:50",
+        "count": 367
+      },
+      {
+        "minute": "2026-10-04T00:43",
+        "count": 333
+      },
+      {
+        "minute": "2026-10-03T23:36",
+        "count": 333
+      },
+      {
+        "minute": "2026-10-05T15:19",
+        "count": 327
+      },
+      {
+        "minute": "2026-10-04T01:28",
+        "count": 324
+      },
+      {
+        "minute": "2026-10-05T16:33",
+        "count": 317
+      },
+      {
+        "minute": "2026-10-04T01:15",
+        "count": 308
+      },
+      {
+        "minute": "2026-10-03T23:42",
+        "count": 295
+      },
+      {
+        "minute": "2026-10-06T12:34",
+        "count": 277
+      },
+      {
+        "minute": "2026-10-04T00:06",
+        "count": 271
+      },
+      {
+        "minute": "2026-10-06T12:33",
+        "count": 270
+      },
+      {
+        "minute": "2026-10-03T20:25",
+        "count": 270
+      },
+      {
+        "minute": "2026-10-05T14:56",
+        "count": 270
+      }
+    ],
+    "provenance_examples": [],
+    "duplicate_published_at_buckets": [],
+    "snapshot_sources_since_72h": {
+      "monitoring_worker": 30506,
+      "keyword_outcome_worker": 3305
+    },
+    "discovery_run_id_prefix_counts_top": {
+      "discovery_worker": 50571
+    },
+    "video_existed_before_discovery_hits_72h": {
+      "False": 40104,
+      "True": 10467
+    },
+    "provenance_buckets": [
+      {
+        "label": "minute_batch_published_at_spikes",
+        "video_count": 411,
+        "example_video_ids": [],
+        "notes": "Up to 411 videos share the same published_at minute (discovery_worker bulk persist / re-scan), not live one-by-one ingest."
+      },
+      {
+        "label": "discovery_before_stored_published_at",
+        "video_count": 33763,
+        "example_video_ids": [],
+        "notes": "discovered_at < published_at: stored publish time often slightly after first hit (API refresh/backfill), not a trustworthy live publish\u2192discovery SLA on full 72h set."
+      }
+    ],
+    "pipeline_touch_72h_published": {
+      "with_keyword_hit": 34955,
+      "format_confirmed_regular": 244,
+      "attention_candidate_pool_same_as_hits": 34955,
+      "monitoring_worker_snapshots_total": 114585
+    },
+    "interpretation": "Large 72h published counts with duplicate exact timestamps and existed_before_discovery=true indicate DB restore/historical backfill, not only live discovery parsing."
+  },
+  "section_2_continuous_baseline": {
+    "baseline_start_utc": "2026-09-16T14:36:26.246736+00:00",
+    "baseline_start_source": "max(monitoring_worker_start,new_video_discovery_start)",
+    "measurement_start_utc_for_baseline": "2026-10-06T11:24:58+00:00",
+    "measurement_start_source": "artifacts/momentum_measurement_start.json",
+    "worker_provenance_limitation": null,
+    "keyword_scan_runs": {
+      "count": 686,
+      "first": "2026-09-16 14:31:25.168372+00:00",
+      "last": "2026-10-06 12:50:51.596021+00:00"
+    },
+    "first_monitoring_worker_snapshot_utc": "2026-09-16 14:36:26.246736+00:00",
+    "first_new_video_discovery_utc": "2026-09-16 14:31:25.168372+00:00",
+    "first_discovery_worker_hit_utc": "2026-09-16 14:31:25.168372+00:00",
+    "manual_vs_worker": {
+      "expansion_hits_72h": 0,
+      "discovery_worker_hits_72h": 50571
+    },
+    "clean_cohort_loose": {
+      "definition": "video_existed_before_discovery=false, discovery_run_id like discovery_%, first_discovered_at>=baseline_start (includes post-restore re-discovery of old corpus)",
+      "video_count": 8095,
+      "note": "Not used for baseline SLA \u2014 see strict_continuous_cohort."
+    },
+    "post_restore_worker_cohort": {
+      "definition": "discovery_worker + existed_before=false + min(discovered_at)>=measurement_start + published_at>=measurement_start",
+      "video_count": 6953,
+      "format_enrichment_attempt_count": 121,
+      "confirmed_regular_count": 71,
+      "momentum_window_snapshot_count": 0,
+      "sample": [
+        {
+          "video_id": "00G0PyIhCEI",
+          "published_at": "2026-10-06T12:00:19.495670+00:00",
+          "first_discovered_at": "2026-10-06T11:59:47.896682+00:00",
+          "publish_to_discovery_h": -0.0088,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "010_CfGP4CY",
+          "published_at": "2026-10-06T12:32:04.446881+00:00",
+          "first_discovered_at": "2026-10-06T12:30:24.561743+00:00",
+          "publish_to_discovery_h": -0.0277,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "01OP7fQgn5Q",
+          "published_at": "2026-10-06T12:25:22.476157+00:00",
+          "first_discovered_at": "2026-10-06T12:24:19.980306+00:00",
+          "publish_to_discovery_h": -0.0174,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "02HLygCthuE",
+          "published_at": "2026-10-06T12:13:45.407442+00:00",
+          "first_discovered_at": "2026-10-06T12:10:56.572035+00:00",
+          "publish_to_discovery_h": -0.0469,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "02tRarJQDj8",
+          "published_at": "2026-10-06T12:45:47.633173+00:00",
+          "first_discovered_at": "2026-10-06T12:44:35.034195+00:00",
+          "publish_to_discovery_h": -0.0202,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "031l6z6CUrE",
+          "published_at": "2026-10-06T12:24:19.314404+00:00",
+          "first_discovered_at": "2026-10-06T12:22:47.946361+00:00",
+          "publish_to_discovery_h": -0.0254,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "039uDX01zUc",
+          "published_at": "2026-10-06T12:35:40.151819+00:00",
+          "first_discovered_at": "2026-10-06T12:34:41.669257+00:00",
+          "publish_to_discovery_h": -0.0162,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "04taNsnFwp8",
+          "published_at": "2026-10-06T11:49:02.043125+00:00",
+          "first_discovered_at": "2026-10-06T11:48:20.348414+00:00",
+          "publish_to_discovery_h": -0.0116,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "06BxZhkqJVY",
+          "published_at": "2026-10-06T12:01:45.225231+00:00",
+          "first_discovered_at": "2026-10-06T12:00:19.640161+00:00",
+          "publish_to_discovery_h": -0.0238,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "06SXrTSVouw",
+          "published_at": "2026-10-06T12:32:03.737001+00:00",
+          "first_discovered_at": "2026-10-06T12:30:24.561743+00:00",
+          "publish_to_discovery_h": -0.0275,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "06XqLhKE2-Y",
+          "published_at": "2026-10-06T12:33:22.985173+00:00",
+          "first_discovered_at": "2026-10-06T12:32:05.354102+00:00",
+          "publish_to_discovery_h": -0.0216,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "070nEDTDvHg",
+          "published_at": "2026-10-06T11:35:41.930088+00:00",
+          "first_discovered_at": "2026-10-06T11:34:00.811103+00:00",
+          "publish_to_discovery_h": -0.0281,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "08PeCkkIWOc",
+          "published_at": "2026-10-06T12:32:04.332571+00:00",
+          "first_discovered_at": "2026-10-06T12:30:24.561743+00:00",
+          "publish_to_discovery_h": -0.0277,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "09_OG4DbJ9Y",
+          "published_at": "2026-10-06T12:44:34.117859+00:00",
+          "first_discovered_at": "2026-10-06T12:43:19.078603+00:00",
+          "publish_to_discovery_h": -0.0208,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "0a5cv90noT4",
+          "published_at": "2026-10-06T11:35:42.215969+00:00",
+          "first_discovered_at": "2026-10-06T11:34:00.811103+00:00",
+          "publish_to_discovery_h": -0.0282,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "0Bfqp14T3uQ",
+          "published_at": "2026-10-06T12:32:04.124465+00:00",
+          "first_discovered_at": "2026-10-06T12:30:24.561743+00:00",
+          "publish_to_discovery_h": -0.0277,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "0BIwLrDcZ3w",
+          "published_at": "2026-10-06T12:48:48.957144+00:00",
+          "first_discovered_at": "2026-10-06T12:20:12.500791+00:00",
+          "publish_to_discovery_h": -0.4768,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "0bLiCSjpEC4",
+          "published_at": "2026-10-06T11:42:49.963883+00:00",
+          "first_discovered_at": "2026-10-06T11:41:51.100274+00:00",
+          "publish_to_discovery_h": -0.0164,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "0BLZwSqjHgo",
+          "published_at": "2026-10-06T12:35:40.494636+00:00",
+          "first_discovered_at": "2026-10-06T12:34:41.669257+00:00",
+          "publish_to_discovery_h": -0.0163,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        },
+        {
+          "video_id": "0BqhHVHhd6c",
+          "published_at": "2026-10-06T12:09:45.642817+00:00",
+          "first_discovered_at": "2026-10-06T12:08:30.626652+00:00",
+          "publish_to_discovery_h": -0.0208,
+          "format_confirmed": false,
+          "first_momentum_snap_age_h": null,
+          "provenance": "discovery_worker"
+        }
+      ],
+      "publish_to_discovery_ordering_valid_count": 0,
+      "ordering_note": "first_discovered_at >= published_at required for trustworthy publish\u2192discovery; if zero, stored published_at lags behind first hit (API/backfill skew)."
+    },
+    "strict_continuous_cohort": {
+      "definition": "post_restore_worker_cohort + first_discovered_at>=published_at",
+      "video_count": 0,
+      "format_enrichment_attempt_count": 0,
+      "confirmed_regular_count": 0,
+      "momentum_window_snapshot_count": 0,
+      "sample": [],
+      "empty_sample_note": "No videos with first_discovered_at>=published_at after measurement_start \u2014 publish\u2192discovery SLA sample absent."
+    },
+    "cohort_invariant_checks": {
+      "strict_subset_of_post_restore_ids": true,
+      "strict_count_lte_post_restore": true,
+      "strict_momentum_snapshots_lte_post_restore": true,
+      "strict_confirmed_lte_post_restore": true,
+      "strict_format_attempts_lte_post_restore": true,
+      "all_invariants_pass": true
+    },
+    "latencies_hours_post_restore_worker_cohort": {
+      "publish_to_discovery": {
+        "n": 6953,
+        "p50": -0.021,
+        "p90": -0.0088,
+        "note": "Often negative when discovered_at<published_at; do not treat as live SLA."
+      },
+      "discovery_to_format_attempt": {
+        "n": 121,
+        "p50": 0.0283,
+        "p90": 0.0286
+      },
+      "publish_to_format_attempt": {
+        "n": 121,
+        "p50": 0.0001,
+        "p90": 0.006
+      },
+      "publish_to_first_momentum_window_snapshot_age": {
+        "n": 0,
+        "p50": null,
+        "p90": null
+      }
+    },
+    "latencies_hours_loose_cohort": {
+      "publish_to_discovery": {
+        "n": 8095,
+        "p50": -0.0204,
+        "p90": 23.9668
+      },
+      "discovery_to_format_attempt": {
+        "n": 140,
+        "p50": 0.0283,
+        "p90": 0.0286
+      },
+      "discovery_to_channel_subscriber_attempt": {
+        "n": 464,
+        "p50": 0.0286,
+        "p90": 0.3003,
+        "note": "Channel-level subs attempt at or after first discovery (approximate)."
+      },
+      "publish_to_format_attempt": {
+        "n": 140,
+        "p50": 0.0002,
+        "p90": 24.0001
+      },
+      "publish_to_first_momentum_window_snapshot_age": {
+        "n": 8,
+        "p50": 24.0806,
+        "p90": 24.1943,
+        "note": "Age at capture within [18,30]h from publish \u2014 not discovery-relative SLA."
+      },
+      "videos_with_momentum_window_snapshot": 8
+    },
+    "latencies_hours_strict_continuous_cohort": {
+      "publish_to_discovery": {
+        "n": 0,
+        "p50": null,
+        "p90": null
+      },
+      "discovery_to_format_attempt": {
+        "n": 0,
+        "p50": null,
+        "p90": null
+      },
+      "publish_to_format_attempt": {
+        "n": 0,
+        "p50": null,
+        "p90": null
+      },
+      "publish_to_first_momentum_window_snapshot_age": {
+        "n": 0,
+        "p50": null,
+        "p90": null,
+        "note": "Age at capture within [18,30]h from publish \u2014 not discovery-relative SLA."
+      }
+    },
+    "no_cohort_message": null
+  },
+  "section_3_budgets": {
+    "format_enrichment_ledger": {
+      "kind": "videos_list",
+      "daily_limit": 200,
+      "reserved_today": 200,
+      "remaining_today": 0
+    },
+    "monitoring_capture_budget": "Monitoring captures use ApiBudgetPolicy.max_capture_requests_per_cycle (monitoring_cycle.allocate_capture_budget), NOT radar_api_budget_daily videos_list.",
+    "confirmed_regular_video_rows": 290,
+    "monitoring_worker_snapshots_today_utc": 12,
+    "format_budget_exhausted_today": true,
+    "independence_note": "Format daily cap exhaustion does not block monitoring_worker captures; monitoring eligibility requires confirmed_regular but uses separate per-cycle cap.",
+    "evidence_when_format_exhausted": "12 monitoring_worker snapshot(s) today UTC while videos_list remaining=0 (reserved=200)."
+  },
+  "section_4_cp24_priority": {
+    "planner_within_video": "checkpoint_priority_key: overdue first, then time_to_expiry (snapshot_collection_policy.py)",
+    "cycle_budget": "allocate_capture_budget sort: overdue, time_to_momentum_vph_deadline_hours (cp24 only), checkpoint expiry, tier, checkpoint_age, vph (monitoring_tier_budget_policy.py)",
+    "momentum_deadline_hours_from_publish": 30.0,
+    "test": "scripts/test_monitoring_tier_budget_policy.py::test_momentum_cp24_deadline_before_tier"
+  },
+  "section_5_baseline_summary": {
+    "measurement_start_utc": "2026-10-06T11:24:58+00:00",
+    "post_restore_worker_video_count": 6953,
+    "strict_continuous_video_count": 0,
+    "post_restore_format_attempt_count": 121,
+    "post_restore_confirmed_regular_count": 71,
+    "strict_format_attempt_count": 0,
+    "strict_confirmed_regular_count": 0,
+    "momentum_window_snapshots_post_restore": 0,
+    "momentum_window_snapshots_strict": 0,
+    "invariants_pass": true,
+    "published_momentum_signals_now": 0,
+    "recommended_next_step": "Run workers continuously from baseline_start; refresh this script daily without mutating data."
+  }
+}

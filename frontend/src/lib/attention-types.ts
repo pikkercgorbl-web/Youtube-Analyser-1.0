@@ -73,6 +73,16 @@ export type AttentionChannelMomentum = {
   human_reasons: string[];
   recent_window_days: number;
   previous_window_days: number;
+  momentum_horizon_hours?: number;
+  momentum_horizon_tolerance_hours?: number;
+  recent_eligible_count?: number;
+  previous_eligible_count?: number;
+  recent_measurable_count?: number;
+  previous_measurable_count?: number;
+  recent_improvement_count?: number;
+  improvement_ratio_threshold?: number;
+  previous_baseline_zero?: boolean;
+  incompleteness_notes?: string[];
 };
 
 export type AttentionSummary = {

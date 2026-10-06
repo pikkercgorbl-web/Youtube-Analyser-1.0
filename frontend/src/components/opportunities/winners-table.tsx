@@ -83,7 +83,9 @@ export function WinnersTable({ videos }: { videos: AttentionVideoWinner[] }) {
               <th className="px-3 py-2 font-medium">Видео</th>
               <th className="px-3 py-2 font-medium">Канал</th>
               <th className="px-3 py-2 font-medium">Views</th>
-              <th className="px-3 py-2 font-medium">VPH</th>
+              <th className="px-3 py-2 font-medium" title="Средняя с публикации по последнему snapshot">
+                VPH (с pub.)
+              </th>
               <th className="px-3 py-2 font-medium">Возраст</th>
               <th className="px-3 py-2 font-medium">Подписчики</th>
               <th className="px-3 py-2 font-medium">Breakout</th>

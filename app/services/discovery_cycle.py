@@ -21,6 +21,7 @@ from app.services.keyword_discovery_metrics_storage import (
     persist_keyword_discovery_hits,
     persist_keyword_scan_run,
 )
+from app.integrations.youtube.client import LiveBroadcastStatus, video_is_regular_item, video_is_stream_content
 from app.services.discovery_keyword_scan import KeywordDiscoveryScanResult, scan_keyword_for_discovery
 from app.services.discovery_keyword_selection import select_discovery_keywords
 from app.services.explosive_channels_service import ExplosiveChannelsService
@@ -73,11 +74,14 @@ class DiscoveryCycleSummary:
     qualification_passed_count: int = 0
     qualification_rejected_count: int = 0
     regular_video_count: int = 0
+    unknown_format_count: int = 0
     short_count: int = 0
     live_count: int = 0
     error_count: int = 0
     cycle_status: CycleStatus = "ok"
     keyword_summaries: tuple[DiscoveryKeywordSummary, ...] = ()
+    cycle_video_ids: tuple[str, ...] = ()
+    cycle_channel_ids: tuple[str, ...] = ()
 
 
 @dataclass
@@ -305,10 +309,14 @@ async def run_discovery_cycle_async(
             unique_seen_ids.add(video.video_id)
             if video.is_short:
                 summary.short_count += 1
-            elif video.is_live:
+            elif video_is_stream_content(video) or video.is_live:
                 summary.live_count += 1
-            else:
+            elif video.live_broadcast_status == LiveBroadcastStatus.UNKNOWN:
+                summary.unknown_format_count += 1
+            elif video_is_regular_item(video):
                 summary.regular_video_count += 1
+            else:
+                summary.unknown_format_count += 1
 
         if not dry_run:
             persist_results, kw_duplicates_from_batch = batch_persist_discovered_videos(
@@ -449,6 +457,16 @@ async def run_discovery_cycle_async(
         failed=summary.failed_keyword_count,
         selected=summary.selected_keyword_count,
     )
+    if not dry_run and cycle_persisted_ids:
+        summary.cycle_video_ids = tuple(sorted(cycle_persisted_ids))
+        channel_ids = {
+            row
+            for row in session.scalars(
+                select(Video.channel_id).where(Video.id.in_(list(cycle_persisted_ids))),
+            ).all()
+            if row
+        }
+        summary.cycle_channel_ids = tuple(sorted(channel_ids))
 
     log_discovery_cycle_summary(summary)
 

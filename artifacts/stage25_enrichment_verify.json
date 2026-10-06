@@ -1,0 +1,1129 @@
+{
+  "started_at": "2026-10-06T11:11:21.367661+00:00",
+  "pass_sequence": 1,
+  "dry_run_before_live": {
+    "seconds": 0.672,
+    "ledger": {
+      "utc_day": "2026-10-06",
+      "channels_list": {
+        "reserved": 100,
+        "http_requests": 2,
+        "remaining": 400
+      },
+      "videos_list": {
+        "reserved": 0,
+        "http_requests": 0,
+        "remaining": 200
+      }
+    },
+    "planned": {
+      "channels": [
+        "UC9GyDf7Dju8U74cLeqKwmaQ",
+        "UCasRtGgmEzhKvPBxS0ORBXg",
+        "UCIs6DkQJJLHNrtgJIiLjddw",
+        "UCV6z3w4ZlblTfvmzAu4SxeQ",
+        "UCQAAd3RAIN0hI0h1HeGn3zw",
+        "UC4NfNt7nJxe2op99ZaY7k-Q",
+        "UC0vbPwTh8t_j6QGpXHyMEfA",
+        "UCjAyZxa2d1BOiNGmXRboqZw",
+        "UCqEr5w-vsL1fPEUtB4Pyeqg",
+        "UC6CCgNlqzN-4Ll51cyDO_KQ",
+        "UCwXo6fZrXJsdOYKztVYKpuA",
+        "UCeJk_typndrPbqtMzUCPxTQ",
+        "UCj-TJPWqI66h_isl3RiXMrw",
+        "UCl7uJDtB_vJBQX7vvGCdD8Q",
+        "UCSxPsy63Gnx24rls25rK-mg",
+        "UCxL9PzEn-dz03uSEjJDuolA",
+        "UCBexcetzwXtcAl6L-ug_OJA",
+        "UCmPMPI2yZHVpiOn-Cd-Wwjw",
+        "UCl-IBLRopsum5wbqsLnEPuQ",
+        "UC5-j3imOLapJXdCkzktL21Q",
+        "UCg_HbmKDOYvOjB1Lowk-rQQ",
+        "UCgx6Hf49nf5h6wOs7ugjarg",
+        "UCkjOcpRk1xCLRT1l53tocjg",
+        "UChwIHwpyBjcWyX79lkcDlFg",
+        "UC0IG0NfuNji09xgFUHURvfg",
+        "UCDzdfZnwIq-sLA-GFtIonKQ",
+        "UCSvroRmy64XfHVmYvu9Jo6A",
+        "UCT8QhM2Jy6GT3qphVYk0HBQ",
+        "UClqtlcGXEvi4OIV7K6ocbXA",
+        "UCX6PwmXr--c0RkSh8ySCe-g",
+        "UCWN_at-yf5AdPNzrnI4AU7g",
+        "UCPbKRZRHCPVaDy4wYVE7E8Q",
+        "UCDkG3r-fEpfKhdcWUbbqQgA",
+        "UC0SvNuae4DVpY8qqCqnJIQw",
+        "UChhdFa_ZLvfhAxgcS3mNyuA",
+        "UCc4oxmC0ivhClScMoOhzBHQ",
+        "UCghjyFFQKoOiKS6xNxtjs3A",
+        "UCEA0X6DSkalHtitpYggD6Rw",
+        "UCNzX1pREv_hX7sRe7XVxLFw",
+        "UCbPfRGQFQPkL95IzPyNdPsA",
+        "UCpAhe2iGgn48klnrQrzkozA",
+        "UCXZ3oLGuTBfgO6i_rirOwnQ",
+        "UCTzjRCRST1H65rC-dzCh18g",
+        "UCHU_M8e_KHBmBncyZ0_Cvag",
+        "UCuT5EDBOEPy8NED510m7upw",
+        "UCpXwzeexwam2b_r5E8uCkDw",
+        "UCTwm6Mp-LHdps7Q0-S-7lHA",
+        "UCjuLv5wYGWaMpoOAY17lPEg",
+        "UCJnNjJ5qvAgCtQxe3wKD30w",
+        "UCsstD1YFtLFF-PljCerUzgg"
+      ],
+      "videos": []
+    },
+    "planned_after_dry_unchanged": false,
+    "pass_report": {
+      "dry_run": true,
+      "subscriber_channels_planned": 50,
+      "subscriber_channels_processed": 50,
+      "subscriber_http_batches": 1,
+      "format_videos_planned": 0,
+      "format_videos_processed": 0,
+      "format_http_batches": 0,
+      "format_confirmed_regular": 0,
+      "format_live_or_broadcast": 0,
+      "format_missing": 0,
+      "channel_budget_reserved": 0,
+      "video_budget_reserved": 0,
+      "errors": [],
+      "notes": {
+        "subscriber_batches": [
+          {
+            "dry_run": true,
+            "channel_ids": [
+              "UCqEswTIlHES1iO8j2PCkb5Q",
+              "UCIzZF6Mcg_IE6Cor7668DvA",
+              "UCM5EynmLWTcPmI8myBnIDoQ",
+              "UCsstD1YFtLFF-PljCerUzgg",
+              "UCbPfRGQFQPkL95IzPyNdPsA",
+              "UCXWqm5AyP1gZ6qIKGq8ltdg",
+              "UCk2tAhLgiUuqgevkWGv3pSQ",
+              "UC4KhSOtK2uVvf4YGgyXNsgw",
+              "UCbKWBLNrrM_nChbfWMV7Ggw",
+              "UCTmiXEY_XT2_EihkpTqglVQ",
+              "UCbKwvrfYB7zcpU2zBByJANg",
+              "UCqtbLMHD2vZWYIkvQYeq_PQ",
+              "UCO4i6zYUclcF8NO6HEJ7uJA",
+              "UCYuXikoKHdST_TZTNBhkxAA",
+              "UCjuLv5wYGWaMpoOAY17lPEg",
+              "UCV9SkXB1Ip1NRg_C8P-qzqQ",
+              "UCY5fkS017o7CtzX4B0odQeA",
+              "UCmcvcrjJbUq9CrxxoNHDagg",
+              "UC3crxBlZlIcaS2Hje7uZW7w",
+              "UCqmjvbC7M2nylMTDm4fCzqg",
+              "UCke5kj2zZyk9HpPVzg5cOVA",
+              "UCjAyZxa2d1BOiNGmXRboqZw",
+              "UCT8Z84YWu8e4EJXIIkdH2-A",
+              "UCD-mvCeO7axKxCeXEa90Myg",
+              "UCPJWA-xh5y39oGXlcK-yQdA",
+              "UCvQ6yiXrBeN2pkBQLynTaqg",
+              "UCN5W35ad0rNpdtOhO_bRQIg",
+              "UCmZ73Z7fvoR-UuGa95o1-mA",
+              "UCnTXUcXkYGKnSfJkitbujHQ",
+              "UCpAhe2iGgn48klnrQrzkozA",
+              "UC9raAA3ngpIPN77Rj95nkiw",
+              "UCPyF0hIpKdSxexFIxuIlQ1w",
+              "UCt7SVcotEfnykpOBi3OwNpQ",
+              "UCHQEerctrDhSg7YWCTI-nMQ",
+              "UCUYgLegC5k_N4vyFby6A_OA",
+              "UCl7uJDtB_vJBQX7vvGCdD8Q",
+              "UCR3m1oGT1EWVC4qDkZVHjrA",
+              "UCALhNdhZzImMqgEyS2oE8GQ",
+              "UCqEr5w-vsL1fPEUtB4Pyeqg",
+              "UCaQh0w8Lnce-S4bgwNyVvgA",
+              "UCw-CPtsrLRBodLyRatVVJOw",
+              "UC8Oxj4-gbKWJa3AG0ug4mFg",
+              "UCEFXRAYbmvR23RAVab467Iw",
+              "UCjcGYkHl2uUYHYrRQsX7GQA",
+              "UC9GyDf7Dju8U74cLeqKwmaQ",
+              "UColfGd63eiOOKHz4CVZncbw",
+              "UC4NfNt7nJxe2op99ZaY7k-Q",
+              "UCOFPVZxmfzSKIpwAa52w4pA",
+              "UCGu8n4i-O3qMhvwvIoaNb8w",
+              "UC9GxNsQvE9zpIhKOby0xzSg"
+            ],
+            "planned": 50
+          }
+        ],
+        "pass_sequence": 1,
+        "discovery_run_id": null,
+        "dry_run_preserves_fetched_state": true
+      }
+    }
+  },
+  "live_pass": {
+    "seconds": 2.111,
+    "ledger_before": {
+      "utc_day": "2026-10-06",
+      "channels_list": {
+        "reserved": 100,
+        "http_requests": 2,
+        "remaining": 400
+      },
+      "videos_list": {
+        "reserved": 0,
+        "http_requests": 0,
+        "remaining": 200
+      }
+    },
+    "ledger_after": {
+      "utc_day": "2026-10-06",
+      "channels_list": {
+        "reserved": 150,
+        "http_requests": 3,
+        "remaining": 350
+      },
+      "videos_list": {
+        "reserved": 50,
+        "http_requests": 1,
+        "remaining": 150
+      }
+    },
+    "planned": {
+      "channels": [
+        "UCdvIA_E8kzBaT0EncFI5CFw",
+        "UCBexcetzwXtcAl6L-ug_OJA",
+        "UCVU4_PvRR1HM5wrZrIRPTfA",
+        "UCx2SajT4ZywaQnl-9cemGHA",
+        "UCU133DP6Jc3p_D_QNZAbyGA",
+        "UCivfpJymev32eGGryM-0iZA",
+        "UCknXlUGPJZH3wIZ6CYzMnwQ",
+        "UC5umHT7nqaRgzyA3um_0-8w",
+        "UCapS-umOAKIxBsalqO6DFVg",
+        "UCMvQFJuEJPJ4CQgkRTmgiOQ",
+        "UC_4lZOSmqWcvGncLpeqDefA",
+        "UCNSZVIXd3ZgTFRv9vHJKU8Q",
+        "UC9pG_C8pyA_UQEEUXCn7q4A",
+        "UCHZtyxlYmhX0gMkl2r2Oasw",
+        "UCQAAd3RAIN0hI0h1HeGn3zw",
+        "UCqriH9H-gAYusKyRV-zUE0w",
+        "UCEtN_bcmQOhV589dxlME2CA",
+        "UCrBjCArRzc4_z-CDCgnqcQQ",
+        "UCR3dCu3BE1aVc6cOGoZBmWA",
+        "UC0SvNuae4DVpY8qqCqnJIQw",
+        "UCHCn4QXbYYPsjAUlqSmz1NA",
+        "UCCQ4fCZ6MoZhkUD7kTcSQQA",
+        "UCA7wic529JCwRaLJjYW3zew",
+        "UCwXo6fZrXJsdOYKztVYKpuA",
+        "UC2M5wG0HURWh1wyRWPxqozg",
+        "UCW0S7iSlezokLj7_KFTqZyw",
+        "UCFrfLambjVDnzHEg4QnsP3g",
+        "UCpAzmBBT2RodgGirKGvx0VA",
+        "UCslU9gEMwFnDNrldCgPXomw",
+        "UCdloy0HrbzkttUUHz_iy6bg",
+        "UCBCftO50hIyIIbPTy58z2Sg",
+        "UCE3ViUzo4DUMMkSlZyr-CqA",
+        "UCEjQyHFRDn38Rr_jtC-Jjaw",
+        "UCG6sJyYpCKlLJ2CE0ao3zFw",
+        "UCtzmezP61LkhyIbRDnMc25A",
+        "UC9uxyeefZfWc_4Ke-J9jTKw",
+        "UCrS4GXU9ib5jiUggXycYEKA",
+        "UC3d6CeEpl0JZGkmMbvJiSUQ",
+        "UCnV_8u2_yEKE43rhbhswfww",
+        "UCSN9_WXMIpAKvQRdtLcTFQA",
+        "UCU5K1x_JEdPnc-klba1X2kA",
+        "UCvGHhD5ZcpKWkdQs_pfXcww",
+        "UCaWUjzi_L879nCsnziXtLUA",
+        "UCKILCwcALm-LvUF7MooOswQ",
+        "UCbqOaWcgz9FNM_6V50GrTrA",
+        "UCmPMPI2yZHVpiOn-Cd-Wwjw",
+        "UCsceEbzqX-bDhK_xsNKyrSQ",
+        "UC7yABmkfZjwpv0xT9IECo9Q",
+        "UCndoEjIsDLkxXPMRN1SXzbw",
+        "UC6sY4AfPhzCv1Y1JCyXiJ_g"
+      ],
+      "videos": []
+    },
+    "pass_report": {
+      "dry_run": false,
+      "subscriber_channels_planned": 50,
+      "subscriber_channels_processed": 50,
+      "subscriber_http_batches": 1,
+      "format_videos_planned": 50,
+      "format_videos_processed": 50,
+      "format_http_batches": 1,
+      "format_confirmed_regular": 42,
+      "format_live_or_broadcast": 6,
+      "format_missing": 2,
+      "channel_budget_reserved": 50,
+      "video_budget_reserved": 50,
+      "errors": [],
+      "notes": {
+        "subscriber_batches": [
+          {
+            "channel_ids": [
+              "UCxF1FmLQc_QWQu8b5E_L76g",
+              "UCPyF0hIpKdSxexFIxuIlQ1w",
+              "UC52qNmKMly9jIUDRyDegmqg",
+              "UCjm3NiBqiAPvruxdsU_sJVQ",
+              "UCIi_m8juSubWmaujnShzktw",
+              "UCVO1bDySJusMVVRqj7G2xdQ",
+              "UCbwzShonymVqc1dDyRhWOSA",
+              "UCRu9M0KG67FWm3EGeiRRFkA",
+              "UCVqhCtWXMj5n6WJl2QYr-pA",
+              "UCRlW6PT15cabVlDpnLQjnnw",
+              "UCBqD8yJg7t0tBB0txzgZB2A",
+              "UCDa3TS3O7vqtvLR88_GaOyA",
+              "UC5-j3imOLapJXdCkzktL21Q",
+              "UCTzjRCRST1H65rC-dzCh18g",
+              "UCunZ5CoRUtl1R7zynqT6Kvg",
+              "UCALhNdhZzImMqgEyS2oE8GQ",
+              "UC3q-Lh74hFUBp691kMnAEQQ",
+              "UC7SM0p6XsKl5CI2gXGO24SQ",
+              "UC5YnU06mzGQF549yUpOABOA",
+              "UCZVVXDPKkJM9hnQdeR7qkLw",
+              "UCYuXikoKHdST_TZTNBhkxAA",
+              "UC0vRggcvmmWJJvfjJqSUvQQ",
+              "UCDOBlfBzAKe9m7vCCPAfVGA",
+              "UCKTeJsPBIXYd_eBrSpXfzCQ",
+              "UCcehRnuB4hpL5ApNHD6BKDA",
+              "UCxf1p4RAKbhhVwChxw-auQw",
+              "UCDrSP_5SHNT2PawoscGrOyw",
+              "UCVr-soIqyOh-B7Lm7MFQOBg",
+              "UCc4icmENp2e8VIRf_PiZLzg",
+              "UCmPMPI2yZHVpiOn-Cd-Wwjw",
+              "UCsceEbzqX-bDhK_xsNKyrSQ",
+              "UClkG9QQ0pW4bQ1cr2zmN7AA",
+              "UC-ohoWsixqYqr31cgLAzQzA",
+              "UChTdn0ugS3oPK3VpkQF7dNA",
+              "UCHU_M8e_KHBmBncyZ0_Cvag",
+              "UCEvSrvZB4f1cVPh53ehO9VQ",
+              "UC4KhSOtK2uVvf4YGgyXNsgw",
+              "UCXEK_clzZU5hE6E8cL3-hBw",
+              "UCO9HHGDFm0T_iTKybH7Cc4Q",
+              "UCTwm6Mp-LHdps7Q0-S-7lHA",
+              "UCG6JdklHIsAig-v3BxjQrrQ",
+              "UC5RjT7k-r_zgHTNvl9xfn6A",
+              "UC3d6CeEpl0JZGkmMbvJiSUQ",
+              "UCpAhe2iGgn48klnrQrzkozA",
+              "UCMvQFJuEJPJ4CQgkRTmgiOQ",
+              "UCKILCwcALm-LvUF7MooOswQ",
+              "UCit-m2Rq-RlumUtO6gL8eNw",
+              "UCMFWVzkFrzvro5BjQFx3XcQ",
+              "UCEYYgI0RCu4XaYKhaFt1I7A",
+              "UCZ_YtuKcyb3wj61vZER-KKA"
+            ],
+            "outcomes": [
+              {
+                "channel_id": "UCxF1FmLQc_QWQu8b5E_L76g",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCPyF0hIpKdSxexFIxuIlQ1w",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC52qNmKMly9jIUDRyDegmqg",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCjm3NiBqiAPvruxdsU_sJVQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCIi_m8juSubWmaujnShzktw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCVO1bDySJusMVVRqj7G2xdQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCbwzShonymVqc1dDyRhWOSA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCRu9M0KG67FWm3EGeiRRFkA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCVqhCtWXMj5n6WJl2QYr-pA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCRlW6PT15cabVlDpnLQjnnw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCBqD8yJg7t0tBB0txzgZB2A",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCDa3TS3O7vqtvLR88_GaOyA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC5-j3imOLapJXdCkzktL21Q",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCTzjRCRST1H65rC-dzCh18g",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCunZ5CoRUtl1R7zynqT6Kvg",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCALhNdhZzImMqgEyS2oE8GQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC3q-Lh74hFUBp691kMnAEQQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC7SM0p6XsKl5CI2gXGO24SQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC5YnU06mzGQF549yUpOABOA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCZVVXDPKkJM9hnQdeR7qkLw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCYuXikoKHdST_TZTNBhkxAA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC0vRggcvmmWJJvfjJqSUvQQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCDOBlfBzAKe9m7vCCPAfVGA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCKTeJsPBIXYd_eBrSpXfzCQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCcehRnuB4hpL5ApNHD6BKDA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCxf1p4RAKbhhVwChxw-auQw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCDrSP_5SHNT2PawoscGrOyw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCVr-soIqyOh-B7Lm7MFQOBg",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCc4icmENp2e8VIRf_PiZLzg",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCmPMPI2yZHVpiOn-Cd-Wwjw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCsceEbzqX-bDhK_xsNKyrSQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UClkG9QQ0pW4bQ1cr2zmN7AA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC-ohoWsixqYqr31cgLAzQzA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UChTdn0ugS3oPK3VpkQF7dNA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCHU_M8e_KHBmBncyZ0_Cvag",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCEvSrvZB4f1cVPh53ehO9VQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC4KhSOtK2uVvf4YGgyXNsgw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCXEK_clzZU5hE6E8cL3-hBw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCO9HHGDFm0T_iTKybH7Cc4Q",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCTwm6Mp-LHdps7Q0-S-7lHA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCG6JdklHIsAig-v3BxjQrrQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC5RjT7k-r_zgHTNvl9xfn6A",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UC3d6CeEpl0JZGkmMbvJiSUQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCpAhe2iGgn48klnrQrzkozA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCMvQFJuEJPJ4CQgkRTmgiOQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCKILCwcALm-LvUF7MooOswQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCit-m2Rq-RlumUtO6gL8eNw",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCMFWVzkFrzvro5BjQFx3XcQ",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCEYYgI0RCu4XaYKhaFt1I7A",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              },
+              {
+                "channel_id": "UCZ_YtuKcyb3wj61vZER-KKA",
+                "reason": "api_item_channel_exists",
+                "api_status": "known",
+                "retry_after": "2026-10-13T11:11:21.367661+00:00"
+              }
+            ],
+            "counts": {
+              "known": 50,
+              "hidden": 0,
+              "missing": 0,
+              "failed": 0
+            }
+          }
+        ],
+        "format_selection_after_subscribers": {
+          "linked_videos": 50,
+          "rejections": {},
+          "selected_would_be": 50,
+          "channels_with_row": 50,
+          "recent_hit_videos_in_sample": 0,
+          "views_by_video_sample_size": 10163
+        },
+        "subscriber_touched_eligible_for_format": [
+          "UC-ohoWsixqYqr31cgLAzQzA",
+          "UC0vRggcvmmWJJvfjJqSUvQQ",
+          "UC3d6CeEpl0JZGkmMbvJiSUQ",
+          "UC3q-Lh74hFUBp691kMnAEQQ",
+          "UC4KhSOtK2uVvf4YGgyXNsgw",
+          "UC5-j3imOLapJXdCkzktL21Q",
+          "UC52qNmKMly9jIUDRyDegmqg",
+          "UC5RjT7k-r_zgHTNvl9xfn6A",
+          "UC5YnU06mzGQF549yUpOABOA",
+          "UC7SM0p6XsKl5CI2gXGO24SQ",
+          "UCALhNdhZzImMqgEyS2oE8GQ",
+          "UCBqD8yJg7t0tBB0txzgZB2A",
+          "UCDOBlfBzAKe9m7vCCPAfVGA",
+          "UCDa3TS3O7vqtvLR88_GaOyA",
+          "UCDrSP_5SHNT2PawoscGrOyw",
+          "UCEYYgI0RCu4XaYKhaFt1I7A",
+          "UCEvSrvZB4f1cVPh53ehO9VQ",
+          "UCG6JdklHIsAig-v3BxjQrrQ",
+          "UCHU_M8e_KHBmBncyZ0_Cvag",
+          "UCIi_m8juSubWmaujnShzktw",
+          "UCKILCwcALm-LvUF7MooOswQ",
+          "UCKTeJsPBIXYd_eBrSpXfzCQ",
+          "UCMFWVzkFrzvro5BjQFx3XcQ",
+          "UCMvQFJuEJPJ4CQgkRTmgiOQ",
+          "UCO9HHGDFm0T_iTKybH7Cc4Q",
+          "UCPyF0hIpKdSxexFIxuIlQ1w",
+          "UCRlW6PT15cabVlDpnLQjnnw",
+          "UCRu9M0KG67FWm3EGeiRRFkA",
+          "UCTwm6Mp-LHdps7Q0-S-7lHA",
+          "UCTzjRCRST1H65rC-dzCh18g",
+          "UCVO1bDySJusMVVRqj7G2xdQ",
+          "UCVqhCtWXMj5n6WJl2QYr-pA",
+          "UCVr-soIqyOh-B7Lm7MFQOBg",
+          "UCXEK_clzZU5hE6E8cL3-hBw",
+          "UCYuXikoKHdST_TZTNBhkxAA",
+          "UCZVVXDPKkJM9hnQdeR7qkLw",
+          "UCZ_YtuKcyb3wj61vZER-KKA",
+          "UCbwzShonymVqc1dDyRhWOSA",
+          "UCc4icmENp2e8VIRf_PiZLzg",
+          "UCcehRnuB4hpL5ApNHD6BKDA",
+          "UChTdn0ugS3oPK3VpkQF7dNA",
+          "UCit-m2Rq-RlumUtO6gL8eNw",
+          "UCjm3NiBqiAPvruxdsU_sJVQ",
+          "UClkG9QQ0pW4bQ1cr2zmN7AA",
+          "UCmPMPI2yZHVpiOn-Cd-Wwjw",
+          "UCpAhe2iGgn48klnrQrzkozA",
+          "UCsceEbzqX-bDhK_xsNKyrSQ",
+          "UCunZ5CoRUtl1R7zynqT6Kvg",
+          "UCxF1FmLQc_QWQu8b5E_L76g",
+          "UCxf1p4RAKbhhVwChxw-auQw"
+        ],
+        "pass_sequence": 1,
+        "discovery_run_id": null,
+        "dry_run_preserves_fetched_state": false
+      }
+    },
+    "subscriber_outcomes_by_reason": {
+      "api_item_channel_exists": 50
+    },
+    "subscriber_outcomes_by_api_status": {
+      "known": 50
+    },
+    "per_channel_outcomes": [
+      {
+        "channel_id": "UCxF1FmLQc_QWQu8b5E_L76g",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCPyF0hIpKdSxexFIxuIlQ1w",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC52qNmKMly9jIUDRyDegmqg",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCjm3NiBqiAPvruxdsU_sJVQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCIi_m8juSubWmaujnShzktw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCVO1bDySJusMVVRqj7G2xdQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCbwzShonymVqc1dDyRhWOSA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCRu9M0KG67FWm3EGeiRRFkA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCVqhCtWXMj5n6WJl2QYr-pA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCRlW6PT15cabVlDpnLQjnnw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCBqD8yJg7t0tBB0txzgZB2A",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCDa3TS3O7vqtvLR88_GaOyA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC5-j3imOLapJXdCkzktL21Q",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCTzjRCRST1H65rC-dzCh18g",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCunZ5CoRUtl1R7zynqT6Kvg",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCALhNdhZzImMqgEyS2oE8GQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC3q-Lh74hFUBp691kMnAEQQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC7SM0p6XsKl5CI2gXGO24SQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC5YnU06mzGQF549yUpOABOA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCZVVXDPKkJM9hnQdeR7qkLw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCYuXikoKHdST_TZTNBhkxAA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC0vRggcvmmWJJvfjJqSUvQQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCDOBlfBzAKe9m7vCCPAfVGA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCKTeJsPBIXYd_eBrSpXfzCQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCcehRnuB4hpL5ApNHD6BKDA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCxf1p4RAKbhhVwChxw-auQw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCDrSP_5SHNT2PawoscGrOyw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCVr-soIqyOh-B7Lm7MFQOBg",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCc4icmENp2e8VIRf_PiZLzg",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCmPMPI2yZHVpiOn-Cd-Wwjw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCsceEbzqX-bDhK_xsNKyrSQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UClkG9QQ0pW4bQ1cr2zmN7AA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC-ohoWsixqYqr31cgLAzQzA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UChTdn0ugS3oPK3VpkQF7dNA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCHU_M8e_KHBmBncyZ0_Cvag",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCEvSrvZB4f1cVPh53ehO9VQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC4KhSOtK2uVvf4YGgyXNsgw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCXEK_clzZU5hE6E8cL3-hBw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCO9HHGDFm0T_iTKybH7Cc4Q",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCTwm6Mp-LHdps7Q0-S-7lHA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCG6JdklHIsAig-v3BxjQrrQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC5RjT7k-r_zgHTNvl9xfn6A",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UC3d6CeEpl0JZGkmMbvJiSUQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCpAhe2iGgn48klnrQrzkozA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCMvQFJuEJPJ4CQgkRTmgiOQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCKILCwcALm-LvUF7MooOswQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCit-m2Rq-RlumUtO6gL8eNw",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCMFWVzkFrzvro5BjQFx3XcQ",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCEYYgI0RCu4XaYKhaFt1I7A",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      },
+      {
+        "channel_id": "UCZ_YtuKcyb3wj61vZER-KKA",
+        "reason": "api_item_channel_exists",
+        "api_status": "known",
+        "retry_after": "2026-10-13T11:11:21.367661+00:00"
+      }
+    ]
+  },
+  "dry_run_after_live": {
+    "seconds": 0.398,
+    "planned": {
+      "channels": [
+        "UCY9z-9HOmejKBM2oTcG0VpQ",
+        "UCslU9gEMwFnDNrldCgPXomw",
+        "UC-vExHVRAHmbQ4iK1WXpfnA",
+        "UCGu8n4i-O3qMhvwvIoaNb8w",
+        "UCPhHgNBDh3GAZWjlHUW227g",
+        "UCN5W35ad0rNpdtOhO_bRQIg",
+        "UC80X9El4XU4Ow-t7wjO6tnA",
+        "UCIRJZcZvD72_i-W0YQi2csQ",
+        "UCeqLe6ceDwCG9nyQj8tjweA",
+        "UC8Q-lyC_2HaxiNsykWTWwKA",
+        "UCC2paCjfgz597LTEQhuxtEw",
+        "UC0z4uXFMFEBiWAajfx2DGbA",
+        "UC0ktbiZRoCVtD-HHCId_TxA",
+        "UCNuHlH1aWZoC72xO3XCo0YA",
+        "UCpl8tKxxxqZF5DJFRG3PEcA",
+        "UCw4OvuVx4kL3ZUEVxup04Lw",
+        "UCjyGQFi58TFJWIFYp6LpCEQ",
+        "UCaB_klFZZRKhh9qc1neP3fg",
+        "UCDIBN3tR7EH1stfQFn7b2Rw",
+        "UC-YAqaUVLL8bXYaIX824U1w",
+        "UCa4ebwYZSfhsCjbThMToFmg",
+        "UCVZr4K3nUG9QrkzrtSsVzVg",
+        "UC1FLo1-GDgGmFSgjEP2g0HA",
+        "UCmcvcrjJbUq9CrxxoNHDagg",
+        "UCL4YhoTGCqdKsqOGKw5YAuQ",
+        "UCEA0X6DSkalHtitpYggD6Rw",
+        "UC1Jyy5c4TentWwcZb3jcp2Q",
+        "UCfkmedkufAta9ZMUC4fAhmA",
+        "UCdvhztl9Hhuer_DqdIr0wmA",
+        "UCrIeLNCG43kj0MGdce9DVIw",
+        "UCQAAd3RAIN0hI0h1HeGn3zw",
+        "UCwvjGU90WF1JjKFnAff9tYw",
+        "UC9GyDf7Dju8U74cLeqKwmaQ",
+        "UC7yABmkfZjwpv0xT9IECo9Q",
+        "UCbqOaWcgz9FNM_6V50GrTrA",
+        "UCndoEjIsDLkxXPMRN1SXzbw",
+        "UCE3ViUzo4DUMMkSlZyr-CqA",
+        "UCLs1wh8IV9o77YIaRy3cK6A",
+        "UCquSMfTJEZf0GdEBUts6wQA",
+        "UCtzmezP61LkhyIbRDnMc25A",
+        "UCLPoBLRzAZ46l8XgreMkX1A",
+        "UCG_Gm_4vBjpPZN2UAZJjIDg",
+        "UCnf_4MBIr--PcLdQyKuGzPQ",
+        "UCXOM_iNE7h3z_F0K5WCqj-w",
+        "UCNrKe4dRVkvdMYVY-UtFrQg",
+        "UCA9NHwHjdxJ9riezwB3ARlw",
+        "UC3fqrmSkFjmkGGBPkoBO1GQ",
+        "UC9MIrNBNNfiISvrYBAqYkkw",
+        "UCHGjncw0m9QYc-sNLn5PF1Q",
+        "UC2M5wG0HURWh1wyRWPxqozg"
+      ],
+      "videos": []
+    },
+    "overlap_with_live_channel_ids": [],
+    "no_immediate_channel_repick": true,
+    "pass_report": {
+      "dry_run": true,
+      "subscriber_channels_planned": 50,
+      "subscriber_channels_processed": 50,
+      "subscriber_http_batches": 1,
+      "format_videos_planned": 0,
+      "format_videos_processed": 0,
+      "format_http_batches": 0,
+      "format_confirmed_regular": 0,
+      "format_live_or_broadcast": 0,
+      "format_missing": 0,
+      "channel_budget_reserved": 0,
+      "video_budget_reserved": 0,
+      "errors": [],
+      "notes": {
+        "subscriber_batches": [
+          {
+            "dry_run": true,
+            "channel_ids": [
+              "UCkA-gCYaWAjgHk7u6gV9Huw",
+              "UCpXwzeexwam2b_r5E8uCkDw",
+              "UC2M5wG0HURWh1wyRWPxqozg",
+              "UChhdFa_ZLvfhAxgcS3mNyuA",
+              "UChwIHwpyBjcWyX79lkcDlFg",
+              "UC-9VaB7rIA1_0slTmTl88Ug",
+              "UCOFig3Up12trZR7r-PhouKg",
+              "UCw-CPtsrLRBodLyRatVVJOw",
+              "UCNNOMNVLQApu2tjRvpMY_Zw",
+              "UCIoqaMtY2AvuoDBRr0MSfhg",
+              "UC9MIrNBNNfiISvrYBAqYkkw",
+              "UCgkkm2Zr3OZAZn3QLVfvibQ",
+              "UCg_HbmKDOYvOjB1Lowk-rQQ",
+              "UCMLFJBVimIRU3PRqVSExIvA",
+              "UChiifrp-zgzwLQM8faEj50g",
+              "UCEMCVrolcrAwhS4PCT5xNqg",
+              "UC1xL5HSwENk3fOoLotl5yig",
+              "UC3oSgKU2UGZLdl8lRpltBNw",
+              "UCknXlUGPJZH3wIZ6CYzMnwQ",
+              "UCWN_at-yf5AdPNzrnI4AU7g",
+              "UCIRJZcZvD72_i-W0YQi2csQ",
+              "UCG_Gm_4vBjpPZN2UAZJjIDg",
+              "UCmmLzUW_xIMWk1g2iNaMAtw",
+              "UCA9NHwHjdxJ9riezwB3ARlw",
+              "UCDzdfZnwIq-sLA-GFtIonKQ",
+              "UCquSMfTJEZf0GdEBUts6wQA",
+              "UC4jwXXrP-gN0vUC36sgJuYA",
+              "UCqriH9H-gAYusKyRV-zUE0w",
+              "UCxL9PzEn-dz03uSEjJDuolA",
+              "UCBzMs_58gEeWVXqRrNR-eFw",
+              "UCDLozUOaZorIO0RRnux9zWQ",
+              "UCndoEjIsDLkxXPMRN1SXzbw",
+              "UCE3ViUzo4DUMMkSlZyr-CqA",
+              "UCaB_klFZZRKhh9qc1neP3fg",
+              "UCbqOaWcgz9FNM_6V50GrTrA",
+              "UCBET72hC1gTehsGOTA-coWA",
+              "UCV9SkXB1Ip1NRg_C8P-qzqQ",
+              "UC1FLo1-GDgGmFSgjEP2g0HA",
+              "UCQAAd3RAIN0hI0h1HeGn3zw",
+              "UCHZtyxlYmhX0gMkl2r2Oasw",
+              "UCa4ebwYZSfhsCjbThMToFmg",
+              "UCfYAsD6X8IAbBjjRaiRjN5w",
+              "UCl-IBLRopsum5wbqsLnEPuQ",
+              "UC_4lZOSmqWcvGncLpeqDefA",
+              "UC-YAqaUVLL8bXYaIX824U1w",
+              "UCLPoBLRzAZ46l8XgreMkX1A",
+              "UCTONzIn_8Zq0SGaqf1DIeag",
+              "UC_d9yrlixvAE71RdrsF4SBg",
+              "UCz5_aporeBlPcPzos0lBbQg",
+              "UCEtN_bcmQOhV589dxlME2CA"
+            ],
+            "planned": 50
+          }
+        ],
+        "pass_sequence": 1,
+        "discovery_run_id": null,
+        "dry_run_preserves_fetched_state": true
+      }
+    }
+  },
+  "finished_at": "2026-10-06T11:11:26.032398+00:00"
+}

@@ -146,16 +146,37 @@ def snapshot_matches_checkpoint(
     return lower <= snapshot_age_hours <= upper
 
 
+def snapshot_effective_age_hours(
+    row: ExistingSnapshot,
+    *,
+    published_at: datetime | None,
+) -> float | None:
+    """Age at capture using current published_at when timestamps allow."""
+    if row.captured_at is not None and published_at is not None:
+        age = compute_video_age_hours(published_at, row.captured_at)
+        if age is not None:
+            return age
+    if row.age_hours is not None:
+        return float(row.age_hours)
+    return None
+
+
 def find_matching_snapshot(
     snapshots: Sequence[ExistingSnapshot],
     checkpoint_hours: int,
     policy: SnapshotCollectionPolicy,
+    *,
+    published_at: datetime | None = None,
 ) -> ExistingSnapshot | None:
     matches = [
         row
         for row in snapshots
-        if row.age_hours is not None
-        and snapshot_matches_checkpoint(float(row.age_hours), checkpoint_hours, policy)
+        if snapshot_effective_age_hours(row, published_at=published_at) is not None
+        and snapshot_matches_checkpoint(
+            float(snapshot_effective_age_hours(row, published_at=published_at)),  # type: ignore[arg-type]
+            checkpoint_hours,
+            policy,
+        )
     ]
     if not matches:
         return None
@@ -271,7 +292,12 @@ def plan_video_revisits(
     if eligible and current_age is not None:
         for checkpoint in cfg.checkpoint_hours:
             lower, upper = checkpoint_match_window(checkpoint, cfg)
-            matched = find_matching_snapshot(existing_snapshots, checkpoint, cfg)
+            matched = find_matching_snapshot(
+                existing_snapshots,
+                checkpoint,
+                cfg,
+                published_at=published_at,
+            )
             status, action, due_since = _checkpoint_status(
                 checkpoint_hours=checkpoint,
                 current_age_hours=current_age,

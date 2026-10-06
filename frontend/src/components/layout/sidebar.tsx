@@ -12,6 +12,8 @@ import {
 
   BarChart3,
 
+  Bookmark,
+
   Flame,
 
   Layers,
@@ -79,6 +81,10 @@ const NAV_GROUPS = [
     items: [
 
       { href: "/opportunities", label: "Возможности", icon: Flame },
+
+      { href: "/saved-topics", label: "Сохранённые темы", icon: Bookmark },
+
+      { href: "/validation", label: "Validation", icon: BarChart3 },
 
       { href: "/keywords", label: "Пул ключей", icon: Layers },
 

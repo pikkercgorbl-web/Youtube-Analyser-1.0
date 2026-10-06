@@ -228,6 +228,80 @@ def test_overdue_near_expiry_first() -> None:
     assert result.selected_requests[0].video_id == "v1"
 
 
+def test_cp24_momentum_deadline_before_later_overdue_checkpoint() -> None:
+    """Due cp24 inside Momentum window beats overdue checkpoint with later expiry."""
+    now = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
+    contexts = [
+        CaptureRequestBudgetContext(
+            request=SnapshotCaptureRequest("cp24", "ch", 24, "due", now, 28.0, "t", "m"),
+            tier=MonitoringTier.A,
+            raw_vph=500.0,
+            is_overdue=False,
+            time_to_checkpoint_expiry_hours=2.0,
+            time_to_momentum_vph_deadline_hours=1.0,
+        ),
+        CaptureRequestBudgetContext(
+            request=SnapshotCaptureRequest("cp12_od", "ch2", 12, "overdue", now, 30.0, "t", "o"),
+            tier=MonitoringTier.C,
+            raw_vph=1.0,
+            is_overdue=True,
+            time_to_checkpoint_expiry_hours=5.0,
+            time_to_momentum_vph_deadline_hours=None,
+        ),
+    ]
+    result = allocate_capture_budget(contexts, ApiBudgetPolicy(max_capture_requests_per_cycle=1))
+    assert result.selected_requests[0].video_id == "cp24"
+
+
+def test_sooner_overdue_still_wins_over_later_cp24_momentum() -> None:
+    now = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
+    contexts = [
+        CaptureRequestBudgetContext(
+            request=SnapshotCaptureRequest("cp24", "ch", 24, "due", now, 28.0, "t", "m"),
+            tier=MonitoringTier.A,
+            raw_vph=500.0,
+            is_overdue=False,
+            time_to_checkpoint_expiry_hours=2.0,
+            time_to_momentum_vph_deadline_hours=2.0,
+        ),
+        CaptureRequestBudgetContext(
+            request=SnapshotCaptureRequest("cp6_od", "ch2", 6, "overdue", now, 30.0, "t", "o"),
+            tier=MonitoringTier.C,
+            raw_vph=1.0,
+            is_overdue=True,
+            time_to_checkpoint_expiry_hours=0.5,
+            time_to_momentum_vph_deadline_hours=None,
+        ),
+    ]
+    result = allocate_capture_budget(contexts, ApiBudgetPolicy(max_capture_requests_per_cycle=1))
+    assert result.selected_requests[0].video_id == "cp6_od"
+
+
+def test_momentum_cp24_deadline_before_tier() -> None:
+    """cp24 inside momentum VPH window outranks higher tier with loose checkpoint expiry."""
+    now = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
+    contexts = [
+        CaptureRequestBudgetContext(
+            request=SnapshotCaptureRequest("tier_a", "ch", 24, "due", now, 28.0, "t", "a"),
+            tier=MonitoringTier.A,
+            raw_vph=500.0,
+            is_overdue=False,
+            time_to_checkpoint_expiry_hours=8.0,
+            time_to_momentum_vph_deadline_hours=None,
+        ),
+        CaptureRequestBudgetContext(
+            request=SnapshotCaptureRequest("urgent", "ch", 24, "due", now, 28.0, "t", "u"),
+            tier=MonitoringTier.C,
+            raw_vph=1.0,
+            is_overdue=False,
+            time_to_checkpoint_expiry_hours=8.0,
+            time_to_momentum_vph_deadline_hours=2.0,
+        ),
+    ]
+    result = allocate_capture_budget(contexts, ApiBudgetPolicy(max_capture_requests_per_cycle=1))
+    assert result.selected_requests[0].video_id == "urgent"
+
+
 def test_tier_a_before_b_in_budget() -> None:
     now = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
     contexts = [
@@ -386,6 +460,9 @@ def main() -> None:
         test_higher_vph_preferred_same_tier_age,
         test_global_budget_respected,
         test_overdue_near_expiry_first,
+        test_cp24_momentum_deadline_before_later_overdue_checkpoint,
+        test_sooner_overdue_still_wins_over_later_cp24_momentum,
+        test_momentum_cp24_deadline_before_tier,
         test_tier_a_before_b_in_budget,
         test_tier_b_before_c_in_budget,
         test_tier_c_fairness_reservation,

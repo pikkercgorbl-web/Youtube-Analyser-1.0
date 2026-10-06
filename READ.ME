@@ -111,6 +111,22 @@ npm run dev
 
 ---
 
+## 3.1. Roadmap Attention / Radar (локально)
+
+| Этап | Статус |
+|------|--------|
+| 1.22A Attention Engine | ✅ |
+| 1.22B Analyst feed UI | ✅ |
+| 1.22B.1 Pattern Families | ✅ |
+| 1.22C Saved Topics | ✅ |
+| 1.22D Feedback + Validation | ✅ |
+| **Наблюдение** (read-only, 24h контроль) | ▶ следующий |
+| **LLM keyword expansion** | запланирован |
+
+Runbook наблюдения: [docs/OBSERVATION_RUNBOOK.md](docs/OBSERVATION_RUNBOOK.md)
+
+---
+
 ## 4. Разделы интерфейса
 
 | Раздел | Адрес | Назначение |
@@ -120,6 +136,9 @@ npm run dev
 | **Взрывные каналы** | `/explosive-channels` | Рadar + список найденных «взрывных» каналов |
 | **Сохранённые идеи** | `/saved-keywords` | Ваши сохранённые ключи с заметками |
 | **Массовый анализ** | `/mass-analysis` | Сравнение нескольких каналов (от 3 шт.) |
+| **Возможности (Attention)** | `/opportunities` | Snapshot winners, pattern families |
+| **Сохранённые темы** | `/saved-topics` | Watchlist по `family_key` |
+| **Validation** | `/validation` | Read-only сводка feedback и observations |
 
 ---
 
@@ -158,6 +177,7 @@ npm run dev
 | Рadar: «БАЗА КЛЮЧЕЙ ПУСТА» | Выполните `python -m scripts.seed_target_keywords` |
 | Изменения на бэкенде не видны | Перезапустите uvicorn (или дождитесь `--reload`) |
 | Старые пороги на странице радара | Очистите localStorage браузера для localhost:3000 |
+| `/opportunities` 500 в `npm run dev` | Удалите `frontend/.next`, выполните `npm run build`, перезапустите dev |
 
 ---
 

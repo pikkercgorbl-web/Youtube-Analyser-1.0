@@ -1,0 +1,600 @@
+{
+  "started_at": "2026-10-06T11:03:28.223055+00:00",
+  "stages": {
+    "migrations": {
+      "seconds": 0.293,
+      "engine_url": "postgresql://radar:***@127.0.0.1:5433/youtube_radar_restore_check"
+    },
+    "dry_run_1": {
+      "seconds": 0.266,
+      "planned_channels": [
+        "UCic6tpLN_YFjUC8RZZ7hOzw",
+        "UC4OThA2HzFVDtRFvaKVhl4w",
+        "UCMLFJBVimIRU3PRqVSExIvA",
+        "UC0IG0NfuNji09xgFUHURvfg",
+        "UC3oSgKU2UGZLdl8lRpltBNw",
+        "UC9pG_C8pyA_UQEEUXCn7q4A",
+        "UCLYKPKdSAtaLmsiXz6a8TVw",
+        "UCtsDLghIc9sWic7xNxzdVJA",
+        "UCpAhe2iGgn48klnrQrzkozA",
+        "UCbqOaWcgz9FNM_6V50GrTrA",
+        "UCohQz4qmU4gLiQ1ITQLFSPQ",
+        "UCR0zsN_7yvO9XbaWVil_c2A",
+        "UCD-mvCeO7axKxCeXEa90Myg",
+        "UCnibD3SX9Ao9tusSWibtBEQ",
+        "UCCtocdleeSsGYWROYi8YCCQ",
+        "UC1FLo1-GDgGmFSgjEP2g0HA",
+        "UC5RjT7k-r_zgHTNvl9xfn6A",
+        "UCQ0FyUTrAPtPh8DlZ2Ft5_Q",
+        "UCU_UyNuqh64GZi2eIWK1csQ",
+        "UCjyGQFi58TFJWIFYp6LpCEQ",
+        "UC59xvTh1w2G1W3rTo340JEw",
+        "UC_LjrQf24bL1n7SQmAVBI9Q",
+        "UCG6rq0ihSErDGXQbo58RHag",
+        "UC1scq0ERtJKCNRldqhHIGAQ",
+        "UCNrKe4dRVkvdMYVY-UtFrQg",
+        "UCit-m2Rq-RlumUtO6gL8eNw",
+        "UCUYgLegC5k_N4vyFby6A_OA",
+        "UCMEE2QUFUJEBdazcc3MT4Ig",
+        "UChiifrp-zgzwLQM8faEj50g",
+        "UCbKwvrfYB7zcpU2zBByJANg",
+        "UCwvjGU90WF1JjKFnAff9tYw",
+        "UCyrgBQYDQhCksmcBR71LukQ",
+        "UCg_HbmKDOYvOjB1Lowk-rQQ",
+        "UCVU4_PvRR1HM5wrZrIRPTfA",
+        "UCNUcBISWxbbHKqiU4jANLYA",
+        "UCPkh02MKaNHiaK0TkNLJo2w",
+        "UCV9SkXB1Ip1NRg_C8P-qzqQ",
+        "UCdvIA_E8kzBaT0EncFI5CFw",
+        "UCgx6Hf49nf5h6wOs7ugjarg",
+        "UCW0S7iSlezokLj7_KFTqZyw",
+        "UC6Sq8M1EnipqGPAfHtvHJFA",
+        "UCB7r0k-a1rgeH6g__q9BrnA",
+        "UCnV_8u2_yEKE43rhbhswfww",
+        "UCSN9_WXMIpAKvQRdtLcTFQA",
+        "UCRlW6PT15cabVlDpnLQjnnw",
+        "UC7os2LGA_3HPMTwWpohUiOg",
+        "UCw6hDV9cm2_1xfMimu75trA",
+        "UCxF1FmLQc_QWQu8b5E_L76g",
+        "UChLpUGaZO35ICTltBP50VSg",
+        "UCBexcetzwXtcAl6L-ug_OJA"
+      ],
+      "planned_videos": [],
+      "ledger_before": {
+        "utc_day": "2026-10-06",
+        "channels_list": {
+          "reserved": 0,
+          "http_requests": 0,
+          "remaining": 500,
+          "daily_limit": 500
+        },
+        "videos_list": {
+          "reserved": 0,
+          "http_requests": 0,
+          "remaining": 200,
+          "daily_limit": 200
+        }
+      },
+      "ledger_after": {
+        "utc_day": "2026-10-06",
+        "channels_list": {
+          "reserved": 0,
+          "http_requests": 0,
+          "remaining": 500,
+          "daily_limit": 500
+        },
+        "videos_list": {
+          "reserved": 0,
+          "http_requests": 0,
+          "remaining": 200,
+          "daily_limit": 200
+        }
+      },
+      "ledger_unchanged": true,
+      "pass_report": {
+        "dry_run": true,
+        "subscriber_channels_planned": 50,
+        "subscriber_channels_processed": 50,
+        "subscriber_http_batches": 1,
+        "format_videos_planned": 0,
+        "format_videos_processed": 0,
+        "format_http_batches": 0,
+        "format_confirmed_regular": 0,
+        "format_live_or_broadcast": 0,
+        "format_missing": 0,
+        "channel_budget_reserved": 0,
+        "video_budget_reserved": 0,
+        "errors": [],
+        "notes": {
+          "pass_sequence": 1,
+          "discovery_run_id": null
+        }
+      }
+    },
+    "live_enrichment": {
+      "seconds": 0.907,
+      "planned_channels": [
+        "UCgkkm2Zr3OZAZn3QLVfvibQ",
+        "UCyYRbf2kagkglz06GatHYUQ",
+        "UCa4ebwYZSfhsCjbThMToFmg",
+        "UCHU_M8e_KHBmBncyZ0_Cvag",
+        "UC_zX9_iDzHBWLaMiRl5mvOQ",
+        "UCfYAsD6X8IAbBjjRaiRjN5w",
+        "UCEMCVrolcrAwhS4PCT5xNqg",
+        "UC0SvNuae4DVpY8qqCqnJIQw",
+        "UCHr_5H5qTBLd0wDqwUJbvrA",
+        "UCsZyyFSCa4TUIenmXTShQ4A",
+        "UC2D8Qz_sQKakv1UFagfgLMA",
+        "UC0IG0NfuNji09xgFUHURvfg",
+        "UCjuLv5wYGWaMpoOAY17lPEg",
+        "UCQS9Aji37fblOuAyCNAQRIA",
+        "UCH9-XTV-z5tyJp1chkregxQ",
+        "UCHZtyxlYmhX0gMkl2r2Oasw",
+        "UCjyGQFi58TFJWIFYp6LpCEQ",
+        "UCIs6DkQJJLHNrtgJIiLjddw",
+        "UC4jwXXrP-gN0vUC36sgJuYA",
+        "UCbKwvrfYB7zcpU2zBByJANg",
+        "UCSn66CMRgFFvBqUitxonfGA",
+        "UCQU_sVZ6eDtX6L5fUGsgV6g",
+        "UCZn6gz8iVeEFpBaMDrn0oGg",
+        "UCEdlzIgt6Cgh_v74TfuiXug",
+        "UCPkh02MKaNHiaK0TkNLJo2w",
+        "UCz3tfA23fiJciWrGmvX0l1Q",
+        "UClk-Y1F_5gemTOd4pRp8Acw",
+        "UC3oSgKU2UGZLdl8lRpltBNw",
+        "UCadrmlcLMwQlraBAIfZqXHA",
+        "UCKCC37i2Hed_NKrYSMsb2qA",
+        "UCghjyFFQKoOiKS6xNxtjs3A",
+        "UCQ0FyUTrAPtPh8DlZ2Ft5_Q",
+        "UCXx8qm_p2x68dx0SbK4P0uw",
+        "UC3fYcaXI8QtXFq_i6Cqi3Zg",
+        "UCEvSrvZB4f1cVPh53ehO9VQ",
+        "UCHaCLYyf-8GismHv-njhi6g",
+        "UCXPx9kQLo4I1WS9WPkhjczQ",
+        "UCOFig3Up12trZR7r-PhouKg",
+        "UCTzjRCRST1H65rC-dzCh18g",
+        "UCNNOMNVLQApu2tjRvpMY_Zw",
+        "UCl9RQXwPS0GBFEmgeQgNFbw",
+        "UCDuEkSTWogoryHheQw3SS8A",
+        "UC7xXnDPuy9XB3e9eJWC6XOQ",
+        "UCdvIA_E8kzBaT0EncFI5CFw",
+        "UCz5_aporeBlPcPzos0lBbQg",
+        "UC_i0eNERim352uHTh9PT5Tw",
+        "UC4m_tYuZB3P5jC_qq9fQLsA",
+        "UCqaNJQlUbxFC_No-zEGaN3g",
+        "UCLoRCKURgTgf914fNE1UQsg",
+        "UCMvQFJuEJPJ4CQgkRTmgiOQ"
+      ],
+      "planned_videos": [],
+      "ledger_before": {
+        "utc_day": "2026-10-06",
+        "channels_list": {
+          "reserved": 0,
+          "http_requests": 0,
+          "remaining": 500,
+          "daily_limit": 500
+        },
+        "videos_list": {
+          "reserved": 0,
+          "http_requests": 0,
+          "remaining": 200,
+          "daily_limit": 200
+        }
+      },
+      "ledger_after": {
+        "utc_day": "2026-10-06",
+        "channels_list": {
+          "reserved": 50,
+          "http_requests": 1,
+          "remaining": 450,
+          "daily_limit": 500
+        },
+        "videos_list": {
+          "reserved": 0,
+          "http_requests": 0,
+          "remaining": 200,
+          "daily_limit": 200
+        }
+      },
+      "pass_report": {
+        "dry_run": false,
+        "subscriber_channels_planned": 50,
+        "subscriber_channels_processed": 50,
+        "subscriber_http_batches": 1,
+        "format_videos_planned": 0,
+        "format_videos_processed": 0,
+        "format_http_batches": 0,
+        "format_confirmed_regular": 0,
+        "format_live_or_broadcast": 0,
+        "format_missing": 0,
+        "channel_budget_reserved": 50,
+        "video_budget_reserved": 0,
+        "errors": [],
+        "notes": {
+          "pass_sequence": 2,
+          "discovery_run_id": null
+        }
+      },
+      "format_outcomes": {},
+      "channel_statuses": {
+        "UCSn66CMRgFFvBqUitxonfGA": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UC4m_tYuZB3P5jC_qq9fQLsA": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCdvIA_E8kzBaT0EncFI5CFw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCfYAsD6X8IAbBjjRaiRjN5w": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCbKwvrfYB7zcpU2zBByJANg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCEMCVrolcrAwhS4PCT5xNqg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCl9RQXwPS0GBFEmgeQgNFbw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UC0SvNuae4DVpY8qqCqnJIQw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCPkh02MKaNHiaK0TkNLJo2w": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UC4jwXXrP-gN0vUC36sgJuYA": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCHr_5H5qTBLd0wDqwUJbvrA": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCZn6gz8iVeEFpBaMDrn0oGg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCMvQFJuEJPJ4CQgkRTmgiOQ": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCEvSrvZB4f1cVPh53ehO9VQ": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCHU_M8e_KHBmBncyZ0_Cvag": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCQU_sVZ6eDtX6L5fUGsgV6g": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCTzjRCRST1H65rC-dzCh18g": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCKCC37i2Hed_NKrYSMsb2qA": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCDuEkSTWogoryHheQw3SS8A": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCz3tfA23fiJciWrGmvX0l1Q": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCjuLv5wYGWaMpoOAY17lPEg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCLoRCKURgTgf914fNE1UQsg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UC7xXnDPuy9XB3e9eJWC6XOQ": {
+          "subscribers_api_status": null,
+          "subscribers_count": 52100
+        },
+        "UCH9-XTV-z5tyJp1chkregxQ": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UClk-Y1F_5gemTOd4pRp8Acw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCQ0FyUTrAPtPh8DlZ2Ft5_Q": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCQS9Aji37fblOuAyCNAQRIA": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCz5_aporeBlPcPzos0lBbQg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCghjyFFQKoOiKS6xNxtjs3A": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UC2D8Qz_sQKakv1UFagfgLMA": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCjyGQFi58TFJWIFYp6LpCEQ": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCHZtyxlYmhX0gMkl2r2Oasw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCa4ebwYZSfhsCjbThMToFmg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCIs6DkQJJLHNrtgJIiLjddw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCadrmlcLMwQlraBAIfZqXHA": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCNNOMNVLQApu2tjRvpMY_Zw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCXPx9kQLo4I1WS9WPkhjczQ": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCgkkm2Zr3OZAZn3QLVfvibQ": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCOFig3Up12trZR7r-PhouKg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UC0IG0NfuNji09xgFUHURvfg": {
+          "subscribers_api_status": null,
+          "subscribers_count": 5310
+        },
+        "UC3oSgKU2UGZLdl8lRpltBNw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UCXx8qm_p2x68dx0SbK4P0uw": {
+          "subscribers_api_status": null,
+          "subscribers_count": 0
+        },
+        "UC3fYcaXI8QtXFq_i6Cqi3Zg": {
+          "subscribers_api_status": "known",
+          "subscribers_count": 1680
+        },
+        "UCEdlzIgt6Cgh_v74TfuiXug": {
+          "subscribers_api_status": "known",
+          "subscribers_count": 381
+        },
+        "UCHaCLYyf-8GismHv-njhi6g": {
+          "subscribers_api_status": "known",
+          "subscribers_count": 76300
+        },
+        "UC_i0eNERim352uHTh9PT5Tw": {
+          "subscribers_api_status": "known",
+          "subscribers_count": 20300
+        },
+        "UC_zX9_iDzHBWLaMiRl5mvOQ": {
+          "subscribers_api_status": "known",
+          "subscribers_count": 3970
+        },
+        "UCqaNJQlUbxFC_No-zEGaN3g": {
+          "subscribers_api_status": "known",
+          "subscribers_count": 186
+        },
+        "UCsZyyFSCa4TUIenmXTShQ4A": {
+          "subscribers_api_status": "known",
+          "subscribers_count": 53900
+        },
+        "UCyYRbf2kagkglz06GatHYUQ": {
+          "subscribers_api_status": "known",
+          "subscribers_count": 16
+        }
+      },
+      "monitored_states_before": 49,
+      "processed_channel_ids": [
+        "UCgkkm2Zr3OZAZn3QLVfvibQ",
+        "UCyYRbf2kagkglz06GatHYUQ",
+        "UCa4ebwYZSfhsCjbThMToFmg",
+        "UCHU_M8e_KHBmBncyZ0_Cvag",
+        "UC_zX9_iDzHBWLaMiRl5mvOQ",
+        "UCfYAsD6X8IAbBjjRaiRjN5w",
+        "UCEMCVrolcrAwhS4PCT5xNqg",
+        "UC0SvNuae4DVpY8qqCqnJIQw",
+        "UCHr_5H5qTBLd0wDqwUJbvrA",
+        "UCsZyyFSCa4TUIenmXTShQ4A",
+        "UC2D8Qz_sQKakv1UFagfgLMA",
+        "UC0IG0NfuNji09xgFUHURvfg",
+        "UCjuLv5wYGWaMpoOAY17lPEg",
+        "UCQS9Aji37fblOuAyCNAQRIA",
+        "UCH9-XTV-z5tyJp1chkregxQ",
+        "UCHZtyxlYmhX0gMkl2r2Oasw",
+        "UCjyGQFi58TFJWIFYp6LpCEQ",
+        "UCIs6DkQJJLHNrtgJIiLjddw",
+        "UC4jwXXrP-gN0vUC36sgJuYA",
+        "UCbKwvrfYB7zcpU2zBByJANg",
+        "UCSn66CMRgFFvBqUitxonfGA",
+        "UCQU_sVZ6eDtX6L5fUGsgV6g",
+        "UCZn6gz8iVeEFpBaMDrn0oGg",
+        "UCEdlzIgt6Cgh_v74TfuiXug",
+        "UCPkh02MKaNHiaK0TkNLJo2w",
+        "UCz3tfA23fiJciWrGmvX0l1Q",
+        "UClk-Y1F_5gemTOd4pRp8Acw",
+        "UC3oSgKU2UGZLdl8lRpltBNw",
+        "UCadrmlcLMwQlraBAIfZqXHA",
+        "UCKCC37i2Hed_NKrYSMsb2qA",
+        "UCghjyFFQKoOiKS6xNxtjs3A",
+        "UCQ0FyUTrAPtPh8DlZ2Ft5_Q",
+        "UCXx8qm_p2x68dx0SbK4P0uw",
+        "UC3fYcaXI8QtXFq_i6Cqi3Zg",
+        "UCEvSrvZB4f1cVPh53ehO9VQ",
+        "UCHaCLYyf-8GismHv-njhi6g",
+        "UCXPx9kQLo4I1WS9WPkhjczQ",
+        "UCOFig3Up12trZR7r-PhouKg",
+        "UCTzjRCRST1H65rC-dzCh18g",
+        "UCNNOMNVLQApu2tjRvpMY_Zw",
+        "UCl9RQXwPS0GBFEmgeQgNFbw",
+        "UCDuEkSTWogoryHheQw3SS8A",
+        "UC7xXnDPuy9XB3e9eJWC6XOQ",
+        "UCdvIA_E8kzBaT0EncFI5CFw",
+        "UCz5_aporeBlPcPzos0lBbQg",
+        "UC_i0eNERim352uHTh9PT5Tw",
+        "UC4m_tYuZB3P5jC_qq9fQLsA",
+        "UCqaNJQlUbxFC_No-zEGaN3g",
+        "UCLoRCKURgTgf914fNE1UQsg",
+        "UCMvQFJuEJPJ4CQgkRTmgiOQ"
+      ],
+      "processed_video_ids": []
+    },
+    "dry_run_2": {
+      "planned_channels": [
+        "UCmcvcrjJbUq9CrxxoNHDagg",
+        "UC2bHyj6w5qG3fslMhzDmptw",
+        "UCpOwP3u_FKwQSrdvD5Ymu5w",
+        "UCBNrmSGFuSW9EieEZvmuZlA",
+        "UCUigI5K_cdltbWozcCql8Fg",
+        "UCHQmnS-kI2C-2GiFSSxKHSw",
+        "UCjm8WDLX3dk7S_gZt-ilnKA",
+        "UCDa3TS3O7vqtvLR88_GaOyA",
+        "UCzlq0jeqyaESzVAak9L3xYQ",
+        "UC8Q-lyC_2HaxiNsykWTWwKA",
+        "UCc4icmENp2e8VIRf_PiZLzg",
+        "UC0z4uXFMFEBiWAajfx2DGbA",
+        "UCMFWVzkFrzvro5BjQFx3XcQ",
+        "UC-vExHVRAHmbQ4iK1WXpfnA",
+        "UCTmiXEY_XT2_EihkpTqglVQ",
+        "UCiPPdVgKiZ354uwqmHDvVjg",
+        "UCke5kj2zZyk9HpPVzg5cOVA",
+        "UCXZ3oLGuTBfgO6i_rirOwnQ",
+        "UCbJ1rXe7YZEx7TyhkJun8Rw",
+        "UCO9HHGDFm0T_iTKybH7Cc4Q",
+        "UCDuEkSTWogoryHheQw3SS8A",
+        "UCIi_m8juSubWmaujnShzktw",
+        "UCo_W3Gk-L5AnstVkeZthEmA",
+        "UCEA0X6DSkalHtitpYggD6Rw",
+        "UCVgHVZDxnxTGY2-dLDuIS1g",
+        "UCqXug42gvUuqGAzpgdRq81Q",
+        "UCJ6MKt18cpUO4XYWgdqS04w",
+        "UC5D1f_3EqbkM2ykiiolF8GQ",
+        "UCXWqm5AyP1gZ6qIKGq8ltdg",
+        "UCiJ4105UcN5JQWlAMOUu-KQ",
+        "UCtfujLnfNcLgebj2WNr0fTw",
+        "UCCibOqsmK8lJ1xEWtaL2Y8A",
+        "UCz3tfA23fiJciWrGmvX0l1Q",
+        "UCzMNiIYG6AEJZMfzhpAcHGQ",
+        "UC9GyDf7Dju8U74cLeqKwmaQ",
+        "UCqEr5w-vsL1fPEUtB4Pyeqg",
+        "UCw-CPtsrLRBodLyRatVVJOw",
+        "UCw5wLVsDQbLNm-f-aByakfw",
+        "UCE-o0A6j1W34eUfLEFkCI5Q",
+        "UCFBE_UZ-TOwAIz3qvlpMXVg",
+        "UC2vBlG_XfqwHM8KSRsGWz4g",
+        "UCa6cvSzCZIxc_suV2urnNfw",
+        "UCsceEbzqX-bDhK_xsNKyrSQ",
+        "UCjAyZxa2d1BOiNGmXRboqZw",
+        "UCG_FuU5sl_85UfGBZmijKRA",
+        "UC88d0lRhw4LGPukxpwsWpcA",
+        "UC80X9El4XU4Ow-t7wjO6tnA",
+        "UCaQh0w8Lnce-S4bgwNyVvgA",
+        "UCRu9M0KG67FWm3EGeiRRFkA",
+        "UCR3m1oGT1EWVC4qDkZVHjrA"
+      ],
+      "planned_videos": [],
+      "overlap_with_live_channels": [
+        "UCDuEkSTWogoryHheQw3SS8A",
+        "UCz3tfA23fiJciWrGmvX0l1Q"
+      ],
+      "overlap_with_live_videos": [],
+      "no_immediate_channel_repick": false,
+      "no_immediate_video_repick": true
+    },
+    "monitoring_cycle": {
+      "seconds": 45.019,
+      "summary": {
+        "run_id": "monitoring_20261006T110400Z_127e0c26",
+        "started_at": "2026-10-06 11:04:00.367973+00:00",
+        "finished_at": "2026-10-06 11:04:15.410902+00:00",
+        "runtime_seconds": 15.043,
+        "loaded_video_count": 50,
+        "eligible_video_count": 50,
+        "tier_counts": {
+          "A": 8,
+          "B": 17,
+          "C": 25
+        },
+        "channel_cap_excluded_count": 0,
+        "global_cap_excluded_count": 0,
+        "due_count": 0,
+        "overdue_count": 0,
+        "capture_request_count": 0,
+        "selected_request_count": 0,
+        "deferred_request_count": 0,
+        "inserted_snapshot_count": 0,
+        "duplicate_snapshot_count": 0,
+        "missing_count": 0,
+        "fetch_failed_count": 0,
+        "validation_failed_count": 0,
+        "persistence_failed_count": 0,
+        "cycle_status": "ok",
+        "errors": []
+      },
+      "monitored_states_before": 50,
+      "monitored_states_after": 50,
+      "new_monitored_delta": 0,
+      "capture_video_ids_checked": [],
+      "admissible_check": {
+        "checked": 0,
+        "violations": []
+      }
+    },
+    "attention_refresh": {
+      "seconds": 8.122,
+      "run_id": "attention_20261006T110445Z",
+      "winners": 50,
+      "patterns": 4,
+      "families": 4,
+      "gating": {
+        "require_confirmed_regular_before_rank_cap": true,
+        "publishable_pool_before_cap": 50,
+        "published_after_cap": 50,
+        "video_limit": 50
+      },
+      "snapshot_api": {
+        "http_ok": true,
+        "api_run_id": "attention_20261006T110445Z",
+        "winner_count": 50,
+        "pattern_count": 4,
+        "matches": true
+      }
+    }
+  },
+  "finished_at": "2026-10-06T11:04:53.511781+00:00",
+  "total_seconds": 54.607
+}

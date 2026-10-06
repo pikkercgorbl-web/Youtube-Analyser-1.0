@@ -25,6 +25,9 @@ from app.services.channel_velocity_baseline import (
     snapshot_record_from_orm,
 )
 from app.services.radar_candidate_analysis import _percentile
+from app.models.orm import VideoFormat
+from app.services.radar_target_eligibility import radar_target_rejection_reason
+from app.services.video_format_api_verification import video_id_publishable_with_confirmed_set
 
 
 def _human_reasons(codes: list[str], rec: AttentionVideoRecord, *, growth: int | None) -> list[str]:
@@ -112,6 +115,7 @@ def build_video_winners(
     config: AttentionEngineConfig,
     *,
     now: datetime,
+    publishable_confirmed_ids: frozenset[str] | None = None,
 ) -> list[VideoWinner]:
     records = list(bundle.records.values())
     eligible_vphs = sorted(rec.vph for rec in records if rec.breakout_eligible and rec.vph is not None)
@@ -121,6 +125,22 @@ def build_video_winners(
 
     winners: list[VideoWinner] = []
     for rec in records:
+        if radar_target_rejection_reason(
+            content_format=rec.video.content_format,
+            channel=rec.channel,
+            latest_snapshot=rec.latest_snapshot,
+        ) is not None:
+            continue
+        if publishable_confirmed_ids is not None and rec.video.content_format in (
+            VideoFormat.MEDIUM,
+            VideoFormat.LONG,
+        ):
+            if not video_id_publishable_with_confirmed_set(
+                content_format=rec.video.content_format,
+                video_id=rec.video.id,
+                confirmed_ids=publishable_confirmed_ids,
+            ):
+                continue
         acceleration = classify_acceleration(
             [snap.vph for snap in rec.snapshots],
             min_points=config.min_acceleration_snapshots,

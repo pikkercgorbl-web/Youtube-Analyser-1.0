@@ -8,8 +8,10 @@ from datetime import datetime
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models.orm import Video, VideoFormat, VideoSnapshot
+from app.models.orm import Channel, Video, VideoFormat, VideoSnapshot
 from app.services.metrics import ensure_utc, utc_now
+from app.services.monitoring_radar_eligibility import monitoring_video_eligible
+from app.services.video_format_api_verification import load_api_format_confirmed_video_ids
 from app.services.video_snapshot_storage import get_latest_snapshots_for_videos
 
 
@@ -82,16 +84,32 @@ def load_monitored_video_states(
     """
     reference = now or utc_now()
     stmt = select(Video).where(
-        Video.content_format.not_in((VideoFormat.SHORT, VideoFormat.LIVE)),
+        Video.content_format.not_in((VideoFormat.SHORT, VideoFormat.LIVE, VideoFormat.UNKNOWN)),
     ).order_by(Video.id.asc())
     if max_videos is not None:
         stmt = stmt.limit(max_videos)
     videos = list(session.scalars(stmt).all())
     video_ids = [video.id for video in videos]
     latest_by_video_id = get_latest_snapshots_for_videos(session, video_ids)
+    channel_ids = list({video.channel_id for video in videos if video.channel_id})
+    channels_by_id: dict[str, Channel] = {}
+    if channel_ids:
+        for chunk_start in range(0, len(channel_ids), 400):
+            chunk = channel_ids[chunk_start : chunk_start + 400]
+            for row in session.scalars(select(Channel).where(Channel.id.in_(chunk))).all():
+                channels_by_id[row.id] = row
 
+    confirmed = load_api_format_confirmed_video_ids(session, video_ids)
     states: list[MonitoredVideoState] = []
     for video in videos:
         latest = latest_by_video_id.get(video.id)
+        channel = channels_by_id.get(video.channel_id)
+        if not monitoring_video_eligible(
+            video=video,
+            channel=channel,
+            latest_snapshot=latest,
+            confirmed_regular_ids=confirmed,
+        ):
+            continue
         states.append(_state_from_video(video, now=reference, latest_snapshot=latest))
     return states

@@ -45,9 +45,13 @@ FLAG_TOPIC_SUPPORTED = "topic_supported"
 
 REASON_MULTI_BREAKOUT = "multiple_recent_breakouts"
 REASON_VPH_ABOVE_PREVIOUS = "recent_median_vph_above_previous"
+REASON_REPEATED_AGE_ALIGNED_IMPROVEMENT = "repeated_age_aligned_improvement"
 REASON_CONFIRMED_72H_CLUSTER = "confirmed_72h_cluster"
 REASON_SUBSCRIBER_GROWTH = "subscriber_growth"
 REASON_CONTENT_MOMENTUM = "content_momentum"
+REASON_CONTEXT_BREAKOUT_ELIGIBLE = "context_breakout_eligible"
+REASON_CONTEXT_KEYWORD_72H_GROWTH = "context_keyword_72h_view_growth"
+REASON_CONTEXT_SUBSCRIBER_GROWTH = "context_subscriber_growth"
 
 
 def youtube_watch_url(video_id: str) -> str:
@@ -131,6 +135,16 @@ class ChannelMomentum:
     human_reasons: tuple[str, ...]
     recent_window_days: int
     previous_window_days: int
+    momentum_horizon_hours: int = 24
+    momentum_horizon_tolerance_hours: float = 6.0
+    recent_eligible_count: int = 0
+    previous_eligible_count: int = 0
+    recent_measurable_count: int = 0
+    previous_measurable_count: int = 0
+    recent_improvement_count: int = 0
+    improvement_ratio_threshold: float = 1.5
+    previous_baseline_zero: bool = False
+    incompleteness_notes: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -142,6 +156,9 @@ class AttentionEngineConfig:
     timezone_name: str = ATTENTION_TIMEZONE
     channel_recent_days: int = 7
     channel_previous_days: int = 7
+    channel_momentum_horizon_hours: int = 24
+    channel_momentum_horizon_tolerance_hours: float = 6.0
+    channel_momentum_improvement_ratio: float = 1.5
     min_acceleration_snapshots: int = 3
     min_pattern_videos: int = 2
     min_pattern_channels: int = 2
@@ -240,6 +257,7 @@ def channel_momentum_to_dict(row: ChannelMomentum) -> dict[str, Any]:
     payload["representative_video_ids"] = list(row.representative_video_ids)
     payload["reason_codes"] = list(row.reason_codes)
     payload["human_reasons"] = list(row.human_reasons)
+    payload["incompleteness_notes"] = list(row.incompleteness_notes)
     return payload
 
 

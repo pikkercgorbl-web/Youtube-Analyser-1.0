@@ -148,6 +148,16 @@ def _channel_response(row: ChannelMomentum) -> AttentionChannelMomentumResponse:
         human_reasons=list(row.human_reasons),
         recent_window_days=row.recent_window_days,
         previous_window_days=row.previous_window_days,
+        momentum_horizon_hours=row.momentum_horizon_hours,
+        momentum_horizon_tolerance_hours=row.momentum_horizon_tolerance_hours,
+        recent_eligible_count=row.recent_eligible_count,
+        previous_eligible_count=row.previous_eligible_count,
+        recent_measurable_count=row.recent_measurable_count,
+        previous_measurable_count=row.previous_measurable_count,
+        recent_improvement_count=row.recent_improvement_count,
+        improvement_ratio_threshold=row.improvement_ratio_threshold,
+        previous_baseline_zero=row.previous_baseline_zero,
+        incompleteness_notes=list(row.incompleteness_notes),
     )
 
 

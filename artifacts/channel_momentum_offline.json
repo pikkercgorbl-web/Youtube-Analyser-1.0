@@ -1,0 +1,11 @@
+{
+  "computed_at": "2026-10-06T12:16:03.467441+00:00",
+  "published_signal_count": 0,
+  "published_channels": [],
+  "rejection_primary_diagnostic_counts": {
+    "insufficient_recent_eligible_videos": 752,
+    "subscriber_count_unavailable_or_above_cap": 9289,
+    "insufficient_previous_videos_in_window": 8
+  },
+  "channels": []
+}

@@ -66,11 +66,13 @@ def main() -> None:
             channel_id="ch_small",
             title="Small Horror Channel",
             subscribers_count=100,
+            subscribers_known=True,
         ),
         "ch_big": YouTubeChannelDetails(
             channel_id="ch_big",
             title="Big History Channel",
             subscribers_count=500_000,
+            subscribers_known=True,
         ),
     }
 

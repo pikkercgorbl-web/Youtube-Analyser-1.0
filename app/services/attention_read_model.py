@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from datetime import datetime
 from typing import Literal
 
@@ -36,6 +37,7 @@ from app.services.attention_engine_types import (
 )
 from app.services.attention_pattern_families import upsert_family_identity
 from app.services.metrics import ensure_utc, utc_now
+from app.services.saved_topics import append_saved_topic_observations_for_result
 
 AttentionReadSource = Literal["snapshot", "live_compute", "unavailable"]
 
@@ -159,6 +161,7 @@ def persist_attention_result(session: Session, result: AttentionEngineResult, *,
     }
     if mapping:
         upsert_family_identity(session, mapping, now=summary.computed_at)
+    append_saved_topic_observations_for_result(session, run_id=run_id, result=result)
 
 
 def refresh_attention_engine(
@@ -166,17 +169,41 @@ def refresh_attention_engine(
     *,
     config: AttentionEngineConfig | None = None,
     now: datetime | None = None,
+    publishable_winner_video_ids: frozenset[str] | None = None,
+    filter_unverified_format_winners: bool = True,
 ) -> AttentionEngineResult:
     cfg = config or AttentionEngineConfig()
     computed_at = ensure_utc(now or utc_now())
     run_id = _run_id(computed_at)
+    use_publish_gate = filter_unverified_format_winners and publishable_winner_video_ids is None
     result = compute_attention_engine(
         session,
         config=cfg,
         now=computed_at,
         source="snapshot",
         run_id=run_id,
+        require_confirmed_regular_for_publish=use_publish_gate,
     )
+    if publishable_winner_video_ids is not None:
+        filtered = [row for row in result.video_winners if row.video_id in publishable_winner_video_ids]
+        notes = dict(result.summary.notes)
+        notes["published_winners_filtered"] = {
+            "before": len(result.video_winners),
+            "after": len(filtered),
+            "allowlist_size": len(publishable_winner_video_ids),
+            "mode": "explicit_allowlist",
+        }
+        result = AttentionEngineResult(
+            summary=replace(
+                result.summary,
+                winner_count=len(filtered),
+                notes=notes,
+            ),
+            video_winners=tuple(filtered),
+            patterns=result.patterns,
+            families=result.families,
+            channels=result.channels,
+        )
     persist_attention_result(session, result, run_id=run_id)
     return result
 
@@ -357,6 +384,16 @@ def _channel_from_json(payload: dict) -> ChannelMomentum:
         human_reasons=tuple(payload.get("human_reasons") or ()),
         recent_window_days=int(payload["recent_window_days"]),
         previous_window_days=int(payload["previous_window_days"]),
+        momentum_horizon_hours=int(payload.get("momentum_horizon_hours") or 24),
+        momentum_horizon_tolerance_hours=float(payload.get("momentum_horizon_tolerance_hours") or 6.0),
+        recent_eligible_count=int(payload.get("recent_eligible_count") or 0),
+        previous_eligible_count=int(payload.get("previous_eligible_count") or 0),
+        recent_measurable_count=int(payload.get("recent_measurable_count") or 0),
+        previous_measurable_count=int(payload.get("previous_measurable_count") or 0),
+        recent_improvement_count=int(payload.get("recent_improvement_count") or 0),
+        improvement_ratio_threshold=float(payload.get("improvement_ratio_threshold") or 1.5),
+        previous_baseline_zero=bool(payload.get("previous_baseline_zero")),
+        incompleteness_notes=tuple(payload.get("incompleteness_notes") or ()),
     )
 
 

@@ -8,8 +8,13 @@ export { youtubeThumbnail, youtubeVideoUrl };
 const BREAKOUT_WINNER_RE = /breakout\s+winner/i;
 
 export function rewriteHumanReason(text: string): string {
-  let out = text.replace(/(\d+)\s+breakout-eligible videos/gi, "$1 видео входят в выборку Breakout");
-  out = out.replace(/breakout-eligible/gi, "в выборке Breakout");
+  let out = text.replace(
+    /(\d+)\s+breakout-eligible videos/gi,
+    "$1 видео подходят для анализа Breakout",
+  );
+  out = out.replace(/breakout-eligible/gi, "подходят для анализа Breakout");
+  out = out.replace(/qualify for Breakout analysis/gi, "подходят для анализа Breakout");
+  out = out.replace(/^Context:/gi, "Контекст:");
   return out;
 }
 
@@ -177,7 +182,7 @@ export function winnerSignalFlags(row: {
   const codes = new Set(row.reason_codes ?? []);
   return {
     winner: Boolean(row.in_winner_snapshot) || codes.has("breakout_high_rank"),
-    accelerating: row.acceleration_state === "accelerating" || codes.has("accelerating_velocity"),
+    accelerating: row.acceleration_state === "accelerating",
     confirmed72h: row.delayed_outcome_state === "confirmed" || codes.has("confirmed_72h_growth"),
     smallChannel: codes.has("small_channel_in_observed_universe"),
     strongerThanChannel: codes.has("channel_relative_outlier") || row.channel_relative_signal?.status === "production_ready",

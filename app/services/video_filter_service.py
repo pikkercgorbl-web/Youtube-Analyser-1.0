@@ -380,24 +380,73 @@ def parse_relative_time_to_days(time_text: str) -> int:
     return -1
 
 
-def parse_relative_published_date(text: str) -> datetime:
+def parse_relative_time_to_timedelta(time_text: str) -> timedelta | None:
+    """Parse YouTube relative labels into a timedelta (None if unknown)."""
+    normalized = (
+        time_text.replace("\xa0", " ")
+        .replace("\u202f", " ")
+        .replace("−", "-")
+        .strip()
+        .lower()
+    )
+    if not normalized:
+        return None
+    if normalized in {"just now", "moments ago", "только что", "сейчас"}:
+        return timedelta(0)
+
+    singular_patterns: tuple[tuple[re.Pattern[str], timedelta], ...] = (
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+years?\b", re.I), timedelta(days=365)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+months?\b", re.I), timedelta(days=30)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+weeks?\b", re.I), timedelta(days=7)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+days?\b", re.I), timedelta(days=1)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+hours?\b", re.I), timedelta(hours=1)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+minutes?\b", re.I), timedelta(minutes=1)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+(?:год(?:а|у)?|лет)\b", re.I), timedelta(days=365)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+месяц(?:а|ев)?\b", re.I), timedelta(days=30)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+недел(?:ю|и|ь|ю)\b", re.I), timedelta(days=7)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+день\b", re.I), timedelta(days=1)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+час(?:а|ов)?\b", re.I), timedelta(hours=1)),
+        (re.compile(r"\b(?:an?|one|один|одна|одну)\s+минут(?:а|ы|у)?\b", re.I), timedelta(minutes=1)),
+    )
+    for pattern, delta in singular_patterns:
+        if pattern.search(normalized):
+            return delta
+
+    amount_patterns: tuple[tuple[re.Pattern[str], str], ...] = (
+        (re.compile(r"(\d+)\s*(?:years?|год(?:а|у)?|лет)\b", re.I), "year"),
+        (re.compile(r"(\d+)\s*(?:months?|месяц(?:а|ев)?)\b", re.I), "month"),
+        (re.compile(r"(\d+)\s*(?:weeks?|недел(?:я|и|ь|ю|ей)?|недель)\b", re.I), "week"),
+        (re.compile(r"(\d+)\s*(?:days?|день|дня|дней)\b", re.I), "day"),
+        (re.compile(r"(\d+)\s*(?:hours?|час(?:а|ов)?)\b", re.I), "hour"),
+        (re.compile(r"(\d+)\s*(?:minutes?|минут(?:а|ы|у)?|мин\.?)\b", re.I), "minute"),
+        (re.compile(r"(\d+)\s*(?:seconds?|секунд(?:а|ы)?)\b", re.I), "second"),
+    )
+    for pattern, unit in amount_patterns:
+        match = pattern.search(normalized)
+        if match:
+            amount = int(match.group(1))
+            return _relative_delta(amount, unit)
+    return None
+
+
+def parse_relative_published_date(
+    text: str,
+    *,
+    reference: datetime | None = None,
+) -> datetime:
     """
     Convert relative publish labels to an approximate UTC datetime.
 
     Examples: ``2 days ago``, ``1 month ago``, ``Streamed 4 weeks ago``,
-    ``3 дня назад``.
+    ``3 дня назад``, ``3 hours ago``.
     """
-    normalized = text.strip().lower()
-    if not normalized:
-        return datetime.min.replace(tzinfo=timezone.utc)
+    ref = reference if reference is not None else datetime.now(timezone.utc)
+    ref = ref if ref.tzinfo is not None else ref.replace(tzinfo=timezone.utc)
 
-    age_days = parse_relative_time_to_days(text)
-    if age_days < 0:
+    delta = parse_relative_time_to_timedelta(text)
+    if delta is None:
         return datetime.min.replace(tzinfo=timezone.utc)
-    if age_days == 0:
-        return datetime.now(timezone.utc)
-
-    return datetime.now(timezone.utc) - timedelta(days=age_days)
+    return ref - delta
 
 
 def _relative_delta(amount: int, unit: str) -> timedelta:

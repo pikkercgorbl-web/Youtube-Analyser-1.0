@@ -1,0 +1,17 @@
+{
+  "channels": 19,
+  "videos_in_momentum_windows": 151,
+  "unique_video_ids_needing_format_confirmation": 135,
+  "videos_list_batches_ceil": 3,
+  "batch_size": 50,
+  "utc_day": "2026-10-06",
+  "videos_list_budget_daily_limit": 200,
+  "videos_list_budget_reserved_today": 200,
+  "videos_list_budget_remaining_today": 0,
+  "pass_limit_per_enrichment_pass": 50,
+  "note": "Format confirmation does not create historical snapshots; monitoring revisits still required for age-aligned VPH.",
+  "suggested_pass_context": {
+    "cycle_video_ids_count": 135,
+    "cycle_channel_ids_count": 19
+  }
+}

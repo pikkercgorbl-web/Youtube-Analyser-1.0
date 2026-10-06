@@ -3,7 +3,7 @@ from __future__ import annotations
 import enum
 from datetime import datetime
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -1393,6 +1393,16 @@ class AttentionChannelMomentumResponse(BaseModel):
     human_reasons: list[str]
     recent_window_days: int
     previous_window_days: int
+    momentum_horizon_hours: int = 24
+    momentum_horizon_tolerance_hours: float = 6.0
+    recent_eligible_count: int = 0
+    previous_eligible_count: int = 0
+    recent_measurable_count: int = 0
+    previous_measurable_count: int = 0
+    recent_improvement_count: int = 0
+    improvement_ratio_threshold: float = 1.5
+    previous_baseline_zero: bool = False
+    incompleteness_notes: list[str] = Field(default_factory=list)
 
 
 class AttentionListMeta(BaseModel):
@@ -1502,4 +1512,147 @@ class AttentionPatternFamilyDetailResponse(BaseModel):
     related_keywords: list[AttentionRelatedKeywordResponse] = Field(default_factory=list)
     channels: list[AttentionParticipatingChannelResponse] = Field(default_factory=list)
     member_patterns: list[AttentionPatternResponse] = Field(default_factory=list)
+
+
+# --- Saved Topics / Watchlist (Stage 1.22C) ---
+
+
+SavedTopicStatusLiteral = Literal["WATCHING", "WANT_TO_TEST", "TESTING", "DROPPED"]
+
+
+class SavedTopicCreateRequest(BaseModel):
+    family_key: str = Field(min_length=1, max_length=160)
+
+
+class SavedTopicPatchRequest(BaseModel):
+    status: SavedTopicStatusLiteral | None = None
+    notes: str | None = Field(default=None, max_length=4000)
+    tags: list[str] | None = None
+
+
+class SavedTopicObservationResponse(BaseModel):
+    id: int
+    attention_run_id: str
+    captured_at: datetime
+    payload: dict[str, Any]
+
+
+class SavedTopicListItemResponse(BaseModel):
+    id: int
+    family_key: str
+    label: str
+    status: SavedTopicStatusLiteral
+    notes: str
+    tags: list[str]
+    created_at: datetime
+    updated_at: datetime
+    archived_at: datetime | None = None
+    latest_observation_at: datetime | None = None
+    present_in_latest_snapshot: bool | None = None
+
+
+class SavedTopicListResponse(BaseModel):
+    items: list[SavedTopicListItemResponse]
+    total: int
+
+
+FindingRatingLiteral = Literal["USEFUL", "NOT_USEFUL", "UNCLEAR"]
+OwnTestOutcomeLiteral = Literal["UNKNOWN", "BETTER", "AS_EXPECTED", "WORSE"]
+
+
+class SavedTopicManualMetricsInput(BaseModel):
+    measured_at: datetime | None = None
+    views: int | None = Field(default=None, ge=0)
+    vph: float | None = Field(default=None, ge=0)
+    notes: str | None = Field(default=None, max_length=500)
+
+
+class SavedTopicFeedbackCreateRequest(BaseModel):
+    finding_rating: FindingRatingLiteral
+    reason_comment: str = Field(default="", max_length=2000)
+    own_test_video_url: str | None = Field(default=None, max_length=512)
+    own_test_video_published_at: datetime | None = None
+    own_test_outcome: OwnTestOutcomeLiteral = "UNKNOWN"
+    manual_metrics: SavedTopicManualMetricsInput | None = None
+
+
+class SavedTopicFeedbackResponse(BaseModel):
+    id: int
+    recorded_at: datetime
+    finding_rating: FindingRatingLiteral
+    reason_comment: str
+    own_test_video_url: str | None = None
+    own_test_video_published_at: datetime | None = None
+    own_test_outcome: OwnTestOutcomeLiteral
+    manual_metrics: dict[str, Any] = Field(default_factory=dict)
+
+
+class SavedTopicDetailResponse(BaseModel):
+    id: int
+    family_key: str
+    status: SavedTopicStatusLiteral
+    notes: str
+    tags: list[str]
+    created_at: datetime
+    updated_at: datetime
+    archived_at: datetime | None = None
+    frozen_snapshot: dict[str, Any]
+    live_observation: SavedTopicObservationResponse | None = None
+    count_deltas: dict[str, int] | None = None
+    latest_feedback: SavedTopicFeedbackResponse | None = None
+
+
+class SavedTopicSaveResponse(BaseModel):
+    item: SavedTopicDetailResponse
+    created: bool
+    idempotent: bool
+    archived_requires_restore: bool = False
+    message: str | None = None
+
+
+class SavedTopicHistoryResponse(BaseModel):
+    items: list[SavedTopicObservationResponse]
+    total: int
+    limit: int
+    offset: int
+
+
+class SavedTopicEventResponse(BaseModel):
+    id: int
+    occurred_at: datetime
+    event_type: str
+    payload: dict[str, Any] = Field(default_factory=dict)
+
+
+class SavedTopicTimelineItemResponse(BaseModel):
+    kind: Literal["observation", "event"]
+    occurred_at: datetime
+    observation_id: int | None = None
+    attention_run_id: str | None = None
+    payload: dict[str, Any] = Field(default_factory=dict)
+    id: int | None = None
+    event_type: str | None = None
+
+
+class SavedTopicTimelineResponse(BaseModel):
+    items: list[SavedTopicTimelineItemResponse]
+    total: int
+    limit: int
+    offset: int
+
+
+class ValidationReportResponse(BaseModel):
+    period: dict[str, Any]
+    topics_saved_in_period: int
+    current_status_counts: dict[str, int]
+    status_transition_events: dict[str, int]
+    latest_finding_rating_distribution: dict[str, int]
+    topics_with_latest_feedback: int
+    topics_with_own_test_video_url: int
+    topics_with_known_own_test_outcome: int
+    latest_observation_presence: dict[str, int]
+    topics_with_comparable_count_deltas: int
+    frozen_support_source_breakdown: dict[str, int]
+    frozen_family_kind_breakdown: dict[str, int]
+    interpretation_notes: list[str]
 

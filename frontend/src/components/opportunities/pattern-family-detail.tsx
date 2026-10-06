@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Bookmark } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import {
   Disclosure,
@@ -28,7 +28,7 @@ import {
 import type { AttentionPatternFamilyDetailResponse, AttentionPatternMemberVideo } from "@/lib/attention-types";
 import { getAttentionPatternFamilyDetail } from "@/lib/api";
 import { surfaces } from "@/lib/design-system/layout";
-import { savedTopicAffordance } from "@/lib/saved-topics";
+import { SaveTopicButton } from "@/components/saved-topics/save-topic-button";
 import { cn } from "@/lib/utils";
 
 import { AttentionSignalBadges, HumanReasonsList } from "./signal-badges";
@@ -111,8 +111,6 @@ export function PatternFamilyDetailView({ familyKey }: { familyKey: string }) {
 
   const family = detail.family;
   const activity = patternActivity(family);
-  const save = savedTopicAffordance({ familyKey: family.family_key, runId: detail.run_id });
-
   return (
     <PageShell>
       <Link href="/opportunities" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "w-fit")}>
@@ -149,17 +147,16 @@ export function PatternFamilyDetailView({ familyKey }: { familyKey: string }) {
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Выборка Breakout</p>
-            <p className="text-sm">{family.breakout_eligible_count} видео входят в выборку Breakout</p>
+            <p className="text-sm">
+              {family.breakout_eligible_count} видео подходят для анализа Breakout (не топ Winners)
+            </p>
           </div>
         </div>
         <div data-testid="pattern-activity">
           <p className="text-xs text-muted-foreground">Активность по периодам</p>
           <p className="text-lg font-semibold">{activity.available ? activity.label : "Недостаточно истории"}</p>
         </div>
-        <Button type="button" variant="outline" size="sm" disabled title={save.hint} data-testid="save-pattern">
-          <Bookmark className="h-3.5 w-3.5" />
-          Сохранить
-        </Button>
+        <SaveTopicButton familyKey={family.family_key} runId={detail.run_id} />
       </div>
 
       <SectionPanel title="Исходные паттерны">

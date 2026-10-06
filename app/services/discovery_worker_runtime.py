@@ -22,6 +22,9 @@ from app.services.discovery_worker_lock import (
     release_discovery_worker_lock,
 )
 from app.services.metrics import utc_now
+from app.services.radar_enrichment_config import radar_enrichment_settings
+from app.services.radar_enrichment_orchestrator import run_radar_enrichment_pass
+from app.services.radar_enrichment_selection import RadarEnrichmentPassContext
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +59,7 @@ def run_discovery_worker(
     cfg = config or DiscoveryWorkerConfig()
     stop_requested = False
     cycle_count = 0
+    enrichment_pass_count = 0
     last_run_id: str | None = None
     last_status: str | None = None
 
@@ -159,6 +163,40 @@ def run_discovery_worker(
                 continue
             finally:
                 cycle_session.close()
+
+            if summary is not None and radar_enrichment_settings.radar_enrichment_after_discovery:
+                enrichment_pass_count += 1
+                enrich_session = session_factory()
+                try:
+                    enrich_report = run_radar_enrichment_pass(
+                        enrich_session,
+                        youtube_client,
+                        context=RadarEnrichmentPassContext(
+                            discovery_run_id=summary.run_id,
+                            cycle_video_ids=frozenset(summary.cycle_video_ids),
+                            cycle_channel_ids=frozenset(summary.cycle_channel_ids),
+                            pass_sequence=enrichment_pass_count,
+                        ),
+                        dry_run=False,
+                    )
+                    enrich_session.commit()
+                    logger.info(
+                        "[RADAR_ENRICHMENT_PASS] discovery_run_id=%s channels=%s/%s videos=%s/%s errors=%s",
+                        summary.run_id,
+                        enrich_report.subscriber_channels_processed,
+                        enrich_report.subscriber_channels_planned,
+                        enrich_report.format_videos_processed,
+                        enrich_report.format_videos_planned,
+                        len(enrich_report.errors),
+                    )
+                except Exception:
+                    enrich_session.rollback()
+                    logger.exception(
+                        "[RADAR_ENRICHMENT_PASS_ERROR] discovery_run_id=%s",
+                        summary.run_id,
+                    )
+                finally:
+                    enrich_session.close()
 
             if stop_requested or (stop_check and stop_check()):
                 break
