@@ -178,6 +178,23 @@ def count_successful_scans(session: Session, keyword_id: int) -> int:
     )
 
 
+def count_successful_scans_batch(session: Session, keyword_ids: list[int]) -> dict[int, int]:
+    if not keyword_ids:
+        return {}
+    rows = session.execute(
+        select(KeywordScanRun.keyword_id, func.count())
+        .where(
+            KeywordScanRun.keyword_id.in_(keyword_ids),
+            KeywordScanRun.status == "ok",
+        )
+        .group_by(KeywordScanRun.keyword_id),
+    ).all()
+    out = {int(kid): 0 for kid in keyword_ids}
+    for kid, cnt in rows:
+        out[int(kid)] = int(cnt or 0)
+    return out
+
+
 def probation_ready_for_review(session: Session, keyword_id: int) -> bool:
     record = session.get(TargetKeyword, keyword_id)
     if record is None or record.lifecycle_status != LIFECYCLE_PROBATION:

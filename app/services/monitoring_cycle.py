@@ -327,8 +327,17 @@ def run_monitoring_cycle(
     log_monitoring_cycle_summary(summary)
 
     if not dry_run:
+        from app.services.monitoring_api_service import build_active_monitoring_enriched
         from app.services.monitoring_cycle_run_storage import persist_monitoring_cycle_run
+        from app.services.monitoring_queue_persist import replace_monitoring_video_queue
 
+        enriched, _, _ = build_active_monitoring_enriched(
+            session,
+            now=summary.finished_at or now,
+            tier_policy=tier_cfg,
+            budget_policy=budget_cfg,
+        )
+        replace_monitoring_video_queue(session, cycle_run_id, enriched)
         persist_monitoring_cycle_run(session, summary)
         session.flush()
 

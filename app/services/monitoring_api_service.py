@@ -41,16 +41,18 @@ from app.services.monitoring_worker_lock import (
     MONITORING_STATUS_STOPPED,
     MONITORING_WORKER_STATE_ROW_ID,
 )
+from app.services.worker_activity_policy import classify_worker_activity
 from app.services.snapshot_collection_policy import (
     VideoRevisitPlan,
     existing_snapshot_from_orm,
     load_snapshots_by_video_id,
     plan_video_revisits,
 )
+from app.services.snapshot_collection_policy import MONITORING_PLANNER_MAX_SNAPSHOT_AGE_HOURS
 from app.services.video_snapshot_storage import (
     get_latest_snapshots_for_videos,
     get_snapshots_for_video,
-    get_snapshots_for_videos,
+    get_snapshots_for_videos_planner,
 )
 
 MonitoringSort = Literal[
@@ -139,28 +141,44 @@ def _resolve_worker_status(
     state: MonitoringWorkerState | None,
     *,
     now: datetime,
-    stale_after_seconds: int,
+    lock_stale_after_seconds: int,
+    latest_cycle_finished_at: datetime | None = None,
+    latest_cycle_status: str | None = None,
 ) -> MonitoringWorkerStatusData:
-    stale_delta = stale_after_seconds
     lock_acquired_at = state.lock_acquired_at if state else None
     lock_holder = state.lock_holder if state else None
-    last_seen = state.updated_at if state else None
+    heartbeat_at = state.updated_at if state else None
 
-    is_stale = False
+    last_activity = latest_cycle_finished_at
+    if heartbeat_at is not None:
+        if last_activity is None or ensure_utc(heartbeat_at) > ensure_utc(last_activity):
+            last_activity = heartbeat_at
+
+    latest_failed = latest_cycle_status == "failed"
+    expected_running = state is not None and state.status == MONITORING_STATUS_RUNNING
+    activity_state, _ = classify_worker_activity(
+        now=now,
+        worker_expected_running=expected_running,
+        last_activity_at=last_activity,
+        expected_interval_seconds=DEFAULT_MONITORING_WORKER_INTERVAL_SECONDS,
+        latest_cycle_failed=latest_failed,
+    )
+
+    is_lock_stale = False
+    if state is not None and state.status == MONITORING_STATUS_RUNNING and lock_acquired_at is not None:
+        lock_age = (ensure_utc(now) - ensure_utc(lock_acquired_at)).total_seconds()
+        is_lock_stale = lock_age > lock_stale_after_seconds
+
     label: WorkerStatusLabel = "unknown"
-
     if state is None:
         label = "unknown"
     elif state.status == MONITORING_STATUS_STOPPED:
         label = "stopped"
     elif state.status == MONITORING_STATUS_RUNNING:
-        if lock_acquired_at is not None:
-            age_seconds = (ensure_utc(now) - ensure_utc(lock_acquired_at)).total_seconds()
-            is_stale = age_seconds > stale_delta
-            label = "stale" if is_stale else "running"
-            last_seen = lock_acquired_at
+        if activity_state in ("stale_activity", "error"):
+            label = "stale"
         else:
-            label = "unknown"
+            label = "running"
     else:
         label = "unknown"
 
@@ -169,18 +187,29 @@ def _resolve_worker_status(
         lock_holder=lock_holder,
         lock_acquired_at=lock_acquired_at,
         worker_interval_seconds=DEFAULT_MONITORING_WORKER_INTERVAL_SECONDS,
-        stale_after_seconds=stale_after_seconds,
-        last_seen=last_seen,
-        is_lock_stale=is_stale,
+        stale_after_seconds=lock_stale_after_seconds,
+        last_seen=last_activity,
+        is_lock_stale=is_lock_stale,
         current_time=now,
     )
 
 
-def get_monitoring_worker_status(session: Session) -> MonitoringWorkerStatusData:
-    now = utc_now()
+def get_monitoring_worker_status(
+    session: Session,
+    *,
+    now: datetime | None = None,
+) -> MonitoringWorkerStatusData:
+    reference = now or utc_now()
     state = session.get(MonitoringWorkerState, MONITORING_WORKER_STATE_ROW_ID)
-    stale_seconds = DEFAULT_STALE_LOCK_MINUTES * 60
-    return _resolve_worker_status(state, now=now, stale_after_seconds=stale_seconds)
+    latest = get_latest_monitoring_cycle_run(session)
+    lock_stale_seconds = DEFAULT_STALE_LOCK_MINUTES * 60
+    return _resolve_worker_status(
+        state,
+        now=reference,
+        lock_stale_after_seconds=lock_stale_seconds,
+        latest_cycle_finished_at=latest.finished_at if latest else None,
+        latest_cycle_status=latest.cycle_status if latest else None,
+    )
 
 
 def _cycle_run_to_summary(row: MonitoringCycleRun) -> MonitoringCycleSummary:
@@ -237,11 +266,17 @@ def build_active_monitoring_enriched(
     video_ids = [d.video_id for d in active_decisions]
     snapshots_by_video: dict[str, list] = {}  # ExistingSnapshot lists for planner
     latest_by_video: dict[str, VideoSnapshot] = {}
-    for row in get_snapshots_for_videos(session, video_ids):
+    for row in get_snapshots_for_videos_planner(
+        session,
+        video_ids,
+        max_age_hours=MONITORING_PLANNER_MAX_SNAPSHOT_AGE_HOURS,
+    ):
         snapshots_by_video.setdefault(row.video_id, []).append(existing_snapshot_from_orm(row))
         previous = latest_by_video.get(row.video_id)
         if previous is None or row.captured_at > previous.captured_at:
             latest_by_video[row.video_id] = row
+    if video_ids:
+        latest_by_video.update(get_latest_snapshots_for_videos(session, video_ids))
 
     video_rows: dict[str, Video] = {}
     channel_titles: dict[str, str] = {}
@@ -315,11 +350,32 @@ def _aggregate_planner_counts(enriched: list[MonitoringEnrichedVideo]) -> tuple[
     return due, overdue, pending, stopped
 
 
-def get_monitoring_overview(session: Session) -> MonitoringOverviewData:
-    enriched, tier_counts, unmonitored_count = build_active_monitoring_enriched(session)
-    due, overdue, pending, stopped = _aggregate_planner_counts(enriched)
+def get_monitoring_overview(
+    session: Session,
+    *,
+    live_planner: bool = False,
+) -> MonitoringOverviewData:
     latest_row = get_latest_monitoring_cycle_run(session)
     latest_cycle = _cycle_run_to_summary(latest_row) if latest_row else None
+
+    if not live_planner and latest_row is not None:
+        return MonitoringOverviewData(
+            active_monitored_count=int(latest_row.eligible_video_count),
+            tier_counts={
+                "A": int(latest_row.tier_a_count),
+                "B": int(latest_row.tier_b_count),
+                "C": int(latest_row.tier_c_count),
+            },
+            unmonitored_count=max(0, int(latest_row.loaded_video_count) - int(latest_row.eligible_video_count)),
+            due_count=int(latest_row.due_count),
+            overdue_count=int(latest_row.overdue_count),
+            pending_count=0,
+            stopped_count=0,
+            latest_cycle=latest_cycle,
+        )
+
+    enriched, tier_counts, unmonitored_count = build_active_monitoring_enriched(session)
+    due, overdue, pending, stopped = _aggregate_planner_counts(enriched)
     return MonitoringOverviewData(
         active_monitored_count=len(enriched),
         tier_counts=tier_counts,
@@ -512,6 +568,15 @@ def list_monitoring_videos_breakout(
     return page, total
 
 
+@dataclass(frozen=True, slots=True)
+class MonitoringVideosListResult:
+    rows: list[MonitoringEnrichedVideo] | list[BreakoutVideoListRow] | list
+    total: int
+    queue_run_id: str | None = None
+    queue_generated_at: datetime | None = None
+    queue_source: str = "cycle_snapshot"
+
+
 def list_monitoring_videos(
     session: Session,
     *,
@@ -522,9 +587,10 @@ def list_monitoring_videos(
     sort: MonitoringSort = "priority",
     limit: int = 50,
     offset: int = 0,
-) -> tuple[list[MonitoringEnrichedVideo] | list[BreakoutVideoListRow], int]:
+    live_planner: bool = False,
+) -> MonitoringVideosListResult:
     if sort == "breakout_v1":
-        return list_monitoring_videos_breakout(
+        page, total = list_monitoring_videos_breakout(
             session,
             tier=tier,
             channel_id=channel_id,
@@ -532,31 +598,68 @@ def list_monitoring_videos(
             limit=limit,
             offset=offset,
         )
+        return MonitoringVideosListResult(rows=page, total=total, queue_source="live_planner")
 
-    enriched, _, _ = build_active_monitoring_enriched(session)
+    if live_planner:
+        enriched, _, _ = build_active_monitoring_enriched(session)
+        filtered = enriched
+        if tier is not None:
+            tier_upper = tier.upper()
+            filtered = [r for r in filtered if r.decision.tier.value == tier_upper]
+        if channel_id is not None:
+            filtered = [r for r in filtered if r.state.channel_id == channel_id]
+        if keyword:
+            needle = keyword.strip().lower()
+            if needle:
+                filtered = [
+                    r
+                    for r in filtered
+                    if (r.title and needle in r.title.lower())
+                    or (r.state.video_id.lower().find(needle) >= 0)
+                ]
+        if status is not None:
+            filtered = [r for r in filtered if _matches_status(r, status)]
+        ordered = _sort_rows(filtered, sort)
+        total = len(ordered)
+        page = ordered[max(0, offset) : max(0, offset) + max(1, min(limit, 200))]
+        return MonitoringVideosListResult(rows=page, total=total, queue_source="live_planner")
 
-    filtered = enriched
-    if tier is not None:
-        tier_upper = tier.upper()
-        filtered = [r for r in filtered if r.decision.tier.value == tier_upper]
-    if channel_id is not None:
-        filtered = [r for r in filtered if r.state.channel_id == channel_id]
-    if keyword:
-        needle = keyword.strip().lower()
-        if needle:
-            filtered = [
-                r
-                for r in filtered
-                if (r.title and needle in r.title.lower())
-                or (r.state.video_id.lower().find(needle) >= 0)
-            ]
-    if status is not None:
-        filtered = [r for r in filtered if _matches_status(r, status)]
+    from app.services.monitoring_video_queue import (
+        list_queue_videos_page,
+        queue_list_meta,
+        resolve_queue_list_context,
+    )
 
-    ordered = _sort_rows(filtered, sort)
-    total = len(ordered)
-    page = ordered[max(0, offset) : max(0, offset) + max(1, min(limit, 200))]
-    return page, total
+    run_id, generated_at, ready = resolve_queue_list_context(session)
+    if not ready or run_id is None:
+        meta = queue_list_meta(run_id=None, generated_at=generated_at, source="unavailable")
+        return MonitoringVideosListResult(
+            rows=[],
+            total=0,
+            queue_run_id=meta.queue_run_id,
+            queue_generated_at=meta.queue_generated_at,
+            queue_source=meta.queue_source,
+        )
+
+    page_rows, total = list_queue_videos_page(
+        session,
+        run_id,
+        tier=tier,
+        status=status,
+        channel_id=channel_id,
+        keyword=keyword,
+        sort=sort,
+        limit=limit,
+        offset=offset,
+    )
+    meta = queue_list_meta(run_id=run_id, generated_at=generated_at, source="cycle_snapshot")
+    return MonitoringVideosListResult(
+        rows=page_rows,
+        total=total,
+        queue_run_id=meta.queue_run_id,
+        queue_generated_at=meta.queue_generated_at,
+        queue_source=meta.queue_source,
+    )
 
 
 def get_monitoring_video_detail(

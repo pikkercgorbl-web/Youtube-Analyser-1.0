@@ -199,7 +199,7 @@ def test_snapshot_counts_and_latest() -> None:
         ),
     )
     session.commit()
-    overview = build_operations_overview(session)
+    overview = build_operations_overview(session, now=NOW)
     assert overview.snapshots.snapshots_last_1h == 1
     assert overview.snapshots.snapshots_last_24h == 2
     assert overview.snapshots.latest_snapshot_at is not None

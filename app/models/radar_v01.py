@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, JSON, String, Text, func
+from sqlalchemy import DateTime, ForeignKey, Integer, JSON, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.db import Base
@@ -43,33 +43,6 @@ class RadarCandidate(Base):
     checks_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     next_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
     first_published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-
-
-class VideoSnapshot(Base):
-    """Point-in-time metrics for a video used by temporal signal calculation."""
-
-    __tablename__ = "video_snapshots"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    video_id: Mapped[str] = mapped_column(
-        ForeignKey("videos.id", ondelete="CASCADE"),
-        nullable=False,
-        index=True,
-    )
-    views: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
-    likes: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
-    comments: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
-    recorded_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        nullable=False,
-        index=True,
-    )
-    baseline_source: Mapped[str] = mapped_column(
-        String(32),
-        nullable=False,
-        default="discovery_keyword",
-        comment="Explicit provenance of the baseline proxy used for this observation.",
-    )
 
 
 class VideoEmbedding(Base):

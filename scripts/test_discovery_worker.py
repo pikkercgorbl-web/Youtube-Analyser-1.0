@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import importlib.util
+import logging
 import subprocess
 import sys
 import threading
@@ -215,9 +217,12 @@ def test_lock_released_on_shutdown() -> None:
 
 
 def test_fatal_cycle_exception_backoff_and_continue() -> None:
+    """First cycle raises RuntimeError('boom') on purpose; worker must backoff and retry."""
     sleeps: list[float] = []
     attempts = {"n": 0}
     make_session, _ = _session_factory()
+    runtime_logger = logging.getLogger("app.services.discovery_worker_runtime")
+    previous_level = runtime_logger.level
 
     def fake_cycle(*_a, **_k):
         attempts["n"] += 1
@@ -226,14 +231,18 @@ def test_fatal_cycle_exception_backoff_and_continue() -> None:
         return _empty_outcome(run_id="discovery_recovered")
 
     config = DiscoveryWorkerConfig(interval_seconds=1, error_backoff_seconds=42)
-    with patch("app.services.discovery_worker_runtime.run_discovery_cycle", side_effect=fake_cycle):
-        run_discovery_worker(
-            make_session,
-            object(),
-            config=config,
-            sleep_fn=lambda seconds: sleeps.append(seconds),
-            stop_check=lambda: attempts["n"] >= 2,
-        )
+    runtime_logger.setLevel(logging.CRITICAL)
+    try:
+        with patch("app.services.discovery_worker_runtime.run_discovery_cycle", side_effect=fake_cycle):
+            run_discovery_worker(
+                make_session,
+                object(),
+                config=config,
+                sleep_fn=lambda seconds: sleeps.append(seconds),
+                stop_check=lambda: attempts["n"] >= 2,
+            )
+    finally:
+        runtime_logger.setLevel(previous_level)
     assert 42.0 in sleeps
     assert attempts["n"] >= 2
 
@@ -319,16 +328,20 @@ def test_keyword_rotation_last_checked() -> None:
     assert set(ids1).isdisjoint(set(ids2)) or len(batch2) <= 2
 
 
-def test_one_shot_cli_still_runs() -> None:
-    proc = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "run_discovery_cycle.py"), "--dry-run"],
-        cwd=str(ROOT),
-        capture_output=True,
-        text=True,
-        timeout=120,
-    )
-    assert proc.returncode in (0, 1)
-    assert "run_id" in proc.stdout or proc.returncode == 0
+def _load_cli_wiring_tests():
+    path = ROOT / "scripts" / "test_discovery_cli_wiring.py"
+    spec = importlib.util.spec_from_file_location("test_discovery_cli_wiring", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_discovery_cycle_cli_wiring_without_live_infra() -> None:
+    """CLI argv, session/youtube injection, JSON summary — see test_discovery_cli_wiring.py."""
+    wiring = _load_cli_wiring_tests()
+    wiring.test_cli_dry_run_and_batch_size_wiring()
+    wiring.test_cli_failed_cycle_exit_code()
 
 
 def test_monitoring_worker_not_imported() -> None:
@@ -373,7 +386,7 @@ def main() -> None:
         test_empty_keyword_db_no_crash,
         test_each_cycle_distinct_run_id,
         test_keyword_rotation_last_checked,
-        test_one_shot_cli_still_runs,
+        test_discovery_cycle_cli_wiring_without_live_infra,
         test_monitoring_worker_not_imported,
         test_frozen_stage110_untouched,
         test_regressions,

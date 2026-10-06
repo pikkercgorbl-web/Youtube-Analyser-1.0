@@ -58,7 +58,7 @@ def main() -> int:
         _timed("get_monitoring_overview", lambda: get_monitoring_overview(session))
         _timed(
             "list_monitoring_videos sort=priority limit=50",
-            lambda: list_monitoring_videos(session, sort="priority", limit=50, offset=0),
+            lambda: list_monitoring_videos(session, sort="priority", limit=50, offset=0).rows,
         )
         _timed(
             "list_monitoring_videos sort=breakout_v1 limit=50",

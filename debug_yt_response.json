@@ -1,6 +1,6 @@
 {
   "responseContext": {
-    "visitorData": "CgsybGhoSG9DaWNUdyjHz-7VBjIKCgJLWhIEGgAgTQ%3D%3D",
+    "visitorData": "CgstajhHSHR4MDFoSSjRwo_WBjIKCgJLWhIEGgAgGA%3D%3D",
     "serviceTrackingParams": [
       {
         "service": "GUIDED_HELP",
@@ -32,7 +32,7 @@
           },
           {
             "key": "visitor_data",
-            "value": "CgsybGhoSG9DaWNUdyjHz-7VBjIKCgJLWhIEGgAgTQ%3D%3D"
+            "value": "CgstajhHSHR4MDFoSSjRwo_WBjIKCgJLWhIEGgAgGA%3D%3D"
           }
         ]
       },
@@ -57,7 +57,7 @@
           },
           {
             "key": "GetSearch_rid",
-            "value": "0x189235ea820fff0a"
+            "value": "0xf5d379bfafc9882d"
           }
         ]
       },
@@ -66,7 +66,7 @@
         "params": [
           {
             "key": "client.version",
-            "value": "2.20250331"
+            "value": "2.20260904"
           },
           {
             "key": "client.name",
@@ -77,9 +77,9 @@
     ],
     "mainAppWebResponseContext": {
       "loggedOut": true,
-      "trackingParam": "k5_fmPxhoXZRPP7kGu_QUD8gnGB0NuNE3TkMcRhcEdE8MvzAjUmEOp7wqzRMkuMESLBwOcCw59TLtslLKPQGSS"
+      "trackingParam": "k5_fmPxhoXZRqQcAeFEiOXBTgEQk60zHhYWo-jEU_vcs00jwLlmwOGT4SzRMkuMESLBwOcCw59TLtslLKPQGSS"
     },
-    "responseId": "IhMIhpfRpt6TlwMVkScGAB3Z6i_0",
+    "responseId": "IhMIyLTCprajlwMVA8s7Ah1dUR6h",
     "webResponseContextExtensionData": {
       "webResponseContextPreloadData": {
         "preloadMessageNames": [
@@ -99,14 +99,31 @@
           "hotkeyDialogSectionOptionRenderer",
           "voiceSearchDialogRenderer",
           "itemSectionRenderer",
-          "messageRenderer"
+          "videoRenderer",
+          "channelThumbnailWithLinkRenderer",
+          "decoratedAvatarViewModel",
+          "avatarViewModel",
+          "metadataBadgeRenderer",
+          "menuRenderer",
+          "menuServiceItemRenderer",
+          "menuServiceItemDownloadRenderer",
+          "unifiedSharePanelRenderer",
+          "thumbnailOverlayTimeStatusRenderer",
+          "thumbnailOverlayToggleButtonRenderer",
+          "thumbnailOverlayNowPlayingRenderer",
+          "thumbnailOverlayLoadingPreviewRenderer",
+          "movingThumbnailRenderer",
+          "expandableMetadataRenderer",
+          "horizontalCardListRenderer",
+          "macroMarkersListItemRenderer",
+          "continuationItemRenderer"
         ]
       },
       "hasDecorated": true
     }
   },
-  "estimatedResults": "0",
-  "trackingParams": "CAAQvGkiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+  "estimatedResults": "26",
+  "trackingParams": "CAAQvGkiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
   "topbar": {
     "desktopTopbarRenderer": {
       "logo": {
@@ -117,12 +134,12 @@
           "tooltipText": {
             "runs": [
               {
-                "text": "YouTube Home"
+                "text": "Главная страница YouTube"
               }
             ]
           },
           "endpoint": {
-            "clickTrackingParams": "CBMQsV4iEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+            "clickTrackingParams": "CDcQsV4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
             "commandMetadata": {
               "webCommandMetadata": {
                 "url": "/",
@@ -135,7 +152,7 @@
               "browseId": "FEwhat_to_watch"
             }
           },
-          "trackingParams": "CBMQsV4iEwiGl9Gm3pOXAxWRJwYAHdnqL_Q=",
+          "trackingParams": "CDcQsV4iEwjItMKmtqOXAxUDyzsCHV1RHqE=",
           "overrideEntityKey": "EgZ0b3BiYXIg9QEoAQ%3D%3D"
         }
       },
@@ -147,21 +164,21 @@
           "placeholderText": {
             "runs": [
               {
-                "text": "Search"
+                "text": "Поиск"
               }
             ]
           },
           "config": {
             "webSearchboxConfig": {
-              "requestLanguage": "en",
-              "requestDomain": "us",
-              "hasOnscreenKeyboard": false,
+              "requestLanguage": "ru",
+              "requestDomain": "ru",
+              "hasOnscreenKeyboard": true,
               "focusSearchbox": true
             }
           },
-          "trackingParams": "CA8Q7VAiEwiGl9Gm3pOXAxWRJwYAHdnqL_Q=",
+          "trackingParams": "CDMQ7VAiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
           "searchEndpoint": {
-            "clickTrackingParams": "CA8Q7VAiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+            "clickTrackingParams": "CDMQ7VAiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
             "commandMetadata": {
               "webCommandMetadata": {
                 "url": "/results?search_query=",
@@ -181,16 +198,16 @@
               "icon": {
                 "iconType": "CLOSE"
               },
-              "trackingParams": "CBIQ8FsiEwiGl9Gm3pOXAxWRJwYAHdnqL_Q=",
+              "trackingParams": "CDYQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
               "accessibilityData": {
                 "accessibilityData": {
-                  "label": "Clear search query"
+                  "label": "Очистить поле поиска"
                 }
               }
             }
           },
           "showImageSourceDialog": {
-            "clickTrackingParams": "CA8Q7VAiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+            "clickTrackingParams": "CDMQ7VAiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
             "showDialogCommand": {
               "panelLoadingStrategy": {
                 "inlineContent": {
@@ -198,7 +215,7 @@
                     "header": {
                       "dialogHeaderViewModel": {
                         "headline": {
-                          "content": "Image source"
+                          "content": "Источник изображения"
                         }
                       }
                     },
@@ -206,18 +223,18 @@
                       "panelFooterViewModel": {
                         "primaryButton": {
                           "buttonViewModel": {
-                            "title": "Visit source",
+                            "title": "Открыть источник",
                             "style": "BUTTON_VIEW_MODEL_STYLE_MONO",
-                            "trackingParams": "CBEQ8FsiEwiGl9Gm3pOXAxWRJwYAHdnqL_Q=",
+                            "trackingParams": "CDUQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
                             "isFullWidth": true,
                             "type": "BUTTON_VIEW_MODEL_TYPE_FILLED"
                           }
                         },
                         "secondaryButton": {
                           "buttonViewModel": {
-                            "title": "Cancel",
+                            "title": "Отмена",
                             "style": "BUTTON_VIEW_MODEL_STYLE_MONO",
-                            "trackingParams": "CBAQ8FsiEwiGl9Gm3pOXAxWRJwYAHdnqL_Q=",
+                            "trackingParams": "CDQQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
                             "isFullWidth": true,
                             "type": "BUTTON_VIEW_MODEL_TYPE_TONAL"
                           }
@@ -230,7 +247,7 @@
                         "paragraphs": [
                           {
                             "text": {
-                              "content": "Visit image source website?"
+                              "content": "Перейти на сайт, с которого взято изображение?"
                             }
                           }
                         ]
@@ -244,7 +261,8 @@
           "disableAiAppearance": true
         }
       },
-      "trackingParams": "CAMQq6wBIhMIhpfRpt6TlwMVkScGAB3Z6i_0",
+      "trackingParams": "CCcQq6wBIhMIyLTCprajlwMVA8s7Ah1dUR6h",
+      "countryCode": "RU",
       "topbarButtons": [
         {
           "topbarMenuButtonRenderer": {
@@ -252,7 +270,7 @@
               "iconType": "MORE_VERT"
             },
             "menuRequest": {
-              "clickTrackingParams": "CA0Q_qsBGAAiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+              "clickTrackingParams": "CDEQ_qsBGAAiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
               "commandMetadata": {
                 "webCommandMetadata": {
                   "sendPost": true,
@@ -263,11 +281,11 @@
                 "signal": "GET_ACCOUNT_MENU",
                 "actions": [
                   {
-                    "clickTrackingParams": "CA0Q_qsBGAAiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+                    "clickTrackingParams": "CDEQ_qsBGAAiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
                     "openPopupAction": {
                       "popup": {
                         "multiPageMenuRenderer": {
-                          "trackingParams": "CA4Q_6sBIhMIhpfRpt6TlwMVkScGAB3Z6i_0",
+                          "trackingParams": "CDIQ_6sBIhMIyLTCprajlwMVA8s7Ah1dUR6h",
                           "style": "MULTI_PAGE_MENU_STYLE_TYPE_SYSTEM",
                           "showLoadingSpinner": true
                         }
@@ -279,13 +297,13 @@
                 ]
               }
             },
-            "trackingParams": "CA0Q_qsBGAAiEwiGl9Gm3pOXAxWRJwYAHdnqL_Q=",
+            "trackingParams": "CDEQ_qsBGAAiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
             "accessibility": {
               "accessibilityData": {
-                "label": "Settings"
+                "label": "Настройки"
               }
             },
-            "tooltip": "Settings",
+            "tooltip": "Настройки",
             "style": "STYLE_DEFAULT"
           }
         },
@@ -296,7 +314,7 @@
             "text": {
               "runs": [
                 {
-                  "text": "Sign in"
+                  "text": "Войти"
                 }
               ]
             },
@@ -304,10 +322,10 @@
               "iconType": "AVATAR_LOGGED_OUT"
             },
             "navigationEndpoint": {
-              "clickTrackingParams": "CAwQ1IAEGAEiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+              "clickTrackingParams": "CDAQ1IAEGAEiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
               "commandMetadata": {
                 "webCommandMetadata": {
-                  "url": "https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Den%26next%3Dhttps%253A%252F%252Fwww.youtube.com%252Fyoutubei%252Fv1%252Fsearch%253FprettyPrint%253Dfalse&hl=en&ec=65620",
+                  "url": "https://accounts.google.com/ServiceLogin?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Dru%26next%3Dhttps%253A%252F%252Fwww.youtube.com%252Fyoutubei%252Fv1%252Fsearch%253FprettyPrint%253Dfalse&hl=ru&ec=65620",
                   "webPageType": "WEB_PAGE_TYPE_UNKNOWN",
                   "rootVe": 83769
                 }
@@ -316,7 +334,7 @@
                 "idamTag": "65620"
               }
             },
-            "trackingParams": "CAwQ1IAEGAEiEwiGl9Gm3pOXAxWRJwYAHdnqL_Q=",
+            "trackingParams": "CDAQ1IAEGAEiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
             "targetId": "topbar-signin"
           }
         }
@@ -326,7 +344,7 @@
           "title": {
             "runs": [
               {
-                "text": "Keyboard shortcuts"
+                "text": "Быстрые клавиши"
               }
             ]
           },
@@ -336,7 +354,7 @@
                 "title": {
                   "runs": [
                     {
-                      "text": "Playback"
+                      "text": "Воспроизведение"
                     }
                   ]
                 },
@@ -346,7 +364,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Toggle play/pause"
+                            "text": "Приостановить или продолжить воспроизведение"
                           }
                         ]
                       },
@@ -358,7 +376,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Rewind 10 seconds"
+                            "text": "Перемотать ролик на 10 секунд назад"
                           }
                         ]
                       },
@@ -370,7 +388,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Fast forward 10 seconds"
+                            "text": "Перемотать ролик на 10 секунд вперед"
                           }
                         ]
                       },
@@ -382,11 +400,11 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Previous video"
+                            "text": "Перейти к предыдущему видео"
                           }
                         ]
                       },
-                      "hotkey": "P (SHIFT+p)"
+                      "hotkey": "P (Shift + p)"
                     }
                   },
                   {
@@ -394,11 +412,11 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Next video"
+                            "text": "Перейти к следующему видео"
                           }
                         ]
                       },
-                      "hotkey": "N (SHIFT+n)"
+                      "hotkey": "N (Shift + n)"
                     }
                   },
                   {
@@ -406,14 +424,14 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Previous frame (while paused)"
+                            "text": "Перейти к следующему кадру (когда воспроизведение приостановлено)"
                           }
                         ]
                       },
                       "hotkey": ",",
                       "hotkeyAccessibilityLabel": {
                         "accessibilityData": {
-                          "label": "Comma"
+                          "label": "Запятая"
                         }
                       }
                     }
@@ -423,14 +441,14 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Next frame (while paused)"
+                            "text": "Перейти к следующему кадру (когда воспроизведение приостановлено)"
                           }
                         ]
                       },
                       "hotkey": ".",
                       "hotkeyAccessibilityLabel": {
                         "accessibilityData": {
-                          "label": "Period"
+                          "label": "Точка"
                         }
                       }
                     }
@@ -440,14 +458,14 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Decrease playback rate"
+                            "text": "Уменьшить скорость воспроизведения"
                           }
                         ]
                       },
                       "hotkey": "< (SHIFT+,)",
                       "hotkeyAccessibilityLabel": {
                         "accessibilityData": {
-                          "label": "Less than or SHIFT + comma"
+                          "label": "Символ \"меньше чем\" либо Shift и запятая"
                         }
                       }
                     }
@@ -457,14 +475,14 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Increase playback rate"
+                            "text": "Увеличить скорость воспроизведения"
                           }
                         ]
                       },
                       "hotkey": "> (SHIFT+.)",
                       "hotkeyAccessibilityLabel": {
                         "accessibilityData": {
-                          "label": "Greater than or SHIFT + period"
+                          "label": "Символ \"больше чем\" либо Shift и точка."
                         }
                       }
                     }
@@ -474,7 +492,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Seek to specific point in the video (7 advances to 70% of duration)"
+                            "text": "Перейти к определенному моменту видео (например, при нажатии на цифру \"7\" ролик будет перемотан до временной отметки, которая соответствует 70% от длительности видео)"
                           }
                         ]
                       },
@@ -486,11 +504,11 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Seek to previous chapter"
+                            "text": "Перейти к предыдущему эпизоду"
                           }
                         ]
                       },
-                      "hotkey": "CONTROL + ←"
+                      "hotkey": "Control + Стрелка влево"
                     }
                   },
                   {
@@ -498,11 +516,11 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Seek to next chapter"
+                            "text": "Перейти к следующему эпизоду"
                           }
                         ]
                       },
-                      "hotkey": "CONTROL + →"
+                      "hotkey": "Control + Стрелка вправо"
                     }
                   }
                 ]
@@ -513,7 +531,7 @@
                 "title": {
                   "runs": [
                     {
-                      "text": "General"
+                      "text": "Общие"
                     }
                   ]
                 },
@@ -523,7 +541,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Toggle full screen"
+                            "text": "Включить или выключить полноэкранный режим"
                           }
                         ]
                       },
@@ -535,7 +553,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Toggle theater mode"
+                            "text": "Увеличить/уменьшить окно проигрывателя"
                           }
                         ]
                       },
@@ -547,7 +565,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Toggle miniplayer"
+                            "text": "Включить или отключить мини-проигрыватель"
                           }
                         ]
                       },
@@ -559,11 +577,11 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Close miniplayer or current dialog"
+                            "text": "Закрыть мини-проигрыватель или текущее диалоговое окно"
                           }
                         ]
                       },
-                      "hotkey": "ESCAPE"
+                      "hotkey": "Esc"
                     }
                   },
                   {
@@ -571,7 +589,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Toggle mute"
+                            "text": "Включить или отключить звук"
                           }
                         ]
                       },
@@ -586,7 +604,7 @@
                 "title": {
                   "runs": [
                     {
-                      "text": "Subtitles and closed captions"
+                      "text": "Субтитры"
                     }
                   ]
                 },
@@ -596,7 +614,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "If the video supports captions, toggle captions ON/OFF"
+                            "text": "Включить или отключить субтитры"
                           }
                         ]
                       },
@@ -608,7 +626,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Rotate through different text opacity levels"
+                            "text": "Настроить прозрачность текста"
                           }
                         ]
                       },
@@ -620,7 +638,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Rotate through different window opacity levels"
+                            "text": "Настроить прозрачность окна"
                           }
                         ]
                       },
@@ -632,7 +650,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Rotate through font sizes (increasing)"
+                            "text": "Увеличить размер шрифта"
                           }
                         ]
                       },
@@ -644,14 +662,14 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Rotate through font sizes (decreasing)"
+                            "text": "Уменьшить размер шрифта"
                           }
                         ]
                       },
                       "hotkey": "-",
                       "hotkeyAccessibilityLabel": {
                         "accessibilityData": {
-                          "label": "Minus"
+                          "label": "Символ \"минус\""
                         }
                       }
                     }
@@ -664,7 +682,7 @@
                 "title": {
                   "runs": [
                     {
-                      "text": "Spherical Videos"
+                      "text": "Панорамные видео"
                     }
                   ]
                 },
@@ -674,7 +692,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Pan up"
+                            "text": "Передвинуть вверх"
                           }
                         ]
                       },
@@ -686,7 +704,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Pan left"
+                            "text": "Посмотреть влево"
                           }
                         ]
                       },
@@ -698,7 +716,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Pan down"
+                            "text": "Передвинуть вниз"
                           }
                         ]
                       },
@@ -710,7 +728,7 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Pan right"
+                            "text": "Передвинуть вправо"
                           }
                         ]
                       },
@@ -722,14 +740,14 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Zoom in"
+                            "text": "Приблизить"
                           }
                         ]
                       },
-                      "hotkey": "+ on numpad or ]",
+                      "hotkey": "Плюс (+) на цифровой клавиатуре или ]",
                       "hotkeyAccessibilityLabel": {
                         "accessibilityData": {
-                          "label": "Plus on number pad or right bracket"
+                          "label": "Плюс на цифровой клавиатуре или закрывающая квадратная скобка"
                         }
                       }
                     }
@@ -739,14 +757,14 @@
                       "label": {
                         "runs": [
                           {
-                            "text": "Zoom out"
+                            "text": "Отдалить"
                           }
                         ]
                       },
-                      "hotkey": "- on numpad or [",
+                      "hotkey": "Минус (-) на цифровой клавиатуре или [",
                       "hotkeyAccessibilityLabel": {
                         "accessibilityData": {
-                          "label": "Minus on number pad or left bracket"
+                          "label": "Символ \"минус\" на цифровой клавиатуре или открывающая квадратная скобка"
                         }
                       }
                     }
@@ -763,21 +781,21 @@
               "text": {
                 "runs": [
                   {
-                    "text": "Dismiss"
+                    "text": "Закрыть"
                   }
                 ]
               },
-              "trackingParams": "CAsQ8FsiEwiGl9Gm3pOXAxWRJwYAHdnqL_Q="
+              "trackingParams": "CC8Q8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE="
             }
           },
-          "trackingParams": "CAoQteYDIhMIhpfRpt6TlwMVkScGAB3Z6i_0"
+          "trackingParams": "CC4QteYDIhMIyLTCprajlwMVA8s7Ah1dUR6h"
         }
       },
       "backButton": {
         "buttonRenderer": {
-          "trackingParams": "CAkQvIYDIhMIhpfRpt6TlwMVkScGAB3Z6i_0",
+          "trackingParams": "CC0QvIYDIhMIyLTCprajlwMVA8s7Ah1dUR6h",
           "command": {
-            "clickTrackingParams": "CAkQvIYDIhMIhpfRpt6TlwMVkScGAB3Z6i_0ygEEcdWUdA==",
+            "clickTrackingParams": "CC0QvIYDIhMIyLTCprajlwMVA8s7Ah1dUR6hygEEPVfBgA==",
             "commandMetadata": {
               "webCommandMetadata": {
                 "sendPost": true
@@ -787,7 +805,7 @@
               "signal": "CLIENT_SIGNAL",
               "actions": [
                 {
-                  "clickTrackingParams": "CAkQvIYDIhMIhpfRpt6TlwMVkScGAB3Z6i_0ygEEcdWUdA==",
+                  "clickTrackingParams": "CC0QvIYDIhMIyLTCprajlwMVA8s7Ah1dUR6hygEEPVfBgA==",
                   "signalAction": {
                     "signal": "HISTORY_BACK"
                   }
@@ -799,9 +817,9 @@
       },
       "forwardButton": {
         "buttonRenderer": {
-          "trackingParams": "CAgQvYYDIhMIhpfRpt6TlwMVkScGAB3Z6i_0",
+          "trackingParams": "CCwQvYYDIhMIyLTCprajlwMVA8s7Ah1dUR6h",
           "command": {
-            "clickTrackingParams": "CAgQvYYDIhMIhpfRpt6TlwMVkScGAB3Z6i_0ygEEcdWUdA==",
+            "clickTrackingParams": "CCwQvYYDIhMIyLTCprajlwMVA8s7Ah1dUR6hygEEPVfBgA==",
             "commandMetadata": {
               "webCommandMetadata": {
                 "sendPost": true
@@ -811,7 +829,7 @@
               "signal": "CLIENT_SIGNAL",
               "actions": [
                 {
-                  "clickTrackingParams": "CAgQvYYDIhMIhpfRpt6TlwMVkScGAB3Z6i_0ygEEcdWUdA==",
+                  "clickTrackingParams": "CCwQvYYDIhMIyLTCprajlwMVA8s7Ah1dUR6hygEEPVfBgA==",
                   "signalAction": {
                     "signal": "HISTORY_FORWARD"
                   }
@@ -829,13 +847,13 @@
           "text": {
             "runs": [
               {
-                "text": "Skip navigation"
+                "text": "Пропустить"
               }
             ]
           },
-          "trackingParams": "CAcQ8FsiEwiGl9Gm3pOXAxWRJwYAHdnqL_Q=",
+          "trackingParams": "CCsQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
           "command": {
-            "clickTrackingParams": "CAcQ8FsiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+            "clickTrackingParams": "CCsQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
             "commandMetadata": {
               "webCommandMetadata": {
                 "sendPost": true
@@ -845,7 +863,7 @@
               "signal": "CLIENT_SIGNAL",
               "actions": [
                 {
-                  "clickTrackingParams": "CAcQ8FsiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+                  "clickTrackingParams": "CCsQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
                   "signalAction": {
                     "signal": "SKIP_NAVIGATION"
                   }
@@ -861,7 +879,7 @@
           "size": "SIZE_DEFAULT",
           "isDisabled": false,
           "serviceEndpoint": {
-            "clickTrackingParams": "CAQQ7a8FIhMIhpfRpt6TlwMVkScGAB3Z6i_0ygEEcdWUdA==",
+            "clickTrackingParams": "CCgQ7a8FIhMIyLTCprajlwMVA8s7Ah1dUR6hygEEPVfBgA==",
             "commandMetadata": {
               "webCommandMetadata": {
                 "sendPost": true
@@ -871,98 +889,98 @@
               "signal": "CLIENT_SIGNAL",
               "actions": [
                 {
-                  "clickTrackingParams": "CAQQ7a8FIhMIhpfRpt6TlwMVkScGAB3Z6i_0ygEEcdWUdA==",
+                  "clickTrackingParams": "CCgQ7a8FIhMIyLTCprajlwMVA8s7Ah1dUR6hygEEPVfBgA==",
                   "openPopupAction": {
                     "popup": {
                       "voiceSearchDialogRenderer": {
                         "placeholderHeader": {
                           "runs": [
                             {
-                              "text": "Listening..."
+                              "text": "Говорите…"
                             }
                           ]
                         },
                         "promptHeader": {
                           "runs": [
                             {
-                              "text": "Didn't hear that. Try again."
+                              "text": "Запрос не распознан. Повторите попытку"
                             }
                           ]
                         },
                         "exampleQuery1": {
                           "runs": [
                             {
-                              "text": "\"Play Dua Lipa\""
+                              "text": "\"Включи песни Дуа Липы\""
                             }
                           ]
                         },
                         "exampleQuery2": {
                           "runs": [
                             {
-                              "text": "\"Show me my subscriptions\""
+                              "text": "\"Покажи мои подписки\""
                             }
                           ]
                         },
                         "promptMicrophoneLabel": {
                           "runs": [
                             {
-                              "text": "Tap microphone to try again"
+                              "text": "Чтобы повторить попытку, нажмите на значок микрофона"
                             }
                           ]
                         },
                         "loadingHeader": {
                           "runs": [
                             {
-                              "text": "Working..."
+                              "text": "Подождите…"
                             }
                           ]
                         },
                         "connectionErrorHeader": {
                           "runs": [
                             {
-                              "text": "No connection"
+                              "text": "Нет подключения"
                             }
                           ]
                         },
                         "connectionErrorMicrophoneLabel": {
                           "runs": [
                             {
-                              "text": "Check your connection and try again"
+                              "text": "Проверьте подключение к Интернету и повторите попытку"
                             }
                           ]
                         },
                         "permissionsHeader": {
                           "runs": [
                             {
-                              "text": "Waiting for permission"
+                              "text": "Предоставьте приложению необходимое разрешение"
                             }
                           ]
                         },
                         "permissionsSubtext": {
                           "runs": [
                             {
-                              "text": "Allow microphone access to search with voice"
+                              "text": "Чтобы пользоваться голосовым поиском, откройте приложению доступ к микрофону."
                             }
                           ]
                         },
                         "disabledHeader": {
                           "runs": [
                             {
-                              "text": "Search with your voice"
+                              "text": "Голосовой поиск"
                             }
                           ]
                         },
                         "disabledSubtext": {
                           "runs": [
                             {
-                              "text": "To search by voice, go to your browser settings and allow access to microphone"
+                              "text": "Чтобы пользоваться голосовым поиском, перейдите в настройки браузера и откройте приложению доступ к микрофону."
                             }
                           ]
                         },
                         "microphoneButtonAriaLabel": {
                           "runs": [
                             {
-                              "text": "Cancel"
+                              "text": "Отмена"
                             }
                           ]
                         },
@@ -974,19 +992,19 @@
                             "icon": {
                               "iconType": "CLOSE"
                             },
-                            "trackingParams": "CAYQ0LEFIhMIhpfRpt6TlwMVkScGAB3Z6i_0",
+                            "trackingParams": "CCoQ0LEFIhMIyLTCprajlwMVA8s7Ah1dUR6h",
                             "accessibilityData": {
                               "accessibilityData": {
-                                "label": "Cancel"
+                                "label": "Отмена"
                               }
                             }
                           }
                         },
-                        "trackingParams": "CAUQ7q8FIhMIhpfRpt6TlwMVkScGAB3Z6i_0",
+                        "trackingParams": "CCkQ7q8FIhMIyLTCprajlwMVA8s7Ah1dUR6h",
                         "microphoneOffPromptHeader": {
                           "runs": [
                             {
-                              "text": "Microphone off. Try again."
+                              "text": "Микрофон отключен. Повторите попытку"
                             }
                           ]
                         }
@@ -1001,11 +1019,11 @@
           "icon": {
             "iconType": "MICROPHONE_ON"
           },
-          "tooltip": "Search with your voice",
-          "trackingParams": "CAQQ7a8FIhMIhpfRpt6TlwMVkScGAB3Z6i_0",
+          "tooltip": "Голосовой поиск",
+          "trackingParams": "CCgQ7a8FIhMIyLTCprajlwMVA8s7Ah1dUR6h",
           "accessibilityData": {
             "accessibilityData": {
-              "label": "Search with your voice"
+              "label": "Голосовой поиск"
             }
           }
         }
@@ -1014,31 +1032,2677 @@
   },
   "onResponseReceivedCommands": [
     {
-      "clickTrackingParams": "CAAQvGkiEwiGl9Gm3pOXAxWRJwYAHdnqL_TKAQRx1ZR0",
+      "clickTrackingParams": "CAAQvGkiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
       "appendContinuationItemsAction": {
         "continuationItems": [
           {
             "itemSectionRenderer": {
               "contents": [
                 {
-                  "messageRenderer": {
-                    "text": {
-                      "runs": [
+                  "videoRenderer": {
+                    "videoId": "PkYYT82e8Qs",
+                    "thumbnail": {
+                      "thumbnails": [
                         {
-                          "text": "No more results"
+                          "url": "https://i.ytimg.com/vi/PkYYT82e8Qs/hq720.jpg?sqp=-oaymwE2COgCEMoBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARhlIGUoZTAP&rs=AOn4CLCUiw7vc6gRSXzJucL7N89r5IvFBg",
+                          "width": 360,
+                          "height": 202
+                        },
+                        {
+                          "url": "https://i.ytimg.com/vi/PkYYT82e8Qs/hq720.jpg?sqp=-oaymwE2CNAFEJQDSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARhlIGUoZTAP&rs=AOn4CLDKSRfPMdRZPfCgnHLYJFeBfeMZPw",
+                          "width": 720,
+                          "height": 404
                         }
                       ]
                     },
-                    "trackingParams": "CAIQljsYACITCIaX0abek5cDFZEnBgAd2eov9A=="
+                    "title": {
+                      "runs": [
+                        {
+                          "text": "ReadMultiplex.com: The Rise Of Electronic Medicine. A New Approach."
+                        }
+                      ],
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "ReadMultiplex.com: The Rise Of Electronic Medicine. A New Approach. 55 минут"
+                        }
+                      }
+                    },
+                    "longBylineText": {
+                      "runs": [
+                        {
+                          "text": "Brian Roemmele",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@MultiplexMediaCorp",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCbU8V0oZzQibwabDn7_tQjw",
+                              "canonicalBaseUrl": "/@MultiplexMediaCorp"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "publishedTimeText": {
+                      "simpleText": "12 часов назад"
+                    },
+                    "lengthText": {
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "55 минут 38 секунд"
+                        }
+                      },
+                      "simpleText": "55:38"
+                    },
+                    "viewCountText": {
+                      "simpleText": "28 просмотров"
+                    },
+                    "navigationEndpoint": {
+                      "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeoTIGc2VhcmNoUifQvdCw0YPRh9C90YvQtSDRjdC60YHQv9C10YDQuNC80LXQvdGC0YuaAQMQ9CTKAQQ9V8GA",
+                      "commandMetadata": {
+                        "webCommandMetadata": {
+                          "url": "/watch?v=PkYYT82e8Qs&pp=ygUn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGL",
+                          "webPageType": "WEB_PAGE_TYPE_WATCH",
+                          "rootVe": 3832
+                        }
+                      },
+                      "watchEndpoint": {
+                        "videoId": "PkYYT82e8Qs",
+                        "params": "qgMn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGLugMKCKnO6eTNg_D3WboDCgj0sMjQ4qikx2DyAwUN_QJtPoIEAhgB",
+                        "playerParams": "ygUn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGL",
+                        "watchEndpointSupportedOnesieConfig": {
+                          "html5PlaybackOnesieConfig": {
+                            "commonConfig": {
+                              "url": "https://rr5---sn-35153iuxa-5a5d.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=3e46184fcd9ef10b&ip=2.133.72.87&initcwndbps=1538875&mt=1791221621&oweuc="
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "badges": [
+                      {
+                        "metadataBadgeRenderer": {
+                          "style": "BADGE_STYLE_TYPE_SIMPLE",
+                          "label": "Новинка",
+                          "trackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeoQ=="
+                        }
+                      }
+                    ],
+                    "ownerText": {
+                      "runs": [
+                        {
+                          "text": "Brian Roemmele",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@MultiplexMediaCorp",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCbU8V0oZzQibwabDn7_tQjw",
+                              "canonicalBaseUrl": "/@MultiplexMediaCorp"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "shortBylineText": {
+                      "runs": [
+                        {
+                          "text": "Brian Roemmele",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@MultiplexMediaCorp",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCbU8V0oZzQibwabDn7_tQjw",
+                              "canonicalBaseUrl": "/@MultiplexMediaCorp"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeoUCL4vvs_ImGoz4=",
+                    "showActionMenu": false,
+                    "shortViewCountText": {
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "28 просмотров"
+                        }
+                      },
+                      "simpleText": "28 просмотров"
+                    },
+                    "menu": {
+                      "menuRenderer": {
+                        "items": [
+                          {
+                            "menuServiceItemRenderer": {
+                              "text": {
+                                "runs": [
+                                  {
+                                    "text": "Добавить в очередь"
+                                  }
+                                ]
+                              },
+                              "icon": {
+                                "iconType": "ADD_TO_QUEUE_TAIL"
+                              },
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CCYQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "sendPost": true
+                                  }
+                                },
+                                "signalServiceEndpoint": {
+                                  "signal": "CLIENT_SIGNAL",
+                                  "actions": [
+                                    {
+                                      "clickTrackingParams": "CCYQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                      "addToPlaylistCommand": {
+                                        "openMiniplayer": true,
+                                        "videoId": "PkYYT82e8Qs",
+                                        "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                        "onCreateListCommand": {
+                                          "clickTrackingParams": "CCYQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                          "commandMetadata": {
+                                            "webCommandMetadata": {
+                                              "sendPost": true,
+                                              "apiUrl": "/youtubei/v1/playlist/create"
+                                            }
+                                          },
+                                          "createPlaylistServiceEndpoint": {
+                                            "videoIds": [
+                                              "PkYYT82e8Qs"
+                                            ],
+                                            "params": "CAQ%3D"
+                                          }
+                                        },
+                                        "videoIds": [
+                                          "PkYYT82e8Qs"
+                                        ],
+                                        "videoCommand": {
+                                          "clickTrackingParams": "CCYQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                          "commandMetadata": {
+                                            "webCommandMetadata": {
+                                              "url": "/watch?v=PkYYT82e8Qs",
+                                              "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                              "rootVe": 3832
+                                            }
+                                          },
+                                          "watchEndpoint": {
+                                            "videoId": "PkYYT82e8Qs",
+                                            "watchEndpointSupportedOnesieConfig": {
+                                              "html5PlaybackOnesieConfig": {
+                                                "commonConfig": {
+                                                  "url": "https://rr5---sn-35153iuxa-5a5d.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=3e46184fcd9ef10b&ip=2.133.72.87&initcwndbps=1538875&mt=1791221621&oweuc="
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "trackingParams": "CCYQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                            }
+                          },
+                          {
+                            "menuServiceItemDownloadRenderer": {
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CCUQ0aoFGA8iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                "offlineVideoEndpoint": {
+                                  "videoId": "PkYYT82e8Qs",
+                                  "onAddCommand": {
+                                    "clickTrackingParams": "CCUQ0aoFGA8iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "getDownloadActionCommand": {
+                                      "videoId": "PkYYT82e8Qs",
+                                      "params": "CAIQAA%3D%3D",
+                                      "isCrossDeviceDownload": false
+                                    }
+                                  }
+                                }
+                              },
+                              "trackingParams": "CCUQ0aoFGA8iEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                            }
+                          },
+                          {
+                            "menuServiceItemRenderer": {
+                              "text": {
+                                "runs": [
+                                  {
+                                    "text": "Поделиться"
+                                  }
+                                ]
+                              },
+                              "icon": {
+                                "iconType": "SHARE"
+                              },
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "sendPost": true,
+                                    "apiUrl": "/youtubei/v1/share/get_share_panel"
+                                  }
+                                },
+                                "shareEntityServiceEndpoint": {
+                                  "serializedShareEntity": "CgtQa1lZVDgyZThRcw%3D%3D",
+                                  "commands": [
+                                    {
+                                      "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                      "openPopupAction": {
+                                        "popup": {
+                                          "unifiedSharePanelRenderer": {
+                                            "trackingParams": "CCQQjmIiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                            "showLoadingSpinner": true
+                                          }
+                                        },
+                                        "popupType": "DIALOG",
+                                        "beReused": true
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "trackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeoQ==",
+                              "hasSeparator": true
+                            }
+                          }
+                        ],
+                        "trackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeoQ==",
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "Меню действий"
+                          }
+                        }
+                      }
+                    },
+                    "channelThumbnailSupportedRenderers": {
+                      "channelThumbnailWithLinkRenderer": {
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://yt3.ggpht.com/ytc/AIdro_mI0BrhzEFh1-r55UTsnCcB9qhM3JVMQc9hsvIEQhEh8iA=s68-c-k-c0x00ffffff-no-rj",
+                              "width": 68,
+                              "height": 68
+                            }
+                          ]
+                        },
+                        "navigationEndpoint": {
+                          "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                          "commandMetadata": {
+                            "webCommandMetadata": {
+                              "url": "/@MultiplexMediaCorp",
+                              "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                              "rootVe": 3611,
+                              "apiUrl": "/youtubei/v1/browse"
+                            }
+                          },
+                          "browseEndpoint": {
+                            "browseId": "UCbU8V0oZzQibwabDn7_tQjw",
+                            "canonicalBaseUrl": "/@MultiplexMediaCorp"
+                          }
+                        },
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "Перейти на канал \"Brian Roemmele\""
+                          }
+                        }
+                      }
+                    },
+                    "thumbnailOverlays": [
+                      {
+                        "thumbnailOverlayTimeStatusRenderer": {
+                          "text": {
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "55 минут 38 секунд"
+                              }
+                            },
+                            "simpleText": "55:38"
+                          },
+                          "style": "DEFAULT"
+                        }
+                      },
+                      {
+                        "thumbnailOverlayToggleButtonRenderer": {
+                          "isToggled": false,
+                          "untoggledIcon": {
+                            "iconType": "WATCH_LATER"
+                          },
+                          "toggledIcon": {
+                            "iconType": "CHECK"
+                          },
+                          "untoggledTooltip": "Смотреть позже",
+                          "toggledTooltip": "Добавлено в плейлист \"Посмотреть позже\"",
+                          "untoggledServiceEndpoint": {
+                            "clickTrackingParams": "CCMQ-ecDGAIiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true,
+                                "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                              }
+                            },
+                            "playlistEditEndpoint": {
+                              "playlistId": "WL",
+                              "actions": [
+                                {
+                                  "addedVideoId": "PkYYT82e8Qs",
+                                  "action": "ACTION_ADD_VIDEO"
+                                }
+                              ]
+                            }
+                          },
+                          "toggledServiceEndpoint": {
+                            "clickTrackingParams": "CCMQ-ecDGAIiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true,
+                                "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                              }
+                            },
+                            "playlistEditEndpoint": {
+                              "playlistId": "WL",
+                              "actions": [
+                                {
+                                  "action": "ACTION_REMOVE_VIDEO_BY_VIDEO_ID",
+                                  "removedVideoId": "PkYYT82e8Qs"
+                                }
+                              ]
+                            }
+                          },
+                          "untoggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Смотреть позже"
+                            }
+                          },
+                          "toggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавлено в плейлист \"Посмотреть позже\""
+                            }
+                          },
+                          "trackingParams": "CCMQ-ecDGAIiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                        }
+                      },
+                      {
+                        "thumbnailOverlayToggleButtonRenderer": {
+                          "untoggledIcon": {
+                            "iconType": "ADD_TO_QUEUE_TAIL"
+                          },
+                          "toggledIcon": {
+                            "iconType": "PLAYLIST_ADD_CHECK"
+                          },
+                          "untoggledTooltip": "Добавить в очередь",
+                          "toggledTooltip": "Добавлено в плейлист \"Посмотреть позже\"",
+                          "untoggledServiceEndpoint": {
+                            "clickTrackingParams": "CCIQx-wEGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true
+                              }
+                            },
+                            "signalServiceEndpoint": {
+                              "signal": "CLIENT_SIGNAL",
+                              "actions": [
+                                {
+                                  "clickTrackingParams": "CCIQx-wEGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                  "addToPlaylistCommand": {
+                                    "openMiniplayer": true,
+                                    "videoId": "PkYYT82e8Qs",
+                                    "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                    "onCreateListCommand": {
+                                      "clickTrackingParams": "CCIQx-wEGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                      "commandMetadata": {
+                                        "webCommandMetadata": {
+                                          "sendPost": true,
+                                          "apiUrl": "/youtubei/v1/playlist/create"
+                                        }
+                                      },
+                                      "createPlaylistServiceEndpoint": {
+                                        "videoIds": [
+                                          "PkYYT82e8Qs"
+                                        ],
+                                        "params": "CAQ%3D"
+                                      }
+                                    },
+                                    "videoIds": [
+                                      "PkYYT82e8Qs"
+                                    ]
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "untoggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавить в очередь"
+                            }
+                          },
+                          "toggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавлено в плейлист \"Посмотреть позже\""
+                            }
+                          },
+                          "trackingParams": "CCIQx-wEGAMiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                        }
+                      },
+                      {
+                        "thumbnailOverlayNowPlayingRenderer": {
+                          "text": {
+                            "runs": [
+                              {
+                                "text": "Текущее видео"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "thumbnailOverlayLoadingPreviewRenderer": {
+                          "text": {
+                            "runs": [
+                              {
+                                "text": "Если убрать указатель, предпросмотр прекратится"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "richThumbnail": {
+                      "movingThumbnailRenderer": {
+                        "movingThumbnailDetails": {
+                          "thumbnails": [
+                            {
+                              "url": "https://i.ytimg.com/an_webp/PkYYT82e8Qs/mqdefault_6s.webp?du=3000&sqp=CMi7j9YG&rs=AOn4CLBhy5dJTrk-e5HBVFkRoe-yXvIXGg",
+                              "width": 320,
+                              "height": 180
+                            }
+                          ],
+                          "logAsMovingThumbnail": true
+                        },
+                        "enableHoveredLogging": true,
+                        "enableOverlay": true
+                      }
+                    },
+                    "detailedMetadataSnippets": [
+                      {
+                        "snippetText": {
+                          "runs": [
+                            {
+                              "text": "There is a technology that keeps coming back. It appears in a 1920s laboratory, vanishes under institutional fire, reappears in a ..."
+                            }
+                          ]
+                        },
+                        "snippetHoverText": {
+                          "runs": [
+                            {
+                              "text": "Информация из описания видео"
+                            }
+                          ]
+                        },
+                        "maxOneLine": false
+                      }
+                    ],
+                    "inlinePlaybackEndpoint": {
+                      "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeoTIGc2VhcmNoUifQvdCw0YPRh9C90YvQtSDRjdC60YHQv9C10YDQuNC80LXQvdGC0YuaAQMQ9CTKAQQ9V8GA",
+                      "commandMetadata": {
+                        "webCommandMetadata": {
+                          "url": "/watch?v=PkYYT82e8Qs&pp=YAHIAQGiBhUBqHapM3faiQpq1v6TLpp8gOAojD8%3D",
+                          "webPageType": "WEB_PAGE_TYPE_WATCH",
+                          "rootVe": 3832
+                        }
+                      },
+                      "watchEndpoint": {
+                        "videoId": "PkYYT82e8Qs",
+                        "params": "qgMn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGLugMKCKnO6eTNg_D3WboDCgj0sMjQ4qikx2DyAwUN_QJtPoIEAhgB",
+                        "playerParams": "YAHIAQGiBhUBqHapM3faiQpq1v6TLpp8gOAojD8%3D",
+                        "playerExtraUrlParams": [
+                          {
+                            "key": "inline",
+                            "value": "1"
+                          }
+                        ],
+                        "watchEndpointSupportedOnesieConfig": {
+                          "html5PlaybackOnesieConfig": {
+                            "commonConfig": {
+                              "url": "https://rr5---sn-35153iuxa-5a5d.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=3e46184fcd9ef10b&ip=2.133.72.87&initcwndbps=1538875&mt=1791221621&oweuc="
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "searchVideoResultEntityKey": "EgtQa1lZVDgyZThRcyDnAigB",
+                    "avatar": {
+                      "decoratedAvatarViewModel": {
+                        "avatar": {
+                          "avatarViewModel": {
+                            "image": {
+                              "sources": [
+                                {
+                                  "url": "https://yt3.ggpht.com/ytc/AIdro_mI0BrhzEFh1-r55UTsnCcB9qhM3JVMQc9hsvIEQhEh8iA=s68-c-k-c0x00ffffff-no-rj",
+                                  "width": 68,
+                                  "height": 68
+                                }
+                              ]
+                            },
+                            "avatarImageSize": "AVATAR_SIZE_M"
+                          }
+                        },
+                        "a11yLabel": "Перейти на канал \"Brian Roemmele\"",
+                        "rendererContext": {
+                          "commandContext": {
+                            "onTap": {
+                              "innertubeCommand": {
+                                "clickTrackingParams": "CCEQ3DAYACITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "url": "/@MultiplexMediaCorp",
+                                    "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                    "rootVe": 3611,
+                                    "apiUrl": "/youtubei/v1/browse"
+                                  }
+                                },
+                                "browseEndpoint": {
+                                  "browseId": "UCbU8V0oZzQibwabDn7_tQjw",
+                                  "canonicalBaseUrl": "/@MultiplexMediaCorp"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "videoRenderer": {
+                    "videoId": "We_AHNyaZyk",
+                    "thumbnail": {
+                      "thumbnails": [
+                        {
+                          "url": "https://i.ytimg.com/vi/We_AHNyaZyk/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBqLzl_8DDgi1m4rWBhjg6gQg4KgB&rs=AOn4CLAWcDd5uJaFxDTV3xxqvo2QvnN3qg&usqp=CBU",
+                          "width": 360,
+                          "height": 202
+                        },
+                        {
+                          "url": "https://i.ytimg.com/vi/We_AHNyaZyk/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBqLzl_8DDgi1m4rWBhjg6gQg4KgB&rs=AOn4CLDwjZq-82wMh0-bXVDW4_FQyj1d5w&usqp=CBU",
+                          "width": 720,
+                          "height": 404
+                        }
+                      ]
+                    },
+                    "title": {
+                      "runs": [
+                        {
+                          "text": "Yoshie Termina и Lobotomy desh Nextbot в яме Nextbot Gmod"
+                        }
+                      ],
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "Yoshie Termina и Lobotomy desh Nextbot в яме Nextbot Gmod 5 минут 59 секунд"
+                        }
+                      }
+                    },
+                    "longBylineText": {
+                      "runs": [
+                        {
+                          "text": "Cuplen",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@cuplengmod",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCTTXkb-sGLd92rfX3BDtVyg",
+                              "canonicalBaseUrl": "/@cuplengmod"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "publishedTimeText": {
+                      "simpleText": "23 часа назад"
+                    },
+                    "lengthText": {
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "5 минут 59 секунд"
+                        }
+                      },
+                      "simpleText": "5:59"
+                    },
+                    "viewCountText": {
+                      "simpleText": "379 просмотров"
+                    },
+                    "navigationEndpoint": {
+                      "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeoTIGc2VhcmNoUifQvdCw0YPRh9C90YvQtSDRjdC60YHQv9C10YDQuNC80LXQvdGC0YuaAQMQ9CTKAQQ9V8GA",
+                      "commandMetadata": {
+                        "webCommandMetadata": {
+                          "url": "/watch?v=We_AHNyaZyk&pp=ygUn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGL0gcJCS0MAYcqIYzv",
+                          "webPageType": "WEB_PAGE_TYPE_WATCH",
+                          "rootVe": 3832
+                        }
+                      },
+                      "watchEndpoint": {
+                        "videoId": "We_AHNyaZyk",
+                        "params": "qgMn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGLugMKCIvi--z8iYajProDCgj0sMjQ4qikx2DyAwUN_QJtPoIEAhgB",
+                        "playerParams": "ygUn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGL0gcJCS0MAYcqIYzv",
+                        "watchEndpointSupportedOnesieConfig": {
+                          "html5PlaybackOnesieConfig": {
+                            "commonConfig": {
+                              "url": "https://rr6---sn-35153iuxa-5a5d.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=59efc01cdc9a6729&ip=2.133.72.87&initcwndbps=1538875&mt=1791221595&oweuc="
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "badges": [
+                      {
+                        "metadataBadgeRenderer": {
+                          "style": "BADGE_STYLE_TYPE_SIMPLE",
+                          "label": "Новинка",
+                          "trackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeoQ=="
+                        }
+                      }
+                    ],
+                    "ownerText": {
+                      "runs": [
+                        {
+                          "text": "Cuplen",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@cuplengmod",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCTTXkb-sGLd92rfX3BDtVyg",
+                              "canonicalBaseUrl": "/@cuplengmod"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "shortBylineText": {
+                      "runs": [
+                        {
+                          "text": "Cuplen",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@cuplengmod",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCTTXkb-sGLd92rfX3BDtVyg",
+                              "canonicalBaseUrl": "/@cuplengmod"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeoUCpzunkzYPw91k=",
+                    "showActionMenu": false,
+                    "shortViewCountText": {
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "379 просмотров"
+                        }
+                      },
+                      "simpleText": "379 просмотров"
+                    },
+                    "menu": {
+                      "menuRenderer": {
+                        "items": [
+                          {
+                            "menuServiceItemRenderer": {
+                              "text": {
+                                "runs": [
+                                  {
+                                    "text": "Добавить в очередь"
+                                  }
+                                ]
+                              },
+                              "icon": {
+                                "iconType": "ADD_TO_QUEUE_TAIL"
+                              },
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CCAQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "sendPost": true
+                                  }
+                                },
+                                "signalServiceEndpoint": {
+                                  "signal": "CLIENT_SIGNAL",
+                                  "actions": [
+                                    {
+                                      "clickTrackingParams": "CCAQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                      "addToPlaylistCommand": {
+                                        "openMiniplayer": true,
+                                        "videoId": "We_AHNyaZyk",
+                                        "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                        "onCreateListCommand": {
+                                          "clickTrackingParams": "CCAQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                          "commandMetadata": {
+                                            "webCommandMetadata": {
+                                              "sendPost": true,
+                                              "apiUrl": "/youtubei/v1/playlist/create"
+                                            }
+                                          },
+                                          "createPlaylistServiceEndpoint": {
+                                            "videoIds": [
+                                              "We_AHNyaZyk"
+                                            ],
+                                            "params": "CAQ%3D"
+                                          }
+                                        },
+                                        "videoIds": [
+                                          "We_AHNyaZyk"
+                                        ],
+                                        "videoCommand": {
+                                          "clickTrackingParams": "CCAQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                          "commandMetadata": {
+                                            "webCommandMetadata": {
+                                              "url": "/watch?v=We_AHNyaZyk&pp=0gcJCcYJdf6zKzOD",
+                                              "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                              "rootVe": 3832
+                                            }
+                                          },
+                                          "watchEndpoint": {
+                                            "videoId": "We_AHNyaZyk",
+                                            "playerParams": "0gcJCcYJdf6zKzOD",
+                                            "watchEndpointSupportedOnesieConfig": {
+                                              "html5PlaybackOnesieConfig": {
+                                                "commonConfig": {
+                                                  "url": "https://rr6---sn-35153iuxa-5a5d.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=59efc01cdc9a6729&ip=2.133.72.87&initcwndbps=1538875&mt=1791221595&oweuc="
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "trackingParams": "CCAQ_pgEGA4iEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                            }
+                          },
+                          {
+                            "menuServiceItemDownloadRenderer": {
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CB8Q0aoFGA8iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                "offlineVideoEndpoint": {
+                                  "videoId": "We_AHNyaZyk",
+                                  "onAddCommand": {
+                                    "clickTrackingParams": "CB8Q0aoFGA8iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "getDownloadActionCommand": {
+                                      "videoId": "We_AHNyaZyk",
+                                      "params": "CAIQAA%3D%3D",
+                                      "isCrossDeviceDownload": false
+                                    }
+                                  }
+                                }
+                              },
+                              "trackingParams": "CB8Q0aoFGA8iEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                            }
+                          },
+                          {
+                            "menuServiceItemRenderer": {
+                              "text": {
+                                "runs": [
+                                  {
+                                    "text": "Поделиться"
+                                  }
+                                ]
+                              },
+                              "icon": {
+                                "iconType": "SHARE"
+                              },
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "sendPost": true,
+                                    "apiUrl": "/youtubei/v1/share/get_share_panel"
+                                  }
+                                },
+                                "shareEntityServiceEndpoint": {
+                                  "serializedShareEntity": "CgtXZV9BSE55YVp5aw%3D%3D",
+                                  "commands": [
+                                    {
+                                      "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                      "openPopupAction": {
+                                        "popup": {
+                                          "unifiedSharePanelRenderer": {
+                                            "trackingParams": "CB4QjmIiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                            "showLoadingSpinner": true
+                                          }
+                                        },
+                                        "popupType": "DIALOG",
+                                        "beReused": true
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "trackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeoQ==",
+                              "hasSeparator": true
+                            }
+                          }
+                        ],
+                        "trackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeoQ==",
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "Меню действий"
+                          }
+                        }
+                      }
+                    },
+                    "channelThumbnailSupportedRenderers": {
+                      "channelThumbnailWithLinkRenderer": {
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://yt3.ggpht.com/89WlpOmBHQS1KEBpZPjs_WyqsZdPrK82fixWbCe-dHTGA-BRM4jgUAdmYTdSPyYdn1dsIcUjtA=s68-c-k-c0x00ffffff-no-rj",
+                              "width": 68,
+                              "height": 68
+                            }
+                          ]
+                        },
+                        "navigationEndpoint": {
+                          "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                          "commandMetadata": {
+                            "webCommandMetadata": {
+                              "url": "/@cuplengmod",
+                              "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                              "rootVe": 3611,
+                              "apiUrl": "/youtubei/v1/browse"
+                            }
+                          },
+                          "browseEndpoint": {
+                            "browseId": "UCTTXkb-sGLd92rfX3BDtVyg",
+                            "canonicalBaseUrl": "/@cuplengmod"
+                          }
+                        },
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "Перейти на канал \"Cuplen\""
+                          }
+                        }
+                      }
+                    },
+                    "thumbnailOverlays": [
+                      {
+                        "thumbnailOverlayTimeStatusRenderer": {
+                          "text": {
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "5 минут 59 секунд"
+                              }
+                            },
+                            "simpleText": "5:59"
+                          },
+                          "style": "DEFAULT"
+                        }
+                      },
+                      {
+                        "thumbnailOverlayToggleButtonRenderer": {
+                          "isToggled": false,
+                          "untoggledIcon": {
+                            "iconType": "WATCH_LATER"
+                          },
+                          "toggledIcon": {
+                            "iconType": "CHECK"
+                          },
+                          "untoggledTooltip": "Смотреть позже",
+                          "toggledTooltip": "Добавлено в плейлист \"Посмотреть позже\"",
+                          "untoggledServiceEndpoint": {
+                            "clickTrackingParams": "CB0Q-ecDGAIiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true,
+                                "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                              }
+                            },
+                            "playlistEditEndpoint": {
+                              "playlistId": "WL",
+                              "actions": [
+                                {
+                                  "addedVideoId": "We_AHNyaZyk",
+                                  "action": "ACTION_ADD_VIDEO"
+                                }
+                              ]
+                            }
+                          },
+                          "toggledServiceEndpoint": {
+                            "clickTrackingParams": "CB0Q-ecDGAIiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true,
+                                "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                              }
+                            },
+                            "playlistEditEndpoint": {
+                              "playlistId": "WL",
+                              "actions": [
+                                {
+                                  "action": "ACTION_REMOVE_VIDEO_BY_VIDEO_ID",
+                                  "removedVideoId": "We_AHNyaZyk"
+                                }
+                              ]
+                            }
+                          },
+                          "untoggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Смотреть позже"
+                            }
+                          },
+                          "toggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавлено в плейлист \"Посмотреть позже\""
+                            }
+                          },
+                          "trackingParams": "CB0Q-ecDGAIiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                        }
+                      },
+                      {
+                        "thumbnailOverlayToggleButtonRenderer": {
+                          "untoggledIcon": {
+                            "iconType": "ADD_TO_QUEUE_TAIL"
+                          },
+                          "toggledIcon": {
+                            "iconType": "PLAYLIST_ADD_CHECK"
+                          },
+                          "untoggledTooltip": "Добавить в очередь",
+                          "toggledTooltip": "Добавлено в плейлист \"Посмотреть позже\"",
+                          "untoggledServiceEndpoint": {
+                            "clickTrackingParams": "CBwQx-wEGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true
+                              }
+                            },
+                            "signalServiceEndpoint": {
+                              "signal": "CLIENT_SIGNAL",
+                              "actions": [
+                                {
+                                  "clickTrackingParams": "CBwQx-wEGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                  "addToPlaylistCommand": {
+                                    "openMiniplayer": true,
+                                    "videoId": "We_AHNyaZyk",
+                                    "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                    "onCreateListCommand": {
+                                      "clickTrackingParams": "CBwQx-wEGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                      "commandMetadata": {
+                                        "webCommandMetadata": {
+                                          "sendPost": true,
+                                          "apiUrl": "/youtubei/v1/playlist/create"
+                                        }
+                                      },
+                                      "createPlaylistServiceEndpoint": {
+                                        "videoIds": [
+                                          "We_AHNyaZyk"
+                                        ],
+                                        "params": "CAQ%3D"
+                                      }
+                                    },
+                                    "videoIds": [
+                                      "We_AHNyaZyk"
+                                    ]
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "untoggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавить в очередь"
+                            }
+                          },
+                          "toggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавлено в плейлист \"Посмотреть позже\""
+                            }
+                          },
+                          "trackingParams": "CBwQx-wEGAMiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                        }
+                      },
+                      {
+                        "thumbnailOverlayNowPlayingRenderer": {
+                          "text": {
+                            "runs": [
+                              {
+                                "text": "Текущее видео"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "thumbnailOverlayLoadingPreviewRenderer": {
+                          "text": {
+                            "runs": [
+                              {
+                                "text": "Если убрать указатель, предпросмотр прекратится"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "richThumbnail": {
+                      "movingThumbnailRenderer": {
+                        "movingThumbnailDetails": {
+                          "thumbnails": [
+                            {
+                              "url": "https://i.ytimg.com/an_webp/We_AHNyaZyk/mqdefault_6s.webp?du=3000&sqp=CN2cj9YG&rs=AOn4CLAhZYP5oAfuc_DZPXSb7s_NvqZCDg",
+                              "width": 320,
+                              "height": 180
+                            }
+                          ],
+                          "logAsMovingThumbnail": true
+                        },
+                        "enableHoveredLogging": true,
+                        "enableOverlay": true
+                      }
+                    },
+                    "detailedMetadataSnippets": [
+                      {
+                        "snippetText": {
+                          "runs": [
+                            {
+                              "text": "ПРЕДУПРЕЖДЕНИЕ:\nЭто видео содержит вымышленный хоррор-геймплей, связанный с Nextbots.\nВсе персонажи, сущности и окружение ..."
+                            }
+                          ]
+                        },
+                        "snippetHoverText": {
+                          "runs": [
+                            {
+                              "text": "Информация из описания видео"
+                            }
+                          ]
+                        },
+                        "maxOneLine": false
+                      }
+                    ],
+                    "inlinePlaybackEndpoint": {
+                      "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeoTIGc2VhcmNoUifQvdCw0YPRh9C90YvQtSDRjdC60YHQv9C10YDQuNC80LXQvdGC0YuaAQMQ9CTKAQQ9V8GA",
+                      "commandMetadata": {
+                        "webCommandMetadata": {
+                          "url": "/watch?v=We_AHNyaZyk&pp=YAHIAQGiBhUBqHapM3zSeNty3tU3GdMZi57P8T0%3D",
+                          "webPageType": "WEB_PAGE_TYPE_WATCH",
+                          "rootVe": 3832
+                        }
+                      },
+                      "watchEndpoint": {
+                        "videoId": "We_AHNyaZyk",
+                        "params": "qgMn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGLugMKCIvi--z8iYajProDCgj0sMjQ4qikx2DyAwUN_QJtPoIEAhgB",
+                        "playerParams": "YAHIAQGiBhUBqHapM3zSeNty3tU3GdMZi57P8T0%3D",
+                        "playerExtraUrlParams": [
+                          {
+                            "key": "inline",
+                            "value": "1"
+                          }
+                        ],
+                        "watchEndpointSupportedOnesieConfig": {
+                          "html5PlaybackOnesieConfig": {
+                            "commonConfig": {
+                              "url": "https://rr6---sn-35153iuxa-5a5d.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=59efc01cdc9a6729&ip=2.133.72.87&initcwndbps=1538875&mt=1791221595&oweuc="
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "searchVideoResultEntityKey": "EgtXZV9BSE55YVp5ayDnAigB",
+                    "avatar": {
+                      "decoratedAvatarViewModel": {
+                        "avatar": {
+                          "avatarViewModel": {
+                            "image": {
+                              "sources": [
+                                {
+                                  "url": "https://yt3.ggpht.com/89WlpOmBHQS1KEBpZPjs_WyqsZdPrK82fixWbCe-dHTGA-BRM4jgUAdmYTdSPyYdn1dsIcUjtA=s68-c-k-c0x00ffffff-no-rj",
+                                  "width": 68,
+                                  "height": 68
+                                }
+                              ]
+                            },
+                            "avatarImageSize": "AVATAR_SIZE_M"
+                          }
+                        },
+                        "a11yLabel": "Перейти на канал \"Cuplen\"",
+                        "rendererContext": {
+                          "commandContext": {
+                            "onTap": {
+                              "innertubeCommand": {
+                                "clickTrackingParams": "CBsQ3DAYASITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "url": "/@cuplengmod",
+                                    "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                    "rootVe": 3611,
+                                    "apiUrl": "/youtubei/v1/browse"
+                                  }
+                                },
+                                "browseEndpoint": {
+                                  "browseId": "UCTTXkb-sGLd92rfX3BDtVyg",
+                                  "canonicalBaseUrl": "/@cuplengmod"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "videoRenderer": {
+                    "videoId": "YI6RRioSGHQ",
+                    "thumbnail": {
+                      "thumbnails": [
+                        {
+                          "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBqLzl_8DDgibrorWBhjg6gQg4KgB&rs=AOn4CLAx2CJm5y90HugDwExZZKyfR-KHTw&usqp=CBU",
+                          "width": 360,
+                          "height": 202
+                        },
+                        {
+                          "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBqLzl_8DDgibrorWBhjg6gQg4KgB&rs=AOn4CLArKaNBqFLrTHzJ0kJQq6Cl0QMd6A&usqp=CBU",
+                          "width": 720,
+                          "height": 404
+                        }
+                      ]
+                    },
+                    "title": {
+                      "runs": [
+                        {
+                          "text": "The Case of Charles Dexter Ward by H. P. Lovecraft - Full Audiobook"
+                        }
+                      ],
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "The Case of Charles Dexter Ward by H. P. Lovecraft - Full Audiobook 4 часа 14 минут"
+                        }
+                      }
+                    },
+                    "longBylineText": {
+                      "runs": [
+                        {
+                          "text": "Supreme Audiobooks",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@SupremeAudiobooks",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCkQuYeMENrthJLWaBQdpOEQ",
+                              "canonicalBaseUrl": "/@SupremeAudiobooks"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "publishedTimeText": {
+                      "simpleText": "23 часа назад"
+                    },
+                    "lengthText": {
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "4 часа 14 минут 23 секунды"
+                        }
+                      },
+                      "simpleText": "4:14:23"
+                    },
+                    "viewCountText": {
+                      "simpleText": "473 просмотра"
+                    },
+                    "navigationEndpoint": {
+                      "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeoTIGc2VhcmNoUifQvdCw0YPRh9C90YvQtSDRjdC60YHQv9C10YDQuNC80LXQvdGC0YuaAQMQ9CTKAQQ9V8GA",
+                      "commandMetadata": {
+                        "webCommandMetadata": {
+                          "url": "/watch?v=YI6RRioSGHQ&pp=ygUn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGL",
+                          "webPageType": "WEB_PAGE_TYPE_WATCH",
+                          "rootVe": 3832
+                        }
+                      },
+                      "watchEndpoint": {
+                        "videoId": "YI6RRioSGHQ",
+                        "params": "qgMn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGLugMKCIvi--z8iYajProDCgipzunkzYPw91nyAwUN_QJtPoIEAhgB",
+                        "playerParams": "ygUn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGL",
+                        "watchEndpointSupportedOnesieConfig": {
+                          "html5PlaybackOnesieConfig": {
+                            "commonConfig": {
+                              "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&initcwndbps=1538875&mt=1791221595&oweuc="
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "badges": [
+                      {
+                        "metadataBadgeRenderer": {
+                          "style": "BADGE_STYLE_TYPE_SIMPLE",
+                          "label": "Новинка",
+                          "trackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeoQ=="
+                        }
+                      },
+                      {
+                        "metadataBadgeRenderer": {
+                          "style": "BADGE_STYLE_TYPE_SIMPLE",
+                          "label": "4K",
+                          "trackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeoQ=="
+                        }
+                      }
+                    ],
+                    "ownerText": {
+                      "runs": [
+                        {
+                          "text": "Supreme Audiobooks",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@SupremeAudiobooks",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCkQuYeMENrthJLWaBQdpOEQ",
+                              "canonicalBaseUrl": "/@SupremeAudiobooks"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "shortBylineText": {
+                      "runs": [
+                        {
+                          "text": "Supreme Audiobooks",
+                          "navigationEndpoint": {
+                            "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "url": "/@SupremeAudiobooks",
+                                "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                "rootVe": 3611,
+                                "apiUrl": "/youtubei/v1/browse"
+                              }
+                            },
+                            "browseEndpoint": {
+                              "browseId": "UCkQuYeMENrthJLWaBQdpOEQ",
+                              "canonicalBaseUrl": "/@SupremeAudiobooks"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "trackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeoUD0sMjQ4qikx2A=",
+                    "showActionMenu": false,
+                    "shortViewCountText": {
+                      "accessibility": {
+                        "accessibilityData": {
+                          "label": "473 просмотра"
+                        }
+                      },
+                      "simpleText": "473 просмотра"
+                    },
+                    "menu": {
+                      "menuRenderer": {
+                        "items": [
+                          {
+                            "menuServiceItemRenderer": {
+                              "text": {
+                                "runs": [
+                                  {
+                                    "text": "Добавить в очередь"
+                                  }
+                                ]
+                              },
+                              "icon": {
+                                "iconType": "ADD_TO_QUEUE_TAIL"
+                              },
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CBoQ_pgEGA8iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "sendPost": true
+                                  }
+                                },
+                                "signalServiceEndpoint": {
+                                  "signal": "CLIENT_SIGNAL",
+                                  "actions": [
+                                    {
+                                      "clickTrackingParams": "CBoQ_pgEGA8iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                      "addToPlaylistCommand": {
+                                        "openMiniplayer": true,
+                                        "videoId": "YI6RRioSGHQ",
+                                        "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                        "onCreateListCommand": {
+                                          "clickTrackingParams": "CBoQ_pgEGA8iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                          "commandMetadata": {
+                                            "webCommandMetadata": {
+                                              "sendPost": true,
+                                              "apiUrl": "/youtubei/v1/playlist/create"
+                                            }
+                                          },
+                                          "createPlaylistServiceEndpoint": {
+                                            "videoIds": [
+                                              "YI6RRioSGHQ"
+                                            ],
+                                            "params": "CAQ%3D"
+                                          }
+                                        },
+                                        "videoIds": [
+                                          "YI6RRioSGHQ"
+                                        ],
+                                        "videoCommand": {
+                                          "clickTrackingParams": "CBoQ_pgEGA8iEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                          "commandMetadata": {
+                                            "webCommandMetadata": {
+                                              "url": "/watch?v=YI6RRioSGHQ",
+                                              "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                              "rootVe": 3832
+                                            }
+                                          },
+                                          "watchEndpoint": {
+                                            "videoId": "YI6RRioSGHQ",
+                                            "watchEndpointSupportedOnesieConfig": {
+                                              "html5PlaybackOnesieConfig": {
+                                                "commonConfig": {
+                                                  "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&initcwndbps=1538875&mt=1791221595&oweuc="
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "trackingParams": "CBoQ_pgEGA8iEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                            }
+                          },
+                          {
+                            "menuServiceItemDownloadRenderer": {
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CBkQ0aoFGBAiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                "offlineVideoEndpoint": {
+                                  "videoId": "YI6RRioSGHQ",
+                                  "onAddCommand": {
+                                    "clickTrackingParams": "CBkQ0aoFGBAiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "getDownloadActionCommand": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "params": "CAIQAA%3D%3D",
+                                      "isCrossDeviceDownload": false
+                                    }
+                                  }
+                                }
+                              },
+                              "trackingParams": "CBkQ0aoFGBAiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                            }
+                          },
+                          {
+                            "menuServiceItemRenderer": {
+                              "text": {
+                                "runs": [
+                                  {
+                                    "text": "Поделиться"
+                                  }
+                                ]
+                              },
+                              "icon": {
+                                "iconType": "SHARE"
+                              },
+                              "serviceEndpoint": {
+                                "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "sendPost": true,
+                                    "apiUrl": "/youtubei/v1/share/get_share_panel"
+                                  }
+                                },
+                                "shareEntityServiceEndpoint": {
+                                  "serializedShareEntity": "CgtZSTZSUmlvU0dIUQ%3D%3D",
+                                  "commands": [
+                                    {
+                                      "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                      "openPopupAction": {
+                                        "popup": {
+                                          "unifiedSharePanelRenderer": {
+                                            "trackingParams": "CBgQjmIiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                            "showLoadingSpinner": true
+                                          }
+                                        },
+                                        "popupType": "DIALOG",
+                                        "beReused": true
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "trackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeoQ==",
+                              "hasSeparator": true
+                            }
+                          }
+                        ],
+                        "trackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeoQ==",
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "Меню действий"
+                          }
+                        }
+                      }
+                    },
+                    "channelThumbnailSupportedRenderers": {
+                      "channelThumbnailWithLinkRenderer": {
+                        "thumbnail": {
+                          "thumbnails": [
+                            {
+                              "url": "https://yt3.ggpht.com/W7PQQV5Q_Lefz232xwXB668MsdHAsljIvvHedQhLvNgKbk50e1y8_aCtd3gUtiep8GFbsdZwBg=s68-c-k-c0x00ffffff-no-rj",
+                              "width": 68,
+                              "height": 68
+                            }
+                          ]
+                        },
+                        "navigationEndpoint": {
+                          "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                          "commandMetadata": {
+                            "webCommandMetadata": {
+                              "url": "/@SupremeAudiobooks",
+                              "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                              "rootVe": 3611,
+                              "apiUrl": "/youtubei/v1/browse"
+                            }
+                          },
+                          "browseEndpoint": {
+                            "browseId": "UCkQuYeMENrthJLWaBQdpOEQ",
+                            "canonicalBaseUrl": "/@SupremeAudiobooks"
+                          }
+                        },
+                        "accessibility": {
+                          "accessibilityData": {
+                            "label": "Перейти на канал \"Supreme Audiobooks\""
+                          }
+                        }
+                      }
+                    },
+                    "thumbnailOverlays": [
+                      {
+                        "thumbnailOverlayTimeStatusRenderer": {
+                          "text": {
+                            "accessibility": {
+                              "accessibilityData": {
+                                "label": "4 часа 14 минут 23 секунды"
+                              }
+                            },
+                            "simpleText": "4:14:23"
+                          },
+                          "style": "DEFAULT"
+                        }
+                      },
+                      {
+                        "thumbnailOverlayToggleButtonRenderer": {
+                          "isToggled": false,
+                          "untoggledIcon": {
+                            "iconType": "WATCH_LATER"
+                          },
+                          "toggledIcon": {
+                            "iconType": "CHECK"
+                          },
+                          "untoggledTooltip": "Смотреть позже",
+                          "toggledTooltip": "Добавлено в плейлист \"Посмотреть позже\"",
+                          "untoggledServiceEndpoint": {
+                            "clickTrackingParams": "CBcQ-ecDGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true,
+                                "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                              }
+                            },
+                            "playlistEditEndpoint": {
+                              "playlistId": "WL",
+                              "actions": [
+                                {
+                                  "addedVideoId": "YI6RRioSGHQ",
+                                  "action": "ACTION_ADD_VIDEO"
+                                }
+                              ]
+                            }
+                          },
+                          "toggledServiceEndpoint": {
+                            "clickTrackingParams": "CBcQ-ecDGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true,
+                                "apiUrl": "/youtubei/v1/browse/edit_playlist"
+                              }
+                            },
+                            "playlistEditEndpoint": {
+                              "playlistId": "WL",
+                              "actions": [
+                                {
+                                  "action": "ACTION_REMOVE_VIDEO_BY_VIDEO_ID",
+                                  "removedVideoId": "YI6RRioSGHQ"
+                                }
+                              ]
+                            }
+                          },
+                          "untoggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Смотреть позже"
+                            }
+                          },
+                          "toggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавлено в плейлист \"Посмотреть позже\""
+                            }
+                          },
+                          "trackingParams": "CBcQ-ecDGAMiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                        }
+                      },
+                      {
+                        "thumbnailOverlayToggleButtonRenderer": {
+                          "untoggledIcon": {
+                            "iconType": "ADD_TO_QUEUE_TAIL"
+                          },
+                          "toggledIcon": {
+                            "iconType": "PLAYLIST_ADD_CHECK"
+                          },
+                          "untoggledTooltip": "Добавить в очередь",
+                          "toggledTooltip": "Добавлено в плейлист \"Посмотреть позже\"",
+                          "untoggledServiceEndpoint": {
+                            "clickTrackingParams": "CBYQx-wEGAQiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                            "commandMetadata": {
+                              "webCommandMetadata": {
+                                "sendPost": true
+                              }
+                            },
+                            "signalServiceEndpoint": {
+                              "signal": "CLIENT_SIGNAL",
+                              "actions": [
+                                {
+                                  "clickTrackingParams": "CBYQx-wEGAQiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                  "addToPlaylistCommand": {
+                                    "openMiniplayer": true,
+                                    "videoId": "YI6RRioSGHQ",
+                                    "listType": "PLAYLIST_EDIT_LIST_TYPE_QUEUE",
+                                    "onCreateListCommand": {
+                                      "clickTrackingParams": "CBYQx-wEGAQiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                      "commandMetadata": {
+                                        "webCommandMetadata": {
+                                          "sendPost": true,
+                                          "apiUrl": "/youtubei/v1/playlist/create"
+                                        }
+                                      },
+                                      "createPlaylistServiceEndpoint": {
+                                        "videoIds": [
+                                          "YI6RRioSGHQ"
+                                        ],
+                                        "params": "CAQ%3D"
+                                      }
+                                    },
+                                    "videoIds": [
+                                      "YI6RRioSGHQ"
+                                    ]
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "untoggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавить в очередь"
+                            }
+                          },
+                          "toggledAccessibility": {
+                            "accessibilityData": {
+                              "label": "Добавлено в плейлист \"Посмотреть позже\""
+                            }
+                          },
+                          "trackingParams": "CBYQx-wEGAQiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                        }
+                      },
+                      {
+                        "thumbnailOverlayNowPlayingRenderer": {
+                          "text": {
+                            "runs": [
+                              {
+                                "text": "Текущее видео"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "thumbnailOverlayLoadingPreviewRenderer": {
+                          "text": {
+                            "runs": [
+                              {
+                                "text": "Если убрать указатель, предпросмотр прекратится"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "richThumbnail": {
+                      "movingThumbnailRenderer": {
+                        "movingThumbnailDetails": {
+                          "thumbnails": [
+                            {
+                              "url": "https://i.ytimg.com/an_webp/YI6RRioSGHQ/mqdefault_6s.webp?du=3000&sqp=COSEj9YG&rs=AOn4CLD3LLhZY7HXUMzQ7Fbn7T6x5Z-iQw",
+                              "width": 320,
+                              "height": 180
+                            }
+                          ],
+                          "logAsMovingThumbnail": true
+                        },
+                        "enableHoveredLogging": true,
+                        "enableOverlay": true
+                      }
+                    },
+                    "detailedMetadataSnippets": [
+                      {
+                        "snippetText": {
+                          "runs": [
+                            {
+                              "text": "The Case of Charles Dexter Ward by H. P. Lovecraft As an Amazon Associate I earn from qualifying purchases. Audible (paid ..."
+                            }
+                          ]
+                        },
+                        "snippetHoverText": {
+                          "runs": [
+                            {
+                              "text": "Информация из описания видео"
+                            }
+                          ]
+                        },
+                        "maxOneLine": true
+                      }
+                    ],
+                    "inlinePlaybackEndpoint": {
+                      "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeoTIGc2VhcmNoUifQvdCw0YPRh9C90YvQtSDRjdC60YHQv9C10YDQuNC80LXQvdGC0YuaAQMQ9CTKAQQ9V8GA",
+                      "commandMetadata": {
+                        "webCommandMetadata": {
+                          "url": "/watch?v=YI6RRioSGHQ&pp=YAHIAQGiBhUBqHapMw12bjGPUSU6o9N-1fO-szY%3D",
+                          "webPageType": "WEB_PAGE_TYPE_WATCH",
+                          "rootVe": 3832
+                        }
+                      },
+                      "watchEndpoint": {
+                        "videoId": "YI6RRioSGHQ",
+                        "params": "qgMn0L3QsNGD0YfQvdGL0LUg0Y3QutGB0L_QtdGA0LjQvNC10L3RgtGLugMKCIvi--z8iYajProDCgipzunkzYPw91nyAwUN_QJtPoIEAhgB",
+                        "playerParams": "YAHIAQGiBhUBqHapMw12bjGPUSU6o9N-1fO-szY%3D",
+                        "playerExtraUrlParams": [
+                          {
+                            "key": "inline",
+                            "value": "1"
+                          }
+                        ],
+                        "watchEndpointSupportedOnesieConfig": {
+                          "html5PlaybackOnesieConfig": {
+                            "commonConfig": {
+                              "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&initcwndbps=1538875&mt=1791221595&oweuc="
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "expandableMetadata": {
+                      "expandableMetadataRenderer": {
+                        "header": {
+                          "collapsedTitle": {
+                            "runs": [
+                              {
+                                "text": "Introduction | The audiobook begins | Chapter 2 | Chapter 3 | Chapter 4 | Chapter 5 | Chapter 6 | Chapter 7 | Chapter 8 | Chapter 9 | About the book and its author | Closing thoughts"
+                              }
+                            ]
+                          },
+                          "collapsedThumbnail": {
+                            "thumbnails": [
+                              {
+                                "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                "width": 336,
+                                "height": 188
+                              }
+                            ]
+                          },
+                          "collapsedLabel": {
+                            "runs": [
+                              {
+                                "text": "Эпизоды ("
+                              },
+                              {
+                                "text": "12"
+                              },
+                              {
+                                "text": ")"
+                              }
+                            ]
+                          },
+                          "expandedTitle": {
+                            "runs": [
+                              {
+                                "text": "Эпизоды ("
+                              },
+                              {
+                                "text": "12"
+                              },
+                              {
+                                "text": ")"
+                              }
+                            ]
+                          },
+                          "showLeadingCollapsedLabel": true
+                        },
+                        "expandedContent": {
+                          "horizontalCardListRenderer": {
+                            "cards": [
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Introduction"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "0:00"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CBUQ0NAGGAAiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CBUQ0NAGGAAiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "The audiobook begins"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "0:40"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CBQQ0NAGGAEiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=40s",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 40,
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=40&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CBQQ0NAGGAEiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Chapter 2"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "13:38"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CBMQ0NAGGAIiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=818s&pp=0gcJCfoAdtSAhXgk",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 818,
+                                      "playerParams": "0gcJCfoAdtSAhXgk",
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=818&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CBMQ0NAGGAIiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Chapter 3"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "48:18"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CBIQ0NAGGAMiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=2898s&pp=0gcJCfoAdtSAhXgk",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 2898,
+                                      "playerParams": "0gcJCfoAdtSAhXgk",
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=2898&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CBIQ0NAGGAMiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Chapter 4"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "1:05:23"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CBEQ0NAGGAQiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=3923s",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 3923,
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=3923&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CBEQ0NAGGAQiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Chapter 5"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "1:32:37"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CBAQ0NAGGAUiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=5557s&pp=0gcJCfoAdtSAhXgk",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 5557,
+                                      "playerParams": "0gcJCfoAdtSAhXgk",
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=5557&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CBAQ0NAGGAUiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Chapter 6"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "1:54:34"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CA8Q0NAGGAYiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=6874s",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 6874,
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=6874&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CA8Q0NAGGAYiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Chapter 7"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "2:17:04"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CA4Q0NAGGAciEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=8224s",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 8224,
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=8224&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CA4Q0NAGGAciEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Chapter 8"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "2:49:46"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CA0Q0NAGGAgiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=10186s",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 10186,
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=10186&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CA0Q0NAGGAgiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Chapter 9"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "3:31:23"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CAwQ0NAGGAkiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=12683s",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 12683,
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=12683&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CAwQ0NAGGAkiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "About the book and its author"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "4:05:52"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CAsQ0NAGGAoiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=14752s",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 14752,
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=14752&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CAsQ0NAGGAoiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              },
+                              {
+                                "macroMarkersListItemRenderer": {
+                                  "title": {
+                                    "runs": [
+                                      {
+                                        "text": "Closing thoughts"
+                                      }
+                                    ]
+                                  },
+                                  "timeDescription": {
+                                    "runs": [
+                                      {
+                                        "text": "4:10:47"
+                                      }
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "thumbnails": [
+                                      {
+                                        "url": "https://i.ytimg.com/vi/YI6RRioSGHQ/hqdefault.jpg",
+                                        "width": 336,
+                                        "height": 188
+                                      }
+                                    ]
+                                  },
+                                  "onTap": {
+                                    "clickTrackingParams": "CAoQ0NAGGAsiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                                    "commandMetadata": {
+                                      "webCommandMetadata": {
+                                        "url": "/watch?v=YI6RRioSGHQ&t=15047s",
+                                        "webPageType": "WEB_PAGE_TYPE_WATCH",
+                                        "rootVe": 3832
+                                      }
+                                    },
+                                    "watchEndpoint": {
+                                      "videoId": "YI6RRioSGHQ",
+                                      "startTimeSeconds": 15047,
+                                      "watchEndpointSupportedOnesieConfig": {
+                                        "html5PlaybackOnesieConfig": {
+                                          "commonConfig": {
+                                            "url": "https://rr7---sn-35153iuxa-5a5r.googlevideo.com/initplayback?source=youtube&oeis=1&c=WEB&oad=3200&ovd=3200&oaad=11000&oavd=11000&ocs=700&oewis=1&oputc=1&msp=1&odepv=1&id=608e91462a121874&ip=2.133.72.87&osts=15047&initcwndbps=1538875&mt=1791221595&oweuc="
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "trackingParams": "CAoQ0NAGGAsiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                                  "layout": "MACRO_MARKERS_LIST_ITEM_RENDERER_LAYOUT_VERTICAL",
+                                  "isHighlighted": false
+                                }
+                              }
+                            ],
+                            "trackingParams": "CAcQkVoiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                            "style": {
+                              "type": "HORIZONTAL_CARD_LIST_STYLE_TYPE_ENGAGEMENT_PANEL_SECTION"
+                            },
+                            "previousButton": {
+                              "buttonRenderer": {
+                                "style": "STYLE_DEFAULT",
+                                "size": "SIZE_DEFAULT",
+                                "isDisabled": false,
+                                "icon": {
+                                  "iconType": "CHEVRON_LEFT"
+                                },
+                                "trackingParams": "CAkQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                              }
+                            },
+                            "nextButton": {
+                              "buttonRenderer": {
+                                "style": "STYLE_DEFAULT",
+                                "size": "SIZE_DEFAULT",
+                                "isDisabled": false,
+                                "icon": {
+                                  "iconType": "CHEVRON_RIGHT"
+                                },
+                                "trackingParams": "CAgQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+                              }
+                            }
+                          }
+                        },
+                        "expandButton": {
+                          "buttonRenderer": {
+                            "style": "STYLE_DEFAULT",
+                            "size": "SIZE_DEFAULT",
+                            "isDisabled": false,
+                            "icon": {
+                              "iconType": "EXPAND_MORE"
+                            },
+                            "trackingParams": "CAYQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                            "accessibilityData": {
+                              "accessibilityData": {
+                                "label": "Ещё"
+                              }
+                            }
+                          }
+                        },
+                        "collapseButton": {
+                          "buttonRenderer": {
+                            "style": "STYLE_DEFAULT",
+                            "size": "SIZE_DEFAULT",
+                            "isDisabled": false,
+                            "icon": {
+                              "iconType": "EXPAND_LESS"
+                            },
+                            "trackingParams": "CAUQ8FsiEwjItMKmtqOXAxUDyzsCHV1RHqE=",
+                            "accessibilityData": {
+                              "accessibilityData": {
+                                "label": "Скрыть"
+                              }
+                            }
+                          }
+                        },
+                        "trackingParams": "CAQQ78MHIhMIyLTCprajlwMVA8s7Ah1dUR6h",
+                        "colorData": {
+                          "lightColorPalette": {
+                            "section1Color": 4294770683,
+                            "section2Color": 4294179057,
+                            "section3Color": 4293653223,
+                            "primaryTitleColor": 4279441680,
+                            "secondaryTitleColor": 4283591493,
+                            "iconActivatedColor": 4282669369,
+                            "iconInactiveColor": 4288525712,
+                            "section4Color": 4293061597,
+                            "iconDisabledColor": 4073840841
+                          },
+                          "darkColorPalette": {
+                            "section1Color": 4280759073,
+                            "section2Color": 4280100376,
+                            "section3Color": 4279441680,
+                            "primaryTitleColor": 4293853157,
+                            "secondaryTitleColor": 4289842339,
+                            "iconActivatedColor": 4293853157,
+                            "iconInactiveColor": 4286155888,
+                            "section4Color": 4278782984,
+                            "iconDisabledColor": 4065024323
+                          },
+                          "vibrantColorPalette": {
+                            "section1Color": 4283327810,
+                            "section2Color": 4282669369,
+                            "section3Color": 4282010673,
+                            "primaryTitleColor": 4293853157,
+                            "secondaryTitleColor": 4291882943,
+                            "iconActivatedColor": 4293853157,
+                            "iconInactiveColor": 4286224747,
+                            "section4Color": 4281417513,
+                            "iconDisabledColor": 4064103477
+                          },
+                          "saturatedColorPalettes": {
+                            "lightThemePalette": {
+                              "baseBackground": 4294311920,
+                              "raisedBackground": 4294311920,
+                              "additiveBackground": 561301829,
+                              "textPrimary": 4279842314,
+                              "textSecondary": 4283199034,
+                              "outline": 858278678,
+                              "keyLight": 4290633132,
+                              "collectionStack": 4288594059,
+                              "invertedBackground": 4282155543,
+                              "textPrimaryInverse": 4294311920,
+                              "textDisabled": 2133347094,
+                              "dropShadow": 427084101,
+                              "cardOutline": 175425861,
+                              "overlayBackground": 3424204298,
+                              "overlayTextPrimary": 4294311920,
+                              "solidWash": 4280830742,
+                              "solidRim": 4279842314,
+                              "tonalWash": 2583035888,
+                              "tonalRim": 201658112,
+                              "outlineRim": 1277709078,
+                              "solidWashInverse": 4292408010,
+                              "solidRimInverse": 2146040544,
+                              "tonalWashInverse": 653656048,
+                              "tonalRimInverse": 652868320,
+                              "outlineRimInverse": 653656048,
+                              "solidBackground": 4280830742,
+                              "solidBackgroundInverse": 4288594059,
+                              "tonalBackground": 866041995,
+                              "tonalBackgroundInverse": 433648330,
+                              "outlineInverse": 870972128,
+                              "directionalLightStopPrimary": 4292408010,
+                              "directionalLightStopSecondary": 4293524192
+                            },
+                            "darkThemePalette": {
+                              "baseBackground": 4278918146,
+                              "raisedBackground": 4279842314,
+                              "additiveBackground": 729073989,
+                              "textPrimary": 4293524192,
+                              "textSecondary": 4290633132,
+                              "outline": 1071182538,
+                              "keyLight": 4282015016,
+                              "collectionStack": 4283199034,
+                              "invertedBackground": 4288799612,
+                              "textPrimaryInverse": 4278918146,
+                              "textDisabled": 2144924362,
+                              "dropShadow": 427084101,
+                              "cardOutline": 175425861,
+                              "overlayBackground": 3424204298,
+                              "overlayTextPrimary": 4294311920,
+                              "solidWash": 4293524192,
+                              "solidRim": 4294311920,
+                              "tonalWash": 215544522,
+                              "tonalRim": 217448432,
+                              "outlineRim": 869855946,
+                              "solidWashInverse": 4283199034,
+                              "solidRimInverse": 869855946,
+                              "tonalWashInverse": 871759856,
+                              "tonalRimInverse": 868081068,
+                              "outlineRimInverse": 1291190256,
+                              "solidBackground": 4288594059,
+                              "solidBackgroundInverse": 4280830742,
+                              "tonalBackground": 433648330,
+                              "tonalBackgroundInverse": 866041995,
+                              "outlineInverse": 858278678,
+                              "directionalLightStopPrimary": 4279842314,
+                              "directionalLightStopSecondary": 4278918146
+                            }
+                          }
+                        },
+                        "useCustomColors": true,
+                        "loggingDirectives": {
+                          "trackingParams": "CAQQ78MHIhMIyLTCprajlwMVA8s7Ah1dUR6h",
+                          "visibility": {
+                            "types": "12"
+                          }
+                        }
+                      }
+                    },
+                    "searchVideoResultEntityKey": "EgtZSTZSUmlvU0dIUSDnAigB",
+                    "avatar": {
+                      "decoratedAvatarViewModel": {
+                        "avatar": {
+                          "avatarViewModel": {
+                            "image": {
+                              "sources": [
+                                {
+                                  "url": "https://yt3.ggpht.com/W7PQQV5Q_Lefz232xwXB668MsdHAsljIvvHedQhLvNgKbk50e1y8_aCtd3gUtiep8GFbsdZwBg=s68-c-k-c0x00ffffff-no-rj",
+                                  "width": 68,
+                                  "height": 68
+                                }
+                              ]
+                            },
+                            "avatarImageSize": "AVATAR_SIZE_M"
+                          }
+                        },
+                        "a11yLabel": "Перейти на канал \"Supreme Audiobooks\"",
+                        "rendererContext": {
+                          "commandContext": {
+                            "onTap": {
+                              "innertubeCommand": {
+                                "clickTrackingParams": "CAMQ3DAYAiITCMi0wqa2o5cDFQPLOwIdXVEeocoBBD1XwYA=",
+                                "commandMetadata": {
+                                  "webCommandMetadata": {
+                                    "url": "/@SupremeAudiobooks",
+                                    "webPageType": "WEB_PAGE_TYPE_CHANNEL",
+                                    "rootVe": 3611,
+                                    "apiUrl": "/youtubei/v1/browse"
+                                  }
+                                },
+                                "browseEndpoint": {
+                                  "browseId": "UCkQuYeMENrthJLWaBQdpOEQ",
+                                  "canonicalBaseUrl": "/@SupremeAudiobooks"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               ],
-              "trackingParams": "CAEQuy8YASITCIaX0abek5cDFZEnBgAd2eov9A=="
+              "trackingParams": "CAIQuy8YASITCMi0wqa2o5cDFQPLOwIdXVEeoQ=="
+            }
+          },
+          {
+            "continuationItemRenderer": {
+              "trigger": "CONTINUATION_TRIGGER_ON_ITEM_SHOWN",
+              "continuationEndpoint": {
+                "clickTrackingParams": "CAEQt6kLGAIiEwjItMKmtqOXAxUDyzsCHV1RHqHKAQQ9V8GA",
+                "commandMetadata": {
+                  "webCommandMetadata": {
+                    "sendPost": true,
+                    "apiUrl": "/youtubei/v1/search"
+                  }
+                },
+                "continuationCommand": {
+                  "token": "En0SJ9C90LDRg9GH0L3Ri9C1INGN0LrRgdC_0LXRgNC40LzQtdC90YLRixpSRWdRSUFoQUJTQ2lDQVF0UWExbFpWRGd5WlRoUmM0SUJDMWRsWDBGSVRubGhXbmxyZ2dFTFdVazJVbEpwYjFOSFNGR3lBUVlLQkFnWEVBTSUzRBiB4OgYIgtzZWFyY2gtZmVlZA%3D%3D",
+                  "request": "CONTINUATION_REQUEST_TYPE_SEARCH"
+                }
+              },
+              "loggingDirectives": {
+                "trackingParams": "CAEQt6kLGAIiEwjItMKmtqOXAxUDyzsCHV1RHqE="
+              }
             }
           }
         ],
         "targetId": "search-feed"
       }
     }
-  ]
+  ],
+  "isSafeSearchTriggered": true
 }

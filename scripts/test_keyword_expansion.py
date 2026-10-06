@@ -123,11 +123,20 @@ def test_new_keyword_probation_provenance() -> None:
 
 
 def test_seed_eligibility() -> None:
+    from app.services.keyword_expansion_orchestrator import is_seed_eligible_for_expansion
+
     assert is_seed_eligible(TargetKeyword(keyword="a", lifecycle_status=LIFECYCLE_ACTIVE), expand_weak=False)
     assert is_seed_eligible(TargetKeyword(keyword="a", lifecycle_status=LIFECYCLE_PROBATION), expand_weak=False)
     assert not is_seed_eligible(TargetKeyword(keyword="a", lifecycle_status=LIFECYCLE_ARCHIVED), expand_weak=False)
     assert not is_seed_eligible(TargetKeyword(keyword="a", lifecycle_status=LIFECYCLE_WEAK), expand_weak=False)
     assert is_seed_eligible(TargetKeyword(keyword="a", lifecycle_status=LIFECYCLE_WEAK), expand_weak=True)
+    assert not is_seed_eligible_for_expansion(
+        TargetKeyword(keyword="p", lifecycle_status=LIFECYCLE_PROBATION),
+        expand_weak=False,
+        successful_scan_count=0,
+        expansion_depth=1,
+        max_expansion_depth=2,
+    )
 
 
 def test_caps_and_no_recursive_same_run() -> None:

@@ -38,8 +38,8 @@ def expand_keyword(
     )
     if summary.errors == ("seed_not_found",):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Keyword not found")
-    if summary.errors == ("seed_ineligible",):
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Seed ineligible")
+    if summary.errors and summary.errors[0].startswith("seed_"):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=summary.errors[0])
     if not payload.dry_run:
         db.commit()
     else:
@@ -53,6 +53,7 @@ def expand_keyword(
         normalized_unique_count=summary.normalized_unique_count,
         existing_keyword_count=summary.existing_keyword_count,
         rejected_count=summary.rejected_count,
+        deferred_count=summary.deferred_count,
         created_keyword_count=summary.created_keyword_count,
         per_source_counts=summary.per_source_counts,
         per_seed_counts={str(k): v for k, v in summary.per_seed_counts.items()},

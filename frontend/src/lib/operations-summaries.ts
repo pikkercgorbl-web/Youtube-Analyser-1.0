@@ -4,6 +4,7 @@ import type {
   KeywordOutcomeOperationsBlock,
   MonitoringOperationsBlock,
   OperationsErrorsBlock,
+  OutcomeCaptureOperationsBlock,
   SnapshotOperationsBlock,
 } from "@/lib/operations-types";
 
@@ -183,6 +184,38 @@ export function outcome72hOperationsSummary(outcomes: KeywordOutcomeOperationsBl
   return {
     tone: outcomes.valid_72h_outcome_count > 0 ? "informational" : "neutral",
     lines,
+  };
+}
+
+export function outcomeCaptureOperationsSummary(
+  block: OutcomeCaptureOperationsBlock,
+): OperationsSummary {
+  const due = block.planner_due + block.planner_overdue;
+  if (due > 0) {
+    return {
+      tone: "warning",
+      lines: [
+        {
+          text: `Outcome capture: ${formatCount(block.unique_due_videos)} видео в окне ±12 ч от discovery+72h (отдельно от monitoring).`,
+          emphasis: true,
+        },
+      ],
+    };
+  }
+  if (block.inserted_snapshot_count_last_cycle > 0) {
+    return {
+      tone: "informational",
+      lines: [
+        {
+          text: `Outcome capture: в последнем цикле сохранено ${formatCount(block.inserted_snapshot_count_last_cycle)} снимков.`,
+          emphasis: true,
+        },
+      ],
+    };
+  }
+  return {
+    tone: "neutral",
+    lines: [{ text: "Outcome capture: сейчас нет видео в окне сбора delayed outcome.", emphasis: true }],
   };
 }
 

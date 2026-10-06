@@ -385,7 +385,7 @@ def test_upcoming_windows_pending_only() -> None:
     assert row.matures_next_24h == 2
 
 
-def test_null_views_at_discovery_not_in_valid_missing() -> None:
+def test_null_views_at_discovery_counts_as_missing_when_matured() -> None:
     session = _session()
     kw = TargetKeyword(keyword="k")
     session.add(kw)
@@ -405,7 +405,7 @@ def test_null_views_at_discovery_not_in_valid_missing() -> None:
     row = compute_maturity_aggregate_sql(session, now=NOW)
     assert row.matured_72h_count == 1
     assert row.valid_72h_outcome_count == 0
-    assert row.missing_72h_outcome_count == 0
+    assert row.missing_72h_outcome_count == 1
 
 
 def test_optimized_matches_legacy_reference() -> None:
@@ -473,7 +473,7 @@ def main() -> None:
         test_nearest_snapshot_chosen,
         test_first_discovery_tie_lowest_keyword_id,
         test_upcoming_windows_pending_only,
-        test_null_views_at_discovery_not_in_valid_missing,
+        test_null_views_at_discovery_counts_as_missing_when_matured,
         test_optimized_matches_legacy_reference,
         test_no_per_baseline_sql_growth,
     ]

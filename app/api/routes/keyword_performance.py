@@ -113,12 +113,19 @@ def _to_response(metrics: KeywordPerformanceMetrics) -> KeywordPerformanceMetric
 def list_keywords_performance(
     db: Session = Depends(get_db),
     limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
     from_timestamp: datetime | None = Query(None),
     to_timestamp: datetime | None = Query(None),
     include_current_tiers: bool = Query(False),
     include_breakout: bool = Query(True),
     include_delayed: bool = Query(True),
     attribution_mode: str = Query("all_hits"),
+    live_evaluation: bool = Query(
+        False,
+        description="Recompute metrics for requested page (diagnostic; unbounded)",
+    ),
+    lifecycle_status: str | None = Query(None, max_length=16),
+    search: str | None = Query(None, max_length=128),
 ) -> KeywordPerformanceListResponse:
     mode: AttributionMode = "all_hits"
     if attribution_mode not in _VALID_ATTRIBUTION:
@@ -128,17 +135,24 @@ def list_keywords_performance(
     result = list_keyword_performance(
         db,
         limit=limit,
+        offset=offset,
         from_timestamp=from_timestamp,
         to_timestamp=to_timestamp,
         include_current_tiers=include_current_tiers,
         include_breakout=include_breakout,
         include_delayed=include_delayed,
         attribution_mode=mode,
+        live_evaluation=live_evaluation,
+        lifecycle_status=lifecycle_status,
+        search=search,
     )
     ctx = result.context
     return KeywordPerformanceListResponse(
         items=[_to_response(item) for item in result.items],
         limit=limit,
+        offset=offset,
+        total=result.total if result.total is not None else len(result.items),
+        data_source=result.data_source,
         evaluated_at=ctx.evaluated_at,
         attribution_mode=ctx.attribution_mode,
         window_from=ctx.window_from,
@@ -160,6 +174,7 @@ def get_keyword_performance_by_id(
     include_breakout: bool = Query(True),
     include_delayed: bool = Query(True),
     attribution_mode: str = Query("all_hits"),
+    live_evaluation: bool = Query(False),
 ) -> KeywordPerformanceMetricsResponse:
     if attribution_mode not in _VALID_ATTRIBUTION:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid attribution_mode")
@@ -172,6 +187,7 @@ def get_keyword_performance_by_id(
         include_breakout=include_breakout,
         include_delayed=include_delayed,
         attribution_mode=attribution_mode,  # type: ignore[arg-type]
+        live_evaluation=live_evaluation,
     )
     if metrics is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Keyword not found")

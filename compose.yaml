@@ -1,0 +1,26 @@
+# Local PostgreSQL for YouTube Radar (dev / Supabase migration prep).
+# Always pass: docker compose --env-file .env.docker <command>
+
+name: youtube-radar-local
+
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${RADAR_LOCAL_DB_NAME}
+      POSTGRES_USER: ${RADAR_LOCAL_DB_USER}
+      POSTGRES_PASSWORD: ${RADAR_LOCAL_DB_PASSWORD:?Set RADAR_LOCAL_DB_PASSWORD in .env.docker}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  postgres_data:

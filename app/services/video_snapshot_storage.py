@@ -334,6 +334,32 @@ def get_snapshots_for_videos(
     return list(session.scalars(stmt).all())
 
 
+def get_snapshots_for_videos_planner(
+    session: Session,
+    video_ids: Sequence[str],
+    *,
+    max_age_hours: float,
+) -> list[VideoSnapshot]:
+    """Snapshots needed for monitoring checkpoint matching (bounded age_hours)."""
+    if not video_ids:
+        return []
+    ids = list(video_ids)
+    rows: list[VideoSnapshot] = []
+    for start in range(0, len(ids), _LATEST_SNAPSHOT_CHUNK):
+        chunk = ids[start : start + _LATEST_SNAPSHOT_CHUNK]
+        stmt = (
+            select(VideoSnapshot)
+            .where(
+                VideoSnapshot.video_id.in_(chunk),
+                VideoSnapshot.age_hours.is_not(None),
+                VideoSnapshot.age_hours <= max_age_hours,
+            )
+            .order_by(VideoSnapshot.video_id.asc(), VideoSnapshot.captured_at.asc())
+        )
+        rows.extend(session.scalars(stmt).all())
+    return rows
+
+
 def find_snapshot_by_capture_run_key(
     session: Session,
     *,

@@ -505,7 +505,7 @@ def test_list_keyword_performance() -> None:
     session = _session()
     session.add(TargetKeyword(keyword="a"))
     session.commit()
-    result = list_keyword_performance(session, limit=10)
+    result = list_keyword_performance(session, limit=10, live_evaluation=True)
     assert len(result.items) == 1
     assert result.context.ranking_version == "breakout_v1"
 

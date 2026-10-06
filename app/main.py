@@ -23,9 +23,13 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.api.routes import (
     analytics,
+    attention,
     explosive_channels,
+    keyword_evidence,
     keyword_expansion,
     keyword_lifecycle,
+    keyword_lifecycle_calibration,
+    keyword_lifecycle_recommendations,
     keyword_performance,
     keywords,
     monitoring,
@@ -144,6 +148,9 @@ app.include_router(search.router, prefix="/api/youtube-search", tags=["search"])
 app.include_router(keywords.router, prefix="/api/keywords", tags=["keywords"])
 app.include_router(keyword_expansion.router, prefix="/api/keywords", tags=["keywords"])
 app.include_router(keyword_lifecycle.router, prefix="/api/keywords", tags=["keywords"])
+app.include_router(keyword_evidence.router, prefix="/api/keywords", tags=["keywords"])
+app.include_router(keyword_lifecycle_recommendations.router, prefix="/api/keywords", tags=["keywords"])
+app.include_router(keyword_lifecycle_calibration.router, prefix="/api/keywords", tags=["keywords"])
 app.include_router(keyword_performance.router, prefix="/api/keywords", tags=["keywords"])
 app.include_router(saved_keywords.router, prefix="/api/saved-keywords", tags=["keywords"])
 app.include_router(explosive_channels.router, prefix="/api/explosive-channels", tags=["analysis"])
@@ -152,6 +159,7 @@ app.include_router(target_keywords.router, prefix="/api/target-keywords", tags=[
 app.include_router(radar_stats.router, prefix="/api/radar-stats", tags=["analysis"])
 app.include_router(monitoring.router, prefix="/api/monitoring", tags=["monitoring"])
 app.include_router(operations.router, prefix="/api/operations", tags=["operations"])
+app.include_router(attention.router, prefix="/api/attention", tags=["attention"])
 
 
 @app.post("/api/force-radar-scan", response_model=ForceRadarScanResponse, tags=["analysis"])

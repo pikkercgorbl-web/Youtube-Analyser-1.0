@@ -40,11 +40,62 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_video_snapshots_table(engine)
     ensure_monitoring_worker_state_table(engine)
     ensure_monitoring_cycle_runs_table(engine)
+    ensure_monitoring_video_queue_table(engine)
     ensure_discovery_worker_state_table(engine)
     ensure_keyword_performance_tables(engine)
+    ensure_keyword_performance_read_model_tables(engine)
     ensure_target_keywords_lifecycle_columns(engine)
     ensure_keyword_lifecycle_events_table(engine)
     ensure_keyword_expansion_events_table(engine)
+    ensure_outcome_capture_tables(engine)
+    ensure_attention_engine_tables(engine)
+
+
+def ensure_attention_engine_tables(engine: Engine) -> None:
+    """Create Attention Engine snapshot tables when missing (Stage 1.22A)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        AttentionChannelMomentumRow,
+        AttentionFamilyIdentity,
+        AttentionPatternFamilyMemberRow,
+        AttentionPatternFamilyRow,
+        AttentionPatternFamilyVideoRow,
+        AttentionPatternRow,
+        AttentionPatternVideoRow,
+        AttentionRun,
+        AttentionVideoWinnerRow,
+    )
+
+    mapping = {
+        "attention_runs": AttentionRun,
+        "attention_video_winners": AttentionVideoWinnerRow,
+        "attention_patterns": AttentionPatternRow,
+        "attention_pattern_videos": AttentionPatternVideoRow,
+        "attention_pattern_families": AttentionPatternFamilyRow,
+        "attention_pattern_family_members": AttentionPatternFamilyMemberRow,
+        "attention_pattern_family_videos": AttentionPatternFamilyVideoRow,
+        "attention_family_identity": AttentionFamilyIdentity,
+        "attention_channel_momentum": AttentionChannelMomentumRow,
+    }
+    for table_name, model in mapping.items():
+        if table_name not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", table_name)
+
+
+def ensure_outcome_capture_tables(engine: Engine) -> None:
+    """Create outcome capture worker/cycle tables when missing (Stage 1.20E.2)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import OutcomeCaptureCycleRun, OutcomeCaptureWorkerState
+
+    if "outcome_capture_cycle_runs" not in names:
+        OutcomeCaptureCycleRun.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created outcome_capture_cycle_runs table")
+    if "outcome_capture_worker_state" not in names:
+        OutcomeCaptureWorkerState.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created outcome_capture_worker_state table")
 
 
 def ensure_monitoring_cycle_runs_table(engine: Engine) -> None:
@@ -57,6 +108,18 @@ def ensure_monitoring_cycle_runs_table(engine: Engine) -> None:
 
     MonitoringCycleRun.__table__.create(bind=engine, checkfirst=True)
     logger.info("Created monitoring_cycle_runs table")
+
+
+def ensure_monitoring_video_queue_table(engine: Engine) -> None:
+    """Create monitoring_video_queue table when missing (Stage 1.20E.3)."""
+    inspector = inspect(engine)
+    if "monitoring_video_queue" in inspector.get_table_names():
+        return
+
+    from app.models.orm import MonitoringVideoQueueEntry
+
+    MonitoringVideoQueueEntry.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created monitoring_video_queue table")
 
 
 def ensure_monitoring_worker_state_table(engine: Engine) -> None:
@@ -180,6 +243,20 @@ def ensure_keyword_performance_tables(engine: Engine) -> None:
     if "keyword_discovery_hits" not in inspector.get_table_names():
         KeywordDiscoveryHit.__table__.create(bind=engine, checkfirst=True)
         logger.info("Created keyword_discovery_hits table")
+
+
+def ensure_keyword_performance_read_model_tables(engine: Engine) -> None:
+    """Create keyword performance snapshot tables when missing (Stage 1.20E.4)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import KeywordPerformanceGlobalSnapshot, KeywordPerformanceKeywordSnapshot
+
+    if "keyword_performance_global_snapshots" not in names:
+        KeywordPerformanceGlobalSnapshot.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created keyword_performance_global_snapshots table")
+    if "keyword_performance_keyword_snapshots" not in names:
+        KeywordPerformanceKeywordSnapshot.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created keyword_performance_keyword_snapshots table")
 
 
 def ensure_discovery_worker_state_table(engine: Engine) -> None:

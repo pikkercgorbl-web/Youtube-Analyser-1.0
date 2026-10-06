@@ -176,7 +176,8 @@ def test_channel_cap_independence() -> None:
         with patch("app.services.monitoring_api_service.MonitoringTierPolicy", return_value=policy):
             with patch("app.services.monitoring_api_service.ApiBudgetPolicy", return_value=budget):
                 breakout_rows, _ = list_monitoring_videos_breakout(session)
-                priority_rows, _ = list_monitoring_videos(session, sort="priority")
+                priority_result = list_monitoring_videos(session, sort="priority", live_planner=True)
+                priority_rows = priority_result.rows
 
     breakout_ids = {r.state.video_id for r in breakout_rows}
     priority_ids = {r.state.video_id for r in priority_rows}
@@ -205,7 +206,8 @@ def test_global_cap_independence() -> None:
         with patch("app.services.monitoring_api_service.MonitoringTierPolicy", return_value=policy):
             with patch("app.services.monitoring_api_service.ApiBudgetPolicy", return_value=budget):
                 breakout_rows, total_b = list_monitoring_videos_breakout(session)
-                priority_rows, _ = list_monitoring_videos(session, sort="priority")
+                priority_result = list_monitoring_videos(session, sort="priority", live_planner=True)
+                priority_rows = priority_result.rows
 
     assert total_b == 5
     assert len(priority_rows) == 2
@@ -248,11 +250,11 @@ def test_priority_sort_regression_unchanged_with_breakout_present() -> None:
     _seed_channel_video(session, "p2", vph=30.0, views=3000, channel_id="ch2")
 
     with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
-        first, total1 = list_monitoring_videos(session, sort="priority")
-        second, total2 = list_monitoring_videos(session, sort="priority")
+        first = list_monitoring_videos(session, sort="priority", live_planner=True)
+        second = list_monitoring_videos(session, sort="priority", live_planner=True)
 
-    assert total1 == total2 == 2
-    assert [r.state.video_id for r in first] == [r.state.video_id for r in second]
+    assert first.total == second.total == 2
+    assert [r.state.video_id for r in first.rows] == [r.state.video_id for r in second.rows]
 
 
 def main() -> None:

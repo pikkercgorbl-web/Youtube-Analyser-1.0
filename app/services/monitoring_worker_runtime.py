@@ -20,6 +20,7 @@ from app.services.monitoring_cycle import (
 from app.services.monitoring_worker_lock import (
     acquire_monitoring_worker_lock,
     clear_monitoring_worker_stop,
+    record_monitoring_worker_heartbeat,
     release_monitoring_worker_lock,
 )
 from app.services.revisit_executor import VideoBatchFetchClient
@@ -109,12 +110,19 @@ def run_monitoring_worker_loop(
                     dry_run=False,
                 )
                 cycle_session.commit()
+                record_monitoring_worker_heartbeat(
+                    session,
+                    at=summary.finished_at if summary is not None else None,
+                )
+                session.commit()
             except StopMonitoringWorker:
                 cycle_session.rollback()
                 break
             except Exception:
                 cycle_session.rollback()
                 logger.exception("Monitoring cycle failed with unexpected error")
+                record_monitoring_worker_heartbeat(session)
+                session.commit()
                 sleep_fn(float(cfg.error_backoff_seconds))
                 continue
             finally:

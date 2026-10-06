@@ -34,6 +34,7 @@ CHANNEL_HOME_URL = "https://www.youtube.com/channel/{channel_id}"
 YOUTUBE_SEARCH_RESULTS_URL = "https://www.youtube.com/results"
 _CYRILLIC_RE = re.compile(r"[\u0400-\u04FF]")
 RADAR_SUBSCRIBER_FETCH_DELAY_SECONDS = 1.0
+RADAR_SUBSCRIBER_FETCH_CONCURRENCY = 3
 _HIDDEN_SUBSCRIBER_NEEDLES = (
     "hidden subscriber",
     "subscribers hidden",

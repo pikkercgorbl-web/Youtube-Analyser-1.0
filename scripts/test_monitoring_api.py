@@ -25,8 +25,10 @@ import app.models.orm  # noqa: F401
 from app.api.routes import monitoring
 from app.models.db import Base, get_db
 from app.models.orm import Channel, MonitoringCycleRun, MonitoringWorkerState, Video, VideoFormat, VideoSnapshot
+from app.services.monitoring_api_service import build_active_monitoring_enriched
 from app.services.monitoring_cycle_run_storage import persist_monitoring_cycle_run
 from app.services.monitoring_cycle import MonitoringCycleSummary
+from app.services.monitoring_queue_persist import replace_monitoring_video_queue
 from app.services.monitoring_worker_lock import acquire_monitoring_worker_lock
 
 UTC = timezone.utc
@@ -58,6 +60,30 @@ def _make_client() -> tuple[TestClient, sessionmaker]:
 
     api.dependency_overrides[get_db] = override_get_db
     return TestClient(api), factory
+
+
+def _seed_monitoring_queue(
+    session: Session,
+    *,
+    run_id: str = "monitoring_test_queue_run",
+    reference: datetime = NOW,
+) -> None:
+    """Persist queue read model + cycle row so default list path is bounded."""
+    with patch("app.services.monitoring_api_service.utc_now", return_value=reference):
+        enriched, _, _ = build_active_monitoring_enriched(session)
+        replace_monitoring_video_queue(session, run_id, enriched)
+    summary = MonitoringCycleSummary(
+        run_id=run_id,
+        started_at=reference - timedelta(minutes=5),
+        finished_at=reference,
+        runtime_seconds=1.0,
+        cycle_status="ok",
+        loaded_video_count=len(enriched),
+        eligible_video_count=len(enriched),
+        tier_counts={"A": sum(1 for r in enriched if r.decision.tier.value == "A"), "B": 0, "C": 0},
+    )
+    persist_monitoring_cycle_run(session, summary)
+    session.commit()
 
 
 def _seed_video(
@@ -139,6 +165,7 @@ def test_video_list_pagination() -> None:
     session = factory()
     for i in range(5):
         _seed_video(session, f"v{i}", published_at=NOW - timedelta(hours=10 + i), views=1000 + i * 100)
+    _seed_monitoring_queue(session)
     with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
         response = client.get("/api/monitoring/videos?limit=2&offset=1")
     assert response.status_code == 200
@@ -153,6 +180,7 @@ def test_tier_filter() -> None:
     client, factory = _make_client()
     session = factory()
     _seed_video(session, "v1", published_at=NOW - timedelta(hours=20), views=9000)
+    _seed_monitoring_queue(session)
     response = client.get("/api/monitoring/videos?tier=A")
     assert response.status_code == 200
     assert all(item["tier"] == "A" for item in response.json()["items"])
@@ -162,6 +190,7 @@ def test_status_filter_due() -> None:
     client, factory = _make_client()
     session = factory()
     _seed_video(session, "v1", published_at=NOW - timedelta(hours=24), views=5000)
+    _seed_monitoring_queue(session)
     with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
         response = client.get("/api/monitoring/videos?status=due")
     assert response.status_code == 200
@@ -175,6 +204,7 @@ def test_default_sort_deterministic() -> None:
     session = factory()
     _seed_video(session, "v2", published_at=NOW - timedelta(hours=30), views=100)
     _seed_video(session, "v1", published_at=NOW - timedelta(hours=30), views=100)
+    _seed_monitoring_queue(session)
     with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
         r1 = client.get("/api/monitoring/videos").json()["items"]
         r2 = client.get("/api/monitoring/videos").json()["items"]
@@ -200,6 +230,7 @@ def test_list_uses_latest_snapshot_metrics() -> None:
         ),
     )
     session.commit()
+    _seed_monitoring_queue(session)
     with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
         item = client.get("/api/monitoring/videos").json()["items"][0]
     assert item["current_views"] == 9999
@@ -210,6 +241,7 @@ def test_missing_snapshot_fallback() -> None:
     client, factory = _make_client()
     session = factory()
     _seed_video(session, "v1", published_at=NOW - timedelta(hours=10), views=321)
+    _seed_monitoring_queue(session)
     with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
         item = client.get("/api/monitoring/videos").json()["items"][0]
     assert item["current_views"] == 321
@@ -336,10 +368,30 @@ def test_list_no_baseline_computation() -> None:
     client, factory = _make_client()
     session = factory()
     _seed_video(session, "v1", published_at=NOW - timedelta(hours=10), views=100)
+    _seed_monitoring_queue(session)
     with patch("app.services.monitoring_api_service.compute_channel_velocity_baseline") as mock_bl:
         with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
             client.get("/api/monitoring/videos")
     mock_bl.assert_not_called()
+
+
+def test_list_unavailable_without_queue() -> None:
+    client, factory = _make_client()
+    session = factory()
+    _seed_video(session, "v1", published_at=NOW - timedelta(hours=10), views=100)
+    body = client.get("/api/monitoring/videos").json()
+    assert body["items"] == []
+    assert body["queue_source"] == "unavailable"
+
+
+def test_list_live_planner_diagnostic() -> None:
+    client, factory = _make_client()
+    session = factory()
+    _seed_video(session, "v1", published_at=NOW - timedelta(hours=10), views=100)
+    with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
+        body = client.get("/api/monitoring/videos?live_planner=true").json()
+    assert body["queue_source"] == "live_planner"
+    assert len(body["items"]) >= 1
 
 
 def test_frozen_stage110_not_referenced() -> None:
@@ -405,6 +457,7 @@ def test_priority_sort_no_breakout_fields() -> None:
     client, factory = _make_client()
     session = factory()
     _seed_video(session, "v1", published_at=NOW - timedelta(hours=10), views=100)
+    _seed_monitoring_queue(session)
     with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
         item = client.get("/api/monitoring/videos?sort=priority").json()["items"][0]
     assert item.get("breakout_rank") is None
@@ -436,6 +489,7 @@ def test_regressions() -> None:
     _run_script("test_monitoring_worker.py")
     _run_script("test_video_snapshot_storage.py")
     _run_script("test_breakout_ranking.py")
+    _run_script("test_monitoring_sql_pagination.py")
 
 
 def main() -> None:
@@ -457,6 +511,8 @@ def main() -> None:
         test_nullable_subscribers_on_snapshots,
         test_baseline_on_detail_explicit,
         test_list_no_baseline_computation,
+        test_list_unavailable_without_queue,
+        test_list_live_planner_diagnostic,
         test_frozen_stage110_not_referenced,
         test_bad_sort_400,
         test_breakout_v1_sort_metadata,

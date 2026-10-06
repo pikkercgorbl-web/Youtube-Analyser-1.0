@@ -15,6 +15,8 @@ from app.models.orm import (
     KeywordDiscoveryHit,
     KeywordScanRun,
     MonitoringCycleRun,
+    MonitoringWorkerState,
+    OutcomeCaptureWorkerState,
     TargetKeyword,
     VideoSnapshot,
 )
@@ -24,7 +26,21 @@ from app.services.discovery_worker_lock import (
     DISCOVERY_STATUS_STOPPED,
     DISCOVERY_WORKER_STATE_ROW_ID,
 )
+from app.services.monitoring_worker_lock import MONITORING_WORKER_STATE_ROW_ID
 from app.services.discovery_worker_runtime import DEFAULT_DISCOVERY_WORKER_INTERVAL_SECONDS
+from app.services.delayed_outcome_capture_config import DEFAULT_OUTCOME_CAPTURE_INTERVAL_SECONDS
+from app.services.delayed_outcome_capture_planner import plan_delayed_outcome_capture
+from app.services.monitoring_cycle import DEFAULT_MONITORING_WORKER_INTERVAL_SECONDS
+from app.services.outcome_capture_cycle_run_storage import get_latest_outcome_capture_cycle_run
+from app.services.outcome_capture_worker_lock import (
+    OUTCOME_CAPTURE_WORKER_STATE_ROW_ID,
+    OUTCOME_STATUS_RUNNING,
+)
+from app.services.worker_activity_policy import (
+    STALE_ACTIVITY_MISSED_INTERVALS,
+    classify_worker_activity,
+    stale_activity_threshold_seconds,
+)
 from app.services.keyword_performance_evaluation import (
     HORIZON_HOURS,
     HORIZON_SNAPSHOT_TOLERANCE_HOURS,
@@ -163,6 +179,27 @@ class KeywordOutcomeOperationsBlock:
 
 
 @dataclass
+class OutcomeCaptureOperationsBlock:
+    worker: WorkerActivityBlock
+    planner_pending: int = 0
+    planner_due: int = 0
+    planner_overdue: int = 0
+    planner_satisfied: int = 0
+    planner_expired: int = 0
+    unique_due_videos: int = 0
+    last_cycle_started_at: datetime | None = None
+    last_cycle_finished_at: datetime | None = None
+    last_cycle_status: str | None = None
+    last_run_id: str | None = None
+    selected_video_count_last_cycle: int = 0
+    deferred_video_count_last_cycle: int = 0
+    inserted_snapshot_count_last_cycle: int = 0
+    fetch_failed_count_last_cycle: int = 0
+    duplicate_snapshot_count_last_cycle: int = 0
+    missing_video_count_last_cycle: int = 0
+
+
+@dataclass
 class OperationsErrorsBlock:
     discovery_last_cycle_error: str | None = None
     monitoring_recent_error_summaries: list[str] = field(default_factory=list)
@@ -179,6 +216,7 @@ class OperationsOverview:
     generated_at: datetime
     discovery: DiscoveryOperationsBlock
     monitoring: MonitoringOperationsBlock
+    outcome_capture: OutcomeCaptureOperationsBlock
     snapshots: SnapshotOperationsBlock
     keyword_outcomes: KeywordOutcomeOperationsBlock
     errors: OperationsErrorsBlock
@@ -189,28 +227,22 @@ def _discovery_activity_state(
     state: DiscoveryWorkerState | None,
     *,
     now: datetime,
-    stale_minutes: int,
+    expected_interval_seconds: int,
 ) -> tuple[ActivityState, datetime | None]:
     if state is None:
         return "unknown", None
 
     last_activity = state.last_cycle_finished_at or state.updated_at
-    if state.last_cycle_status == "failed" or state.last_error:
-        return "error", last_activity
+    latest_failed = state.last_cycle_status == "failed" or bool(state.last_error)
+    expected_running = state.status == DISCOVERY_STATUS_RUNNING
 
-    if state.status == DISCOVERY_STATUS_STOPPED:
-        return "unknown", last_activity
-
-    if state.status == DISCOVERY_STATUS_RUNNING and state.lock_acquired_at is not None:
-        age = (ensure_utc(now) - ensure_utc(state.lock_acquired_at)).total_seconds()
-        if age > stale_minutes * 60:
-            return "stale_activity", last_activity
-        return "active_recently", last_activity
-
-    if state.last_cycle_finished_at is not None and state.last_cycle_status in ("ok", "partial", "dry_run"):
-        return "active_recently", last_activity
-
-    return "unknown", last_activity
+    return classify_worker_activity(
+        now=now,
+        worker_expected_running=expected_running,
+        last_activity_at=last_activity,
+        expected_interval_seconds=expected_interval_seconds,
+        latest_cycle_failed=latest_failed,
+    )
 
 
 def get_discovery_worker_activity(
@@ -226,8 +258,9 @@ def get_discovery_worker_activity(
     activity, last_at = _discovery_activity_state(
         state,
         now=reference,
-        stale_minutes=DEFAULT_STALE_LOCK_MINUTES,
+        expected_interval_seconds=DEFAULT_DISCOVERY_WORKER_INTERVAL_SECONDS,
     )
+    stale_activity_seconds = stale_activity_threshold_seconds(DEFAULT_DISCOVERY_WORKER_INTERVAL_SECONDS)
     return WorkerActivityBlock(
         lock_status=state.status if state else None,
         lock_holder=state.lock_holder if state else None,
@@ -237,29 +270,43 @@ def get_discovery_worker_activity(
         expected_interval_seconds=DEFAULT_DISCOVERY_WORKER_INTERVAL_SECONDS,
         stale_lock_minutes=DEFAULT_STALE_LOCK_MINUTES,
         liveness_note=(
-            "Last cycle/lock activity only; true process liveness requires Stage 1.19D heartbeat."
+            f"Activity from last cycle finish or worker heartbeat; stale after ~{stale_activity_seconds}s "
+            f"({STALE_ACTIVITY_MISSED_INTERVALS}× interval). lock_acquired_at is lock diagnostics only."
         ),
     )
 
 
-def _monitoring_activity_from_status(status_data) -> WorkerActivityBlock:
-    label_map = {
-        "running": "active_recently",
-        "stale": "stale_activity",
-        "stopped": "unknown",
-        "unknown": "unknown",
-    }
-    activity: ActivityState = label_map.get(status_data.status, "unknown")
+def _monitoring_activity_block(
+    status_data,
+    *,
+    latest_cycle_finished_at: datetime | None,
+    latest_cycle_failed: bool,
+    worker_db_status: str | None,
+) -> WorkerActivityBlock:
+    from app.services.monitoring_worker_lock import MONITORING_STATUS_RUNNING
+
+    last_activity = latest_cycle_finished_at or status_data.last_seen
+    expected_running = worker_db_status == MONITORING_STATUS_RUNNING
+
+    activity, last_at = classify_worker_activity(
+        now=status_data.current_time,
+        worker_expected_running=expected_running,
+        last_activity_at=last_activity,
+        expected_interval_seconds=status_data.worker_interval_seconds,
+        latest_cycle_failed=latest_cycle_failed,
+    )
+    stale_activity_seconds = stale_activity_threshold_seconds(status_data.worker_interval_seconds)
     return WorkerActivityBlock(
         lock_status=status_data.status,
         lock_holder=status_data.lock_holder,
         lock_acquired_at=status_data.lock_acquired_at,
-        last_activity_at=status_data.last_seen,
+        last_activity_at=last_at,
         activity_state=activity,
         expected_interval_seconds=status_data.worker_interval_seconds,
         stale_lock_minutes=status_data.stale_after_seconds // 60,
         liveness_note=(
-            "Lock/status signal; last cycle success is separate. Stage 1.19D for heartbeat."
+            f"Activity from monitoring cycle finish or worker heartbeat; stale after ~{stale_activity_seconds}s. "
+            "lock_acquired_at is lock diagnostics only."
         ),
     )
 
@@ -522,28 +569,25 @@ def compute_keyword_outcome_maturity_legacy(
             if base.views_at_discovery is not None:
                 matured.append(base)
 
-    if not matured:
-        return block
+    if matured:
+        min_discovery = min(ensure_utc(b.discovery_at) for b in matured)
+        max_discovery = max(ensure_utc(b.discovery_at) for b in matured)
+        captured_from = min_discovery + timedelta(hours=HORIZON_HOURS - HORIZON_SNAPSHOT_TOLERANCE_HOURS)
+        captured_to = max_discovery + timedelta(hours=HORIZON_HOURS + HORIZON_SNAPSHOT_TOLERANCE_HOURS)
+        video_ids = {b.video_id for b in matured}
+        snapshots = load_snapshots_for_horizon(
+            session,
+            video_ids,
+            captured_from=captured_from,
+            captured_to=captured_to,
+        )
 
-    min_discovery = min(ensure_utc(b.discovery_at) for b in matured)
-    max_discovery = max(ensure_utc(b.discovery_at) for b in matured)
-    captured_from = min_discovery + timedelta(hours=HORIZON_HOURS - HORIZON_SNAPSHOT_TOLERANCE_HOURS)
-    captured_to = max_discovery + timedelta(hours=HORIZON_HOURS + HORIZON_SNAPSHOT_TOLERANCE_HOURS)
-    video_ids = {b.video_id for b in matured}
-    snapshots = load_snapshots_for_horizon(
-        session,
-        video_ids,
-        captured_from=captured_from,
-        captured_to=captured_to,
-    )
+        for base in matured:
+            outcome = match_horizon_outcome(base, snapshots)
+            if outcome is not None:
+                block.valid_72h_outcome_count += 1
 
-    for base in matured:
-        outcome = match_horizon_outcome(base, snapshots)
-        if outcome is None:
-            block.missing_72h_outcome_count += 1
-        else:
-            block.valid_72h_outcome_count += 1
-
+    block.missing_72h_outcome_count = block.matured_72h_count - block.valid_72h_outcome_count
     return block
 
 
@@ -575,19 +619,131 @@ def compute_keyword_outcome_maturity(
     )
 
 
+def get_outcome_capture_worker_activity(
+    session: Session,
+    *,
+    now: datetime | None = None,
+    worker_state: OutcomeCaptureWorkerState | None = None,
+) -> WorkerActivityBlock:
+    reference = now or utc_now()
+    state = worker_state
+    if state is None:
+        state = session.get(OutcomeCaptureWorkerState, OUTCOME_CAPTURE_WORKER_STATE_ROW_ID)
+    last_at = None
+    if state is not None:
+        last_at = state.last_cycle_finished_at or state.updated_at
+    activity, resolved_last = classify_worker_activity(
+        now=reference,
+        worker_expected_running=bool(state and state.status == OUTCOME_STATUS_RUNNING),
+        last_activity_at=last_at,
+        expected_interval_seconds=DEFAULT_OUTCOME_CAPTURE_INTERVAL_SECONDS,
+        latest_cycle_failed=bool(state and (state.last_cycle_status == "failed" or state.last_error)),
+    )
+    stale_activity_seconds = stale_activity_threshold_seconds(DEFAULT_OUTCOME_CAPTURE_INTERVAL_SECONDS)
+    return WorkerActivityBlock(
+        lock_status=state.status if state else None,
+        lock_holder=state.lock_holder if state else None,
+        lock_acquired_at=state.lock_acquired_at if state else None,
+        last_activity_at=resolved_last,
+        activity_state=activity,
+        expected_interval_seconds=DEFAULT_OUTCOME_CAPTURE_INTERVAL_SECONDS,
+        stale_lock_minutes=DEFAULT_STALE_LOCK_MINUTES,
+        liveness_note=(
+            f"Delayed outcome capture worker; stale after ~{stale_activity_seconds}s "
+            f"({STALE_ACTIVITY_MISSED_INTERVALS}× interval). Separate from monitoring."
+        ),
+    )
+
+
+def build_outcome_capture_block(
+    session: Session,
+    *,
+    now: datetime | None = None,
+    outcome_attribution_mode: OutcomeAttributionMode = "all_hits",
+    include_live_planner: bool = False,
+) -> OutcomeCaptureOperationsBlock:
+    reference = now or utc_now()
+    worker_state = session.get(OutcomeCaptureWorkerState, OUTCOME_CAPTURE_WORKER_STATE_ROW_ID)
+    latest = get_latest_outcome_capture_cycle_run(session)
+    if include_live_planner:
+        plan = plan_delayed_outcome_capture(
+            session,
+            reference=reference,
+            attribution_mode=outcome_attribution_mode,
+        )
+        planner_pending = plan.pending_count
+        planner_due = plan.capture_due_count
+        planner_overdue = plan.capture_overdue_count
+        planner_satisfied = plan.satisfied_count
+        planner_expired = plan.expired_count
+        unique_due_videos = plan.unique_due_video_count
+    elif latest is not None:
+        planner_pending = int(latest.pending_count)
+        planner_due = int(latest.capture_due_count)
+        planner_overdue = int(latest.capture_overdue_count)
+        planner_satisfied = int(latest.satisfied_existing_count)
+        planner_expired = int(latest.expired_count)
+        unique_due_videos = int(latest.unique_due_video_count)
+    else:
+        planner_pending = planner_due = planner_overdue = 0
+        planner_satisfied = planner_expired = unique_due_videos = 0
+
+    block = OutcomeCaptureOperationsBlock(
+        worker=get_outcome_capture_worker_activity(
+            session,
+            now=reference,
+            worker_state=worker_state,
+        ),
+        planner_pending=planner_pending,
+        planner_due=planner_due,
+        planner_overdue=planner_overdue,
+        planner_satisfied=planner_satisfied,
+        planner_expired=planner_expired,
+        unique_due_videos=unique_due_videos,
+    )
+    if worker_state:
+        block.last_cycle_started_at = worker_state.last_cycle_started_at
+        block.last_cycle_finished_at = worker_state.last_cycle_finished_at
+        block.last_cycle_status = worker_state.last_cycle_status
+        block.last_run_id = worker_state.last_run_id
+
+    if latest is not None:
+        block.selected_video_count_last_cycle = latest.selected_video_count
+        block.deferred_video_count_last_cycle = latest.deferred_video_count
+        block.inserted_snapshot_count_last_cycle = latest.inserted_snapshot_count
+        block.fetch_failed_count_last_cycle = latest.fetch_failed_count
+        block.duplicate_snapshot_count_last_cycle = latest.duplicate_snapshot_count
+        block.missing_video_count_last_cycle = latest.missing_video_count
+        if not block.last_cycle_started_at:
+            block.last_cycle_started_at = latest.started_at
+        if not block.last_cycle_finished_at:
+            block.last_cycle_finished_at = latest.finished_at
+        if not block.last_cycle_status:
+            block.last_cycle_status = latest.cycle_status
+        if not block.last_run_id:
+            block.last_run_id = latest.run_id
+    return block
+
+
 def build_monitoring_block(
     session: Session,
     *,
     include_live_planner: bool,
     cycle_runs: list[MonitoringCycleRun] | None = None,
 ) -> MonitoringOperationsBlock:
-    status = get_monitoring_worker_status(session)
-    worker = _monitoring_activity_from_status(status)
-    block = MonitoringOperationsBlock(worker=worker, live_planner_requested=include_live_planner)
-
     latest = cycle_runs[0] if cycle_runs else None
     if latest is None:
         latest = get_latest_monitoring_cycle_run(session)
+
+    mon_state = session.get(MonitoringWorkerState, MONITORING_WORKER_STATE_ROW_ID)
+    status = get_monitoring_worker_status(session)
+    worker = _monitoring_activity_block(
+        status,
+        latest_cycle_finished_at=latest.finished_at if latest else None,
+        latest_cycle_failed=bool(latest and latest.cycle_status == "failed"),
+        worker_db_status=mon_state.status if mon_state else None,
+    )
+    block = MonitoringOperationsBlock(worker=worker, live_planner_requested=include_live_planner)
     if latest:
         block.last_cycle_started_at = latest.started_at
         block.last_cycle_finished_at = latest.finished_at
@@ -617,6 +773,7 @@ def build_operations_overview(
     session: Session,
     *,
     include_live_monitoring_planner: bool = False,
+    include_live_outcome_planner: bool = False,
     discovery_history_limit: int = 10,
     monitoring_history_limit: int = 10,
     outcome_attribution_mode: OutcomeAttributionMode = "all_hits",
@@ -673,6 +830,12 @@ def build_operations_overview(
         attribution_mode=outcome_attribution_mode,
         now=reference,
     )
+    outcome_capture = build_outcome_capture_block(
+        session,
+        now=reference,
+        outcome_attribution_mode=outcome_attribution_mode,
+        include_live_planner=include_live_outcome_planner,
+    )
 
     errors = OperationsErrorsBlock(
         discovery_last_cycle_error=discovery.last_error,
@@ -691,6 +854,7 @@ def build_operations_overview(
         generated_at=reference,
         discovery=discovery,
         monitoring=monitoring,
+        outcome_capture=outcome_capture,
         snapshots=snapshots,
         keyword_outcomes=outcomes,
         errors=errors,
@@ -746,6 +910,11 @@ def build_operations_overview_sequential(
         attribution_mode=outcome_attribution_mode,
         now=reference,
     )
+    outcome_capture = build_outcome_capture_block(
+        session,
+        now=reference,
+        outcome_attribution_mode=outcome_attribution_mode,
+    )
 
     disc_ids = list_recent_discovery_run_ids(session, limit=discovery_history_limit)
     disc_summaries = [aggregate_discovery_cycle(session, rid) for rid in disc_ids]
@@ -767,6 +936,7 @@ def build_operations_overview_sequential(
         generated_at=reference,
         discovery=discovery,
         monitoring=monitoring,
+        outcome_capture=outcome_capture,
         snapshots=snapshots,
         keyword_outcomes=outcomes,
         errors=errors,

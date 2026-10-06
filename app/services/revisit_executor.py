@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Literal, Protocol, Sequence
+from typing import Any, Literal, Protocol, Sequence
 
 from sqlalchemy.orm import Session
 
@@ -149,12 +149,20 @@ def _details_to_observation(
         is_short=is_short,
         is_live=is_live,
         fetch_status="ok",
-        raw_metadata={
-            "checkpoint_age_hours": request.checkpoint_age_hours,
-            "capture_reason": request.reason,
-            "requested_at": request.requested_at.isoformat(),
-        },
+        raw_metadata=_raw_metadata_for_request(request),
     )
+
+
+def _raw_metadata_for_request(request: SnapshotCaptureRequest) -> dict[str, Any]:
+    meta: dict[str, Any] = {
+        "checkpoint_age_hours": request.checkpoint_age_hours,
+        "capture_reason": request.reason,
+        "requested_at": request.requested_at.isoformat(),
+    }
+    if request.outcome_target_at is not None:
+        meta["capture_purpose"] = "keyword_delayed_outcome"
+        meta["outcome_target_at"] = request.outcome_target_at.isoformat()
+    return meta
 
 
 def _result_from_request(

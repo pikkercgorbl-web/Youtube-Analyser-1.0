@@ -105,6 +105,9 @@ class KeywordPerformanceMetrics:
 class KeywordPerformanceListResult:
     context: KeywordEvaluationContext
     items: list[KeywordPerformanceMetrics]
+    total: int | None = None
+    offset: int = 0
+    data_source: str = "live_evaluation"
 
 
 def _time_filter_hit(column, from_ts: datetime | None, to_ts: datetime | None):
@@ -335,7 +338,12 @@ def evaluate_keyword_performance_batch(
         items.append(
             _batch_to_metrics(agg, keyword, context, _schedule_fields_fast(keyword, reference)),
         )
-    return KeywordPerformanceListResult(context=context, items=items)
+    return KeywordPerformanceListResult(
+        context=context,
+        items=items,
+        total=len(items),
+        data_source="live_evaluation",
+    )
 
 
 def get_keyword_performance(
@@ -348,10 +356,22 @@ def get_keyword_performance(
     include_breakout: bool = True,
     include_delayed: bool = True,
     attribution_mode: AttributionMode = "all_hits",
+    live_evaluation: bool = False,
 ) -> KeywordPerformanceMetrics | None:
     keyword = session.get(TargetKeyword, keyword_id)
     if keyword is None:
         return None
+    use_live = live_evaluation or from_timestamp is not None or to_timestamp is not None
+    if not use_live:
+        from app.services.keyword_performance_read_model import get_keyword_performance_from_snapshot
+
+        snap_metrics = get_keyword_performance_from_snapshot(
+            session,
+            keyword_id,
+            attribution_mode=attribution_mode,
+        )
+        if snap_metrics is not None:
+            return snap_metrics
     result = evaluate_keyword_performance_batch(
         session,
         [keyword],
@@ -371,27 +391,81 @@ def list_keyword_performance(
     session: Session,
     *,
     limit: int = 100,
+    offset: int = 0,
     from_timestamp: datetime | None = None,
     to_timestamp: datetime | None = None,
     include_current_tiers: bool = False,
     include_breakout: bool = True,
     include_delayed: bool = True,
     attribution_mode: AttributionMode = "all_hits",
+    live_evaluation: bool = False,
+    lifecycle_status: str | None = None,
+    search: str | None = None,
 ) -> KeywordPerformanceListResult:
-    keyword_records = list(
-        session.scalars(
-            select(TargetKeyword).order_by(TargetKeyword.id.asc()).limit(max(1, limit)),
-        ).all(),
-    )
-    return evaluate_keyword_performance_batch(
+    use_live = live_evaluation or from_timestamp is not None or to_timestamp is not None
+    if not use_live:
+        from app.services.keyword_performance_read_model import (
+            count_keyword_performance_snapshots,
+            get_latest_global_snapshot,
+            list_keyword_performance_from_snapshots,
+        )
+
+        if get_latest_global_snapshot(session) is not None:
+            snapshot_result = list_keyword_performance_from_snapshots(
+                session,
+                limit=limit,
+                offset=offset,
+                attribution_mode=attribution_mode,
+                lifecycle_status=lifecycle_status,
+                search=search,
+            )
+            if snapshot_result is not None:
+                total = count_keyword_performance_snapshots(
+                    session,
+                    attribution_mode=attribution_mode,
+                    lifecycle_status=lifecycle_status,
+                    search=search,
+                )
+                return KeywordPerformanceListResult(
+                    context=snapshot_result.context,
+                    items=snapshot_result.items,
+                    total=total,
+                    offset=offset,
+                    data_source="snapshot",
+                )
+        empty_ctx = make_evaluation_context(
+            global_eligible_video_count=0,
+            attribution_mode=attribution_mode,
+            window_from=from_timestamp,
+            window_to=to_timestamp,
+        )
+        return KeywordPerformanceListResult(
+            context=empty_ctx,
+            items=[],
+            total=0,
+            offset=offset,
+            data_source="unavailable",
+        )
+
+    from app.services.keyword_performance_read_model import list_keyword_performance_live_page
+
+    live = list_keyword_performance_live_page(
         session,
-        keyword_records,
+        limit=limit,
+        offset=offset,
         from_timestamp=from_timestamp,
         to_timestamp=to_timestamp,
-        attribution_mode=attribution_mode,
         include_current_tiers=include_current_tiers,
         include_breakout=include_breakout,
         include_delayed=include_delayed,
+        attribution_mode=attribution_mode,
+    )
+    return KeywordPerformanceListResult(
+        context=live.context,
+        items=live.items,
+        total=len(live.items),
+        offset=offset,
+        data_source="live_evaluation",
     )
 
 

@@ -31,6 +31,7 @@ import {
   monitoringOperationsSummary,
   operationsBlockedSummary,
   outcome72hOperationsSummary,
+  outcomeCaptureOperationsSummary,
   OUTCOME_72H_HELP,
   snapshotOperationsSummary,
 } from "@/lib/operations-summaries";
@@ -216,8 +217,15 @@ export function OperationsDashboard() {
     );
   }
 
-  const { discovery, monitoring, snapshots, keyword_outcomes: outcomes, errors, recent_cycles } =
-    data;
+  const {
+    discovery,
+    monitoring,
+    outcome_capture: outcomeCapture,
+    snapshots,
+    keyword_outcomes: outcomes,
+    errors,
+    recent_cycles,
+  } = data;
   const refIso = data.generated_at;
   const discoveryCycleRel = formatRelativeTime(discovery.last_cycle_finished_at, refIso).relative;
   const blocked = operationsBlockedSummary(discovery, monitoring, errors);
@@ -226,6 +234,7 @@ export function OperationsDashboard() {
   const monitoringSummary = monitoringOperationsSummary(monitoring, snapshots.snapshots_last_24h);
   const snapshotSummary = snapshotOperationsSummary(snapshots);
   const outcomeSummary = outcome72hOperationsSummary(outcomes);
+  const outcomeCaptureSummary = outcomeCaptureOperationsSummary(outcomeCapture);
 
   const hasErrors =
     Boolean(errors.discovery_last_cycle_error) || errors.monitoring_recent_error_summaries.length > 0;
@@ -272,6 +281,11 @@ export function OperationsDashboard() {
           tone={monitoringSummary.tone}
           lines={monitoringSummary.lines}
           data-testid="operations-monitoring-summary"
+        />
+        <SummaryStrip
+          tone={outcomeCaptureSummary.tone}
+          lines={outcomeCaptureSummary.lines}
+          data-testid="operations-outcome-capture-summary"
         />
         <SummaryStrip
           tone={snapshotSummary.tone}

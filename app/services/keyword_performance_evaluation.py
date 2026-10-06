@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Literal
+from typing import Any, Literal
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -201,6 +201,83 @@ def _shared_videos_in_window(hits: list[KeywordDiscoveryHit]) -> set[str]:
     return {vid for vid, kids in by_video.items() if len(kids) > 1}
 
 
+def load_first_discovery_owner_for_videos(
+    session: Session,
+    video_ids: set[str],
+    *,
+    window_from: datetime | None = None,
+    window_to: datetime | None = None,
+) -> dict[str, int]:
+    """Earliest discovery owner per video (scoped to video_ids, optional window)."""
+    if not video_ids:
+        return {}
+    clauses = [
+        KeywordDiscoveryHit.video_id.in_(list(video_ids)),
+        *_time_clauses(KeywordDiscoveryHit.discovered_at, window_from, window_to),
+    ]
+    rows = session.execute(
+        select(
+            KeywordDiscoveryHit.video_id,
+            KeywordDiscoveryHit.keyword_id,
+            KeywordDiscoveryHit.discovered_at,
+        )
+        .where(*clauses)
+        .order_by(
+            KeywordDiscoveryHit.video_id.asc(),
+            KeywordDiscoveryHit.discovered_at.asc(),
+            KeywordDiscoveryHit.keyword_id.asc(),
+        ),
+    ).all()
+    best: dict[str, tuple[datetime, int]] = {}
+    for video_id, keyword_id, discovered_at in rows:
+        at = ensure_utc(discovered_at)
+        if video_id not in best:
+            best[video_id] = (at, int(keyword_id))
+            continue
+        prev_at, prev_kid = best[video_id]
+        if at < prev_at or (at == prev_at and int(keyword_id) < prev_kid):
+            best[video_id] = (at, int(keyword_id))
+    return {vid: kid for vid, (_, kid) in best.items()}
+
+
+def load_shared_video_ids_in_window(
+    session: Session,
+    *,
+    window_from: datetime | None = None,
+    window_to: datetime | None = None,
+) -> set[str]:
+    """Videos discovered by more than one keyword in the optional time window."""
+    time_clauses = _time_clauses(KeywordDiscoveryHit.discovered_at, window_from, window_to)
+    stmt = select(KeywordDiscoveryHit.video_id)
+    if time_clauses:
+        stmt = stmt.where(*time_clauses)
+    rows = session.execute(
+        stmt.group_by(KeywordDiscoveryHit.video_id).having(
+            func.count(func.distinct(KeywordDiscoveryHit.keyword_id)) > 1,
+        ),
+    ).all()
+    return {row[0] for row in rows}
+
+
+def _nearest_snapshot_delta_hours(
+    baseline: KeywordVideoBaseline,
+    snapshots_by_video: dict[str, list[VideoSnapshot]],
+) -> float | None:
+    """Absolute hours between target horizon and closest snapshot with views (diagnostics only)."""
+    target = ensure_utc(baseline.discovery_at) + timedelta(hours=HORIZON_HOURS)
+    best: timedelta | None = None
+    for snap in snapshots_by_video.get(baseline.video_id, []):
+        if snap.views is None:
+            continue
+        captured = ensure_utc(snap.captured_at)
+        delta = abs(captured - target)
+        if best is None or delta < best:
+            best = delta
+    if best is None:
+        return None
+    return round(best.total_seconds() / 3600.0, 4)
+
+
 def match_horizon_outcome(
     baseline: KeywordVideoBaseline,
     snapshots_by_video: dict[str, list[VideoSnapshot]],
@@ -236,6 +313,223 @@ def match_horizon_outcome(
         absolute_view_growth=growth,
         actual_elapsed_hours=round(elapsed, 4),
         snapshot_captured_at=captured,
+    )
+
+
+@dataclass(frozen=True, slots=True)
+class DelayedOutcomeTally:
+    pending: int = 0
+    matured: int = 0
+    valid: int = 0
+    missing: int = 0
+
+
+def tally_delayed_outcomes_for_videos(
+    video_ids: set[str],
+    baselines_map: dict[tuple[int, str], KeywordDiscoveryHit],
+    keyword_id: int,
+    *,
+    reference: datetime,
+    horizon_hours: int,
+    snapshots_by_video: dict[str, list[VideoSnapshot]],
+    tolerance_hours: float = HORIZON_SNAPSHOT_TOLERANCE_HOURS,
+) -> tuple[DelayedOutcomeTally, list[float]]:
+    """Per-keyword 72h counts: pending excluded from missing; matured == valid + missing."""
+    horizon_delta = timedelta(hours=horizon_hours)
+    reference_utc = ensure_utc(reference)
+    tally = DelayedOutcomeTally()
+    growths: list[float] = []
+    for vid in video_ids:
+        base_hit = baselines_map.get((keyword_id, vid))
+        if base_hit is None:
+            continue
+        discovery_at = ensure_utc(base_hit.discovered_at)
+        if reference_utc < discovery_at + horizon_delta:
+            tally = DelayedOutcomeTally(
+                pending=tally.pending + 1,
+                matured=tally.matured,
+                valid=tally.valid,
+                missing=tally.missing,
+            )
+            continue
+        tally = DelayedOutcomeTally(
+            pending=tally.pending,
+            matured=tally.matured + 1,
+            valid=tally.valid,
+            missing=tally.missing,
+        )
+        baseline = KeywordVideoBaseline(
+            keyword_id=keyword_id,
+            video_id=vid,
+            discovery_at=base_hit.discovered_at,
+            views_at_discovery=base_hit.views_at_discovery,
+            vph_at_discovery=base_hit.vph_at_discovery,
+        )
+        outcome = match_horizon_outcome(
+            baseline,
+            snapshots_by_video,
+            tolerance_hours=tolerance_hours,
+        )
+        if outcome is None:
+            tally = DelayedOutcomeTally(
+                pending=tally.pending,
+                matured=tally.matured,
+                valid=tally.valid,
+                missing=tally.missing + 1,
+            )
+            continue
+        tally = DelayedOutcomeTally(
+            pending=tally.pending,
+            matured=tally.matured,
+            valid=tally.valid + 1,
+            missing=tally.missing,
+        )
+        growths.append(float(outcome.absolute_view_growth))
+    return tally, growths
+
+
+@dataclass(frozen=True, slots=True)
+class HorizonCoverageDiagnostics:
+    attributed_observation_count: int
+    pending_72h_count: int
+    matured_72h_count: int
+    valid_72h_outcome_count: int
+    missing_72h_outcome_count: int
+    matured_with_any_snapshot: int
+    matured_with_snapshot_in_window: int
+    matured_with_only_outside_window: int
+    matured_with_no_snapshot: int
+    nearest_snapshot_delta_hours: dict[str, Any]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "attributed_observation_count": self.attributed_observation_count,
+            "pending_72h_count": self.pending_72h_count,
+            "matured_72h_count": self.matured_72h_count,
+            "valid_72h_outcome_count": self.valid_72h_outcome_count,
+            "missing_72h_outcome_count": self.missing_72h_outcome_count,
+            "matured_with_any_snapshot": self.matured_with_any_snapshot,
+            "matured_with_snapshot_in_window": self.matured_with_snapshot_in_window,
+            "matured_with_only_outside_window": self.matured_with_only_outside_window,
+            "matured_with_no_snapshot": self.matured_with_no_snapshot,
+            "nearest_snapshot_delta_hours": self.nearest_snapshot_delta_hours,
+        }
+
+
+def compute_horizon_coverage_diagnostics(
+    session: Session,
+    *,
+    attribution_mode: AttributionMode = "all_hits",
+    now: datetime | None = None,
+    keyword_ids: list[int] | None = None,
+    horizon_hours: int = HORIZON_HOURS,
+    tolerance_hours: float = HORIZON_SNAPSHOT_TOLERANCE_HOURS,
+) -> HorizonCoverageDiagnostics:
+    """Read-only 72h coverage audit across attributed keyword×video observations."""
+    reference = ensure_utc(now or utc_now())
+    stmt = select(TargetKeyword.id).order_by(TargetKeyword.id.asc())
+    if keyword_ids is not None:
+        stmt = stmt.where(TargetKeyword.id.in_(keyword_ids))
+    ids = [int(x) for x in session.scalars(stmt).all()]
+    if not ids:
+        empty_dist: dict[str, Any] = {"n": 0, "note": "INSUFFICIENT_SAMPLE"}
+        return HorizonCoverageDiagnostics(0, 0, 0, 0, 0, 0, 0, 0, 0, empty_dist)
+
+    window_hits = list(session.scalars(select(KeywordDiscoveryHit)).all())
+    id_set = set(ids)
+    hits = [h for h in window_hits if h.keyword_id in id_set]
+    first_owner = _first_discovery_owner(window_hits)
+    baselines_map = _first_hit_per_keyword_video(hits)
+    hits_by_keyword: dict[int, list[KeywordDiscoveryHit]] = {}
+    for hit in hits:
+        hits_by_keyword.setdefault(hit.keyword_id, []).append(hit)
+
+    observations: list[tuple[int, str, KeywordDiscoveryHit]] = []
+    for kid in ids:
+        vids = attributed_videos_for_keyword(
+            kid,
+            mode=attribution_mode,
+            hits_for_keyword=hits_by_keyword.get(kid, []),
+            first_owner=first_owner,
+        )
+        for vid in vids:
+            base = baselines_map.get((kid, vid))
+            if base is not None:
+                observations.append((kid, vid, base))
+
+    attributed = len(observations)
+    horizon_delta = timedelta(hours=horizon_hours)
+    matured_obs: list[tuple[int, str, KeywordDiscoveryHit]] = []
+    pending = 0
+    for kid, vid, base in observations:
+        if reference < ensure_utc(base.discovered_at) + horizon_delta:
+            pending += 1
+        else:
+            matured_obs.append((kid, vid, base))
+
+    matured_video_ids = {vid for _kid, vid, _base in matured_obs}
+    all_snaps: dict[str, list[VideoSnapshot]] = {}
+    if matured_video_ids:
+        all_snaps = load_snapshots_for_horizon(session, matured_video_ids)
+
+    any_snap = in_window = outside_only = no_snap = 0
+    nearest_deltas: list[float] = []
+    valid = 0
+    missing = 0
+    tolerance = timedelta(hours=tolerance_hours)
+
+    for _kid, vid, base in matured_obs:
+        baseline = KeywordVideoBaseline(
+            keyword_id=_kid,
+            video_id=vid,
+            discovery_at=base.discovered_at,
+            views_at_discovery=base.views_at_discovery,
+            vph_at_discovery=base.vph_at_discovery,
+        )
+        outcome = match_horizon_outcome(baseline, all_snaps, tolerance_hours=tolerance_hours)
+        if outcome is not None:
+            valid += 1
+        else:
+            missing += 1
+
+        snaps = [s for s in all_snaps.get(vid, []) if s.views is not None]
+        if not snaps:
+            no_snap += 1
+            continue
+        any_snap += 1
+        target = ensure_utc(base.discovered_at) + horizon_delta
+        has_in = any(abs(ensure_utc(s.captured_at) - target) <= tolerance for s in snaps)
+        if has_in:
+            in_window += 1
+        else:
+            outside_only += 1
+        delta_h = _nearest_snapshot_delta_hours(baseline, all_snaps)
+        if delta_h is not None:
+            nearest_deltas.append(delta_h)
+
+    dist: dict[str, Any]
+    if nearest_deltas:
+        ordered = sorted(nearest_deltas)
+        dist = {
+            "n": len(ordered),
+            "p50": _median(nearest_deltas),
+            "p75": round(_percentile(ordered, 75), 4),
+            "p90": round(_percentile(ordered, 90), 4),
+        }
+    else:
+        dist = {"n": 0, "note": "INSUFFICIENT_SAMPLE"}
+
+    return HorizonCoverageDiagnostics(
+        attributed_observation_count=attributed,
+        pending_72h_count=pending,
+        matured_72h_count=len(matured_obs),
+        valid_72h_outcome_count=valid,
+        missing_72h_outcome_count=missing,
+        matured_with_any_snapshot=any_snap,
+        matured_with_snapshot_in_window=in_window,
+        matured_with_only_outside_window=outside_only,
+        matured_with_no_snapshot=no_snap,
+        nearest_snapshot_delta_hours=dist,
     )
 
 
@@ -293,12 +587,16 @@ class KeywordBatchAggregates:
     breakout_ranked_video_count: int = 0
     top_decile_breakout_count: int = 0
     top_decile_breakout_rate: float | None = None
+    discovery_vph_observation_count: int = 0
     median_vph_at_discovery: float | None = None
     p90_vph_at_discovery: float | None = None
     median_current_vph: float | None = None
     observed_72h_video_count: int = 0
     missing_72h_video_count: int = 0
+    matured_72h_video_count: int = 0
+    pending_72h_video_count: int = 0
     median_absolute_view_growth_72h: float | None = None
+    p90_absolute_view_growth_72h: float | None = None
     evidence_status: str = "insufficient"
     evidence_detail: EvidenceDetail = field(default_factory=lambda: EvidenceDetail(0, 0, 0, 0))
     current_tier_a_count: int | None = None
@@ -417,17 +715,22 @@ def evaluate_keywords_batch(
         KeywordDiscoveryHit.keyword_id.in_(keyword_ids),
         *_time_clauses(KeywordDiscoveryHit.discovered_at, context.window_from, context.window_to),
     ]
-    window_hits_for_first = list(
-        session.scalars(
-            select(KeywordDiscoveryHit).where(
-                *_time_clauses(KeywordDiscoveryHit.discovered_at, context.window_from, context.window_to),
-            ),
-        ).all(),
+    all_hits = list(session.scalars(select(KeywordDiscoveryHit).where(*hit_filters)).all())
+    attributed_video_ids_early: set[str] = {hit.video_id for hit in all_hits}
+    if context.attribution_mode == "first_discovery":
+        first_owner = load_first_discovery_owner_for_videos(
+            session,
+            attributed_video_ids_early,
+            window_from=context.window_from,
+            window_to=context.window_to,
+        )
+    else:
+        first_owner = {}
+    shared_videos = load_shared_video_ids_in_window(
+        session,
+        window_from=context.window_from,
+        window_to=context.window_to,
     )
-    keyword_id_set = set(keyword_ids)
-    all_hits = [hit for hit in window_hits_for_first if hit.keyword_id in keyword_id_set]
-    first_owner = _first_discovery_owner(window_hits_for_first)
-    shared_videos = _shared_videos_in_window(window_hits_for_first)
     baselines_map = _first_hit_per_keyword_video(all_hits)
 
     hits_by_keyword: dict[int, list[KeywordDiscoveryHit]] = {}
@@ -609,6 +912,7 @@ def evaluate_keywords_batch(
                 4,
             )
 
+        agg.discovery_vph_observation_count = len(discovery_vphs)
         if discovery_vphs:
             ordered = sorted(discovery_vphs)
             agg.median_vph_at_discovery = _median(discovery_vphs)
@@ -617,35 +921,30 @@ def evaluate_keywords_batch(
             agg.median_current_vph = _median(current_vphs)
 
         growths: list[float] = []
-        missing = 0
         if opts.include_delayed:
-            for vid in attr_vids:
-                base_hit = baselines_map.get((kid, vid))
-                if base_hit is None:
-                    missing += 1
-                    continue
-                baseline = KeywordVideoBaseline(
-                    keyword_id=kid,
-                    video_id=vid,
-                    discovery_at=base_hit.discovered_at,
-                    views_at_discovery=base_hit.views_at_discovery,
-                    vph_at_discovery=base_hit.vph_at_discovery,
-                )
-                outcome = match_horizon_outcome(
-                    baseline,
-                    snapshots_by_video,
-                    tolerance_hours=context.horizon_snapshot_tolerance_hours,
-                )
-                if outcome is None:
-                    missing += 1
-                    continue
-                agg.observed_72h_video_count += 1
-                growths.append(float(outcome.absolute_view_growth))
-            agg.missing_72h_video_count = missing
+            tally, growths = tally_delayed_outcomes_for_videos(
+                attr_vids,
+                baselines_map,
+                kid,
+                reference=context.evaluated_at,
+                horizon_hours=context.horizon_hours,
+                snapshots_by_video=snapshots_by_video,
+                tolerance_hours=context.horizon_snapshot_tolerance_hours,
+            )
+            agg.pending_72h_video_count = tally.pending
+            agg.matured_72h_video_count = tally.matured
+            agg.observed_72h_video_count = tally.valid
+            agg.missing_72h_video_count = tally.missing
             agg.median_absolute_view_growth_72h = _median(growths)
+            if growths:
+                ordered_growths = sorted(growths)
+                agg.p90_absolute_view_growth_72h = round(_percentile(ordered_growths, 90), 4)
         else:
+            agg.pending_72h_video_count = 0
             agg.missing_72h_video_count = 0
+            agg.matured_72h_video_count = 0
             agg.median_absolute_view_growth_72h = None
+            agg.p90_absolute_view_growth_72h = None
 
         agg.evidence_detail = EvidenceDetail(
             scan_count=agg.scan_count,

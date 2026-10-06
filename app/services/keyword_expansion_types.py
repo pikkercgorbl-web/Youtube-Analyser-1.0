@@ -51,6 +51,7 @@ class KeywordExpansionSummary:
     normalized_unique_count: int = 0
     existing_keyword_count: int = 0
     rejected_count: int = 0
+    deferred_count: int = 0
     created_keyword_count: int = 0
     per_source_counts: dict[str, int] = field(default_factory=dict)
     per_seed_counts: dict[int, int] = field(default_factory=dict)

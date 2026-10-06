@@ -17,6 +17,7 @@ from app.models.schemas import (
     MonitoringOperationsBlockResponse,
     OperationsErrorsBlockResponse,
     OperationsOverviewResponse,
+    OutcomeCaptureOperationsBlockResponse,
     RecentCyclesBlockResponse,
     SnapshotDailyCountResponse,
     SnapshotOperationsBlockResponse,
@@ -56,6 +57,7 @@ def _discovery_cycle_response(row: DiscoveryCycleSummaryOps) -> DiscoveryCycleOp
 def _to_response(overview: OperationsOverview) -> OperationsOverviewResponse:
     d = overview.discovery
     m = overview.monitoring
+    oc = overview.outcome_capture
     return OperationsOverviewResponse(
         generated_at=overview.generated_at,
         discovery=DiscoveryOperationsBlockResponse(
@@ -96,6 +98,25 @@ def _to_response(overview: OperationsOverview) -> OperationsOverviewResponse:
             live_planner_due_count=m.live_planner_due_count,
             live_planner_overdue_count=m.live_planner_overdue_count,
             live_planner_requested=m.live_planner_requested,
+        ),
+        outcome_capture=OutcomeCaptureOperationsBlockResponse(
+            worker=_worker_response(oc.worker),
+            planner_pending=oc.planner_pending,
+            planner_due=oc.planner_due,
+            planner_overdue=oc.planner_overdue,
+            planner_satisfied=oc.planner_satisfied,
+            planner_expired=oc.planner_expired,
+            unique_due_videos=oc.unique_due_videos,
+            last_cycle_started_at=oc.last_cycle_started_at,
+            last_cycle_finished_at=oc.last_cycle_finished_at,
+            last_cycle_status=oc.last_cycle_status,
+            last_run_id=oc.last_run_id,
+            selected_video_count_last_cycle=oc.selected_video_count_last_cycle,
+            deferred_video_count_last_cycle=oc.deferred_video_count_last_cycle,
+            inserted_snapshot_count_last_cycle=oc.inserted_snapshot_count_last_cycle,
+            fetch_failed_count_last_cycle=oc.fetch_failed_count_last_cycle,
+            duplicate_snapshot_count_last_cycle=oc.duplicate_snapshot_count_last_cycle,
+            missing_video_count_last_cycle=oc.missing_video_count_last_cycle,
         ),
         snapshots=SnapshotOperationsBlockResponse(
             latest_snapshot_at=overview.snapshots.latest_snapshot_at,
@@ -157,10 +178,12 @@ def operations_overview(
     discovery_history_limit: int = Query(10, ge=1, le=50),
     monitoring_history_limit: int = Query(10, ge=1, le=50),
     outcome_attribution_mode: Literal["all_hits", "first_discovery"] = Query("all_hits"),
+    include_live_outcome_planner: bool = Query(False),
 ) -> OperationsOverviewResponse:
     overview = build_operations_overview(
         db,
         include_live_monitoring_planner=include_live_monitoring_planner,
+        include_live_outcome_planner=include_live_outcome_planner,
         discovery_history_limit=discovery_history_limit,
         monitoring_history_limit=monitoring_history_limit,
         outcome_attribution_mode=outcome_attribution_mode,

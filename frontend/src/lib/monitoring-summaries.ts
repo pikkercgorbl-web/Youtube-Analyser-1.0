@@ -108,10 +108,10 @@ export function monitoringWorkerSummaryLine(worker: MonitoringWorkerStatus | nul
     return null;
   }
   if (worker.status === "running") {
-    return "Lock воркера активен.";
+    return "Мониторинг недавно выполнял цикл.";
   }
   if (worker.status === "stale") {
-    return "Сигнал воркера устарел — проверьте процесс мониторинга.";
+    return "Давно не было успешных циклов мониторинга — проверьте процесс.";
   }
   return null;
 }

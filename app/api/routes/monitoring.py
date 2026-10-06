@@ -40,6 +40,7 @@ from app.services.monitoring_api_service import (
     list_monitoring_videos,
     list_video_monitoring_snapshots,
 )
+from app.services.monitoring_video_queue import MonitoringQueuePageRow
 
 router = APIRouter()
 
@@ -69,6 +70,28 @@ def _list_item(row: MonitoringEnrichedVideo) -> MonitoringVideoListItem:
         baseline_status=row.state.channel_velocity_baseline_status,
         vph_vs_channel_median=row.state.vph_vs_channel_median,
         content_format=row.state.content_format,
+    )
+
+
+def _queue_list_item(row: MonitoringQueuePageRow) -> MonitoringVideoListItem:
+    return MonitoringVideoListItem(
+        video_id=row.video_id,
+        channel_id=row.channel_id,
+        title=row.title,
+        channel_title=row.channel_title,
+        tier=row.tier,
+        current_views=row.current_views,
+        current_vph=row.current_vph,
+        age_hours=row.age_hours,
+        published_at=row.published_at,
+        latest_snapshot_at=row.latest_snapshot_at,
+        next_checkpoint_hours=row.next_checkpoint_hours,
+        monitoring_status=row.monitoring_status,
+        due_checkpoint_hours=row.due_checkpoint_hours,
+        overdue_checkpoint_hours=row.overdue_checkpoint_hours,
+        baseline_status=row.baseline_status,
+        vph_vs_channel_median=row.vph_vs_channel_median,
+        content_format=row.content_format,
     )
 
 
@@ -109,8 +132,11 @@ def monitoring_status(db: Session = Depends(get_db)) -> MonitoringWorkerStatusRe
 
 
 @router.get("/overview", response_model=MonitoringOverviewResponse)
-def monitoring_overview(db: Session = Depends(get_db)) -> MonitoringOverviewResponse:
-    data = get_monitoring_overview(db)
+def monitoring_overview(
+    db: Session = Depends(get_db),
+    live_planner: bool = Query(False, description="Recompute live planner counts (slow)"),
+) -> MonitoringOverviewResponse:
+    data = get_monitoring_overview(db, live_planner=live_planner)
     latest = None
     if data.latest_cycle is not None:
         cycle = data.latest_cycle
@@ -154,6 +180,10 @@ def monitoring_videos(
     sort: str = Query(default="priority"),
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
+    live_planner: bool = Query(
+        default=False,
+        description="Recompute full active pool (diagnostic; unbounded latency)",
+    ),
     db: Session = Depends(get_db),
 ) -> MonitoringVideoListResponse:
     if tier is not None and tier.upper() not in _VALID_TIERS:
@@ -166,7 +196,7 @@ def monitoring_videos(
     status_filter: MonitoringListStatus | None = (
         monitoring_status.lower() if monitoring_status else None
     )  # type: ignore[assignment]
-    rows, total = list_monitoring_videos(
+    result = list_monitoring_videos(
         db,
         tier=tier,
         status=status_filter,
@@ -175,16 +205,22 @@ def monitoring_videos(
         sort=sort,  # type: ignore[arg-type]
         limit=limit,
         offset=offset,
+        live_planner=live_planner,
     )
     if sort == "breakout_v1":
-        items = [_breakout_list_item(row) for row in rows]  # type: ignore[arg-type]
+        items = [_breakout_list_item(row) for row in result.rows]  # type: ignore[arg-type]
+    elif live_planner or isinstance(result.rows[0] if result.rows else None, MonitoringEnrichedVideo):
+        items = [_list_item(row) for row in result.rows]  # type: ignore[arg-type]
     else:
-        items = [_list_item(row) for row in rows]  # type: ignore[arg-type]
+        items = [_queue_list_item(row) for row in result.rows]  # type: ignore[arg-type]
     return MonitoringVideoListResponse(
         items=items,
-        total=total,
+        total=result.total,
         limit=limit,
         offset=offset,
+        queue_run_id=result.queue_run_id,
+        queue_generated_at=result.queue_generated_at,
+        queue_source=result.queue_source,
     )
 
 

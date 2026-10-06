@@ -217,7 +217,7 @@ def test_breakout_pass_once_for_list() -> None:
         "app.services.keyword_performance_service.build_global_breakout_bundle",
         side_effect=counting,
     ):
-        list_keyword_performance(session, limit=5)
+        list_keyword_performance(session, limit=5, live_evaluation=True)
     assert calls["n"] == 1
 
 
@@ -235,7 +235,7 @@ def test_list_query_count_bounded() -> None:
 
     event.listen(engine, "before_cursor_execute", before_cursor_execute)
     try:
-        list_keyword_performance(session, limit=3)
+        list_keyword_performance(session, limit=3, live_evaluation=True)
     finally:
         event.remove(engine, "before_cursor_execute", before_cursor_execute)
     assert query_count <= 25
@@ -270,8 +270,13 @@ def test_first_discovery_mode_assigns_video() -> None:
         ),
     )
     session.commit()
-    r_all = list_keyword_performance(session, limit=10, attribution_mode="all_hits")
-    r_first = list_keyword_performance(session, limit=10, attribution_mode="first_discovery")
+    r_all = list_keyword_performance(session, limit=10, attribution_mode="all_hits", live_evaluation=True)
+    r_first = list_keyword_performance(
+        session,
+        limit=10,
+        attribution_mode="first_discovery",
+        live_evaluation=True,
+    )
     by_id_all = {i.keyword_id: i.attributed_video_count for i in r_all.items}
     by_id_first = {i.keyword_id: i.attributed_video_count for i in r_first.items}
     assert by_id_all[k1.id] == 1 and by_id_all[k2.id] == 1
@@ -282,7 +287,7 @@ def test_api_context_fields_on_list() -> None:
     session = _session()
     session.add(TargetKeyword(keyword="x"))
     session.commit()
-    result = list_keyword_performance(session, limit=1)
+    result = list_keyword_performance(session, limit=1, live_evaluation=True)
     assert result.context.global_eligible_video_count is not None
     assert result.items[0].ranking_version == "breakout_v1"
     assert result.items[0].evaluated_at is not None

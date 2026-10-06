@@ -343,7 +343,7 @@ def compute_maturity_aggregate_sql(
         pending_72h_count=int(row["pending"] or 0),
         matured_72h_count=int(row["matured"] or 0),
         valid_72h_outcome_count=valid,
-        missing_72h_outcome_count=eligible - valid,
+        missing_72h_outcome_count=int(row["matured"] or 0) - valid,
         matures_next_6h=int(row["matures_next_6h"] or 0),
         matures_next_24h=int(row["matures_next_24h"] or 0),
         matures_next_48h=int(row["matures_next_48h"] or 0),

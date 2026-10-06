@@ -85,6 +85,7 @@ class SnapshotCaptureRequest:
     current_age_hours: float
     source: str
     run_id: str
+    outcome_target_at: datetime | None = None
 
 
 def checkpoint_match_tolerance_hours(
@@ -117,6 +118,12 @@ def checkpoint_expires_at_age_hours(
         policy.relative_recovery_fraction * float(checkpoint_hours),
     )
     return float(checkpoint_hours) + recovery
+
+
+MONITORING_PLANNER_MAX_SNAPSHOT_AGE_HOURS: float = max(
+    checkpoint_expires_at_age_hours(h, SnapshotCollectionPolicy())
+    for h in DEFAULT_SNAPSHOT_CHECKPOINT_HOURS
+)
 
 
 def compute_video_age_hours(
@@ -394,8 +401,16 @@ def existing_snapshot_from_orm(row: VideoSnapshot) -> ExistingSnapshot:
 def load_snapshots_by_video_id(
     session: Session,
     video_ids: Sequence[str],
+    *,
+    max_age_hours: float | None = MONITORING_PLANNER_MAX_SNAPSHOT_AGE_HOURS,
 ) -> dict[str, list[ExistingSnapshot]]:
-    rows = get_snapshots_for_videos(session, video_ids)
+    from app.services.video_snapshot_storage import get_snapshots_for_videos_planner
+
+    rows = (
+        get_snapshots_for_videos_planner(session, video_ids, max_age_hours=max_age_hours)
+        if max_age_hours is not None
+        else get_snapshots_for_videos(session, video_ids)
+    )
     grouped: dict[str, list[ExistingSnapshot]] = {}
     for row in rows:
         grouped.setdefault(row.video_id, []).append(existing_snapshot_from_orm(row))

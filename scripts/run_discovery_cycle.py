@@ -5,7 +5,9 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -13,10 +15,16 @@ if str(ROOT) not in sys.path:
 
 from app.api.deps import get_youtube_client
 from app.models.db import SessionLocal
-from app.services.discovery_cycle import DiscoveryCycleConfig, run_discovery_cycle
+from app.services.discovery_cycle import DiscoveryCycleConfig, DiscoveryCycleOutcome, run_discovery_cycle
 
 
-def main() -> int:
+def main(
+    argv: list[str] | None = None,
+    *,
+    session_factory: Callable[[], Any] = SessionLocal,
+    youtube_client_factory: Callable[[], Any] = get_youtube_client,
+    run_cycle: Callable[..., DiscoveryCycleOutcome] = run_discovery_cycle,
+) -> int:
     parser = argparse.ArgumentParser(description="Run one discovery keyword cycle.")
     parser.add_argument(
         "--dry-run",
@@ -29,14 +37,22 @@ def main() -> int:
         default=5,
         help="Keyword batch size (default: 5).",
     )
-    args = parser.parse_args()
+    parser.add_argument(
+        "--profile",
+        action="store_true",
+        help="Print phase timings, HTTP/SQL counts, and per-keyword breakdown (Stage 1.20E.5).",
+    )
+    args = parser.parse_args(argv)
 
-    session = SessionLocal()
+    session = session_factory()
     try:
-        config = DiscoveryCycleConfig(keyword_batch_size=max(1, args.batch_size))
-        outcome = run_discovery_cycle(
+        config = DiscoveryCycleConfig(
+            keyword_batch_size=max(1, args.batch_size),
+            profile=args.profile,
+        )
+        outcome = run_cycle(
             session,
-            youtube_client=get_youtube_client(),
+            youtube_client=youtube_client_factory(),
             config=config,
             dry_run=args.dry_run,
         )

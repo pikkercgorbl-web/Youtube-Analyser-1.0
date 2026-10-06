@@ -2,6 +2,11 @@
 .env
 .env.*
 !.env.example
+!.env.docker.example
+.env.docker
+
+# Локальные дампы перед миграцией с Supabase
+backups/
 
 # Python / FastAPI
 __pycache__/

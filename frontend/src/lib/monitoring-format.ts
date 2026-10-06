@@ -91,9 +91,9 @@ export function shortenRunId(runId: string): string {
 export function workerStatusLabel(status: MonitoringWorkerState): string {
   switch (status) {
     case "running":
-      return "Блокировка воркера активна";
+      return "Недавняя активность циклов";
     case "stale":
-      return "Состояние воркера устарело";
+      return "Давно не было активности циклов";
     case "stopped":
       return "Воркер остановлен";
     default:
@@ -104,9 +104,9 @@ export function workerStatusLabel(status: MonitoringWorkerState): string {
 export function workerStatusHint(status: MonitoringWorkerState): string {
   switch (status) {
     case "running":
-      return "В БД есть активная lock-запись. Это не гарантирует, что OS-процесс воркера жив.";
+      return "Недавно завершался цикл мониторинга или обновлялся heartbeat воркера.";
     case "stale":
-      return "Lock не обновлялся дольше порога stale. Возможен зависший или упавший процесс.";
+      return "Долго нет завершённых циклов и heartbeat. Возможен зависший процесс (возраст lock — отдельная диагностика).";
     case "stopped":
       return "В БД выставлен флаг остановки мониторингового воркера.";
     default:

@@ -6,6 +6,7 @@ import asyncio
 import logging
 import secrets
 import time
+from contextlib import nullcontext
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Literal, Protocol
@@ -14,7 +15,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.orm import Video
-from app.services.discovered_video_persistence import persist_discovered_video
+from app.services.discovered_video_batch import batch_persist_discovered_videos
 from app.services.keyword_discovery_metrics_storage import (
     mark_hits_persisted_for_monitoring,
     persist_keyword_discovery_hits,
@@ -89,6 +90,7 @@ class DiscoveryCycleConfig:
     keyword_batch_size: int = DEFAULT_KEYWORD_BATCH_SIZE
     max_pages_per_keyword: int = 100
     register_explosive_channels: bool = True
+    profile: bool = False
 
 
 def generate_discovery_run_id(*, now: datetime | None = None) -> str:
@@ -164,14 +166,27 @@ async def run_discovery_cycle_async(
             keyword_batch_size=cfg.keyword_batch_size,
             max_pages_per_keyword=cfg.max_pages_per_keyword,
             register_explosive_channels=False,
+            profile=cfg.profile,
         )
+
+    from app.services.discovery_cycle_profiling import DiscoveryProfiler, set_active_profiler
+
+    profiler: DiscoveryProfiler | None = None
+    if cfg.profile:
+        profiler = DiscoveryProfiler()
+        set_active_profiler(profiler)
+        profiler.attach_sql_listener(session.get_bind())
 
     started_perf = time.perf_counter()
     started_at = utc_now()
     cycle_run_id = run_id or generate_discovery_run_id(now=started_at)
 
-    keywords = select_discovery_keywords(session, batch_size=cfg.keyword_batch_size)
-    upload_period = ExplosiveChannelsService().get_upload_period(session)
+    bootstrap_ctx = profiler.phase("cycle_bootstrap") if profiler else nullcontext()
+    with bootstrap_ctx:
+        select_ctx = profiler.phase("keyword_selection") if profiler else nullcontext()
+        with select_ctx:
+            keywords = select_discovery_keywords(session, batch_size=cfg.keyword_batch_size)
+        upload_period = ExplosiveChannelsService().get_upload_period(session)
 
     summary = DiscoveryCycleSummary(
         run_id=cycle_run_id,
@@ -186,21 +201,25 @@ async def run_discovery_cycle_async(
     # Immutable snapshot at cycle start — never updated when new videos insert mid-cycle.
     video_ids_existing_before_cycle: frozenset[str] = frozenset()
     if not dry_run:
-        video_ids_existing_before_cycle = frozenset(session.scalars(select(Video.id)).all())
+        db_ctx = profiler.phase("database") if profiler else nullcontext()
+        with db_ctx:
+            video_ids_existing_before_cycle = frozenset(session.scalars(select(Video.id)).all())
 
     for record in keywords:
         kw_started = utc_now()
         kw_started_perf = time.perf_counter()
         scan: KeywordDiscoveryScanResult | None = None
         try:
-            scan = await scan_keyword_for_discovery(
-                session,
-                keyword=record.keyword,
-                keyword_id=record.id,
-                upload_period=upload_period,
-                register_explosive_channels=cfg.register_explosive_channels,
-                max_pages=cfg.max_pages_per_keyword,
-            )
+            kw_ctx = profiler.phase("per_keyword_total") if profiler else nullcontext()
+            with kw_ctx:
+                scan = await scan_keyword_for_discovery(
+                    session,
+                    keyword=record.keyword,
+                    keyword_id=record.id,
+                    upload_period=upload_period,
+                    register_explosive_channels=cfg.register_explosive_channels,
+                    max_pages=cfg.max_pages_per_keyword,
+                )
         except Exception as exc:
             summary.failed_keyword_count += 1
             summary.error_count += 1
@@ -270,15 +289,17 @@ async def run_discovery_cycle_async(
         persisted_for_monitoring_ids: set[str] = set()
 
         if not dry_run:
-            cross_keyword_dup, _ = persist_keyword_discovery_hits(
-                session,
-                keyword_id=record.id,
-                discovery_run_id=cycle_run_id,
-                discovered_at=kw_started,
-                scan=scan,
-                cycle_video_ids_seen=cycle_video_ids_seen,
-                video_ids_existing_before_cycle=video_ids_existing_before_cycle,
-            )
+            persist_ctx = profiler.phase("database") if profiler else nullcontext()
+            with persist_ctx:
+                cross_keyword_dup, _ = persist_keyword_discovery_hits(
+                    session,
+                    keyword_id=record.id,
+                    discovery_run_id=cycle_run_id,
+                    discovered_at=kw_started,
+                    scan=scan,
+                    cycle_video_ids_seen=cycle_video_ids_seen,
+                    video_ids_existing_before_cycle=video_ids_existing_before_cycle,
+                )
 
         for video in scan.unique_videos:
             unique_seen_ids.add(video.video_id)
@@ -289,32 +310,30 @@ async def run_discovery_cycle_async(
             else:
                 summary.regular_video_count += 1
 
-            if video.video_id in cycle_persisted_ids:
-                summary.duplicate_occurrence_count += 1
-                kw_duplicates += 1
-                continue
-
-            if not dry_run:
-                outcome = persist_discovered_video(
-                    session,
-                    video,
-                    discovery_keyword=record.keyword,
-                )
+        if not dry_run:
+            persist_results, kw_duplicates_from_batch = batch_persist_discovered_videos(
+                session,
+                scan.unique_videos,
+                discovery_keyword=record.keyword,
+                cycle_persisted_ids=cycle_persisted_ids,
+            )
+            kw_duplicates += kw_duplicates_from_batch
+            summary.duplicate_occurrence_count += kw_duplicates_from_batch
+            for outcome in persist_results:
                 if outcome.outcome == "inserted":
                     summary.persisted_video_count += 1
                     kw_persisted += 1
-                    cycle_persisted_ids.add(video.video_id)
-                    persisted_for_monitoring_ids.add(video.video_id)
+                    persisted_for_monitoring_ids.add(outcome.video_id)
                 elif outcome.outcome == "updated":
                     summary.updated_video_count += 1
                     kw_updated += 1
-                    cycle_persisted_ids.add(video.video_id)
-                    persisted_for_monitoring_ids.add(video.video_id)
-                elif outcome.outcome in ("skipped_short", "skipped_live"):
+                    persisted_for_monitoring_ids.add(outcome.video_id)
+        else:
+            for video in scan.unique_videos:
+                if video.video_id in cycle_persisted_ids:
+                    summary.duplicate_occurrence_count += 1
+                    kw_duplicates += 1
                     continue
-                else:
-                    continue
-            else:
                 cycle_persisted_ids.add(video.video_id)
 
         if not dry_run:
@@ -370,12 +389,55 @@ async def run_discovery_cycle_async(
         keyword_summaries.append(kw_summary)
         _log_keyword_summary(kw_summary)
 
-    if not dry_run:
-        session.commit()
-    elif dry_run:
-        session.rollback()
-    else:
-        session.commit()
+        if profiler and scan is not None:
+            from app.services.discovery_cycle_profiling import build_keyword_profile
+
+            innertube_n = int(scan.innertube_metrics_summary.get("request_count", 0))
+            html_n = int(scan.filter_metrics_summary.get("html_fallback_count", 0))
+            profiler.record_http_innertube(
+                innertube_n,
+                max_duration_ms=float(scan.innertube_metrics_summary.get("max_duration_ms", 0.0)),
+            )
+            profiler.record_http_html_fallback(html_n)
+            channel_n = int(scan.profile_phase_seconds.get("channel_homepage_fetches", 0))
+            profiler.record_http_channel(channel_n)
+            phases = scan.profile_phase_seconds
+            profiler.add_phase("per_keyword_fetch", phases.get("fetch", 0.0))
+            profiler.add_phase("per_keyword_parse", phases.get("parse", 0.0))
+            profiler.add_phase("per_keyword_qualification", phases.get("qualification", 0.0))
+            profiler.add_phase("per_keyword_channel", phases.get("channel_enrichment", 0.0))
+            profiler.add_phase("per_keyword_database", phases.get("database", 0.0))
+            format_passed = int(scan.filter_metrics_summary.get("discovered_videos", 0)) - int(
+                scan.filter_metrics_summary.get("format_skips", 0),
+            )
+            profiler.record_keyword_profile(
+                build_keyword_profile(
+                    keyword_id=record.id,
+                    keyword=record.keyword,
+                    started_at=kw_started,
+                    duration_seconds=kw_summary.runtime_seconds,
+                    phase_seconds=phases,
+                    raw_candidates=scan.raw_candidate_count,
+                    unique_candidates=len(scan.unique_videos),
+                    format_passed=max(0, format_passed),
+                    qualification_passed=scan.qualification_passed_count,
+                    qualification_rejected=scan.qualification_rejected_count,
+                    unique_channels=int(scan.filter_metrics_summary.get("unique_channels", 0)),
+                    html_fallback_count=html_n,
+                    innertube_requests=innertube_n,
+                    status=kw_summary.status,
+                    errors=kw_summary.errors,
+                ),
+            )
+
+    commit_ctx = profiler.phase("db_flush_commit") if profiler else nullcontext()
+    with commit_ctx:
+        if not dry_run:
+            session.commit()
+        elif dry_run:
+            session.rollback()
+        else:
+            session.commit()
 
     summary.unique_video_count = len(unique_seen_ids)
     summary.keyword_summaries = tuple(keyword_summaries)
@@ -389,6 +451,13 @@ async def run_discovery_cycle_async(
     )
 
     log_discovery_cycle_summary(summary)
+
+    if profiler:
+        with profiler.phase("cycle_summary"):
+            profiler.print_summary(total_cycle_seconds=summary.runtime_seconds)
+        profiler.detach_sql_listener()
+        set_active_profiler(None)
+
     return DiscoveryCycleOutcome(summary=summary)
 
 

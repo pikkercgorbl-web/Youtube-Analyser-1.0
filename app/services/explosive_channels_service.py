@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import logging
 import re
+import time
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -14,11 +15,13 @@ from sqlalchemy.orm import Session
 from app.integrations.youtube.client import (
     ChannelAnalysisModel,
     EnrichedVideoModel,
+    RADAR_SUBSCRIBER_FETCH_CONCURRENCY,
     RADAR_SUBSCRIBER_FETCH_DELAY_SECONDS,
     VideoSearchModel,
     calc_virality_coefficient,
     fetch_channel_subscribers_from_homepage,
 )
+from app.services.radar_subscriber_cache import prefill_subscriber_cache_from_db
 from app.models.db import SessionLocal
 from app.models.orm import ExplosiveChannel, ExplosiveChannelSettings
 from app.services.metrics import calc_vph, utc_now
@@ -195,6 +198,13 @@ class ExplosiveChannelThresholds:
 
 
 @dataclass(frozen=True, slots=True)
+class RadarQualificationContext:
+    thresholds: ExplosiveChannelThresholds
+    upload_period: str
+    max_age_days: int | None
+
+
+@dataclass(frozen=True, slots=True)
 class RadarChannelHit:
     channel_name: str
     viral_coefficient: float
@@ -207,6 +217,77 @@ class RadarProcessResult:
     skipped_count: int = 0
     parse_error_count: int = 0
     video_outcomes: tuple[RadarVideoOutcome, ...] = ()
+    subscriber_fetch_seconds: float = 0.0
+    subscriber_fetch_count: int = 0
+    subscriber_fetch_delay_seconds: float = 0.0
+
+
+@dataclass(slots=True)
+class _RadarEligibleVideo:
+    video: VideoSearchModel
+    channel_name: str
+    video_views: int
+    channel_id: str
+
+
+async def _prefetch_channel_subscribers(
+    *,
+    channel_ids: list[str],
+    channel_names: dict[str, str],
+    cache: dict[str, int | None],
+    delay_seconds: float,
+    concurrency: int,
+) -> tuple[float, int]:
+    missing = [
+        cid
+        for cid in channel_ids
+        if cid.strip() and cid not in cache and max(cache.get(cid.strip()) or 0, 0) <= 0
+    ]
+    unique = list(dict.fromkeys(missing))
+    if not unique:
+        return 0.0, 0
+
+    sem = asyncio.Semaphore(max(1, concurrency))
+    fetch_count = 0
+    started = time.perf_counter()
+
+    async def fetch_one(channel_id: str) -> None:
+        nonlocal fetch_count
+        async with sem:
+            await asyncio.sleep(delay_seconds)
+            fetch_count += 1
+            try:
+                cache[channel_id] = await fetch_channel_subscribers_from_homepage(
+                    channel_id,
+                    channel_name=channel_names.get(channel_id, ""),
+                )
+            except Exception:
+                logger.exception(
+                    "Failed to fetch subscribers from channel homepage for %s",
+                    channel_id,
+                )
+                cache[channel_id] = None
+
+    await asyncio.gather(*(fetch_one(channel_id) for channel_id in unique))
+    return time.perf_counter() - started, fetch_count
+
+
+def _load_explosive_channels_map(
+    db: Session,
+    channel_ids: list[str],
+) -> dict[str, ExplosiveChannel]:
+    if not channel_ids:
+        return {}
+    unique = list(dict.fromkeys(channel_ids))
+    out: dict[str, ExplosiveChannel] = {}
+    chunk_size = 400
+    for start in range(0, len(unique), chunk_size):
+        chunk = unique[start : start + chunk_size]
+        for row in db.scalars(
+            select(ExplosiveChannel).where(ExplosiveChannel.channel_id.in_(chunk)),
+        ).all():
+            out[row.channel_id] = row
+    return out
 
 
 class ExplosiveChannelsService:
@@ -283,6 +364,25 @@ class ExplosiveChannelsService:
         return ExplosiveChannelThresholds(
             min_views=settings.min_views,
             min_viral_coeff=settings.min_viral_coeff,
+        )
+
+    def get_radar_qualification_context(
+        self,
+        db: Session,
+        *,
+        upload_period: str | None = None,
+    ) -> RadarQualificationContext:
+        settings = self._get_or_create_settings(db)
+        effective_period = upload_period or settings.upload_period or DEFAULT_UPLOAD_PERIOD
+        if effective_period not in VALID_UPLOAD_PERIODS:
+            effective_period = DEFAULT_UPLOAD_PERIOD
+        return RadarQualificationContext(
+            thresholds=ExplosiveChannelThresholds(
+                min_views=settings.min_views,
+                min_viral_coeff=settings.min_viral_coeff,
+            ),
+            upload_period=effective_period,
+            max_age_days=settings.max_age_days,
         )
 
     def get_upload_period(self, db: Session) -> str:
@@ -485,7 +585,9 @@ class ExplosiveChannelsService:
         log_rejections: bool = False,
         filter_title_language: bool = False,
         upload_period: str | None = None,
+        qualification_context: RadarQualificationContext | None = None,
         subscriber_fetch_delay_seconds: float = RADAR_SUBSCRIBER_FETCH_DELAY_SECONDS,
+        subscriber_fetch_concurrency: int = RADAR_SUBSCRIBER_FETCH_CONCURRENCY,
         blacklist_words: list[str] | None = None,
         subscriber_cache: dict[str, int | None] | None = None,
         filter_metrics: RadarFilterMetrics | None = None,
@@ -497,9 +599,15 @@ class ExplosiveChannelsService:
 
         Caller owns ``commit``/``rollback``; this method only ``flush``es when registering channels.
         """
-        thresholds = self.get_thresholds(db)
-        effective_upload_period = upload_period or self.get_upload_period(db)
-        settings = self._get_or_create_settings(db)
+        if qualification_context is not None:
+            thresholds = qualification_context.thresholds
+            effective_upload_period = upload_period or qualification_context.upload_period
+            settings_max_age_days = qualification_context.max_age_days
+        else:
+            thresholds = self.get_thresholds(db)
+            effective_upload_period = upload_period or self.get_upload_period(db)
+            settings_max_age_days = self._get_or_create_settings(db).max_age_days
+
         hits: list[RadarChannelHit] = []
         rejection_logs = 0
         passed_count = 0
@@ -508,6 +616,7 @@ class ExplosiveChannelsService:
         cache = subscriber_cache if subscriber_cache is not None else {}
         metrics = filter_metrics if filter_metrics is not None else NULL_RADAR_FILTER_METRICS
         video_outcomes: list[RadarVideoOutcome] = []
+        eligible: list[_RadarEligibleVideo] = []
 
         for video in videos:
             try:
@@ -517,7 +626,7 @@ class ExplosiveChannelsService:
                 if effective_upload_period != "all" and reject_upload_date_text(
                     upload_date_text,
                     effective_upload_period,
-                    settings_max_age_days=settings.max_age_days,
+                    settings_max_age_days=settings_max_age_days,
                     video_title=video.title,
                 ):
                     if log_rejections:
@@ -608,26 +717,69 @@ class ExplosiveChannelsService:
                     skipped_count += 1
                     continue
 
+                eligible.append(
+                    _RadarEligibleVideo(
+                        video=video,
+                        channel_name=channel_name,
+                        video_views=video_views,
+                        channel_id=video.channel_id.strip(),
+                    ),
+                )
+            except Exception as exc:
+                parse_error_count += 1
+                if collect_video_outcomes:
+                    video_outcomes.append(
+                        RadarVideoOutcome(
+                            getattr(video, "video_id", ""),
+                            QUALIFICATION_PARSE_ERROR,
+                            FILTER_SKIP_PARSE_ERROR,
+                        ),
+                    )
+                metrics.record_parse_error()
+                logger.warning(
+                    "Пропуск видео %r из-за ошибки обработки: %s",
+                    getattr(video, "video_id", "?"),
+                    exc,
+                )
+                continue
+
+        subscriber_fetch_seconds = 0.0
+        subscriber_fetch_count = 0
+        if eligible:
+            needs_subscriber_lookup = [
+                item.channel_id
+                for item in eligible
+                if max(item.video.subscribers_count, 0) <= 0
+            ]
+            prefill_subscriber_cache_from_db(db, needs_subscriber_lookup, cache)
+            channel_names = {item.channel_id: item.channel_name for item in eligible}
+            still_need_fetch = [
+                cid
+                for cid in needs_subscriber_lookup
+                if cid not in cache and max(cache.get(cid) or 0, 0) <= 0
+            ]
+            subscriber_fetch_seconds, subscriber_fetch_count = await _prefetch_channel_subscribers(
+                channel_ids=still_need_fetch,
+                channel_names=channel_names,
+                cache=cache,
+                delay_seconds=subscriber_fetch_delay_seconds,
+                concurrency=subscriber_fetch_concurrency,
+            )
+
+        explosive_map = (
+            _load_explosive_channels_map(db, [item.channel_id for item in eligible])
+            if register_channels
+            else {}
+        )
+
+        for item in eligible:
+            video = item.video
+            channel_name = item.channel_name
+            video_views = item.video_views
+            channel_id = item.channel_id
+            try:
                 subscribers = max(video.subscribers_count, 0)
-                channel_id = video.channel_id
-
                 if subscribers <= 0:
-                    if channel_id not in cache:
-                        await asyncio.sleep(subscriber_fetch_delay_seconds)
-                        try:
-                            cache[channel_id] = (
-                                await fetch_channel_subscribers_from_homepage(
-                                    channel_id,
-                                    channel_name=channel_name,
-                                )
-                            )
-                        except Exception:
-                            logger.exception(
-                                "Failed to fetch subscribers from channel homepage for %s",
-                                channel_id,
-                            )
-                            cache[channel_id] = None
-
                     fetched = cache.get(channel_id)
                     if fetched is not None and fetched > 0:
                         subscribers = fetched
@@ -706,9 +858,14 @@ class ExplosiveChannelsService:
                         representative_video_id=video.video_id,
                         vph=vph,
                         skip_qualify_check=True,
+                        existing_explosive=explosive_map.get(channel_id),
                     )
                     if hit is not None:
                         hits.append(hit)
+                    if channel_id not in explosive_map:
+                        loaded = db.get(ExplosiveChannel, channel_id)
+                        if loaded is not None:
+                            explosive_map[channel_id] = loaded
             except Exception as exc:
                 parse_error_count += 1
                 if collect_video_outcomes:
@@ -735,6 +892,9 @@ class ExplosiveChannelsService:
             skipped_count=skipped_count,
             parse_error_count=parse_error_count,
             video_outcomes=tuple(video_outcomes) if collect_video_outcomes else (),
+            subscriber_fetch_seconds=subscriber_fetch_seconds,
+            subscriber_fetch_count=subscriber_fetch_count,
+            subscriber_fetch_delay_seconds=subscriber_fetch_delay_seconds,
         )
 
     def process_channel_analysis(self, db: Session, analysis: ChannelAnalysisModel) -> None:
@@ -863,6 +1023,7 @@ class ExplosiveChannelsService:
         representative_video_id: str = "",
         vph: float | None = None,
         skip_qualify_check: bool = False,
+        existing_explosive: ExplosiveChannel | None = None,
     ) -> RadarChannelHit | None:
         if is_placeholder_channel(channel_id, channel_name):
             return None
@@ -875,7 +1036,11 @@ class ExplosiveChannelsService:
             return None
 
         now = utc_now()
-        existing = db.get(ExplosiveChannel, channel_id)
+        existing = (
+            existing_explosive
+            if existing_explosive is not None
+            else db.get(ExplosiveChannel, channel_id)
+        )
 
         if existing is None:
             db.add(

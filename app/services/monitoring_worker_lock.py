@@ -99,3 +99,14 @@ def clear_monitoring_worker_stop(session: Session) -> None:
         state.status = MONITORING_STATUS_IDLE
         state.updated_at = utc_now()
         session.flush()
+
+
+def record_monitoring_worker_heartbeat(
+    session: Session,
+    *,
+    at: datetime | None = None,
+) -> None:
+    """Refresh worker state after a monitoring cycle attempt (flush only; owner commits)."""
+    state = _get_or_create_state(session)
+    state.updated_at = at or utc_now()
+    session.flush()

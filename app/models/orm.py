@@ -403,6 +403,77 @@ class KeywordDiscoveryHit(Base):
     keyword: Mapped[TargetKeyword] = relationship(back_populates="discovery_hits")
 
 
+class KeywordPerformanceGlobalSnapshot(Base):
+    """Global breakout denominator metadata for keyword performance reads (Stage 1.20E.4)."""
+
+    __tablename__ = "keyword_performance_global_snapshots"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(String(128), nullable=False, unique=True, index=True)
+    evaluated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    global_eligible_video_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    top_decile_rank_cutoff: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    ranking_version: Mapped[str] = mapped_column(String(32), nullable=False)
+
+
+class KeywordPerformanceKeywordSnapshot(Base):
+    """Precomputed keyword performance row (Stage 1.20E.4)."""
+
+    __tablename__ = "keyword_performance_keyword_snapshots"
+    __table_args__ = (
+        UniqueConstraint(
+            "keyword_id",
+            "attribution_mode",
+            name="uq_keyword_performance_snapshot_keyword_mode",
+        ),
+        Index("ix_keyword_performance_snapshot_mode", "attribution_mode"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    keyword_id: Mapped[int] = mapped_column(
+        ForeignKey("target_keywords.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    attribution_mode: Mapped[str] = mapped_column(String(32), nullable=False)
+    global_run_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    evaluated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    metrics_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class MonitoringVideoQueueEntry(Base):
+    """Persisted priority-queue read model for one monitoring cycle (Stage 1.20E.3)."""
+
+    __tablename__ = "monitoring_video_queue"
+    __table_args__ = (
+        UniqueConstraint("run_id", "video_id", name="uq_monitoring_video_queue_run_video"),
+        Index("ix_monitoring_video_queue_run_priority", "run_id", "priority_rank"),
+        Index("ix_monitoring_video_queue_run_tier", "run_id", "tier"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    channel_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    tier: Mapped[str] = mapped_column(String(1), nullable=False)
+    monitoring_status: Mapped[str] = mapped_column(String(16), nullable=False)
+    has_due_checkpoint: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    has_overdue_checkpoint: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    has_pending_checkpoint: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    priority_rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    current_vph: Mapped[float | None] = mapped_column(nullable=True)
+    current_views: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    age_hours: Mapped[float | None] = mapped_column(nullable=True)
+    published_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    latest_snapshot_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    next_checkpoint_hours: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    due_checkpoint_hours_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    overdue_checkpoint_hours_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    channel_velocity_baseline_status: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    vph_vs_channel_median: Mapped[float | None] = mapped_column(nullable=True)
+    content_format: Mapped[str | None] = mapped_column(String(16), nullable=True)
+
+
 class MonitoringCycleRun(Base):
     """Append-only summary of one monitoring worker cycle (Stage 1.14A)."""
 
@@ -430,6 +501,65 @@ class MonitoringCycleRun(Base):
     validation_failed_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     persistence_failed_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     error_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class OutcomeCaptureCycleRun(Base):
+    """Append-only summary of one delayed outcome capture cycle (Stage 1.20E.2)."""
+
+    __tablename__ = "outcome_capture_cycle_runs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(String(128), nullable=False, unique=True, index=True)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    runtime_seconds: Mapped[float] = mapped_column(nullable=False, default=0.0)
+    cycle_status: Mapped[str] = mapped_column(String(16), nullable=False)
+    attribution_mode: Mapped[str] = mapped_column(String(32), nullable=False, default="all_hits")
+    attributed_observation_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    pending_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    satisfied_existing_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    capture_due_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    capture_overdue_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    expired_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    unique_due_video_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    selected_video_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    deferred_video_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    inserted_snapshot_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    duplicate_snapshot_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    missing_video_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    fetch_failed_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    error_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+
+class OutcomeCaptureWorkerState(Base):
+    """Singleton lock/state for delayed outcome capture worker (Stage 1.20E.2)."""
+
+    __tablename__ = "outcome_capture_worker_state"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, default=1)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="idle")
+    lock_holder: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    lock_acquired_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    last_cycle_started_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    last_cycle_finished_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    last_cycle_status: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    last_run_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
 
 
 class MonitoringWorkerState(Base):
@@ -566,3 +696,172 @@ class ExtendedSearchCache(Base):
         nullable=False,
         index=True,
     )
+
+
+class AttentionRun(Base):
+    """One Attention Engine refresh snapshot (Stage 1.22A)."""
+
+    __tablename__ = "attention_runs"
+
+    run_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    computed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    timezone_name: Mapped[str] = mapped_column(String(32), nullable=False, default="UTC")
+    window_hours: Mapped[int] = mapped_column(Integer, nullable=False)
+    window_start: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    window_end: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    candidate_video_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    winner_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    pattern_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    channel_momentum_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    video_limit: Mapped[int] = mapped_column(Integer, nullable=False, default=50)
+    pattern_limit: Mapped[int] = mapped_column(Integer, nullable=False, default=20)
+    channel_limit: Mapped[int] = mapped_column(Integer, nullable=False, default=20)
+    notes_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
+class AttentionVideoWinnerRow(Base):
+    """Persisted VideoWinner row for one attention run."""
+
+    __tablename__ = "attention_video_winners"
+    __table_args__ = (
+        UniqueConstraint("run_id", "video_id", name="uq_attention_video_winner_run_video"),
+        Index("ix_attention_video_winners_run_rank", "run_id", "rank"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("attention_runs.run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class AttentionPatternRow(Base):
+    """Persisted Pattern v1 row for one attention run."""
+
+    __tablename__ = "attention_patterns"
+    __table_args__ = (
+        UniqueConstraint("run_id", "pattern_key", name="uq_attention_pattern_run_key"),
+        Index("ix_attention_patterns_run_rank", "run_id", "rank"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("attention_runs.run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    pattern_key: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class AttentionPatternVideoRow(Base):
+    """Pattern membership for GET /patterns/{id} without recomputing groups."""
+
+    __tablename__ = "attention_pattern_videos"
+    __table_args__ = (
+        UniqueConstraint(
+            "run_id",
+            "pattern_key",
+            "video_id",
+            name="uq_attention_pattern_video",
+        ),
+        Index("ix_attention_pattern_videos_run_key", "run_id", "pattern_key"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("attention_runs.run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    pattern_key: Mapped[str] = mapped_column(String(128), nullable=False)
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False)
+
+
+class AttentionPatternFamilyRow(Base):
+    """Persisted PatternFamily aggregation for one attention run (Stage 1.22B.1)."""
+
+    __tablename__ = "attention_pattern_families"
+    __table_args__ = (
+        UniqueConstraint("run_id", "family_key", name="uq_attention_family_run_key"),
+        Index("ix_attention_pattern_families_run_rank", "run_id", "rank"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("attention_runs.run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    family_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class AttentionPatternFamilyMemberRow(Base):
+    __tablename__ = "attention_pattern_family_members"
+    __table_args__ = (
+        UniqueConstraint("run_id", "family_key", "pattern_key", name="uq_attention_family_member"),
+        Index("ix_attention_family_members_run_key", "run_id", "family_key"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("attention_runs.run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    family_key: Mapped[str] = mapped_column(String(160), nullable=False)
+    pattern_key: Mapped[str] = mapped_column(String(128), nullable=False)
+
+
+class AttentionPatternFamilyVideoRow(Base):
+    __tablename__ = "attention_pattern_family_videos"
+    __table_args__ = (
+        UniqueConstraint("run_id", "family_key", "video_id", name="uq_attention_family_video"),
+        Index("ix_attention_family_videos_run_key", "run_id", "family_key"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("attention_runs.run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    family_key: Mapped[str] = mapped_column(String(160), nullable=False)
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False)
+
+
+class AttentionFamilyIdentity(Base):
+    """Cross-run map pattern_key → family_key so bookmarks survive membership growth."""
+
+    __tablename__ = "attention_family_identity"
+
+    pattern_key: Mapped[str] = mapped_column(String(128), primary_key=True)
+    family_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class AttentionChannelMomentumRow(Base):
+    """Persisted ChannelMomentum row for one attention run."""
+
+    __tablename__ = "attention_channel_momentum"
+    __table_args__ = (
+        UniqueConstraint("run_id", "channel_id", name="uq_attention_channel_run"),
+        Index("ix_attention_channel_momentum_run_rank", "run_id", "rank"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    run_id: Mapped[str] = mapped_column(
+        ForeignKey("attention_runs.run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    channel_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)

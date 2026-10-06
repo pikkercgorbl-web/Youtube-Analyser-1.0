@@ -124,10 +124,31 @@ export interface RecentCyclesBlock {
   monitoring: MonitoringCycleHistoryItem[];
 }
 
+export interface OutcomeCaptureOperationsBlock {
+  worker: WorkerActivityBlock;
+  planner_pending: number;
+  planner_due: number;
+  planner_overdue: number;
+  planner_satisfied: number;
+  planner_expired: number;
+  unique_due_videos: number;
+  last_cycle_started_at: string | null;
+  last_cycle_finished_at: string | null;
+  last_cycle_status: string | null;
+  last_run_id: string | null;
+  selected_video_count_last_cycle: number;
+  deferred_video_count_last_cycle: number;
+  inserted_snapshot_count_last_cycle: number;
+  fetch_failed_count_last_cycle: number;
+  duplicate_snapshot_count_last_cycle: number;
+  missing_video_count_last_cycle: number;
+}
+
 export interface OperationsOverviewResponse {
   generated_at: string;
   discovery: DiscoveryOperationsBlock;
   monitoring: MonitoringOperationsBlock;
+  outcome_capture: OutcomeCaptureOperationsBlock;
   snapshots: SnapshotOperationsBlock;
   keyword_outcomes: KeywordOutcomeOperationsBlock;
   errors: OperationsErrorsBlock;

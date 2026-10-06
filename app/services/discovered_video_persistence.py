@@ -15,6 +15,8 @@ from app.services.video_filter_service import parse_relative_published_date
 
 PersistOutcome = Literal["inserted", "updated", "skipped_invalid", "skipped_short", "skipped_live"]
 
+_UNCACHED_VIDEO = object()
+
 
 @dataclass(frozen=True, slots=True)
 class VideoPersistResult:
@@ -125,6 +127,7 @@ def persist_discovered_video(
     video: VideoSearchModel,
     *,
     discovery_keyword: str,
+    existing_video: Video | None | object = _UNCACHED_VIDEO,
 ) -> VideoPersistResult:
     """
     Upsert ``Video`` (+ minimal ``Channel``) for monitoring handoff.
@@ -160,7 +163,10 @@ def persist_discovered_video(
     duration_seconds = _parse_duration_seconds(video.duration_text)
     title = (video.title or "").strip() or video_id
 
-    existing = session.get(Video, video_id)
+    if existing_video is _UNCACHED_VIDEO:
+        existing = session.get(Video, video_id)
+    else:
+        existing = existing_video  # type: ignore[assignment]
     if existing is None:
         session.add(
             Video(

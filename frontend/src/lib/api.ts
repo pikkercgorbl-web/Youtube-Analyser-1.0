@@ -41,6 +41,15 @@ import type {
   OperationsOverviewResponse,
 } from "./operations-types";
 import type { SearchRequestPayload } from "./search-filters";
+import type {
+  AttentionChannelListResponse,
+  AttentionPatternDetailResponse,
+  AttentionPatternFamilyDetailResponse,
+  AttentionPatternFamilyListResponse,
+  AttentionPatternListResponse,
+  AttentionSummaryApiResponse,
+  AttentionVideoListResponse,
+} from "./attention-types";
 
 const api = axios.create({
   baseURL: "",
@@ -329,6 +338,57 @@ export async function getOperationsOverview(
     },
     timeout: params.include_live_monitoring_planner ? 120_000 : 90_000,
   });
+  return data;
+}
+
+export async function getAttentionSummary(): Promise<AttentionSummaryApiResponse> {
+  const { data } = await api.get<AttentionSummaryApiResponse>("/api/attention/summary");
+  return data;
+}
+
+export async function getAttentionVideos(params: { limit?: number; offset?: number } = {}): Promise<AttentionVideoListResponse> {
+  const { data } = await api.get<AttentionVideoListResponse>("/api/attention/videos", {
+    params: { limit: params.limit ?? 50, offset: params.offset ?? 0 },
+  });
+  return data;
+}
+
+export async function getAttentionPatterns(params: { limit?: number; offset?: number } = {}): Promise<AttentionPatternListResponse> {
+  const { data } = await api.get<AttentionPatternListResponse>("/api/attention/patterns", {
+    params: { limit: params.limit ?? 100, offset: params.offset ?? 0 },
+  });
+  return data;
+}
+
+export async function getAttentionChannels(params: { limit?: number; offset?: number } = {}): Promise<AttentionChannelListResponse> {
+  const { data } = await api.get<AttentionChannelListResponse>("/api/attention/channels", {
+    params: { limit: params.limit ?? 50, offset: params.offset ?? 0 },
+  });
+  return data;
+}
+
+export async function getAttentionPatternDetail(patternKey: string): Promise<AttentionPatternDetailResponse> {
+  const { data } = await api.get<AttentionPatternDetailResponse>(
+    `/api/attention/patterns/${encodeURIComponent(patternKey)}`,
+  );
+  return data;
+}
+
+export async function getAttentionPatternFamilies(
+  params: { limit?: number; offset?: number } = {},
+): Promise<AttentionPatternFamilyListResponse> {
+  const { data } = await api.get<AttentionPatternFamilyListResponse>("/api/attention/pattern-families", {
+    params: { limit: params.limit ?? 100, offset: params.offset ?? 0 },
+  });
+  return data;
+}
+
+export async function getAttentionPatternFamilyDetail(
+  familyKey: string,
+): Promise<AttentionPatternFamilyDetailResponse> {
+  const { data } = await api.get<AttentionPatternFamilyDetailResponse>(
+    `/api/attention/pattern-families/${encodeURIComponent(familyKey)}`,
+  );
   return data;
 }
 

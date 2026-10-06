@@ -782,6 +782,9 @@ class MonitoringVideoListResponse(BaseModel):
     total: int
     limit: int
     offset: int
+    queue_run_id: str | None = None
+    queue_generated_at: datetime | None = None
+    queue_source: str = "cycle_snapshot"
 
 
 class MonitoringCheckpointResponse(BaseModel):
@@ -949,6 +952,9 @@ class KeywordPerformanceMetricsResponse(BaseModel):
 class KeywordPerformanceListResponse(BaseModel):
     items: list[KeywordPerformanceMetricsResponse]
     limit: int
+    offset: int = 0
+    total: int = 0
+    data_source: str = "snapshot"
     evaluated_at: datetime | None = None
     attribution_mode: str | None = None
     window_from: datetime | None = None
@@ -1056,6 +1062,26 @@ class KeywordOutcomeOperationsBlockResponse(BaseModel):
     matures_next_48h: int = 0
 
 
+class OutcomeCaptureOperationsBlockResponse(BaseModel):
+    worker: WorkerActivityResponse
+    planner_pending: int = 0
+    planner_due: int = 0
+    planner_overdue: int = 0
+    planner_satisfied: int = 0
+    planner_expired: int = 0
+    unique_due_videos: int = 0
+    last_cycle_started_at: datetime | None = None
+    last_cycle_finished_at: datetime | None = None
+    last_cycle_status: str | None = None
+    last_run_id: str | None = None
+    selected_video_count_last_cycle: int = 0
+    deferred_video_count_last_cycle: int = 0
+    inserted_snapshot_count_last_cycle: int = 0
+    fetch_failed_count_last_cycle: int = 0
+    duplicate_snapshot_count_last_cycle: int = 0
+    missing_video_count_last_cycle: int = 0
+
+
 class OperationsErrorsBlockResponse(BaseModel):
     discovery_last_cycle_error: str | None = None
     monitoring_recent_error_summaries: list[str] = Field(default_factory=list)
@@ -1088,10 +1114,172 @@ class OperationsOverviewResponse(BaseModel):
     generated_at: datetime
     discovery: DiscoveryOperationsBlockResponse
     monitoring: MonitoringOperationsBlockResponse
+    outcome_capture: OutcomeCaptureOperationsBlockResponse
     snapshots: SnapshotOperationsBlockResponse
     keyword_outcomes: KeywordOutcomeOperationsBlockResponse
     errors: OperationsErrorsBlockResponse
     recent_cycles: RecentCyclesBlockResponse
+
+
+class EvidenceFamilyMetaResponse(BaseModel):
+    availability: str
+    role: str
+
+
+class ScanEvidenceResponse(BaseModel):
+    meta: EvidenceFamilyMetaResponse
+    total_scan_count: int
+    successful_scan_count: int
+    failed_scan_count: int
+    latest_scan_at: datetime | None = None
+    latest_scan_status: str | None = None
+    total_raw_candidates: int
+    total_unique_candidates: int
+    total_persisted_videos: int
+
+
+class DiscoveryEvidenceResponse(BaseModel):
+    meta: EvidenceFamilyMetaResponse
+    total_discovery_hits: int
+    unique_discovered_video_count: int
+    new_to_database_video_count: int
+    persisted_for_monitoring_count: int
+    attributed_observation_count: int
+    unique_candidate_rate: float | None = None
+    persistence_rate: float | None = None
+    new_video_rate: float | None = None
+
+
+class RedundancyEvidenceResponse(BaseModel):
+    meta: EvidenceFamilyMetaResponse
+    within_keyword_duplicate_count: int
+    cross_keyword_duplicate_count: int
+    duplicate_hit_count: int
+    duplicate_rate: float | None = None
+    unique_yield_rate: float | None = None
+
+
+class DiscoveryVphEvidenceResponse(BaseModel):
+    meta: EvidenceFamilyMetaResponse
+    observation_count: int
+    median_discovery_vph: float | None = None
+    p90_discovery_vph: float | None = None
+
+
+class BreakoutEvidenceResponse(BaseModel):
+    meta: EvidenceFamilyMetaResponse
+    breakout_eligible_count: int
+    top_decile_breakout_count: int
+    top_decile_breakout_rate: float | None = None
+    ranking_version: str | None = None
+    global_eligible_video_count: int | None = None
+
+
+class DelayedOutcomeEvidenceResponse(BaseModel):
+    meta: EvidenceFamilyMetaResponse
+    attributed_observation_count: int
+    matured_72h_count: int
+    valid_72h_outcome_count: int
+    missing_72h_outcome_count: int
+    median_72h_growth: float | None = None
+    p90_72h_growth: float | None = None
+    horizon_hours: int | None = None
+    horizon_snapshot_tolerance_hours: float | None = None
+
+
+class LifecycleContextEvidenceResponse(BaseModel):
+    meta: EvidenceFamilyMetaResponse
+    status_changed_at: datetime | None = None
+    status_reason: str | None = None
+    last_manual_change_at: datetime | None = None
+    latest_lifecycle_actor_source: str | None = None
+
+
+class SchedulingEvidenceResponse(BaseModel):
+    meta: EvidenceFamilyMetaResponse
+    last_checked: datetime | None = None
+    next_scan_at: datetime | None = None
+    scan_interval_seconds: int | None = None
+    is_due: bool
+    scheduling_hint: str | None = None
+
+
+class KeywordEvidenceResponse(BaseModel):
+    keyword_id: int
+    keyword: str
+    lifecycle_status: str
+    source_type: str
+    parent_keyword_id: int | None = None
+    scan: ScanEvidenceResponse
+    discovery: DiscoveryEvidenceResponse
+    redundancy: RedundancyEvidenceResponse
+    discovery_vph: DiscoveryVphEvidenceResponse
+    breakout: BreakoutEvidenceResponse
+    delayed_outcome: DelayedOutcomeEvidenceResponse
+    lifecycle_context: LifecycleContextEvidenceResponse
+    scheduling: SchedulingEvidenceResponse
+    attribution_mode: str
+    evaluated_at: datetime
+    include_breakout: bool
+    include_delayed: bool
+
+
+class KeywordEvidenceListResponse(BaseModel):
+    evaluated_at: datetime
+    attribution_mode: str
+    include_breakout: bool
+    include_delayed: bool
+    ranking_version: str | None = None
+    global_eligible_video_count: int | None = None
+    limit: int
+    items: list[KeywordEvidenceResponse]
+
+
+class KeywordLifecycleRecommendationResponse(BaseModel):
+    keyword_id: int
+    keyword: str
+    lifecycle_status: str
+    recommendation: str
+    confidence: str
+    reason_code: str
+    human_reason: str
+    calibration_required: bool
+    suggested_transition: str | None = None
+    evidence_facts: list[str] = Field(default_factory=list)
+    evaluated_at: datetime | None = None
+
+
+class KeywordLifecycleRecommendationListResponse(BaseModel):
+    evaluated_at: datetime
+    attribution_mode: str
+    items: list[KeywordLifecycleRecommendationResponse]
+
+
+class KeywordCalibrationSummaryResponse(BaseModel):
+    generated_at: str
+    attribution_mode: str
+    include_breakout: bool
+    include_delayed: bool
+    keyword_count: int
+    scan_row_count: int
+    maturity_group_counts: dict[str, int]
+    recommendation_counts: dict[str, int]
+    recommendation_by_lifecycle: dict[str, dict[str, int]]
+    zero_yield_by_maturity: dict[str, object]
+    yield_distribution: dict[str, object]
+    vph_analysis: dict[str, object]
+    breakout_analysis: dict[str, object]
+    outcome_72h_coverage: dict[str, object]
+    associations: list[dict[str, object]]
+    readiness: list[dict[str, object]]
+    case_review: dict[str, list[dict[str, object]]]
+    production_findings: list[str]
+
+
+class KeywordCalibrationDatasetResponse(BaseModel):
+    summary: dict[str, object]
+    keyword_rows: list[dict[str, object]]
+    scan_rows: list[dict[str, object]]
 
 
 class KeywordExpansionSummaryResponse(BaseModel):
@@ -1103,9 +1291,215 @@ class KeywordExpansionSummaryResponse(BaseModel):
     normalized_unique_count: int = 0
     existing_keyword_count: int = 0
     rejected_count: int = 0
+    deferred_count: int = 0
     created_keyword_count: int = 0
     per_source_counts: dict[str, int] = Field(default_factory=dict)
     per_seed_counts: dict[str, int] = Field(default_factory=dict)
     errors: list[str] = Field(default_factory=list)
     runtime_seconds: float = 0.0
+
+
+# --- Attention Engine (Stage 1.22A) ---
+
+
+class AttentionSummaryResponse(BaseModel):
+    run_id: str | None = None
+    computed_at: datetime
+    timezone_name: str
+    window_hours: int
+    window_start: datetime
+    window_end: datetime
+    source: str
+    candidate_video_count: int
+    winner_count: int
+    pattern_count: int
+    channel_momentum_count: int
+    video_limit: int
+    pattern_limit: int
+    channel_limit: int
+    notes: dict[str, object] = Field(default_factory=dict)
+
+
+class ChannelRelativeSignalResponse(BaseModel):
+    status: str
+    baseline_quality: str
+    comparable_video_count: int
+    vph_vs_channel_median: float | None = None
+    notes: list[str] = Field(default_factory=list)
+
+
+class AttentionVideoWinnerResponse(BaseModel):
+    video_id: str
+    title: str
+    channel_id: str
+    channel_title: str
+    youtube_url: str
+    published_at: datetime | None = None
+    age_hours: float | None = None
+    views: int | None = None
+    vph: float | None = None
+    subscribers: int | None = None
+    breakout_rank: int | None = None
+    breakout_eligible: bool
+    channel_relative_signal: ChannelRelativeSignalResponse | None = None
+    acceleration_state: str
+    delayed_outcome_state: str
+    delayed_outcome_growth: int | None = None
+    reason_codes: list[str]
+    human_reasons: list[str]
+    keyword_ids: list[int] = Field(default_factory=list)
+
+
+class AttentionPatternResponse(BaseModel):
+    pattern_key: str
+    kind: str
+    label: str
+    video_count: int
+    channel_count: int
+    keyword_count: int
+    breakout_video_count: int
+    small_channel_winner_count: int
+    first_seen_at: datetime | None = None
+    latest_seen_at: datetime | None = None
+    videos_last_24h: int
+    videos_previous_24h: int
+    videos_previous_48_24h: int
+    participating_video_ids: list[str]
+    participating_channel_ids: list[str]
+    participating_keyword_ids: list[int]
+    reason_codes: list[str]
+    human_reasons: list[str]
+
+
+class AttentionChannelMomentumResponse(BaseModel):
+    channel_id: str
+    channel_title: str
+    subscriber_count_latest: int | None = None
+    observed_video_count: int
+    recent_video_count: int
+    previous_video_count: int
+    breakout_video_count: int
+    confirmed_72h_count: int
+    recent_median_vph: float | None = None
+    previous_median_vph: float | None = None
+    recent_median_vph_vs_previous: float | None = None
+    subscriber_growth_absolute: int | None = None
+    subscriber_growth_pct: float | None = None
+    subscriber_growth_available: bool
+    first_observed_at: datetime | None = None
+    latest_observed_at: datetime | None = None
+    representative_video_ids: list[str]
+    reason_codes: list[str]
+    human_reasons: list[str]
+    recent_window_days: int
+    previous_window_days: int
+
+
+class AttentionListMeta(BaseModel):
+    data_source: str
+    run_id: str | None = None
+    computed_at: datetime | None = None
+    limit: int
+    offset: int = 0
+    total: int = 0
+
+
+class AttentionSummaryApiResponse(BaseModel):
+    summary: AttentionSummaryResponse | None = None
+    data_source: str
+
+
+class AttentionVideoListResponse(AttentionListMeta):
+    items: list[AttentionVideoWinnerResponse]
+
+
+class AttentionPatternListResponse(AttentionListMeta):
+    items: list[AttentionPatternResponse]
+
+
+class AttentionChannelListResponse(AttentionListMeta):
+    items: list[AttentionChannelMomentumResponse]
+
+
+class AttentionPatternMemberVideoResponse(BaseModel):
+    """Identity + latest stored metrics for a pattern member. Not a live Attention recompute."""
+
+    video_id: str
+    title: str
+    channel_id: str
+    channel_title: str
+    youtube_url: str
+    published_at: datetime | None = None
+    age_hours: float | None = None
+    views: int | None = None
+    vph: float | None = None
+    subscribers: int | None = None
+    in_winner_snapshot: bool = False
+    breakout_rank: int | None = None
+    breakout_eligible: bool | None = None
+    acceleration_state: str | None = None
+    delayed_outcome_state: str | None = None
+    delayed_outcome_growth: int | None = None
+    reason_codes: list[str] = Field(default_factory=list)
+    human_reasons: list[str] = Field(default_factory=list)
+    keyword_ids: list[int] = Field(default_factory=list)
+
+
+class AttentionRelatedKeywordResponse(BaseModel):
+    keyword_id: int
+    keyword: str
+
+
+class AttentionParticipatingChannelResponse(BaseModel):
+    channel_id: str
+    channel_title: str
+    video_count: int
+
+
+class AttentionPatternDetailResponse(BaseModel):
+    pattern: AttentionPatternResponse | None = None
+    data_source: str
+    run_id: str | None = None
+    computed_at: datetime | None = None
+    videos: list[AttentionPatternMemberVideoResponse] = Field(default_factory=list)
+    related_keywords: list[AttentionRelatedKeywordResponse] = Field(default_factory=list)
+    channels: list[AttentionParticipatingChannelResponse] = Field(default_factory=list)
+
+
+class AttentionPatternFamilyResponse(BaseModel):
+    family_key: str
+    label: str
+    family_kind: str
+    member_pattern_keys: list[str]
+    member_labels: list[str]
+    video_count: int
+    channel_count: int
+    keyword_count: int
+    breakout_eligible_count: int = 0
+    videos_last_24h: int = 0
+    videos_previous_24h: int = 0
+    videos_previous_48_24h: int = 0
+    grouping_reasons: list[str] = Field(default_factory=list)
+    quality_flags: list[str] = Field(default_factory=list)
+    support_sources: list[str] = Field(default_factory=list)
+    first_seen_at: datetime | None = None
+    latest_seen_at: datetime | None = None
+    participating_video_ids: list[str] = Field(default_factory=list)
+    participating_channel_ids: list[str] = Field(default_factory=list)
+    participating_keyword_ids: list[int] = Field(default_factory=list)
+
+
+class AttentionPatternFamilyListResponse(AttentionListMeta):
+    items: list[AttentionPatternFamilyResponse]
+
+
+class AttentionPatternFamilyDetailResponse(BaseModel):
+    family: AttentionPatternFamilyResponse | None = None
+    data_source: str
+    run_id: str | None = None
+    computed_at: datetime | None = None
+    videos: list[AttentionPatternMemberVideoResponse] = Field(default_factory=list)
+    related_keywords: list[AttentionRelatedKeywordResponse] = Field(default_factory=list)
+    channels: list[AttentionParticipatingChannelResponse] = Field(default_factory=list)
+    member_patterns: list[AttentionPatternResponse] = Field(default_factory=list)
 

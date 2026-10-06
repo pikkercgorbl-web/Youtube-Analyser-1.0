@@ -128,7 +128,13 @@ def test_full_mode_metric_parity_attribution_and_breakout() -> None:
     _seed_keyword_hit(session, kw2, "shared")
     session.commit()
 
-    full = list_keyword_performance(session, limit=10, include_breakout=True, include_delayed=True)
+    full = list_keyword_performance(
+        session,
+        limit=10,
+        include_breakout=True,
+        include_delayed=True,
+        live_evaluation=True,
+    )
     assert len(full.items) == 2
     assert sum(i.attributed_video_count or 0 for i in full.items) == 2
     assert all(i.top_decile_breakout_count == 0 for i in full.items)
@@ -147,7 +153,13 @@ def test_include_delayed_false_skips_horizon_snapshot_load() -> None:
         "app.services.keyword_performance_evaluation.load_snapshots_for_horizon",
         wraps=load_snapshots_for_horizon,
     ) as mocked:
-        list_keyword_performance(session, limit=10, include_breakout=False, include_delayed=False)
+        list_keyword_performance(
+            session,
+            limit=10,
+            include_breakout=False,
+            include_delayed=False,
+            live_evaluation=True,
+        )
         mocked.assert_not_called()
 
 
@@ -167,6 +179,7 @@ def test_include_breakout_false_skips_global_bundle() -> None:
             limit=10,
             include_breakout=False,
             include_delayed=False,
+            live_evaluation=True,
         )
         mocked.assert_not_called()
         assert result.context.global_eligible_video_count == 0
@@ -249,6 +262,7 @@ def test_no_per_keyword_query_growth() -> None:
                 limit=limit,
                 include_breakout=True,
                 include_delayed=True,
+                live_evaluation=True,
             )
         finally:
             event.remove(engine, "before_cursor_execute", before_cursor_execute)
