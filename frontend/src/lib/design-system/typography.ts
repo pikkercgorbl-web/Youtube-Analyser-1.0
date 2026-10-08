@@ -1,10 +1,11 @@
 /** Typography roles — compose with cn() (Stage 1.21B). */
 
 export const textRoles = {
-  pageTitle: "text-2xl font-semibold tracking-tight text-foreground",
-  pageLead: "mt-1 max-w-3xl text-sm text-muted-foreground leading-relaxed",
-  sectionTitle: "text-base font-medium text-foreground",
-  sectionDescription: "text-xs text-muted-foreground leading-relaxed",
+  pageTitle:
+    "text-3xl md:text-4xl font-semibold tracking-tight text-foreground",
+  pageLead: "mt-3 max-w-3xl text-base text-muted-foreground leading-relaxed",
+  sectionTitle: "text-xl font-semibold text-foreground",
+  sectionDescription: "text-sm text-muted-foreground leading-relaxed",
   /** Level 1 human summary */
   summaryHeadline: "text-base font-medium text-foreground leading-snug",
   summarySupport: "text-sm text-muted-foreground leading-relaxed",

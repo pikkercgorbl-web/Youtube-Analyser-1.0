@@ -80,7 +80,8 @@ export function KeywordPoolDashboard() {
       hasLoaded.current = true;
       setError(null);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Не удалось загрузить пул ключей";
+      const message =
+        err instanceof Error ? err.message : "Не удалось загрузить пул ключей";
       setError(message);
       if (!hasLoaded.current) {
         setRows(null);
@@ -134,9 +135,11 @@ export function KeywordPoolDashboard() {
   return (
     <PageShell>
       <PageHeader
-        title="Пул ключей"
-        lead="Какие ключи в системе, откуда они и когда запланирован следующий скан discovery."
-        icon={<KeyRound className="h-6 w-6 shrink-0 text-primary" aria-hidden />}
+        title="Поисковые запросы"
+        lead="Управляйте направлениями поиска: происхождение запросов, их статус и время следующего прохода."
+        icon={
+          <KeyRound className="h-6 w-6 shrink-0 text-primary" aria-hidden />
+        }
       />
 
       <div className="flex flex-wrap items-center gap-2">
@@ -160,7 +163,9 @@ export function KeywordPoolDashboard() {
         />
       ) : null}
 
-      {initialLoading && !rows ? <LoadingState title="Загрузка пула ключей…" /> : null}
+      {initialLoading && !rows ? (
+        <LoadingState title="Загрузка пула ключей…" />
+      ) : null}
 
       {error && !rows ? (
         <StateMessage variant="error" title="Ошибка" description={error} />
@@ -168,13 +173,20 @@ export function KeywordPoolDashboard() {
 
       {rows ? (
         <>
-          <SummaryStrip tone={metrics.dueNow > 0 ? "warning" : "neutral"} lines={summaryLines} />
+          <SummaryStrip
+            tone={metrics.dueNow > 0 ? "warning" : "neutral"}
+            lines={summaryLines}
+          />
 
           <HelpText>{POOL_LIFECYCLE_HELP}</HelpText>
           <p className="text-xs text-muted-foreground">{ARCHIVED_POOL_HELP}</p>
 
           <MetricGroup title="Состояние пула">
-            <Metric label="Всего ключей" value={formatCount(metrics.total)} testId="metric-pool-total" />
+            <Metric
+              label="Всего ключей"
+              value={formatCount(metrics.total)}
+              testId="metric-pool-total"
+            />
             <Metric
               label="Пробный"
               value={formatCount(metrics.probation)}
@@ -204,7 +216,10 @@ export function KeywordPoolDashboard() {
           </MetricGroup>
 
           {dueNote ? (
-            <p className="text-sm text-muted-foreground" data-testid="pool-no-due-note">
+            <p
+              className="text-sm text-muted-foreground"
+              data-testid="pool-no-due-note"
+            >
               {dueNote}
             </p>
           ) : null}
@@ -227,27 +242,37 @@ export function KeywordPoolDashboard() {
                 </span>
                 <Select
                   value={lifecycle}
-                  onChange={(e) => setLifecycle(e.target.value as PoolLifecycleFilter)}
+                  onChange={(e) =>
+                    setLifecycle(e.target.value as PoolLifecycleFilter)
+                  }
                   className="min-w-[140px]"
                   data-testid="pool-filter-lifecycle"
                 >
                   <option value="all">Все</option>
-                  <option value="probation">{poolLifecycleLabel("probation")}</option>
+                  <option value="probation">
+                    {poolLifecycleLabel("probation")}
+                  </option>
                   <option value="active">{poolLifecycleLabel("active")}</option>
                   <option value="weak">{poolLifecycleLabel("weak")}</option>
-                  <option value="archived">{poolLifecycleLabel("archived")}</option>
+                  <option value="archived">
+                    {poolLifecycleLabel("archived")}
+                  </option>
                 </Select>
               </label>
               <label className="flex flex-col gap-1 text-xs">
                 <span className="text-muted-foreground">Источник</span>
                 <Select
                   value={source}
-                  onChange={(e) => setSource(e.target.value as PoolSourceFilter)}
+                  onChange={(e) =>
+                    setSource(e.target.value as PoolSourceFilter)
+                  }
                   className="min-w-[160px]"
                 >
                   <option value="all">Все</option>
                   <option value="seed">{poolSourceLabel("seed")}</option>
-                  <option value="suggestion">{poolSourceLabel("suggestion")}</option>
+                  <option value="suggestion">
+                    {poolSourceLabel("suggestion")}
+                  </option>
                   <option value="related">{poolSourceLabel("related")}</option>
                   <option value="channel">{poolSourceLabel("channel")}</option>
                   <option value="manual">{poolSourceLabel("manual")}</option>
@@ -265,7 +290,9 @@ export function KeywordPoolDashboard() {
                   <option value="all">Все</option>
                   <option value="due">Пора сканировать</option>
                   <option value="next_24h">В ближайшие 24 ч</option>
-                  <option value="unscheduled_or_archived">Не запланировано / архив</option>
+                  <option value="unscheduled_or_archived">
+                    Не запланировано / архив
+                  </option>
                 </Select>
               </label>
               <label className="flex flex-col gap-1 text-xs">
@@ -296,7 +323,11 @@ export function KeywordPoolDashboard() {
                 compact
               />
             ) : (
-              <KeywordPoolTable rows={filtered} keywordById={keywordById} now={now} />
+              <KeywordPoolTable
+                rows={filtered}
+                keywordById={keywordById}
+                now={now}
+              />
             )}
           </SectionPanel>
         </>

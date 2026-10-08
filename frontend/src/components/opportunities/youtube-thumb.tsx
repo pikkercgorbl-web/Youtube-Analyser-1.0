@@ -18,10 +18,14 @@ export function YoutubeThumb({
   if (!videoId || failed) {
     return (
       <div
-        className={cn("flex items-center justify-center bg-muted/60 text-[10px] text-muted-foreground", className)}
+        className={cn(
+          "flex flex-col gap-2 items-center justify-center bg-muted/60 text-xs text-muted-foreground",
+          className,
+        )}
         aria-hidden
       >
-        ▶
+        <span className="text-2xl">▶</span>
+        <span>Обложка недоступна</span>
       </div>
     );
   }
@@ -30,6 +34,8 @@ export function YoutubeThumb({
     <img
       src={youtubeThumbnail(videoId)}
       alt={title}
+      loading="lazy"
+      decoding="async"
       className={cn("object-cover", className)}
       onError={() => setFailed(true)}
     />
