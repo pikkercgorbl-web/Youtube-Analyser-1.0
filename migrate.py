@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Migrate data from local SQLite (database.db) to PostgreSQL (Supabase / Render).
+Migrate data from local SQLite (database.db) to PostgreSQL (any DATABASE_URL).
 
 Usage:
     set DATABASE_URL=postgresql://user:pass@host:5432/dbname

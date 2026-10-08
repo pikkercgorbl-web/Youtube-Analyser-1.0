@@ -73,7 +73,10 @@ python -m scripts.seed_target_keywords
 
 ## 3. Запуск (каждый раз)
 
-Нужны **два терминала**: сначала бэкенд, затем фронтенд.
+**Сбор данных (Discovery / Monitoring / Outcome)** и **обновление read models (Attention / Keyword Performance)** описаны отдельно: [`docs/OPERATIONS_LAUNCH.md`](docs/OPERATIONS_LAUNCH.md).  
+Backend и frontend нужны для **интерфейса**, не для непрерывного сбора.
+
+Для **просмотра** сохранённых данных нужны **два терминала**: сначала бэкенд, затем фронтенд.
 
 ### Терминал 1 — бэкенд
 
@@ -215,13 +218,11 @@ ngrok
 # Терминал 3
 ngrok http 3000
 
-frontend
-cd frontend
-npm install
-npm run dev
-
-python scripts/run_discovery_worker.py
-
-python scripts/run_monitoring_worker.py         
-
-python scripts/run_outcome_capture_worker.py
+.\scripts\start-local-db.ps1
+.\scripts\start-backend.ps1
+.\scripts\start-frontend.ps1
+.\scripts\start-discovery.ps1
+.\scripts\start-monitoring.ps1
+.\scripts\start-outcome.ps1
+.\scripts\start-attention-loop.ps1
+.\scripts\start-keyword-performance-loop.ps1

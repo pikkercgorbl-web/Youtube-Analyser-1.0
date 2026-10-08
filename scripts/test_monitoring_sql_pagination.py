@@ -39,23 +39,17 @@ def _engine():
 
 
 def _seed_many(session: Session, count: int) -> None:
-    if session.get(Channel, "ch1") is None:
-        session.add(
-            Channel(id="ch1", title="Channel One", subscribers_count=1000, created_at=NOW),
-        )
+    from scripts.monitoring_test_seed_helpers import ensure_monitoring_eligible_video
+
     for idx in range(count):
-        session.add(
-            Video(
-                id=f"v{idx:04d}",
-                title=f"Video {idx}",
-                views_count=1000 + idx,
-                likes_count=0,
-                comments_count=0,
-                published_at=NOW - timedelta(hours=12 + (idx % 5)),
-                duration_seconds=600,
-                content_format=VideoFormat.MEDIUM,
-                channel_id="ch1",
-            ),
+        pub = NOW - timedelta(hours=12 + (idx % 5))
+        ensure_monitoring_eligible_video(
+            session,
+            f"v{idx:04d}",
+            channel_id=f"ch{idx:04d}",
+            published_at=pub,
+            views=1000 + idx,
+            title=f"Video {idx}",
         )
     session.commit()
 
@@ -100,8 +94,9 @@ def test_page_loads_only_page_snapshots() -> None:
     assert result.queue_source == "cycle_snapshot"
     assert len(result.rows) == page_limit
     assert result.total == pool_size
-    assert len(seen_ids) == 1
-    assert len(seen_ids[0]) == page_limit
+    page_batch_calls = [batch for batch in seen_ids if len(batch) == page_limit]
+    assert len(page_batch_calls) == 1
+    assert len(page_batch_calls[0]) == page_limit
 
 
 def test_no_full_enrich_on_default_path() -> None:

@@ -94,7 +94,7 @@ class YouTubeVideoDetails:
     channel_id: str
     title: str
     published_at: datetime
-    views_count: int
+    views_count: int | None
     likes_count: int
     comments_count: int
     duration_seconds: int
@@ -349,7 +349,7 @@ class YouTubeApiClient:
                         channel_id=snippet.get("channelId", ""),
                         title=snippet.get("title", ""),
                         published_at=_parse_rfc3339(snippet.get("publishedAt", "")),
-                        views_count=_safe_int(statistics.get("viewCount")),
+                        views_count=_statistics_view_count(statistics),
                         likes_count=_safe_int(statistics.get("likeCount")),
                         comments_count=_safe_int(statistics.get("commentCount")),
                         duration_seconds=parse_iso8601_duration(
@@ -1218,6 +1218,19 @@ def _safe_int(value: str | None) -> int:
         return int(value)
     except (TypeError, ValueError):
         return 0
+
+
+def _statistics_view_count(statistics: dict) -> int | None:
+    """None when viewCount absent; explicit 0 when API reports zero."""
+    if "viewCount" not in statistics:
+        return None
+    raw = statistics.get("viewCount")
+    if raw is None:
+        return None
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        return None
 
 
 def calc_virality_coefficient(views_count: int, subscribers_count: int) -> float:

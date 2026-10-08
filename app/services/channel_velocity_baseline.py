@@ -6,9 +6,11 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Literal, Sequence
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models.orm import VideoSnapshot
+from app.models.orm import Video, VideoSnapshot
+from app.services.snapshot_measurement import derive_measurement_at_snapshot
 from app.services.metrics import ensure_utc
 from app.services.radar_candidate_analysis import _percentile
 from app.services.video_snapshot_storage import get_snapshots_for_channel
@@ -84,7 +86,20 @@ class ChannelVelocityBaselineResult:
     notes: tuple[str, ...] = ()
 
 
-def snapshot_record_from_orm(row: VideoSnapshot) -> SnapshotRecord:
+def snapshot_record_from_orm(row: VideoSnapshot, *, video: Video | None = None) -> SnapshotRecord:
+    if video is not None:
+        measurement = derive_measurement_at_snapshot(video=video, snapshot=row)
+        return SnapshotRecord(
+            video_id=row.video_id,
+            channel_id=row.channel_id,
+            captured_at=row.captured_at,
+            published_at=measurement.published_at_used,
+            age_hours=measurement.age_hours_at_measurement,
+            vph=measurement.average_vph,
+            content_format=row.content_format,
+            is_short=row.is_short,
+            is_live=row.is_live,
+        )
     return SnapshotRecord(
         video_id=row.video_id,
         channel_id=row.channel_id,
@@ -400,7 +415,14 @@ def compute_channel_velocity_baseline(
     config: ChannelVelocityBaselineConfig | None = None,
 ) -> ChannelVelocityBaselineResult:
     rows = get_snapshots_for_channel(session, channel_id)
-    records = [snapshot_record_from_orm(row) for row in rows]
+    videos_by_id = {
+        row.id: row
+        for row in session.scalars(select(Video).where(Video.channel_id == channel_id)).all()
+    }
+    records = [
+        snapshot_record_from_orm(row, video=videos_by_id.get(row.video_id))
+        for row in rows
+    ]
     return compute_channel_velocity_baseline_from_snapshots(
         channel_id=channel_id,
         candidate_video_id=candidate_video_id,
@@ -423,9 +445,19 @@ def compute_channel_velocity_baselines(
 
     channel_ids = {item.channel_id for item in candidates}
     snapshots_by_channel: dict[str, list[SnapshotRecord]] = {}
+    videos_by_channel: dict[str, dict[str, Video]] = {}
+    for channel_id in channel_ids:
+        videos_by_channel[channel_id] = {
+            row.id: row
+            for row in session.scalars(select(Video).where(Video.channel_id == channel_id)).all()
+        }
     for channel_id in channel_ids:
         rows = get_snapshots_for_channel(session, channel_id)
-        snapshots_by_channel[channel_id] = [snapshot_record_from_orm(row) for row in rows]
+        by_id = videos_by_channel.get(channel_id, {})
+        snapshots_by_channel[channel_id] = [
+            snapshot_record_from_orm(row, video=by_id.get(row.video_id))
+            for row in rows
+        ]
 
     results: list[ChannelVelocityBaselineResult] = []
     for item in candidates:

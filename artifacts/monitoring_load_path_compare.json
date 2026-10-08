@@ -1,0 +1,42 @@
+{
+  "generated_at_utc": "2026-10-08T11:00:05.536702+00:00",
+  "note": "Single load-path (current code). Historical pre-fix counts were missing_vph~2277 in full pool.",
+  "current": {
+    "at_utc": "2026-10-08T11:00:05.536702+00:00",
+    "loaded": 2420,
+    "active": 1497,
+    "missing_vph": 272,
+    "due": 4,
+    "overdue": 0,
+    "selected": 4,
+    "measurement_source_among_with_vph": {
+      "snapshot": 413,
+      "discovery": 1735
+    },
+    "tier_counts": {
+      "A": 50,
+      "B": 346,
+      "C": 1101
+    }
+  },
+  "examples": {
+    "keyword_discovery": [
+      {
+        "video_id": "01OP7fQgn5Q",
+        "vph": 696.2218,
+        "measured_at": "2026-10-06T12:24:19.980306+00:00"
+      },
+      {
+        "video_id": "04GFm7wrJps",
+        "vph": 19.2516,
+        "measured_at": "2026-10-05T15:35:50.872443+00:00"
+      },
+      {
+        "video_id": "0Bfqp14T3uQ",
+        "vph": 0.4347,
+        "measured_at": "2026-10-06T12:30:24.561743+00:00"
+      }
+    ],
+    "format_enrichment_snapshot": []
+  }
+}

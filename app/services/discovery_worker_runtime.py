@@ -22,6 +22,11 @@ from app.services.discovery_worker_lock import (
     release_discovery_worker_lock,
 )
 from app.services.metrics import utc_now
+from app.services.keyword_expansion_discovery_pass import run_keyword_expansion_discovery_pass
+from app.services.keyword_expansion_runtime_config import keyword_expansion_runtime_settings
+from app.services.topic_exploration_cycle import build_topic_exploration_cycle_plan
+from app.services.topic_exploration_discovery_pass import run_topic_exploration_discovery_pass
+from app.services.topic_exploration_runtime_config import topic_exploration_runtime_settings
 from app.services.radar_enrichment_config import radar_enrichment_settings
 from app.services.radar_enrichment_orchestrator import run_radar_enrichment_pass
 from app.services.radar_enrichment_selection import RadarEnrichmentPassContext
@@ -105,11 +110,18 @@ def run_discovery_worker(
             cfg.keyword_batch_size,
         )
 
-        cycle_config = DiscoveryCycleConfig(keyword_batch_size=max(1, cfg.keyword_batch_size))
-
         while True:
             if stop_requested or (stop_check and stop_check()):
                 break
+
+            exploration_plan = build_topic_exploration_cycle_plan(
+                topic_exploration_runtime_settings,
+                cycle_index=cycle_count,
+            )
+            cycle_config = DiscoveryCycleConfig(
+                keyword_batch_size=max(1, cfg.keyword_batch_size),
+                topic_exploration_plan=exploration_plan if exploration_plan.enabled else None,
+            )
 
             cycle_session = session_factory()
             summary: DiscoveryCycleSummary | None = None
@@ -197,6 +209,70 @@ def run_discovery_worker(
                     )
                 finally:
                     enrich_session.close()
+
+            if summary is not None and keyword_expansion_runtime_settings.keyword_expansion_after_discovery:
+                expansion_session = session_factory()
+                try:
+                    expansion_report = run_keyword_expansion_discovery_pass(
+                        expansion_session,
+                        cycle_summary=summary,
+                        dry_run=False,
+                    )
+                    if expansion_report.summary is not None and not (
+                        expansion_report.summary.cycle_status == "dry_run"
+                    ):
+                        expansion_session.commit()
+                    else:
+                        expansion_session.rollback()
+                    created = (
+                        expansion_report.summary.created_keyword_count
+                        if expansion_report.summary
+                        else 0
+                    )
+                    logger.info(
+                        "[KEYWORD_EXPANSION_PASS] discovery_run_id=%s expansion_run_id=%s seeds=%s created=%s errors=%s",
+                        summary.run_id,
+                        expansion_report.expansion_run_id,
+                        expansion_report.selected_seed_count,
+                        created,
+                        len(expansion_report.errors),
+                    )
+                except Exception:
+                    expansion_session.rollback()
+                    logger.exception(
+                        "[KEYWORD_EXPANSION_PASS_ERROR] discovery_run_id=%s",
+                        summary.run_id,
+                    )
+                finally:
+                    expansion_session.close()
+
+            if summary is not None and topic_exploration_runtime_settings.topic_exploration_in_discovery:
+                exploration_session = session_factory()
+                try:
+                    exploration_report = run_topic_exploration_discovery_pass(
+                        exploration_session,
+                        cycle_summary=summary,
+                        dry_run=not topic_exploration_runtime_settings.topic_exploration_auto_admit,
+                    )
+                    if exploration_report.admitted_count > 0 and topic_exploration_runtime_settings.topic_exploration_auto_admit:
+                        exploration_session.commit()
+                    else:
+                        exploration_session.rollback()
+                    logger.info(
+                        "[TOPIC_EXPLORATION_PASS] discovery_run_id=%s proposed=%s admitted=%s errors=%s",
+                        summary.run_id,
+                        len(exploration_report.preview.proposed) if exploration_report.preview else 0,
+                        exploration_report.admitted_count,
+                        len(exploration_report.errors),
+                    )
+                except Exception:
+                    exploration_session.rollback()
+                    logger.exception(
+                        "[TOPIC_EXPLORATION_PASS_ERROR] discovery_run_id=%s",
+                        summary.run_id,
+                    )
+                finally:
+                    exploration_session.close()
 
             if stop_requested or (stop_check and stop_check()):
                 break

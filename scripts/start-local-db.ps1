@@ -1,7 +1,7 @@
-# Start local Postgres (Docker) — data volume preserved
+﻿# Local Postgres via Docker (volume preserved). UTF-8 with BOM for Windows PowerShell 5.1.
 $ErrorActionPreference = "Stop"
-$Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-Set-Location $Root
+$Root = Split-Path -Parent $PSScriptRoot
+Set-Location -LiteralPath $Root
 
 if (-not (Test-Path ".env.docker")) {
     Write-Host "Create .env.docker from .env.docker.example" -ForegroundColor Red

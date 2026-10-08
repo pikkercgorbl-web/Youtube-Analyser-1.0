@@ -242,8 +242,8 @@ def build_snapshot_metrics_batch(session: Session, *, now: datetime | None = Non
     if latest_at is not None and not isinstance(latest_at, datetime):
         text_val = str(latest_at).replace(" ", "T", 1)
         latest_at = datetime.fromisoformat(text_val)
-    if latest_at is not None and latest_at.tzinfo is not None:
-        latest_at = ensure_utc(latest_at).replace(tzinfo=None)
+    if latest_at is not None:
+        latest_at = ensure_utc(latest_at)
 
     return SnapshotOperationsBlock(
         latest_snapshot_at=latest_at,

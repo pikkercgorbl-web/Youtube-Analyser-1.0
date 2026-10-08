@@ -90,6 +90,29 @@ python scripts/audit_momentum_baseline_measurement.py
 
 ---
 
+## 4b. Stage 6 — expansion + exploration (локальный restore-check)
+
+**Включено (конфиг, без автозапуска workers):** `2026-10-07T15:08:36Z` — см. `artifacts/stage6_local_radar_enable.json`.
+
+- Backup перед включением: `backups/youtube_radar_restore_check_20261007-210836.dump`
+- Запросы: `config/topic_exploration_queries.json` (5 enabled broad queries; finance/medical disabled)
+- Preflight (без YouTube): `python scripts/stage6_local_enable_preflight.py` → `artifacts/stage6_local_enable_preflight.json`
+- После циклов discovery — preview фраз (read-only, БД): `python scripts/preview_topic_exploration_evidence.py`
+- Evidence в PostgreSQL: `topic_exploration_passes`, `topic_exploration_video_observations`, `topic_exploration_phrase_pass_stats`
+- `TOPIC_EXPLORATION_AUTO_ADMIT=0` — keywords не создаются автоматически; expansion pass по-прежнему от seed hits.
+
+Запуск discovery (когда анализ снова разрешён):
+
+```powershell
+Set-Location "C:\Projects\Сайт анализ ниш1"
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
+.\scripts\start-discovery.ps1
+```
+
+Логи: `logs/workers/discovery_*.log` — строки `[TOPIC_EXPLORATION_PASS]`, `[KEYWORD_EXPANSION_PASS]`.
+
+---
+
 ## 5. Backup
 
 ```powershell

@@ -56,6 +56,9 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_videos_published_at_source_column(engine)
     ensure_saved_topics_tables(engine)
     ensure_saved_topics_1_22d_tables(engine)
+    ensure_read_model_publish_locks_table(engine)
+    ensure_read_model_publish_lock_token_column(engine)
+    ensure_topic_exploration_evidence_tables(engine)
 
 
 def ensure_videos_published_at_source_column(engine: Engine) -> None:
@@ -466,3 +469,50 @@ def ensure_explosive_channels_video_id(engine: Engine) -> None:
             ),
         )
     logger.info("Added explosive_channels.representative_video_id column")
+
+
+def ensure_read_model_publish_locks_table(engine: Engine) -> None:
+    """Create read_model_publish_locks when missing (Stage 3)."""
+    inspector = inspect(engine)
+    if "read_model_publish_locks" in inspector.get_table_names():
+        return
+
+    from app.models.orm import ReadModelPublishLock
+
+    ReadModelPublishLock.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created read_model_publish_locks table")
+
+
+def ensure_read_model_publish_lock_token_column(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "read_model_publish_locks" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("read_model_publish_locks")}
+    if "lock_token" in column_names:
+        return
+    with engine.begin() as connection:
+        connection.execute(
+            text("ALTER TABLE read_model_publish_locks ADD COLUMN lock_token VARCHAR(64)"),
+        )
+    logger.info("Added read_model_publish_locks.lock_token column")
+
+
+def ensure_topic_exploration_evidence_tables(engine: Engine) -> None:
+    """Create topic exploration evidence tables when missing (Stage 6)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        TopicExplorationPass,
+        TopicExplorationPhrasePassStat,
+        TopicExplorationVideoObservation,
+    )
+
+    if "topic_exploration_passes" not in names:
+        TopicExplorationPass.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created topic_exploration_passes table")
+    if "topic_exploration_video_observations" not in names:
+        TopicExplorationVideoObservation.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created topic_exploration_video_observations table")
+    if "topic_exploration_phrase_pass_stats" not in names:
+        TopicExplorationPhrasePassStat.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created topic_exploration_phrase_pass_stats table")

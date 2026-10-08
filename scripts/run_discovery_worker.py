@@ -20,7 +20,9 @@ if str(ROOT) not in sys.path:
 
     sys.path.insert(0, str(ROOT))
 
+from app.utils.worker_stdio import configure_worker_stdio_utf8
 
+configure_worker_stdio_utf8()
 
 from app.api.deps import get_youtube_client
 

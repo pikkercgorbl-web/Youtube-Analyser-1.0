@@ -1,4 +1,4 @@
-# Local PostgreSQL for YouTube Radar (dev / Supabase migration prep).
+# Local PostgreSQL for YouTube Radar (Docker dev / restore-check).
 # Always pass: docker compose --env-file .env.docker <command>
 
 name: youtube-radar-local

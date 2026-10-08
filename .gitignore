@@ -4,9 +4,8 @@
 !.env.example
 !.env.docker.example
 .env.docker
-.env.supabase.remote
 
-# Локальные дампы перед миграцией с Supabase
+# Local DB dumps and migration archives (may contain old remote DATABASE_URL)
 backups/
 
 # Python / FastAPI

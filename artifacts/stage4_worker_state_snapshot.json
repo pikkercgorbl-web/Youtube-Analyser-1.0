@@ -1,0 +1,52 @@
+{
+  "captured_at_utc": "2026-10-06T15:45:40.572165+00:00",
+  "discovery_worker_state": {
+    "status": "running",
+    "last_cycle_started_at": "2026-10-06T15:33:49.778312+00:00",
+    "last_cycle_finished_at": "2026-10-06T15:41:43.184081+00:00",
+    "last_run_id": "discovery_20261006T153349Z_d8a3c9ac",
+    "updated_at": "2026-10-06T15:41:43.241942+00:00",
+    "lock_acquired_at": "2026-10-06T15:33:49.765310+00:00",
+    "lock_holder": "LAPTOP-K7VTSODB:discovery",
+    "id": 1,
+    "last_cycle_status": "ok",
+    "last_error": null
+  },
+  "monitoring_worker_state": {
+    "lock_acquired_at": "2026-10-06T15:33:49.828191+00:00",
+    "lock_holder": "LAPTOP-K7VTSODB:1",
+    "status": "running",
+    "id": 1,
+    "updated_at": "2026-10-06T15:34:09.003036+00:00"
+  },
+  "outcome_worker_state": {
+    "status": "running",
+    "id": 1,
+    "lock_acquired_at": "2026-10-06T15:33:49.998280+00:00",
+    "last_cycle_status": "ok",
+    "last_error": null,
+    "lock_holder": "LAPTOP-K7VTSODB:1",
+    "last_cycle_started_at": "2026-10-06T15:33:50.014284+00:00",
+    "last_cycle_finished_at": "2026-10-06T15:34:09.062037+00:00",
+    "last_run_id": "outcome_20261006T153350Z_6169e806",
+    "updated_at": "2026-10-06T15:34:09.155035+00:00"
+  },
+  "enrichment_budget_summary": {
+    "utc_day": "2026-10-06",
+    "http_requests_semantics": "batch_api_calls_not_youtube_quota_units",
+    "channels_list": {
+      "daily_limit": 1000,
+      "pass_limit": 50,
+      "id_units_reserved": 600,
+      "http_requests": 12,
+      "remaining_id_units": 400
+    },
+    "videos_list": {
+      "daily_limit": 1000,
+      "pass_limit": 50,
+      "id_units_reserved": 481,
+      "http_requests": 10,
+      "remaining_id_units": 519
+    }
+  }
+}

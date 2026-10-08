@@ -2,7 +2,7 @@
 
 These models are intentionally additive. The current application can keep using
 SQLite while the semantic embedding column is represented as JSON; the planned
-PostgreSQL/Supabase migration can replace that storage with pgvector(384) without
+PostgreSQL migration can replace that storage with pgvector(384) without
 changing the higher-level domain fields.
 """
 

@@ -13,6 +13,7 @@ from app.services.keyword_scheduling_policy import (
     LIFECYCLE_ARCHIVED,
     LIFECYCLE_TIEBREAK_ORDER,
     KeywordSchedulingPolicy,
+    SOURCE_EXPLORATION,
 )
 from app.services.metrics import ensure_utc, utc_now
 
@@ -66,6 +67,10 @@ def select_discovery_keywords(
             select(TargetKeyword).where(
                 TargetKeyword.lifecycle_status != LIFECYCLE_ARCHIVED,
                 due_clause,
+                or_(
+                    TargetKeyword.source_type != SOURCE_EXPLORATION,
+                    TargetKeyword.parent_keyword_id.is_not(None),
+                ),
             ),
         ).all(),
     )

@@ -1,7 +1,8 @@
 # Локальный Radar на ноутбуке (PostgreSQL)
 
-Рабочая база: **`youtube_radar_restore_check`** на `127.0.0.1:5433` (Docker volume `postgres_data`).  
-Supabase не трогаем; прежний `DATABASE_URL` сохранён в **`.env.supabase.remote`** (gitignored).
+Полная схема режимов (просмотр / сбор / read models): **`docs/OPERATIONS_LAUNCH.md`**.
+
+Рабочая база: **`youtube_radar_restore_check`** на `127.0.0.1:5433` (Docker volume `postgres_data`).
 
 ## Однократная настройка `.env`
 
@@ -12,13 +13,15 @@ python scripts/configure_local_database_env.py
 
 Скрипт:
 
-- копирует удалённый `DATABASE_URL` в `.env.supabase.remote` (если ещё нет бэкапа);
+- при необходимости архивирует **прежний удалённый** `DATABASE_URL` в `backups/migration_archive/database_url_remote.env` (gitignored, **не перезаписывает** существующий архив);
 - ставит локальный `DATABASE_URL` (пароль из `.env.docker`, URL-encoding);
 - включает `RADAR_ENRICHMENT_AFTER_DISCOVERY=1`.
 
+Архивные инструменты миграции с hosted Postgres: `scripts/archive/migration/` (не для ежедневного запуска).
+
 ### Важно: переменные в уже открытых терминалах
 
-PowerShell **кэширует** `$env:DATABASE_URL` из сессии. Если вы раньше экспортировали Supabase URL, он **перекроет** `.env` для дочерних процессов.
+PowerShell **кэширует** `$env:DATABASE_URL` из сессии. Значение из User/Machine или старой сессии **перекроет** `.env` для дочерних процессов.
 
 Перед запуском backend/workers:
 
@@ -81,82 +84,17 @@ Swagger: http://127.0.0.1:8000/docs
 
 Сайт: http://localhost:3000 (`frontend/.env.local` → `NEXT_PUBLIC_API_URL=http://localhost:8000`).
 
-### 4) Workers (запускать отдельно, когда нужны)
-
-Убедитесь, что `.env` указывает на локальную БД и **нет** `$env:DATABASE_URL` из Supabase.
-
-**Discovery**
+### 4) Workers и read models (отдельный терминал на компонент)
 
 ```powershell
-python scripts/run_discovery_worker.py --interval-seconds 300 --error-backoff-seconds 300 --batch-size 5
+.\scripts\start-discovery.ps1
+.\scripts\start-monitoring.ps1
+.\scripts\start-outcome.ps1
+.\scripts\start-attention-loop.ps1
+.\scripts\start-keyword-performance-loop.ps1
 ```
 
-**Monitoring**
-
-```powershell
-python scripts/run_monitoring_worker.py --interval-seconds 900 --error-backoff-seconds 300
-```
-
-**Outcome capture**
-
-```powershell
-python scripts/run_outcome_capture_worker.py --interval-seconds 3600
-```
-
-Остановка каждого: `Ctrl+C`.
-
----
-
-## Attention refresh (без UI compute)
-
-Разовый пересчёт и запись snapshot:
-
-```powershell
-Set-Location "C:\Projects\Сайт анализ ниш1"
-Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
-python scripts/refresh_attention_engine.py
-```
-
-JSON-вывод:
-
-```powershell
-python scripts/refresh_attention_engine.py --json
-```
-
-Dry-run (не пишет в БД):
-
-```powershell
-python scripts/refresh_attention_engine.py --dry-run
-```
-
-### Расписание на Windows (Task Scheduler)
-
-1. **Task Scheduler** → Create Task.
-2. Trigger: Daily (или каждые N часов).
-3. Action: Start a program  
-   - Program: `python` (или полный путь к `python.exe`)  
-   - Arguments: `scripts/refresh_attention_engine.py`  
-   - Start in: `C:\Projects\Сайт анализ ниш1`
-4. В «Start in» проект должен видеть `.env`; не задавайте в задаче старый `DATABASE_URL`.
-
-Пример PowerShell one-liner для теста задачи:
-
-```powershell
-powershell -NoProfile -Command "Set-Location 'C:\Projects\Сайт анализ ниш1'; Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue; python scripts/refresh_attention_engine.py"
-```
-
----
-
-## Backup локальной БД (`pg_dump`)
-
-```powershell
-$ts = Get-Date -Format "yyyyMMdd-HHmmss"
-New-Item -ItemType Directory -Force -Path ".\backups" | Out-Null
-docker compose --env-file .env.docker exec -T db pg_dump -U radar -d youtube_radar_restore_check -Fc -f - > ".\backups\youtube_radar_restore_check_$ts.dump"
-```
-
-Пользователя `-U` замените на `RADAR_LOCAL_DB_USER` из `.env.docker`.  
-Формат `-Fc` — custom, удобен для `pg_restore`.
+Подробнее: `docs/OPERATIONS_LAUNCH.md` (таблица, `-DryRun`, Ctrl+C, Docker после сна).
 
 ---
 
@@ -168,6 +106,6 @@ python scripts/verify_local_radar_entrypoints.py
 
 ---
 
-## Вернуть Supabase (вручную)
+## Перенос на другой PostgreSQL-сервер
 
-Скопируйте `DATABASE_URL` из `.env.supabase.remote` обратно в `.env`. Supabase в облаке не изменяется.
+Задайте `DATABASE_URL` в `.env` (URI сервера). Локальный Docker не обязателен. Архив старого URL: `backups/migration_archive/database_url_remote.env`.

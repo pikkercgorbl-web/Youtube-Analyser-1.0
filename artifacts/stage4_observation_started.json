@@ -1,0 +1,181 @@
+{
+  "status": "observation_started",
+  "not": "analytical_quality_confirmed",
+  "recorded_at_utc": "2026-10-06T15:46:30+00:00",
+  "database": {
+    "host": "127.0.0.1",
+    "port": 5433,
+    "name": "youtube_radar_restore_check"
+  },
+  "measurement_marker": {
+    "path": "artifacts/momentum_measurement_start.json",
+    "measurement_start_utc": "2026-10-06T11:24:58+00:00",
+    "reset_on_worker_restart": false,
+    "gap_note": "Workers for stage 4 started ~2026-10-06T15:33:49Z (~4h 9m after marker). Marker kept; gap is pre-continuous-worker downtime, not a new experiment."
+  },
+  "preflight": {
+    "command": "python scripts/stage3_operations_preflight.py",
+    "last_ok_utc": "2026-10-06T15:44:04+00:00",
+    "youtube_api_keys_count": 3,
+    "enrichment_after_discovery": true
+  },
+  "processes": {
+    "started_local": "2026-10-06T21:33:48+06:00",
+    "pids_at_observation_start": {
+      "discovery": 19624,
+      "monitoring": 28640,
+      "outcome": 22048
+    },
+    "discovery_db_status": "running",
+    "duplicate_instances_avoided": true,
+    "log_files": {
+      "discovery": "logs/workers/discovery_20261006-213348.log",
+      "discovery_stderr": "logs/workers/discovery_20261006-213348.err.log",
+      "monitoring": "logs/workers/monitoring_20261006-213348.log",
+      "outcome": "logs/workers/outcome_20261006-213348.log"
+    },
+    "start_commands": [
+      "Set-Location \"C:\\Projects\\Сайт анализ ниш1\"",
+      "Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue",
+      "$stamp = Get-Date -Format \"yyyyMMdd-HHmmss\"",
+      "$logDir = \"logs\\workers\"; New-Item -ItemType Directory -Force -Path $logDir | Out-Null",
+      "Start-Process python -ArgumentList \"scripts/run_discovery_worker.py --interval-seconds 300 --error-backoff-seconds 300 --batch-size 5\" -WorkingDirectory (Get-Location) -RedirectStandardOutput \"$logDir/discovery_$stamp.log\" -RedirectStandardError \"$logDir/discovery_$stamp.err.log\" -NoNewWindow",
+      "Start-Process python -ArgumentList \"scripts/run_monitoring_worker.py --interval-seconds 900 --error-backoff-seconds 300\" -WorkingDirectory (Get-Location) -RedirectStandardOutput \"$logDir/monitoring_$stamp.log\" -NoNewWindow",
+      "Start-Process python -ArgumentList \"scripts/run_outcome_capture_worker.py --interval-seconds 3600\" -WorkingDirectory (Get-Location) -RedirectStandardOutput \"$logDir/outcome_$stamp.log\" -NoNewWindow"
+    ],
+    "stop_commands": [
+      "Stop-Process -Id 19624,28640,22048 -ErrorAction SilentlyContinue",
+      "Or: Ctrl+C in each worker terminal; verify discovery_worker_state.status not stuck running after crash"
+    ],
+    "resume_after_reboot": "docs/OPERATIONS_LAUNCH.md mode B — docker db, preflight, start workers only (do not re-stamp measurement)"
+  },
+  "read_models_one_shot": {
+    "attention": {
+      "command": "python scripts/refresh_attention_engine.py",
+      "run_id": "attention_20261006T153350Z",
+      "computed_at_utc": "2026-10-06T15:33:50.377217+00:00"
+    },
+    "keyword_performance": {
+      "command": "python scripts/backfill_keyword_performance_read_model.py",
+      "run_id": "keyword_performance_20261006T154033Z",
+      "rows": 178,
+      "evaluated_at_utc": "2026-10-06T15:40:33.830581+00:00"
+    }
+  },
+  "scheduled_tasks": {
+    "mechanism": "Windows Task Scheduler only (scripts/setup_read_model_scheduled_tasks.ps1 + run_*_refresh.ps1)",
+    "attention": {
+      "name": "NicheScope-Radar-AttentionRefresh",
+      "state": "Ready",
+      "schedule": "hourly (Register-ScheduledTask repetition; schtasks /TR fails on Cyrillic project path)",
+      "wrapper": "scripts/scheduled/run_attention_refresh.ps1",
+      "log_pattern": "logs/scheduled/attention_refresh_*.log",
+      "settings": "IgnoreNew + StartWhenAvailable via setup -Action Enable"
+    },
+    "keyword_performance": {
+      "name": "NicheScope-Radar-KeywordPerformanceRefresh",
+      "state": "Ready",
+      "schedule": "daily 03:15 local",
+      "wrapper": "scripts/scheduled/run_keyword_performance_refresh.ps1",
+      "log_pattern": "logs/scheduled/keyword_performance_refresh_*.log"
+    },
+    "enable_command": ".\\scripts\\setup_read_model_scheduled_tasks.ps1 -Action Enable",
+    "disable_command": "Disable-ScheduledTask -TaskName NicheScope-Radar-AttentionRefresh,NicheScope-Radar-KeywordPerformanceRefresh"
+  },
+  "first_completed_cycles": {
+    "discovery": {
+      "run_id": "discovery_20261006T153349Z_d8a3c9ac",
+      "status": "ok",
+      "started_utc": "2026-10-06T15:33:49.778312+00:00",
+      "finished_utc": "2026-10-06T15:41:43.184081+00:00",
+      "keywords_scanned": 5,
+      "hits": 1782,
+      "new_videos_not_existed_before": 1448,
+      "raw_candidates": 1782,
+      "persisted_videos": 1703,
+      "qualification_passed": 6
+    },
+    "enrichment_after_first_discovery_cycle": {
+      "subscriber_channels_processed": 50,
+      "format_videos_processed": 50,
+      "format_outcomes": {
+        "confirmed_regular": 46,
+        "short": 3,
+        "stream": 1
+      },
+      "utc_day_budget_ledger_after": {
+        "channels_id_units_reserved": 600,
+        "channels_http_requests_batch_calls": 12,
+        "videos_id_units_reserved": 481,
+        "videos_http_requests_batch_calls": 10,
+        "note": "http_requests = batch API call count, not YouTube quota units"
+      }
+    },
+    "monitoring": {
+      "run_id": "monitoring_20261006T153349Z_5ea24b57",
+      "status": "ok",
+      "eligible": 52,
+      "due": 0,
+      "overdue": 14,
+      "captures_inserted": 14,
+      "fetch_failed": 0,
+      "interpretation": "due=0 with overdue captures is normal backlog catch-up, not idle failure"
+    },
+    "outcome": {
+      "run_id": "outcome_20261006T153350Z_6169e806",
+      "status": "ok",
+      "capture_due": 20334,
+      "capture_overdue": 4840,
+      "selected": 100,
+      "captures_inserted": 97,
+      "fetch_failed": 0
+    }
+  },
+  "cycle_errors": {
+    "discovery_last_error": null,
+    "monitoring_error_summary": null,
+    "outcome_error_summary": null
+  },
+  "audit_artifacts": {
+    "stage4_worker_state": "artifacts/stage4_worker_state_snapshot.json",
+    "enrichment_closure": "artifacts/stage25_enrichment_closure_audit.json",
+    "momentum_pipeline": "artifacts/momentum_data_pipeline_audit.json",
+    "momentum_baseline": "artifacts/momentum_baseline_measurement.json"
+  },
+  "baseline_audit_highlights": {
+    "enrichment_queue_due_subscriber_channels_at_least": 10000,
+    "enrichment_queue_due_format_videos": 2123,
+    "oldest_due_subscriber_sample_utc": "2026-10-04T15:56:48.935693+00:00",
+    "post_restore_confirmed_regular_api_snippet": 9,
+    "momentum_window_snapshots_18_30h_post_restore_cohort": 0,
+    "published_momentum_signals": 0,
+    "momentum_skip_top": {
+      "format_not_confirmed": 40900,
+      "momentum_24h_window_missed": 21174
+    },
+    "momentum_rejection_offline_snapshot": {
+      "insufficient_recent_eligible_videos": 752,
+      "subscriber_count_unavailable_or_above_cap": 9289,
+      "insufficient_previous_videos_in_window": 8
+    },
+    "channels_2plus_measured_recent_and_previous": 0,
+    "channel_momentum_offline_stale_at_utc": "2026-10-06T12:16:03+00:00"
+  },
+  "monitoring_observation_gap_20261007": {
+    "last_monitoring_cycle_before_stall_utc": "2026-10-07T03:26:38Z",
+    "recovery_first_completed_cycle_utc": "2026-10-07T13:23:25Z",
+    "approx_gap_hours": 9.95,
+    "detail_artifact": "artifacts/monitoring_recovery_20261007.json",
+    "measurement_marker_unchanged": true
+  },
+  "repeat_in_24h": [
+    "python scripts/stage3_operations_preflight.py",
+    "python scripts/stage4_worker_state_snapshot.py",
+    "python scripts/stage25_enrichment_closure_audit.py",
+    "python scripts/audit_momentum_data_pipeline.py",
+    "python scripts/audit_momentum_baseline_measurement.py",
+    "Confirm workers still single-instance; review logs/workers/*.log for last_cycle_status=failed",
+    "Confirm logs/scheduled/* after Task Scheduler runs",
+    "Optional refresh offline momentum: python scripts/run_channel_momentum_offline.py"
+  ]
+}

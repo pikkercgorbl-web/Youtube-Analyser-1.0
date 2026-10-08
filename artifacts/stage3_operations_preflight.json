@@ -1,0 +1,38 @@
+{
+  "checked_at_utc": "2026-10-08T10:16:28.394002+00:00",
+  "database": {
+    "host": "127.0.0.1",
+    "port": 5433,
+    "name": "youtube_radar_restore_check"
+  },
+  "enrichment": {
+    "radar_enrichment_after_discovery": true,
+    "keyword_expansion_after_discovery": true,
+    "topic_exploration_in_discovery": true,
+    "topic_exploration_auto_admit": false,
+    "topic_exploration_queries_file": "config/topic_exploration_queries.json",
+    "channel_subscriber_daily_limit": 1000,
+    "channel_subscriber_pass_limit": 50,
+    "video_format_pass_limit": 50,
+    "unknown_format_daily_limit": 1000,
+    "backlog_pass_fraction": 0.2
+  },
+  "youtube_api_keys_count": 3,
+  "read_models": {
+    "attention_latest_computed_at": "2026-10-08T08:59:14.431638+00:00",
+    "attention_run_id": "attention_20261008T085914Z",
+    "keyword_performance_evaluated_at": "2026-10-07T15:41:55.900780+00:00",
+    "keyword_performance_run_id": "keyword_performance_20261007T154155Z"
+  },
+  "launch_paths": {
+    "start_backend": true,
+    "start_frontend": true,
+    "run_discovery_worker": true,
+    "run_monitoring_worker": true,
+    "refresh_attention": true,
+    "refresh_keyword_performance": true
+  },
+  "logs_dir_exists": true,
+  "measurement_start_utc": "2026-10-06T11:24:58+00:00",
+  "note": "Read-only; no workers started; secrets not printed."
+}

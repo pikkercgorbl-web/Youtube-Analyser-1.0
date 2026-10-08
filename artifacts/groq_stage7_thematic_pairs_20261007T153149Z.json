@@ -1,0 +1,2365 @@
+{
+  "generated_at_utc": "2026-10-07T15:31:56.015935+00:00",
+  "stage": 7,
+  "methodology": "thematic_en_pairs_manual_baseline_vs_saved_llm",
+  "supersedes_flawed_run": {
+    "note": "Prior 9-search RU/EN cross-topic compare is NOT evidence of LLM advantage.",
+    "flawed_artifact_may_exist": "groq_stage7_search_compare_latest.json (pre-fix content)"
+  },
+  "no_llm_calls": true,
+  "no_db_writes": true,
+  "live_innertube_searches_this_run": 3,
+  "max_live_searches_allowed": 6,
+  "source_experiment": "artifacts\\groq_radar_evidence_experiment_20261007T152414Z.json",
+  "source_packets": "artifacts\\groq_radar_evidence_packets_20261007T152414Z.json",
+  "cache_reuse": {
+    "path": "artifacts\\groq_stage7_search_compare_latest.json",
+    "settings_matched": true,
+    "queries_reused": [
+      "real life betrayal stories",
+      "real stories of mysterious abandoned places",
+      "what if you have cursed energy"
+    ]
+  },
+  "thematic_pairs": [
+    {
+      "pair_id": "betrayal_stories",
+      "theme_label": "betrayal / personal drama storytime",
+      "baseline_query": "betrayal stories",
+      "baseline_kind": "manual_control_en",
+      "llm_query": "real life betrayal stories",
+      "llm_packet_id": "keyword:146",
+      "llm_provenance": {
+        "packet_id": "keyword:146",
+        "source_video_ids": [
+          "0bAwA1ZWIXk",
+          "09H9FEnBEQc",
+          "0E-tkcvVirA"
+        ],
+        "llm_reason": "Several videos describe personal betrayals such as a husband cheating, a mother‑in‑law humiliating a daughter‑in‑law, and a husband demanding money from his wife’s mother, indicating strong interest in betrayal narratives."
+      }
+    },
+    {
+      "pair_id": "abandoned_places",
+      "theme_label": "mysterious abandoned places narratives",
+      "baseline_query": "abandoned places stories",
+      "baseline_kind": "manual_control_en",
+      "llm_query": "real stories of mysterious abandoned places",
+      "llm_packet_id": "keyword:146",
+      "llm_provenance": {
+        "packet_id": "keyword:146",
+        "source_video_ids": [
+          "09owcRnAXqI"
+        ],
+        "llm_reason": "A video describes buying an abandoned ranch and discovering four women inside, reflecting interest in eerie, abandoned‑location narratives."
+      }
+    },
+    {
+      "pair_id": "anime_what_if",
+      "theme_label": "anime-style what-if hypotheticals",
+      "baseline_query": "anime what if",
+      "baseline_kind": "manual_control_en",
+      "llm_query": "what if you have cursed energy",
+      "llm_packet_id": "keyword:148",
+      "llm_provenance": {
+        "packet_id": "keyword:148",
+        "source_video_ids": [
+          "0hbSsxY3jd8"
+        ],
+        "llm_reason": "Derived from the title \"Что если бы у ДЕКУ была ПРОКЛЯТАЯ ЭНЕРГИЯ\" which asks a hypothetical about possessing cursed energy."
+      }
+    }
+  ],
+  "search_plan": [
+    {
+      "pair_id": "betrayal_stories",
+      "kind": "baseline",
+      "query": "betrayal stories"
+    },
+    {
+      "pair_id": "betrayal_stories",
+      "kind": "llm_saved",
+      "query": "real life betrayal stories"
+    },
+    {
+      "pair_id": "abandoned_places",
+      "kind": "baseline",
+      "query": "abandoned places stories"
+    },
+    {
+      "pair_id": "abandoned_places",
+      "kind": "llm_saved",
+      "query": "real stories of mysterious abandoned places"
+    },
+    {
+      "pair_id": "anime_what_if",
+      "kind": "baseline",
+      "query": "anime what if"
+    },
+    {
+      "pair_id": "anime_what_if",
+      "kind": "llm_saved",
+      "query": "what if you have cursed energy"
+    }
+  ],
+  "search_settings": {
+    "client": "iter_radar_search_pages",
+    "max_pages": 1,
+    "sort_by_upload_date": true,
+    "persist_pipeline": false,
+    "locale_rule": "hl=en gl=US for Latin queries; hl=ru gl=RU if query contains Cyrillic"
+  },
+  "search_results": [
+    {
+      "query": "betrayal stories",
+      "pair_id": "betrayal_stories",
+      "kind": "baseline",
+      "innertube_locale": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "started_at_utc": "2026-10-07T15:31:49.747975+00:00",
+      "finished_at_utc": "2026-10-07T15:31:50.889330+00:00",
+      "duration_ms": 1141,
+      "renderer_counts": {
+        "videoRenderer": 20,
+        "lockupViewModel": 0,
+        "compactVideoRenderer": 0,
+        "gridVideoRenderer": 0,
+        "richItemRenderer": 0,
+        "reelItemRenderer": 0,
+        "playlistVideoRenderer": 0,
+        "shortVideoRenderer": 0,
+        "shortsLockupViewModel": 0,
+        "continuationItemRenderer": 1
+      },
+      "result_count": 20,
+      "results": [
+        {
+          "video_id": "gcbN9dhrzmY",
+          "channel_id": "UCZT1PZ9WDTy4cd_LDul6Saw",
+          "channel_title": "Perdita's Truths",
+          "title": "I Left My Injured Husband in the Snow and Said He’d Catch Up… Then Our Friends Learned the Truth",
+          "views_count": 2022,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=gcbN9dhrzmY"
+        },
+        {
+          "video_id": "u7ltGqc1PJM",
+          "channel_id": "UCZT1PZ9WDTy4cd_LDul6Saw",
+          "channel_title": "Perdita's Truths",
+          "title": "I Paid a Crewman to Release My Husband’s Towline to Get Revenge for Choosing a Resort I Didn’t Want…",
+          "views_count": 5281,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=u7ltGqc1PJM"
+        },
+        {
+          "video_id": "XuPFj_SRLyc",
+          "channel_id": "UCyHGJP-6Xv4jU3VDASIr6pA",
+          "channel_title": "Tony's Stories",
+          "title": "3 Stories Where the Groom Called Off the Wedding!",
+          "views_count": 12969,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=XuPFj_SRLyc"
+        },
+        {
+          "video_id": "VnXFg3zvr7I",
+          "channel_id": "UC2FQObxNJpTKrgJor3TeDVw",
+          "channel_title": "Clocked Out",
+          "title": "My Year-End Bonus Was $450 While the Company Average Was $7,500—Then My Boss Asked Me to Work...",
+          "views_count": 3402,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=VnXFg3zvr7I"
+        },
+        {
+          "video_id": "OuhNS5A8VIU",
+          "channel_id": "UC2FQObxNJpTKrgJor3TeDVw",
+          "channel_title": "Clocked Out",
+          "title": "Finance Refused My $18,600 Overtime—So I Stopped Working After 5 and Let the $4.5 Million Client...",
+          "views_count": 462,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=OuhNS5A8VIU"
+        },
+        {
+          "video_id": "yRs3qj90qF8",
+          "channel_id": "UC78qZQiv1rxRTyOIIo-dXyA",
+          "channel_title": "Whisper Drama",
+          "title": "I Tore Open My Husband's Secret Room — What I Found Destroyed Our Marriage...#drama",
+          "views_count": 8087,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=yRs3qj90qF8"
+        },
+        {
+          "video_id": "J6iIoJK6FAA",
+          "channel_id": "UC6gHoXVdH-kbAMQc-JH8cTg",
+          "channel_title": "Hush Drama",
+          "title": "He Married Her by Contract—Then Found His Late Brother’s Secret Love Diary | Full | Eng Dub",
+          "views_count": 1852,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=J6iIoJK6FAA"
+        },
+        {
+          "video_id": "MC0LgvB5RE0",
+          "channel_id": "UCH466ZcMa0ss4imzRfaPLxg",
+          "channel_title": "Reddit Love Fallout",
+          "title": "She Shouted, ＂Stop Acting Like My Father! I Can Do Whatever I Want!＂ After Disappear  Reddit Sto",
+          "views_count": 4489,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=MC0LgvB5RE0"
+        },
+        {
+          "video_id": "IS29qOy4zyQ",
+          "channel_id": "UC9GIEUGlq7304QghwdE0WTg",
+          "channel_title": "Real Retaliation",
+          "title": "Family Betrayal Stories: My In-Laws Sold Grandma's House In Hospice — So I Showed Who Forged My Name",
+          "views_count": 0,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=IS29qOy4zyQ"
+        },
+        {
+          "video_id": "wVyJhS7jvMg",
+          "channel_id": "UCi2vJ7xxHy4ob6gSM7PlMcQ",
+          "channel_title": "The Career Chronicles",
+          "title": "I Was Packing Up My Desk After Being Laid Off When the Chairman Arrived With an Investor.",
+          "views_count": 14210,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=wVyJhS7jvMg"
+        },
+        {
+          "video_id": "zB9C8b8fbFo",
+          "channel_id": "UCh6gY2GIpKdo7MvBS5G63sA",
+          "channel_title": "BROKEN VENGEANCE",
+          "title": "\"Was Too Big...” — A Cheating Story | A Infidelity story",
+          "views_count": 796,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=zB9C8b8fbFo"
+        },
+        {
+          "video_id": "ffnI9CrYf1M",
+          "channel_id": "UC-EQIDe8mXFB_CvoHcXIjJg",
+          "channel_title": "Power House Studio",
+          "title": "The Unclaimed Bride | True Life Story | FULL NIGERIAN MOVIE",
+          "views_count": 43845,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=ffnI9CrYf1M"
+        },
+        {
+          "video_id": "lAzxiw2czKU",
+          "channel_id": "UC2El0RBhfFYu5eZFVAxNpSg",
+          "channel_title": "Dark Mobvella and Mafia Mercy",
+          "title": "Her Husband Left Her in Mexico—Then The Mafia Boss at the Airport Noticed Her",
+          "views_count": 5471,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 866,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=lAzxiw2czKU"
+        },
+        {
+          "video_id": "XJc14oy6IoM",
+          "channel_id": "UCLKljDwMKSkj6x2RxUXF6pQ",
+          "channel_title": "Tales of wahala and wisdom",
+          "title": "MY HUSBAND’S MISTRESS | A STORY OF BETRAYAL, LOVE, SECRETS & SECOND CHANCES",
+          "views_count": 9,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=XJc14oy6IoM"
+        },
+        {
+          "video_id": "Cgy2pPFqUjA",
+          "channel_id": "UC1CDuQEsD-iZ8j26Zm3a-_A",
+          "channel_title": "Revenge Reborn and 2 more",
+          "title": "Her Cheating Husband Came Home With Flowers—He Never Expected the Mafia Boss to Be Waiting",
+          "views_count": 2906,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 7110,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=Cgy2pPFqUjA"
+        },
+        {
+          "video_id": "q-X7MPaoYns",
+          "channel_id": "UC_YTzgP4FaX0_cANpD9lJ9g",
+          "channel_title": "Vee’s Story land",
+          "title": "My Friend Faked Cancer and Scammed Us Out of $12,000",
+          "views_count": 5684,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=q-X7MPaoYns"
+        },
+        {
+          "video_id": "9BuYD8jMgog",
+          "channel_id": "UCe1lUrSV_Erb5L5Lv5H-cwQ",
+          "channel_title": "Family Giggles Tv",
+          "title": "He Chose His Favorite Daughter… Until She Betrayed Him | Emotional Family Story",
+          "views_count": 20,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=9BuYD8jMgog"
+        },
+        {
+          "video_id": "faVlLTbjl4o",
+          "channel_id": "UC04DxM4u1pWcjQ_9z5NRU_A",
+          "channel_title": "Her Last Payback",
+          "title": "My Parents Used My Scholarship to Pay My Brother’s Tuition—Then University Sent Me a Sealed Letter",
+          "views_count": 837,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=faVlLTbjl4o"
+        },
+        {
+          "video_id": "NdrFN6Ua3fA",
+          "channel_id": "UChOXlogXj6G20OQz5mp1nJg",
+          "channel_title": "Bible Flash Stories",
+          "title": "Joseph: From Betrayal to Greatness in Egypt 🇪🇬 | Full Biblical Story | part1 #jesus#christian#egypt",
+          "views_count": 0,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=NdrFN6Ua3fA"
+        },
+        {
+          "video_id": "aAufvf5rfWQ",
+          "channel_id": "UCd96IMWolfVkIXyPlgUvaTg",
+          "channel_title": "Tales by Zona",
+          "title": "Her Husband Threw Her Out for Another Woman — Years Later, He Applied for a Job at Her Company",
+          "views_count": 81828,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=aAufvf5rfWQ"
+        }
+      ],
+      "source": "live_innertube"
+    },
+    {
+      "query": "real life betrayal stories",
+      "pair_id": "betrayal_stories",
+      "kind": "llm_saved",
+      "innertube_locale": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "result_count": 20,
+      "results": [
+        {
+          "video_id": "zFOpZJqvufg",
+          "channel_id": "UC9moi_R50SJM-3zw8Wb1h4Q",
+          "channel_title": "Reddit Stories Confessions",
+          "title": "My Wife Said I Was Her Biggest Mistake at Dinner – My Reply Made Her Regret It Fast",
+          "views_count": 28,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=zFOpZJqvufg"
+        },
+        {
+          "video_id": "ffnI9CrYf1M",
+          "channel_id": "UC-EQIDe8mXFB_CvoHcXIjJg",
+          "channel_title": "Power House Studio",
+          "title": "The Unclaimed Bride | True Life Story | FULL NIGERIAN MOVIE",
+          "views_count": 43845,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=ffnI9CrYf1M"
+        },
+        {
+          "video_id": "9dW6fMu6gdk",
+          "channel_id": "UC2uAnHg-Dg1xSCxurM0qETw",
+          "channel_title": "Mr. Peter Stories World",
+          "title": "\"Shout at Me Again and I'll End You!\" Bank Cashier Warned the Billionaire. His Move Shocked Everyone",
+          "views_count": 208,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=9dW6fMu6gdk"
+        },
+        {
+          "video_id": "j47LLoFfJ3M",
+          "channel_id": "UCBqvrwvqH_BaSlaMrXoIMbw",
+          "channel_title": "SwoonRush Drama",
+          "title": "【FULL】After 8 Years, She Found His Secret & Betrayal... She Divorced Him & He Lost It! 💔 #minidrama",
+          "views_count": 20057,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=j47LLoFfJ3M"
+        },
+        {
+          "video_id": "JYjimwNV-Wc",
+          "channel_id": "UCMzAsU0vcif54y-H0vgq4PQ",
+          "channel_title": "Moral Toons With Me",
+          "title": "How a Poor Boy Became a CEO in Just a Few Days | An Emotional Love & Success Story",
+          "views_count": 4890,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=JYjimwNV-Wc"
+        },
+        {
+          "video_id": "lAzxiw2czKU",
+          "channel_id": "UC2El0RBhfFYu5eZFVAxNpSg",
+          "channel_title": "Dark Mobvella and Mafia Mercy",
+          "title": "Her Husband Left Her in Mexico—Then The Mafia Boss at the Airport Noticed Her",
+          "views_count": 5471,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 866,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=lAzxiw2czKU"
+        },
+        {
+          "video_id": "5ZduRGcUQIU",
+          "channel_id": "UCjuSVvI3nMWAKohiNRBIKAw",
+          "channel_title": "Mrs. priyanagendra",
+          "title": "Nikhil’s Biggest Victory After a Major Betrayal",
+          "views_count": 266,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=5ZduRGcUQIU"
+        },
+        {
+          "video_id": "lx0GlATow9E",
+          "channel_id": "UCjhsGUYlFupliZHZC5nGGfg",
+          "channel_title": "Stories Of Betrayal",
+          "title": "My Wife’s Cheating Confession Destroyed Our Marriage — His Silent Revenge Changed Everything",
+          "views_count": 2,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=lx0GlATow9E"
+        },
+        {
+          "video_id": "SQ2_ILr_TLw",
+          "channel_id": "UCKwqytLyWXIatsHlEl6z3vQ",
+          "channel_title": "KLove Diaries",
+          "title": "Her Boyfriend Denied Knowing Her… Then a Korean Billionaire Walked Over and Called Her “My Love”",
+          "views_count": 12271,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=SQ2_ILr_TLw"
+        },
+        {
+          "video_id": "7draP0Fmi_k",
+          "channel_id": "UClH0Ftjg4_Ooq2Ycb5zCrHQ",
+          "channel_title": "Unspoken Love Studio  and 2 more",
+          "title": "My Stepmother Hates Me 💔_ Learn English With Story🔥||Graded Reader📚",
+          "views_count": 571,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 22100,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=7draP0Fmi_k"
+        },
+        {
+          "video_id": "0hRnCqSJkBQ",
+          "channel_id": "UCNd_al-zW4riH_yxGnAs-bQ",
+          "channel_title": "StoryLab Exposed",
+          "title": "Brother in Law Hired 12 Men Broke My Son's Legs    All 12 Had Vanished in 48 Hours When I",
+          "views_count": 7,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=0hRnCqSJkBQ"
+        },
+        {
+          "video_id": "tMZrxZAyghU",
+          "channel_id": "UCjhsGUYlFupliZHZC5nGGfg",
+          "channel_title": "Stories Of Betrayal",
+          "title": "My Wife Chose Cheating Over Our Marriage, Then Begged Me to Come Back",
+          "views_count": 3,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=tMZrxZAyghU"
+        },
+        {
+          "video_id": "jVgjnHrJCuo",
+          "channel_id": "UC9nUSvBlQWfqDI43NNF9vGw",
+          "channel_title": "Family Betrayal & Secret Stories and 2 more",
+          "title": "My Husband Kicked Me Out After My Dad’s Funeral—Then His Mom Demanded 50% of My House",
+          "views_count": 44,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 13,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=jVgjnHrJCuo"
+        },
+        {
+          "video_id": "ggCBBgM5O1o",
+          "channel_id": "UCBcsQ4fzG8bcU3NHyS2OwWQ",
+          "channel_title": "Revenge Dad",
+          "title": "My Daughter’s Mother-in-Law Locked Her In A Storage Room And Called Her “Useless”—Until I Showed Up",
+          "views_count": 6534,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=ggCBBgM5O1o"
+        },
+        {
+          "video_id": "Nc75l9N_d6o",
+          "channel_id": "UCVZmDPeLwn-ioF3SkKlSwJw",
+          "channel_title": "Real Truth",
+          "title": "Her Husband Left for His College Love—Six Months Later, He Barely Recognized the Woman He Lost",
+          "views_count": 1227,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=Nc75l9N_d6o"
+        },
+        {
+          "video_id": "I4ejrGx38ZA",
+          "channel_id": "UCvk_CkcB5z6tdWqkLRYFnQQ",
+          "channel_title": "Whispered Nightmares",
+          "title": "My Best Friend Betrayed Me in the Worst Way… Then I Found Her Secret | Powerful Betrayal Story LIVE",
+          "views_count": 35,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=I4ejrGx38ZA"
+        },
+        {
+          "video_id": "1pDdO8UtaiE",
+          "channel_id": "UCGAT5b145nI1FBuq4O7n5fw",
+          "channel_title": "The Reset Podcast",
+          "title": "Matt Cooper: Betrayal, Addiction & the Night That Changed Everything",
+          "views_count": 1316,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=1pDdO8UtaiE"
+        },
+        {
+          "video_id": "rIz0Naw7dLk",
+          "channel_id": "UCOhg44jqYzuZWff2mSWpX7Q",
+          "channel_title": "Gentle Horse Drama",
+          "title": "Poor Deliveryman Was Proposed To By A Beautiful CEO—No One Knew He Was The City's Richest Man!",
+          "views_count": 1426,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=rIz0Naw7dLk"
+        },
+        {
+          "video_id": "msUMpDkJYTI",
+          "channel_id": "UCeMWf2U6dCsI_W6E-WbGhkA",
+          "channel_title": "VENGEFUL VEIL",
+          "title": "My Daughter-in-law Said 'I Own This House Now, Get Out' — But The Eviction Notice Had Her Name On It",
+          "views_count": 253,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=msUMpDkJYTI"
+        },
+        {
+          "video_id": "f1m9xDWVJWU",
+          "channel_id": "UCYZ1KSQ0VhCC5JqPCqw3WUg",
+          "channel_title": "A Husband's Diary",
+          "title": "“You’re Useless,” My In-Laws Said—They Had No Idea Who Controlled Their $1B Deal”",
+          "views_count": 20,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=f1m9xDWVJWU"
+        }
+      ],
+      "renderer_counts": {
+        "videoRenderer": 20,
+        "lockupViewModel": 0,
+        "compactVideoRenderer": 0,
+        "gridVideoRenderer": 0,
+        "richItemRenderer": 0,
+        "reelItemRenderer": 0,
+        "playlistVideoRenderer": 0,
+        "shortVideoRenderer": 0,
+        "shortsLockupViewModel": 0,
+        "continuationItemRenderer": 1
+      },
+      "source": "reused_from_cache",
+      "reused_from": "artifacts\\groq_stage7_search_compare_latest.json"
+    },
+    {
+      "query": "abandoned places stories",
+      "pair_id": "abandoned_places",
+      "kind": "baseline",
+      "innertube_locale": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "started_at_utc": "2026-10-07T15:31:52.398352+00:00",
+      "finished_at_utc": "2026-10-07T15:31:53.344015+00:00",
+      "duration_ms": 945,
+      "renderer_counts": {
+        "videoRenderer": 20,
+        "lockupViewModel": 0,
+        "compactVideoRenderer": 0,
+        "gridVideoRenderer": 0,
+        "richItemRenderer": 0,
+        "reelItemRenderer": 0,
+        "playlistVideoRenderer": 0,
+        "shortVideoRenderer": 0,
+        "shortsLockupViewModel": 0,
+        "continuationItemRenderer": 1
+      },
+      "result_count": 20,
+      "results": [
+        {
+          "video_id": "Hwr8uaZGcUo",
+          "channel_id": "UCnYRxtbm1ADb6CmjpU4BBWw",
+          "channel_title": "Inheritance Files 2",
+          "title": "She Inherited an Abandoned, “Worthless” Auction House—Then Found a 34-Year-Old Secret Inside!",
+          "views_count": 118,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=Hwr8uaZGcUo"
+        },
+        {
+          "video_id": "7EbZjEfpK_g",
+          "channel_id": "UCl2hq9Mw-9TjRKjK4hPOJzQ",
+          "channel_title": "Inheritance Secrets",
+          "title": "Homeless at 39, She Bought an Abandoned Garage — Then Found a Classic Car Collection With a Secret",
+          "views_count": 173,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=7EbZjEfpK_g"
+        },
+        {
+          "video_id": "c559xA7_WMo",
+          "channel_id": "UCbEyUOPiOvMn8IhSKOyxvwg",
+          "channel_title": "The Silent Ruins",
+          "title": "The Strange Remains of Fort Apache Just Got Even Stranger",
+          "views_count": 35873,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=c559xA7_WMo"
+        },
+        {
+          "video_id": "gZd6iGipeeo",
+          "channel_id": "UC8qyXmhfIZoZPWMUGvH5bfA",
+          "channel_title": "Mr. Global X",
+          "title": "What’s Inside the Haveli? 😱 | Mystery 1975 Part 6 | The Secret Inside This Abandoned Haveli",
+          "views_count": 28,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=gZd6iGipeeo"
+        },
+        {
+          "video_id": "mEBtpJWoqtg",
+          "channel_id": "UCWcQCJHYOK2ZZRA2Sym0mOw",
+          "channel_title": "Amaan parkar",
+          "title": "Bihar Haunted Mental Asylum | Horror Story",
+          "views_count": 38815,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=mEBtpJWoqtg"
+        },
+        {
+          "video_id": "llj4fokZp6g",
+          "channel_id": "UCw99HsTLdQ-uW7Mr_DIscbA",
+          "channel_title": "The Forgotten Treasure",
+          "title": "“It Looks Haunted!”A Broke Single Mom Buys a $1 House—Then Finds a $50M Basement Secret",
+          "views_count": 360,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=llj4fokZp6g"
+        },
+        {
+          "video_id": "Ad3qm7y04CA",
+          "channel_id": "UCtsSurKf5gsk8ird8ujLJ5Q",
+          "channel_title": "ROLL WITH US - TN Todd & Diane",
+          "title": "Creepy Old Abandoned Houses 2026",
+          "views_count": 1,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=Ad3qm7y04CA"
+        },
+        {
+          "video_id": "an5cvI2qp9E",
+          "channel_id": "UCvdEazQnXaArjMHUvZIvEqA",
+          "channel_title": "Hidden America Stories",
+          "title": "Grossinger’s: The Abandoned Resort Hidden in the Catskills",
+          "views_count": 0,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=an5cvI2qp9E"
+        },
+        {
+          "video_id": "igK-ygBp-zE",
+          "channel_id": "UC_H_plUG5L8ndvpQ-7PVftg",
+          "channel_title": "Mini Mova",
+          "title": "“We Found an Abandoned Mansion… But Someone Was Living Inside”",
+          "views_count": 14,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=igK-ygBp-zE"
+        },
+        {
+          "video_id": "z5YprPIJVEw",
+          "channel_id": "UCta708ZqhfIJbovWc6Elqiw",
+          "channel_title": "Sai - Harii SK",
+          "title": "The Real Occult House..! சாபம் பிடித்த வீடு",
+          "views_count": 1125,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=z5YprPIJVEw"
+        },
+        {
+          "video_id": "l3n7D5qZyNI",
+          "channel_id": "UC_8K1qFRrnFj_g4W_VVAX1A",
+          "channel_title": "Come Hither with Heather",
+          "title": "We Had a Stickybeak Inside This Abandoned House | South Australia",
+          "views_count": 0,
+          "content_format": "live",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=l3n7D5qZyNI"
+        },
+        {
+          "video_id": "gcEE_4kpP1E",
+          "channel_id": "UCXdX381KHdcHu82vO_voxgA",
+          "channel_title": "Hidden America Files",
+          "title": "7 American Towns That Were Abandoned, Buried, or Forgotten",
+          "views_count": 3,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=gcEE_4kpP1E"
+        },
+        {
+          "video_id": "9Be8frhXSzs",
+          "channel_id": "UCSOwUo-zXbKDfjeh54EGMQQ",
+          "channel_title": "Classified 1700",
+          "title": "Why Was It Abandoned? | The Scottish Castle Lost to the Jacobites | The Family That Lost Everything",
+          "views_count": 0,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=9Be8frhXSzs"
+        },
+        {
+          "video_id": "bBFeSMISjGM",
+          "channel_id": "UCAfR3RxHoGL9Ua3jtU2QxLQ",
+          "channel_title": "The jk20 rider",
+          "title": "The Abandoned House Where My Family Once Lived.",
+          "views_count": 80,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=bBFeSMISjGM"
+        },
+        {
+          "video_id": "JaiOrmEtcho",
+          "channel_id": "UCx6t66dqr4OKRDJdiWewtbA",
+          "channel_title": "Ghibli Cozy ASMR",
+          "title": "We Moved an Old Stove Building an Oak Barrel-Stave Bed in a Trapper's Underground Cellar Bunker |",
+          "views_count": 2639,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=JaiOrmEtcho"
+        },
+        {
+          "video_id": "nCUcXTrK938",
+          "channel_id": "UCtQt4rIcchYe0t8Vk21EQkQ",
+          "channel_title": "Solitary Redemption",
+          "title": "The Dark Story of the Iowa State Penitentiary — America's Oldest Prison West of the Mississippi",
+          "views_count": 6207,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=nCUcXTrK938"
+        },
+        {
+          "video_id": "rww5ZVW0yRA",
+          "channel_id": "UC69A24S0nTzIi9M4YDyz3EQ",
+          "channel_title": "Megha Kamath",
+          "title": "WE EXPLORED AN ABANDONED BUILDING AT 3AM… 😰 | URBAN EXPLORATION STORIES | SPOOKTOBER #10",
+          "views_count": 0,
+          "content_format": "live",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=rww5ZVW0yRA"
+        },
+        {
+          "video_id": "kUOMNlGAx90",
+          "channel_id": "UCWgzBhXjJYGnEs6Ymk6Y6Vw",
+          "channel_title": "SEAL Dog Chronicles",
+          "title": "Navy SEAL Bought a $1 Abandoned Chapel—His K9 Found a Secret Tied a 30-Year Secret to His Father",
+          "views_count": 32,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=kUOMNlGAx90"
+        },
+        {
+          "video_id": "lEdEwHf2ie8",
+          "channel_id": "UC-mM7da-0kPC7EcPT7hexjw",
+          "channel_title": "Elias Hollow",
+          "title": "I Was Sent to Inspect an Abandoned Lake House... I Never Left",
+          "views_count": 4,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=lEdEwHf2ie8"
+        },
+        {
+          "video_id": "8b9tJIjvUfU",
+          "channel_id": "UC2Pg0zD5vtRhGNq4K2vATwA",
+          "channel_title": "MR MICKY EXPLORES  and The Urbanators",
+          "title": "INSIDE ABANDONED APOLLO’S & BAILEYS | Halifax Nightclub Frozen in Time",
+          "views_count": 32,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 473,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=8b9tJIjvUfU"
+        }
+      ],
+      "source": "live_innertube"
+    },
+    {
+      "query": "real stories of mysterious abandoned places",
+      "pair_id": "abandoned_places",
+      "kind": "llm_saved",
+      "innertube_locale": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "result_count": 20,
+      "results": [
+        {
+          "video_id": "rww5ZVW0yRA",
+          "channel_id": "UC69A24S0nTzIi9M4YDyz3EQ",
+          "channel_title": "Megha Kamath",
+          "title": "WE EXPLORED AN ABANDONED BUILDING AT 3AM… 😰 | URBAN EXPLORATION STORIES | SPOOKTOBER #10",
+          "views_count": 0,
+          "content_format": "live",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=rww5ZVW0yRA"
+        },
+        {
+          "video_id": "gZd6iGipeeo",
+          "channel_id": "UC8qyXmhfIZoZPWMUGvH5bfA",
+          "channel_title": "Mr. Global X",
+          "title": "What’s Inside the Haveli? 😱 | Mystery 1975 Part 6 | The Secret Inside This Abandoned Haveli",
+          "views_count": 25,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=gZd6iGipeeo"
+        },
+        {
+          "video_id": "QIAkn9Ej-QI",
+          "channel_id": "UC0QqYsNV7nqKSQHdD69m7TA",
+          "channel_title": "Quiet Mysteries",
+          "title": "3+ HOURS of Most SHOCKING Ancient Mysteries That Terrified Archaeologists for Decades",
+          "views_count": 1918,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=QIAkn9Ej-QI"
+        },
+        {
+          "video_id": "c559xA7_WMo",
+          "channel_id": "UCbEyUOPiOvMn8IhSKOyxvwg",
+          "channel_title": "The Silent Ruins",
+          "title": "The Strange Remains of Fort Apache Just Got Even Stranger",
+          "views_count": 35831,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=c559xA7_WMo"
+        },
+        {
+          "video_id": "gcEE_4kpP1E",
+          "channel_id": "UCXdX381KHdcHu82vO_voxgA",
+          "channel_title": "Hidden America Files",
+          "title": "7 American Towns That Were Abandoned, Buried, or Forgotten",
+          "views_count": 3,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=gcEE_4kpP1E"
+        },
+        {
+          "video_id": "SuH0RttLd5U",
+          "channel_id": "UC-T80CDfRf72p7qxrD0p_xw",
+          "channel_title": "Quipu Mysteries",
+          "title": "The Lost City of Z: Why Percy Fawcett Vanished in the Amazon",
+          "views_count": 32,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=SuH0RttLd5U"
+        },
+        {
+          "video_id": "mEBtpJWoqtg",
+          "channel_id": "UCWcQCJHYOK2ZZRA2Sym0mOw",
+          "channel_title": "Amaan parkar",
+          "title": "Bihar Haunted Mental Asylum | Horror Story",
+          "views_count": 38484,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=mEBtpJWoqtg"
+        },
+        {
+          "video_id": "mJ9QdYoyZtg",
+          "channel_id": "UCfta4LKXHrOzrkG_YwsqJHA",
+          "channel_title": "Space Theory",
+          "title": "The American Town That Has Been Burning Underground for 60+ Years",
+          "views_count": 10,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=mJ9QdYoyZtg"
+        },
+        {
+          "video_id": "ZmO62svOU14",
+          "channel_id": "UCZSE95RmyMUgJWmfra9Yx1A",
+          "channel_title": "Banijay Science",
+          "title": "The Most Overcrowded Sea Fortress In History | Abandoned Engineering",
+          "views_count": 1696,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=ZmO62svOU14"
+        },
+        {
+          "video_id": "-O7U9F7Ibbc",
+          "channel_id": "UC0iVtTPm2c-06Ftl-jvl7Dw",
+          "channel_title": "Lost Histories USA",
+          "title": "America's Secret Submarine Base: Why Connecticut Abandoned It",
+          "views_count": 2,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=-O7U9F7Ibbc"
+        },
+        {
+          "video_id": "llj4fokZp6g",
+          "channel_id": "UCw99HsTLdQ-uW7Mr_DIscbA",
+          "channel_title": "The Forgotten Treasure",
+          "title": "“It Looks Haunted!”A Broke Single Mom Buys a $1 House—Then Finds a $50M Basement Secret",
+          "views_count": 357,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=llj4fokZp6g"
+        },
+        {
+          "video_id": "PrVXdzeypUs",
+          "channel_id": "UC-OyOZpU-R7PNBOFwP4mu3g",
+          "channel_title": "Miniature Adventures",
+          "title": "The Pitchfork King: Inside the Museum of Somerset",
+          "views_count": 14,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=PrVXdzeypUs"
+        },
+        {
+          "video_id": "KY_6hmFtbKE",
+          "channel_id": "UCNufNR6sP0N9_ufD7-9PalQ",
+          "channel_title": "Forbidden Mysteries",
+          "title": "The Stasi File That Exposed a Brother’s Betrayal | Forbidden Mysteries",
+          "views_count": 41,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=KY_6hmFtbKE"
+        },
+        {
+          "video_id": "fxRXOaTodY4",
+          "channel_id": "UC89mcFlRPHqPj56OnPUOfqQ",
+          "channel_title": "PAME VOLTA 2",
+          "title": "Το παράξενο Μοναστήρι του Ασκητή! στους Γαργαλιάνους Μεσσηνίας/The Hermit's Monastery in Gargaliani.",
+          "views_count": 84,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=fxRXOaTodY4"
+        },
+        {
+          "video_id": "T_Yfc9u5CRU",
+          "channel_id": "UClwnwYPMKBQIQ_bHyDpv0ng",
+          "channel_title": "Terra Secrets",
+          "title": "5 Ancient Structures That Were Impossible to Build — How Did They Do It?",
+          "views_count": 8,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=T_Yfc9u5CRU"
+        },
+        {
+          "video_id": "igK-ygBp-zE",
+          "channel_id": "UC_H_plUG5L8ndvpQ-7PVftg",
+          "channel_title": "Mini Mova",
+          "title": "“We Found an Abandoned Mansion… But Someone Was Living Inside”",
+          "views_count": 11,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=igK-ygBp-zE"
+        },
+        {
+          "video_id": "iMW31hsHIbo",
+          "channel_id": "UCPzPunMz5N5PHn5ku6yKGSg",
+          "channel_title": "Jingwu Show",
+          "title": "How Did JAPAN and RUSSIA “BUILD” 1/8 of CHINA? (Then Lost Everything…) - Pt.1",
+          "views_count": 5037,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=iMW31hsHIbo"
+        },
+        {
+          "video_id": "mSrLYulDrU8",
+          "channel_id": "UC32h6d969DkyXn87dUQPEng",
+          "channel_title": "The Wazzup Dude",
+          "title": "The Scariest Night of My Life: Old Joliet Prison",
+          "views_count": 34,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=mSrLYulDrU8"
+        },
+        {
+          "video_id": "8fI__zb5R9w",
+          "channel_id": "UCpaNfy4vhkObJXDkHixmXvA",
+          "channel_title": "Abandoned places",
+          "title": "Lost at Sea 50 Ghost Ships That Suddenly Went Silent",
+          "views_count": 16,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=8fI__zb5R9w"
+        },
+        {
+          "video_id": "vo-uJri5IPo",
+          "channel_id": "UC7yOJ-1ZRX_MKuM3eoImzCA",
+          "channel_title": "The Lost Museum",
+          "title": "The Abandoned Dutch Cemetery That Rewrote Colonial America.",
+          "views_count": 0,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=vo-uJri5IPo"
+        }
+      ],
+      "renderer_counts": {
+        "videoRenderer": 20,
+        "lockupViewModel": 0,
+        "compactVideoRenderer": 0,
+        "gridVideoRenderer": 0,
+        "richItemRenderer": 0,
+        "reelItemRenderer": 0,
+        "playlistVideoRenderer": 0,
+        "shortVideoRenderer": 0,
+        "shortsLockupViewModel": 0,
+        "continuationItemRenderer": 1
+      },
+      "source": "reused_from_cache",
+      "reused_from": "artifacts\\groq_stage7_search_compare_latest.json"
+    },
+    {
+      "query": "anime what if",
+      "pair_id": "anime_what_if",
+      "kind": "baseline",
+      "innertube_locale": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "started_at_utc": "2026-10-07T15:31:54.846254+00:00",
+      "finished_at_utc": "2026-10-07T15:31:56.011936+00:00",
+      "duration_ms": 1165,
+      "renderer_counts": {
+        "videoRenderer": 20,
+        "lockupViewModel": 0,
+        "compactVideoRenderer": 0,
+        "gridVideoRenderer": 0,
+        "richItemRenderer": 0,
+        "reelItemRenderer": 0,
+        "playlistVideoRenderer": 0,
+        "shortVideoRenderer": 0,
+        "shortsLockupViewModel": 0,
+        "continuationItemRenderer": 1
+      },
+      "result_count": 20,
+      "results": [
+        {
+          "video_id": "3pV-Hq4fKM4",
+          "channel_id": "UCzVwEfUEHJQPhuKL4hub9zg",
+          "channel_title": "Tsukimi Anime Quiz",
+          "title": "HUSBAND💍 BOYFRIEND💖 JUST FRIENDS🫂 NO CONTACT⛔ ANIME MALE CHARACTERS 🔥| ANIME QUIZ",
+          "views_count": 164,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=3pV-Hq4fKM4"
+        },
+        {
+          "video_id": "CauySUckHzQ",
+          "channel_id": "UCLK2sQ29Hhny-LNg9OocC2Q",
+          "channel_title": "AnimeBall Z",
+          "title": "What if GOKU was an ENGINEER? (Part 5)",
+          "views_count": 149,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=CauySUckHzQ"
+        },
+        {
+          "video_id": "RBp7dsNYOFE",
+          "channel_id": "UCEx3--jn2zfAZSNWXm8OQsA",
+          "channel_title": "NoStar Animation",
+          "title": "If Saitama in Solo Leveling and figh Beru (the ant King) Fan Animation",
+          "views_count": 13595,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=RBp7dsNYOFE"
+        },
+        {
+          "video_id": "TDDAivIPQ8Q",
+          "channel_id": "UC30v7rrMg6luaF0h8aaoX4Q",
+          "channel_title": "AnimeWorld",
+          "title": "Anime Characters Who Have The Most Brothers & Sisters",
+          "views_count": 1810,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=TDDAivIPQ8Q"
+        },
+        {
+          "video_id": "JDJkMCijpr4",
+          "channel_id": "UCAl8aNfbbUW2-uN8oMk9taw",
+          "channel_title": "Bell x Eminence What Ifs",
+          "title": "What If Bell Returned From Death to End Alfia’s Catastrophic Evil Era Movie",
+          "views_count": 233,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=JDJkMCijpr4"
+        },
+        {
+          "video_id": "CCs09UlMnWg",
+          "channel_id": "UCZOpDNfjGnkcJqAl-muh9jA",
+          "channel_title": "Mr Zargon",
+          "title": "If Luffy and Strawhats Meet Enel Again | One Piece",
+          "views_count": 250,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=CCs09UlMnWg"
+        },
+        {
+          "video_id": "mJKSI9Q7TFY",
+          "channel_id": "UCjkoCh2Vvc3WODlVliABQYw",
+          "channel_title": "VitaOtaku",
+          "title": "10,000 Soldiers Attacked Him, but Every Attack Makes Him Stronger",
+          "views_count": 12874,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=mJKSI9Q7TFY"
+        },
+        {
+          "video_id": "kUQBvojPMSU",
+          "channel_id": "UCL00Hw_FaGoyYoryUqO5-aQ",
+          "channel_title": "NagBlox",
+          "title": "The END of Anime Expeditions...",
+          "views_count": 26055,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=kUQBvojPMSU"
+        },
+        {
+          "video_id": "PhLxkQzleus",
+          "channel_id": "UCDifKL7a33fewYn7rMlU8hg",
+          "channel_title": "AniFusion Theory and 3 more",
+          "title": "💔 What If Naruto Died Saving Hinata From Pain? 🥀",
+          "views_count": 1596,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 255,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=PhLxkQzleus"
+        },
+        {
+          "video_id": "wO-Y9iw_cr4",
+          "channel_id": "UCAFV6ly-RuO7wem_wcUw2Gg",
+          "channel_title": "Lack Of Entertainment",
+          "title": "Why Japan Anime Is Losing Against Censorship",
+          "views_count": 14887,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=wO-Y9iw_cr4"
+        },
+        {
+          "video_id": "F1B38fJ2Qr0",
+          "channel_id": "UChHoRSOb3dHBhXsxmJB8_AA",
+          "channel_title": "Dr.Shinchin",
+          "title": "If Naruto Characters play Would you Rather | Naruto discord server",
+          "views_count": 250,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=F1B38fJ2Qr0"
+        },
+        {
+          "video_id": "rkSZHO14OQ0",
+          "channel_id": "UC6pGDc4bFGD1_36IKv3FnYg",
+          "channel_title": "Crunchyroll",
+          "title": "He Split The Town in Half on Accident | The Laid-Off Cheat-Granting Mage",
+          "views_count": 180575,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=rkSZHO14OQ0"
+        },
+        {
+          "video_id": "JmsKtOsW4iM",
+          "channel_id": "UCyahbSDLKCeiui_3CXYWIBg",
+          "channel_title": "Manga Studio",
+          "title": "The Ultimate Anime Crossover | They Were Brought Here for a Reason | Goku, Naruto, Luffy, Yugi & Ash",
+          "views_count": 1121,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=JmsKtOsW4iM"
+        },
+        {
+          "video_id": "Q9Ewt_NTN9g",
+          "channel_id": "UCDV0PD-rOvojVi8EqjTrBWw",
+          "channel_title": "NaB YGO",
+          "title": "Atticus Rhodes (Manga) vs Yusuke Fujiwara | What if Manga GX had Anime's plot? | EDOPRO",
+          "views_count": 927,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=Q9Ewt_NTN9g"
+        },
+        {
+          "video_id": "ng8G4KrztsM",
+          "channel_id": "UCsG6vgq38uB_VKemQZIHPXQ",
+          "channel_title": "Orange Hokage",
+          "title": "What If Naruto Was Born 6 Years Earlier And Became a GENIUS Like Itachi | Full",
+          "views_count": 277,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=ng8G4KrztsM"
+        },
+        {
+          "video_id": "ZMdM5RLPWOU",
+          "channel_id": "UCj1M5NU_aDgkQbfJ5XMCJXA",
+          "channel_title": "Academia Naruto",
+          "title": "what if Godlike Naruto was in Jujutsu Kaisen",
+          "views_count": 392,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=ZMdM5RLPWOU"
+        },
+        {
+          "video_id": "ukWQgzbdblE",
+          "channel_id": "UCADvz4NMF6ZTqhmAaEIGhkw",
+          "channel_title": "gospelgenga",
+          "title": "WHY DID GOD GIVE BALAAM'S DONKEY A VOICE? (Bible Anime)",
+          "views_count": 1863,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=ukWQgzbdblE"
+        },
+        {
+          "video_id": "VSNuL32-2Ls",
+          "channel_id": "UCfTNVWuP2yPDeuwTDvcKc7g",
+          "channel_title": "sole naruto fiction",
+          "title": "what if Naruto x Rennala harem elder ring",
+          "views_count": 373,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=VSNuL32-2Ls"
+        },
+        {
+          "video_id": "Bdy9A1UQopI",
+          "channel_id": "UCpaZAxzCQ_0HURFOZu_WkAg",
+          "channel_title": "SPLITCANON  and CloverCoddex",
+          "title": "What if Hinata’s love for Naruto was part of a ritual?",
+          "views_count": 1528,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 303,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=Bdy9A1UQopI"
+        },
+        {
+          "video_id": "aFrmpLErDVg",
+          "channel_id": "UCuRXZHFmp4i96hnTDxJdAZQ",
+          "channel_title": "SayaQuiz EN",
+          "title": "GUESS THE ANIME BY 4 SONGS 🎶🔥| 4 Songs 1 Anime🎵 | Anime Quiz",
+          "views_count": 5694,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=aFrmpLErDVg"
+        }
+      ],
+      "source": "live_innertube"
+    },
+    {
+      "query": "what if you have cursed energy",
+      "pair_id": "anime_what_if",
+      "kind": "llm_saved",
+      "innertube_locale": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "result_count": 20,
+      "results": [
+        {
+          "video_id": "pMFuzBdnzGE",
+          "channel_id": "UCnisXHDV5SqQPkgDADzV2sw",
+          "channel_title": "Terra Jaja",
+          "title": "Twins Were Abandoned for Being a Curse, But a Village Girl Adopted Them—Lucky Stars?!",
+          "views_count": 1628,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=pMFuzBdnzGE"
+        },
+        {
+          "video_id": "rVzvZtlAECE",
+          "channel_id": "UCi0NgTHaNSjxsVvL4cwTSdg",
+          "channel_title": "Half Blood Theorist",
+          "title": "What if James PROTECTED Snape Instead of Bullying Him?",
+          "views_count": 18178,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=rVzvZtlAECE"
+        },
+        {
+          "video_id": "poqUcUcSDuE",
+          "channel_id": "UC0Y-ObG5uVy2FfqX8yl9EBw",
+          "channel_title": "Glowing Insect Drama",
+          "title": "Wife Had Me Sent Away to Party With Lover at Banquet!Divorced,I Became a Powerful CEO—She Regrets It",
+          "views_count": 450,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=poqUcUcSDuE"
+        },
+        {
+          "video_id": "4J3U6Jjgt14",
+          "channel_id": "UCJInWX1EvIeJfPf6nvO0G9A",
+          "channel_title": "Sundae Drama",
+          "title": "The King Banished His Consort To A Forgotten Palace, BUT She’s Happily Living There! Love Begins!",
+          "views_count": 785,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=4J3U6Jjgt14"
+        },
+        {
+          "video_id": "n3O2-Y7gCiE",
+          "channel_id": "UC4erRQuMzptu9MpkObbknBw",
+          "channel_title": "1221 Manhwa Recap",
+          "title": "1,000 Points to Upgrade a Skill. 100,000 for an Ability. 1,000,000 — and I Folded Space.",
+          "views_count": 1002,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=n3O2-Y7gCiE"
+        },
+        {
+          "video_id": "1yDgqOoPD28",
+          "channel_id": "UCRopHZi19nAGeL7Rkn5z2rA",
+          "channel_title": "AnciRom Drama",
+          "title": "Reborn as a 4yo Kid, an Empress Used Foresight to Tame Her Playboy Dad into a Great King!",
+          "views_count": 682,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=1yDgqOoPD28"
+        },
+        {
+          "video_id": "SEeXhw85DCw",
+          "channel_id": "UCchQ3jeDEikd0UM7ueWyVLA",
+          "channel_title": "ST GameX🎮",
+          "title": "Roblox +1 Power Jujutsu Kaisen Evolution 🔥 89% Rated… WORTH IT?! 😱⚡",
+          "views_count": 13,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=SEeXhw85DCw"
+        },
+        {
+          "video_id": "47htHfLOcHI",
+          "channel_id": "UCFPPQ1Ge5-bSfkiLE3Zh8dQ",
+          "channel_title": "MoonchaseDrama",
+          "title": "Poor boy save sexy CEO,yet find mystical ring,master cultivate,tame beast,be invincible legend!",
+          "views_count": 3484,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=47htHfLOcHI"
+        },
+        {
+          "video_id": "biMpSBqriu8",
+          "channel_id": "UCRxFY3ORt3dKhLDJmSA73FQ",
+          "channel_title": "Vengeant Reversal Short",
+          "title": "All mock the useless live‑in son‑in‑law:he is a legendary war god,and beautiful CEO proposes to him！",
+          "views_count": 869,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=biMpSBqriu8"
+        },
+        {
+          "video_id": "sCgdbKeNxW8",
+          "channel_id": "UC2hF_OpvoKzlK0GP-tHSnZQ",
+          "channel_title": "Marie-Eve Phoenix 🧿🪽",
+          "title": "🫵YOUR PARTNER HAS A **𝗖𝗨𝗥𝗦𝗘!** 🤯 GOD WARNS U OF AN EVIL 😈 SPELL ON UR 𝗧𝗪𝗜𝗡 𝗙𝗟𝗔𝗠𝗘! U CAN CHANGE THIS🥰",
+          "views_count": 2436,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=sCgdbKeNxW8"
+        },
+        {
+          "video_id": "hg76l8CfCiI",
+          "channel_id": "UCLiom6t7zFbXXiFXjoLVa-Q",
+          "channel_title": "Relaxation Cabin Manhwa Recap",
+          "title": "He Failed to Awaken... Then Saving the School Belle Gave Him an SS Power",
+          "views_count": 486,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=hg76l8CfCiI"
+        },
+        {
+          "video_id": "3Qq23WmDLi0",
+          "channel_id": "UCcjtAhoiYUnHP9-Tw01gZ-g",
+          "channel_title": "AeroMint Drama",
+          "title": "Transmigrated As Swapped Real Heiress—Whole Family Can Hear Her Thoughts!Slaps Villains Back! Twist!",
+          "views_count": 617,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=3Qq23WmDLi0"
+        },
+        {
+          "video_id": "NUYmhIjZUUA",
+          "channel_id": "UCyTVoU0w-XtcRnnVmwGnkHA",
+          "channel_title": "Pink Rose Drama",
+          "title": "Mafia queen reborn as a nanny!Soothed the daughter of 5 CEOs no one could handle! family spoils her!",
+          "views_count": 462,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=NUYmhIjZUUA"
+        },
+        {
+          "video_id": "xrhqGuOnYh4",
+          "channel_id": "UCEV1TlAg21XuVW5irYSha8A",
+          "channel_title": "PUP YTP",
+          "title": "BLUEY - TRY NOT TO LAUGH 😂 [YTP] GOOF GUMBALL",
+          "views_count": 338,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=xrhqGuOnYh4"
+        },
+        {
+          "video_id": "_65o9mjSLgw",
+          "channel_id": "UCID9PX8YBppwKqsQi5YSbiQ",
+          "channel_title": "Heart Tides",
+          "title": "Reborn as Hated Heiress!She Exposed Fiancé’s Mistress’s Fake Pregnancy&Won the CEO’s Love!Twist!",
+          "views_count": 2668,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=_65o9mjSLgw"
+        },
+        {
+          "video_id": "vvWU1h7Eb7w",
+          "channel_id": "UCINmjxZSoto6leOxpKAVVhw",
+          "channel_title": "SK Plays and SK Plays 3.0",
+          "title": "Franklin & Shinchan MCQueen Are Chased by a Cursed Talking Mahindra Thar in GTA 5!",
+          "views_count": 2760,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 71300,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=vvWU1h7Eb7w"
+        },
+        {
+          "video_id": "7AEjgzWnzh4",
+          "channel_id": "UCHAuNbzO07sISoOWMZnjhIQ",
+          "channel_title": "桃心短劇topsweet",
+          "title": "A contract marriage,strings attached!Fac hardships toge doctors,fall love true love!",
+          "views_count": 547,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=7AEjgzWnzh4"
+        },
+        {
+          "video_id": "XeGYi_eiayE",
+          "channel_id": "UC4Twr_bXSOB6weZWDUZ5KhQ",
+          "channel_title": "AudiobooksLN",
+          "title": "Re:Zero Prequel: Apocalypse Girls [EN]",
+          "views_count": 167,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=XeGYi_eiayE"
+        },
+        {
+          "video_id": "xT718Es9iXI",
+          "channel_id": "UCNKFy_rZCZ4Pw5WUi8jYrqQ",
+          "channel_title": "SK Plays 3.0 and SK Plays",
+          "title": "Franklin & Shinchan Optimus Prime are Chased by a Cursed Talking Signa Truck in GTA 5!",
+          "views_count": 14283,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": 7470,
+          "subscribers_note": "innertube_search_subs_not_api_verified",
+          "youtube_url": "https://www.youtube.com/watch?v=xT718Es9iXI"
+        },
+        {
+          "video_id": "S7wLNhGY0o8",
+          "channel_id": "UCm7UrieCM6lUGfoGJ0oqZKQ",
+          "channel_title": "Radiant Plot Shorts",
+          "title": "【FULL】：I Revealed I Was the Real Heiress at My Engagement Party—No One Believed Me💥#drama",
+          "views_count": 506,
+          "content_format": "regular",
+          "language_hint": "latin_heavy",
+          "subscribers_count_search": null,
+          "subscribers_note": "search_card_subs_unconfirmed",
+          "youtube_url": "https://www.youtube.com/watch?v=S7wLNhGY0o8"
+        }
+      ],
+      "renderer_counts": {
+        "videoRenderer": 20,
+        "lockupViewModel": 0,
+        "compactVideoRenderer": 0,
+        "gridVideoRenderer": 0,
+        "richItemRenderer": 0,
+        "reelItemRenderer": 0,
+        "playlistVideoRenderer": 0,
+        "shortVideoRenderer": 0,
+        "shortsLockupViewModel": 0,
+        "continuationItemRenderer": 1
+      },
+      "source": "reused_from_cache",
+      "reused_from": "artifacts\\groq_stage7_search_compare_latest.json"
+    }
+  ],
+  "pair_analyses": [
+    {
+      "pair_id": "betrayal_stories",
+      "theme_label": "betrayal / personal drama storytime",
+      "baseline_query": "betrayal stories",
+      "llm_query": "real life betrayal stories",
+      "baseline_kind": "manual_control_en",
+      "innertube_locale_baseline": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "innertube_locale_llm": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "intersection_video_ids": [
+        "ffnI9CrYf1M",
+        "lAzxiw2czKU"
+      ],
+      "intersection_count": 2,
+      "baseline_only_count": 18,
+      "llm_only_count": 18,
+      "baseline_page_analysis": {
+        "thematic_video_ids": [
+          "XuPFj_SRLyc",
+          "yRs3qj90qF8",
+          "IS29qOy4zyQ",
+          "gcbN9dhrzmY",
+          "XJc14oy6IoM",
+          "zB9C8b8fbFo",
+          "NdrFN6Ua3fA",
+          "q-X7MPaoYns",
+          "aAufvf5rfWQ",
+          "u7ltGqc1PJM",
+          "9BuYD8jMgog",
+          "Cgy2pPFqUjA"
+        ],
+        "neutral_or_unclear_video_ids": [
+          "faVlLTbjl4o",
+          "VnXFg3zvr7I",
+          "J6iIoJK6FAA",
+          "MC0LgvB5RE0",
+          "OuhNS5A8VIU"
+        ],
+        "likely_irrelevant_video_ids": [
+          "wVyJhS7jvMg"
+        ],
+        "content_format_counts": {
+          "regular": 18
+        }
+      },
+      "llm_page_analysis": {
+        "thematic_video_ids": [
+          "7draP0Fmi_k",
+          "jVgjnHrJCuo",
+          "JYjimwNV-Wc",
+          "zFOpZJqvufg",
+          "lx0GlATow9E",
+          "tMZrxZAyghU",
+          "5ZduRGcUQIU",
+          "j47LLoFfJ3M",
+          "I4ejrGx38ZA",
+          "1pDdO8UtaiE",
+          "Nc75l9N_d6o"
+        ],
+        "neutral_or_unclear_video_ids": [
+          "ggCBBgM5O1o",
+          "0hRnCqSJkBQ",
+          "rIz0Naw7dLk",
+          "f1m9xDWVJWU",
+          "msUMpDkJYTI",
+          "9dW6fMu6gdk",
+          "SQ2_ILr_TLw"
+        ],
+        "likely_irrelevant_video_ids": [],
+        "content_format_counts": {
+          "regular": 18
+        }
+      },
+      "intersection_titles": [
+        {
+          "video_id": "ffnI9CrYf1M",
+          "title": "The Unclaimed Bride | True Life Story | FULL NIGERIAN MOVIE",
+          "youtube_url": "https://www.youtube.com/watch?v=ffnI9CrYf1M",
+          "content_format": "regular"
+        },
+        {
+          "video_id": "lAzxiw2czKU",
+          "title": "Her Husband Left Her in Mexico—Then The Mafia Boss at the Airport Noticed Her",
+          "youtube_url": "https://www.youtube.com/watch?v=lAzxiw2czKU",
+          "content_format": "regular"
+        }
+      ],
+      "llm_overlap_known_evidence_corpus": [],
+      "llm_ids_not_in_evidence_corpus_count": 20,
+      "llm_new_ids_not_auto_useful": true,
+      "same_theme_interpretation": "Both queries are English and target the same narrative niche; overlap and title heuristics measure query phrasing, not proof that LLM beats manual baselines."
+    },
+    {
+      "pair_id": "abandoned_places",
+      "theme_label": "mysterious abandoned places narratives",
+      "baseline_query": "abandoned places stories",
+      "llm_query": "real stories of mysterious abandoned places",
+      "baseline_kind": "manual_control_en",
+      "innertube_locale_baseline": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "innertube_locale_llm": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "intersection_video_ids": [
+        "c559xA7_WMo",
+        "gZd6iGipeeo",
+        "gcEE_4kpP1E",
+        "igK-ygBp-zE",
+        "llj4fokZp6g",
+        "mEBtpJWoqtg",
+        "rww5ZVW0yRA"
+      ],
+      "intersection_count": 7,
+      "baseline_only_count": 13,
+      "llm_only_count": 13,
+      "baseline_page_analysis": {
+        "thematic_video_ids": [
+          "Ad3qm7y04CA",
+          "an5cvI2qp9E",
+          "lEdEwHf2ie8",
+          "8b9tJIjvUfU",
+          "JaiOrmEtcho",
+          "9Be8frhXSzs",
+          "l3n7D5qZyNI",
+          "Hwr8uaZGcUo",
+          "kUOMNlGAx90",
+          "7EbZjEfpK_g",
+          "bBFeSMISjGM"
+        ],
+        "neutral_or_unclear_video_ids": [
+          "nCUcXTrK938",
+          "z5YprPIJVEw"
+        ],
+        "likely_irrelevant_video_ids": [],
+        "content_format_counts": {
+          "regular": 12,
+          "live": 1
+        }
+      },
+      "llm_page_analysis": {
+        "thematic_video_ids": [
+          "vo-uJri5IPo",
+          "-O7U9F7Ibbc",
+          "ZmO62svOU14",
+          "8fI__zb5R9w"
+        ],
+        "neutral_or_unclear_video_ids": [
+          "KY_6hmFtbKE",
+          "mJ9QdYoyZtg",
+          "T_Yfc9u5CRU",
+          "QIAkn9Ej-QI",
+          "SuH0RttLd5U",
+          "fxRXOaTodY4",
+          "mSrLYulDrU8",
+          "iMW31hsHIbo",
+          "PrVXdzeypUs"
+        ],
+        "likely_irrelevant_video_ids": [],
+        "content_format_counts": {
+          "regular": 13
+        }
+      },
+      "intersection_titles": [
+        {
+          "video_id": "c559xA7_WMo",
+          "title": "The Strange Remains of Fort Apache Just Got Even Stranger",
+          "youtube_url": "https://www.youtube.com/watch?v=c559xA7_WMo",
+          "content_format": "regular"
+        },
+        {
+          "video_id": "gZd6iGipeeo",
+          "title": "What’s Inside the Haveli? 😱 | Mystery 1975 Part 6 | The Secret Inside This Abandoned Haveli",
+          "youtube_url": "https://www.youtube.com/watch?v=gZd6iGipeeo",
+          "content_format": "regular"
+        },
+        {
+          "video_id": "gcEE_4kpP1E",
+          "title": "7 American Towns That Were Abandoned, Buried, or Forgotten",
+          "youtube_url": "https://www.youtube.com/watch?v=gcEE_4kpP1E",
+          "content_format": "regular"
+        },
+        {
+          "video_id": "igK-ygBp-zE",
+          "title": "“We Found an Abandoned Mansion… But Someone Was Living Inside”",
+          "youtube_url": "https://www.youtube.com/watch?v=igK-ygBp-zE",
+          "content_format": "regular"
+        },
+        {
+          "video_id": "llj4fokZp6g",
+          "title": "“It Looks Haunted!”A Broke Single Mom Buys a $1 House—Then Finds a $50M Basement Secret",
+          "youtube_url": "https://www.youtube.com/watch?v=llj4fokZp6g",
+          "content_format": "regular"
+        },
+        {
+          "video_id": "mEBtpJWoqtg",
+          "title": "Bihar Haunted Mental Asylum | Horror Story",
+          "youtube_url": "https://www.youtube.com/watch?v=mEBtpJWoqtg",
+          "content_format": "regular"
+        },
+        {
+          "video_id": "rww5ZVW0yRA",
+          "title": "WE EXPLORED AN ABANDONED BUILDING AT 3AM… 😰 | URBAN EXPLORATION STORIES | SPOOKTOBER #10",
+          "youtube_url": "https://www.youtube.com/watch?v=rww5ZVW0yRA",
+          "content_format": "live"
+        }
+      ],
+      "llm_overlap_known_evidence_corpus": [],
+      "llm_ids_not_in_evidence_corpus_count": 20,
+      "llm_new_ids_not_auto_useful": true,
+      "same_theme_interpretation": "Both queries are English and target the same narrative niche; overlap and title heuristics measure query phrasing, not proof that LLM beats manual baselines."
+    },
+    {
+      "pair_id": "anime_what_if",
+      "theme_label": "anime-style what-if hypotheticals",
+      "baseline_query": "anime what if",
+      "llm_query": "what if you have cursed energy",
+      "baseline_kind": "manual_control_en",
+      "innertube_locale_baseline": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "innertube_locale_llm": {
+        "hl": "en",
+        "gl": "US"
+      },
+      "intersection_video_ids": [],
+      "intersection_count": 0,
+      "baseline_only_count": 20,
+      "llm_only_count": 20,
+      "baseline_page_analysis": {
+        "thematic_video_ids": [
+          "kUQBvojPMSU",
+          "3pV-Hq4fKM4",
+          "ukWQgzbdblE",
+          "TDDAivIPQ8Q",
+          "JDJkMCijpr4",
+          "ng8G4KrztsM",
+          "Q9Ewt_NTN9g",
+          "wO-Y9iw_cr4",
+          "Bdy9A1UQopI",
+          "aFrmpLErDVg",
+          "VSNuL32-2Ls",
+          "F1B38fJ2Qr0",
+          "CauySUckHzQ",
+          "JmsKtOsW4iM",
+          "ZMdM5RLPWOU",
+          "PhLxkQzleus"
+        ],
+        "neutral_or_unclear_video_ids": [
+          "CCs09UlMnWg",
+          "rkSZHO14OQ0",
+          "mJKSI9Q7TFY",
+          "RBp7dsNYOFE"
+        ],
+        "likely_irrelevant_video_ids": [],
+        "content_format_counts": {
+          "regular": 20
+        }
+      },
+      "llm_page_analysis": {
+        "thematic_video_ids": [
+          "vvWU1h7Eb7w",
+          "xT718Es9iXI",
+          "SEeXhw85DCw",
+          "rVzvZtlAECE",
+          "hg76l8CfCiI"
+        ],
+        "neutral_or_unclear_video_ids": [
+          "47htHfLOcHI",
+          "biMpSBqriu8",
+          "_65o9mjSLgw",
+          "7AEjgzWnzh4",
+          "1yDgqOoPD28",
+          "4J3U6Jjgt14",
+          "XeGYi_eiayE",
+          "pMFuzBdnzGE",
+          "n3O2-Y7gCiE",
+          "3Qq23WmDLi0",
+          "sCgdbKeNxW8",
+          "xrhqGuOnYh4",
+          "NUYmhIjZUUA",
+          "poqUcUcSDuE",
+          "S7wLNhGY0o8"
+        ],
+        "likely_irrelevant_video_ids": [],
+        "content_format_counts": {
+          "regular": 20
+        }
+      },
+      "intersection_titles": [],
+      "llm_overlap_known_evidence_corpus": [],
+      "llm_ids_not_in_evidence_corpus_count": 20,
+      "llm_new_ids_not_auto_useful": true,
+      "same_theme_interpretation": "Both queries are English and target the same narrative niche; overlap and title heuristics measure query phrasing, not proof that LLM beats manual baselines."
+    }
+  ],
+  "manual_review_examples": [
+    {
+      "pair_id": "betrayal_stories",
+      "role": "intersection_baseline_and_llm",
+      "baseline_query": "betrayal stories",
+      "llm_query": "real life betrayal stories",
+      "video_id": "ffnI9CrYf1M",
+      "title": "The Unclaimed Bride | True Life Story | FULL NIGERIAN MOVIE",
+      "channel_title": "Power House Studio",
+      "youtube_url": "https://www.youtube.com/watch?v=ffnI9CrYf1M",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": true,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": true,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "betrayal_stories",
+      "role": "intersection_baseline_and_llm",
+      "baseline_query": "betrayal stories",
+      "llm_query": "real life betrayal stories",
+      "video_id": "lAzxiw2czKU",
+      "title": "Her Husband Left Her in Mexico—Then The Mafia Boss at the Airport Noticed Her",
+      "channel_title": "Dark Mobvella and Mafia Mercy",
+      "youtube_url": "https://www.youtube.com/watch?v=lAzxiw2czKU",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": true,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "betrayal_stories",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "betrayal stories",
+      "llm_query": "real life betrayal stories",
+      "video_id": "7draP0Fmi_k",
+      "title": "My Stepmother Hates Me 💔_ Learn English With Story🔥||Graded Reader📚",
+      "channel_title": "Unspoken Love Studio  and 2 more",
+      "youtube_url": "https://www.youtube.com/watch?v=7draP0Fmi_k",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": true,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "betrayal_stories",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "betrayal stories",
+      "llm_query": "real life betrayal stories",
+      "video_id": "jVgjnHrJCuo",
+      "title": "My Husband Kicked Me Out After My Dad’s Funeral—Then His Mom Demanded 50% of My House",
+      "channel_title": "Family Betrayal & Secret Stories and 2 more",
+      "youtube_url": "https://www.youtube.com/watch?v=jVgjnHrJCuo",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "betrayal_stories",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "betrayal stories",
+      "llm_query": "real life betrayal stories",
+      "video_id": "JYjimwNV-Wc",
+      "title": "How a Poor Boy Became a CEO in Just a Few Days | An Emotional Love & Success Story",
+      "channel_title": "Moral Toons With Me",
+      "youtube_url": "https://www.youtube.com/watch?v=JYjimwNV-Wc",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": true,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "abandoned_places",
+      "role": "intersection_baseline_and_llm",
+      "baseline_query": "abandoned places stories",
+      "llm_query": "real stories of mysterious abandoned places",
+      "video_id": "c559xA7_WMo",
+      "title": "The Strange Remains of Fort Apache Just Got Even Stranger",
+      "channel_title": "The Silent Ruins",
+      "youtube_url": "https://www.youtube.com/watch?v=c559xA7_WMo",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": true,
+      "thematic_title_match_heuristic": false,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "abandoned_places",
+      "role": "intersection_baseline_and_llm",
+      "baseline_query": "abandoned places stories",
+      "llm_query": "real stories of mysterious abandoned places",
+      "video_id": "gZd6iGipeeo",
+      "title": "What’s Inside the Haveli? 😱 | Mystery 1975 Part 6 | The Secret Inside This Abandoned Haveli",
+      "channel_title": "Mr. Global X",
+      "youtube_url": "https://www.youtube.com/watch?v=gZd6iGipeeo",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": true,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "abandoned_places",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "abandoned places stories",
+      "llm_query": "real stories of mysterious abandoned places",
+      "video_id": "vo-uJri5IPo",
+      "title": "The Abandoned Dutch Cemetery That Rewrote Colonial America.",
+      "channel_title": "The Lost Museum",
+      "youtube_url": "https://www.youtube.com/watch?v=vo-uJri5IPo",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "abandoned_places",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "abandoned places stories",
+      "llm_query": "real stories of mysterious abandoned places",
+      "video_id": "-O7U9F7Ibbc",
+      "title": "America's Secret Submarine Base: Why Connecticut Abandoned It",
+      "channel_title": "Lost Histories USA",
+      "youtube_url": "https://www.youtube.com/watch?v=-O7U9F7Ibbc",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "abandoned_places",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "abandoned places stories",
+      "llm_query": "real stories of mysterious abandoned places",
+      "video_id": "ZmO62svOU14",
+      "title": "The Most Overcrowded Sea Fortress In History | Abandoned Engineering",
+      "channel_title": "Banijay Science",
+      "youtube_url": "https://www.youtube.com/watch?v=ZmO62svOU14",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "anime_what_if",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "anime what if",
+      "llm_query": "what if you have cursed energy",
+      "video_id": "vvWU1h7Eb7w",
+      "title": "Franklin & Shinchan MCQueen Are Chased by a Cursed Talking Mahindra Thar in GTA 5!",
+      "channel_title": "SK Plays and SK Plays 3.0",
+      "youtube_url": "https://www.youtube.com/watch?v=vvWU1h7Eb7w",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "anime_what_if",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "anime what if",
+      "llm_query": "what if you have cursed energy",
+      "video_id": "xT718Es9iXI",
+      "title": "Franklin & Shinchan Optimus Prime are Chased by a Cursed Talking Signa Truck in GTA 5!",
+      "channel_title": "SK Plays 3.0 and SK Plays",
+      "youtube_url": "https://www.youtube.com/watch?v=xT718Es9iXI",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "anime_what_if",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "anime what if",
+      "llm_query": "what if you have cursed energy",
+      "video_id": "SEeXhw85DCw",
+      "title": "Roblox +1 Power Jujutsu Kaisen Evolution 🔥 89% Rated… WORTH IT?! 😱⚡",
+      "channel_title": "ST GameX🎮",
+      "youtube_url": "https://www.youtube.com/watch?v=SEeXhw85DCw",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "anime_what_if",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "anime what if",
+      "llm_query": "what if you have cursed energy",
+      "video_id": "rVzvZtlAECE",
+      "title": "What if James PROTECTED Snape Instead of Bullying Him?",
+      "channel_title": "Half Blood Theorist",
+      "youtube_url": "https://www.youtube.com/watch?v=rVzvZtlAECE",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": true,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    },
+    {
+      "pair_id": "anime_what_if",
+      "role": "llm_only_thematic_extra",
+      "baseline_query": "anime what if",
+      "llm_query": "what if you have cursed energy",
+      "video_id": "hg76l8CfCiI",
+      "title": "He Failed to Awaken... Then Saving the School Belle Gave Him an SS Power",
+      "channel_title": "Relaxation Cabin Manhwa Recap",
+      "youtube_url": "https://www.youtube.com/watch?v=hg76l8CfCiI",
+      "content_format": "regular",
+      "language_hint": "latin_heavy",
+      "in_baseline_llm_intersection": false,
+      "thematic_title_match_heuristic": true,
+      "likely_irrelevant_heuristic": false,
+      "faceless_production_format_hint_only": false,
+      "faceless_note": "Not verified without watching; shorts/live not counted as faceless-ready",
+      "limitations": [
+        "Title-only heuristic; watch video to judge faceless suitability",
+        "No API subscriber cap claim (≤100k not asserted)",
+        "Single InnerTube page; new ID ≠ validated opportunity"
+      ]
+    }
+  ],
+  "conclusions": [
+    "Compare English manual baselines to saved English LLM queries on the same theme only.",
+    "Intersection size reflects query wording and YouTube ranking, not LLM superiority.",
+    "LLM-only video IDs require manual review; not auto-counted as discoveries.",
+    "Faceless production claims require video review; format hints are title-based only.",
+    "Channel size ≤100k not stated without API subscriber evidence."
+  ],
+  "disclaimers": [
+    "InnerTube locale follows query script (en/US for these pairs).",
+    "Upload-date sort on page 1 only; not full Radar discovery qualification.",
+    "Evidence corpus overlap does not validate search result quality."
+  ]
+}

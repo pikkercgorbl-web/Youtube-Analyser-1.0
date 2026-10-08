@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "description": "Local Radar broad exploration queries (kind=exploration). Not auto-imported as TargetKeywords.",
+  "defaults": {
+    "kind": "exploration",
+    "schedule": "every_discovery_cycle",
+    "enabled": false
+  },
+  "queries": [
+    {
+      "id": "explore_cozy_sim_building",
+      "direction": "gaming / cozy life sim",
+      "query": "cozy life sim building decorating gameplay no commentary",
+      "enabled": true,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    },
+    {
+      "id": "explore_roguelike_deck_new",
+      "direction": "gaming / roguelike deckbuilder",
+      "query": "new roguelike deck builder gameplay full run",
+      "enabled": true,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    },
+    {
+      "id": "explore_factory_automation_sandbox",
+      "direction": "gaming / automation sandbox",
+      "query": "factory automation sandbox game base building tutorial",
+      "enabled": true,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    },
+    {
+      "id": "explore_miniature_painting_diy",
+      "direction": "DIY / miniatures",
+      "query": "miniature painting tutorial beginners tabletop",
+      "enabled": true,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    },
+    {
+      "id": "explore_wet_palette_techniques",
+      "direction": "DIY / miniatures techniques",
+      "query": "wet palette miniature paint blending technique",
+      "enabled": false,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    },
+    {
+      "id": "explore_blender_animation_tutorial",
+      "direction": "animation / Blender",
+      "query": "blender character animation tutorial beginner indie",
+      "enabled": true,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    },
+    {
+      "id": "explore_2d_animation_workflow",
+      "direction": "animation / 2D tools",
+      "query": "2d animation software indie game workflow tutorial",
+      "enabled": false,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    },
+    {
+      "id": "explore_disabled_finance_example",
+      "direction": "excluded / finance",
+      "query": "stock market day trading strategy 2025",
+      "enabled": false,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration",
+      "notes": "Intentionally disabled — out of niche scope."
+    },
+    {
+      "id": "explore_disabled_medical_example",
+      "direction": "excluded / medical",
+      "query": "medical symptoms diagnosis explained",
+      "enabled": false,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration",
+      "notes": "Intentionally disabled — out of niche scope."
+    }
+  ]
+}

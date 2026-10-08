@@ -1,0 +1,44 @@
+{
+  "enabled_at_utc": "2026-10-07T15:08:36+00:00",
+  "database": {
+    "host": "127.0.0.1",
+    "port": 5433,
+    "name": "youtube_radar_restore_check"
+  },
+  "backup_before_enable": {
+    "dump": "backups/youtube_radar_restore_check_20261007-210836.dump",
+    "counts_snapshot": "backups/youtube_radar_restore_check_20261007-210836.counts.snapshot.json"
+  },
+  "migrations": {
+    "entrypoint": "app.db.migrations.run_startup_migrations (via app startup or one-shot python)",
+    "exploration_tables_verified": [
+      "topic_exploration_passes",
+      "topic_exploration_video_observations",
+      "topic_exploration_phrase_pass_stats"
+    ]
+  },
+  "env_flags": {
+    "KEYWORD_EXPANSION_AFTER_DISCOVERY": "1",
+    "TOPIC_EXPLORATION_IN_DISCOVERY": "1",
+    "TOPIC_EXPLORATION_QUERIES_FILE": "config/topic_exploration_queries.json",
+    "TOPIC_EXPLORATION_BATCH_FRACTION": "0.2",
+    "TOPIC_EXPLORATION_MAX_PAGES_PER_QUERY": "3",
+    "TOPIC_EXPLORATION_AUTO_ADMIT": "0",
+    "unchanged": ["DATABASE_URL", "YOUTUBE_API_KEYS", "RADAR_ENRICHMENT_* daily limits"]
+  },
+  "exploration_queries_enabled_ids": [
+    "explore_cozy_sim_building",
+    "explore_roguelike_deck_new",
+    "explore_factory_automation_sandbox",
+    "explore_miniature_painting_diy",
+    "explore_blender_animation_tutorial"
+  ],
+  "discovery_batch_size_default": 5,
+  "planned_slots_per_cycle": {
+    "seed_keywords": 4,
+    "exploration_queries": 1,
+    "note": "Round-robin across 5 enabled exploration queries → one broad query per cycle."
+  },
+  "workers_started": false,
+  "preflight_artifact": "artifacts/stage6_local_enable_preflight.json"
+}

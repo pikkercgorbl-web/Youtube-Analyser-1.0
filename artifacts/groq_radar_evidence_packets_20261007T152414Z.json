@@ -1,0 +1,601 @@
+{
+  "frozen_at_utc": "2026-10-07T15:24:17.716848+00:00",
+  "source_note": "no_exploration_observations; using keyword_discovery_hit",
+  "packets": [
+    {
+      "packet_id": "keyword:146",
+      "direction": "реальные истории",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "реальные истории",
+      "meta": {
+        "keyword_id": 146,
+        "usable_title_rows": 398,
+        "distinct_channels_usable": 286,
+        "hits_sampled": 400
+      },
+      "rows": [
+        {
+          "video_id": "030mlMr_lTQ",
+          "channel_id": "UCdBVMNzlc5u9PAxbfgSyzaA",
+          "title": "Миллионер сделал заказ на иностранном языке, чтобы унизить официантку. Но ответ девушки заткнул его",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "09H9FEnBEQc",
+          "channel_id": "UCklzCjCyxiwOKwe4fr9N_2w",
+          "title": "«Сынок, она опять не работает!» — свекровь вылила на меня ведро воды, видя, что я лежу с ноутбуком.",
+          "views_at_discovery": 536,
+          "vph_at_discovery": 536.0
+        },
+        {
+          "video_id": "09owcRnAXqI",
+          "channel_id": "UCwqlUYTwkgfohpJAT_8APOQ",
+          "title": "Он купил заброшенное ранчо — вернулся через несколько недель и нашёл внутри ЧЕТЫРЁХ женщин",
+          "views_at_discovery": 19,
+          "vph_at_discovery": 19.0
+        },
+        {
+          "video_id": "0A6gMHT5uFw",
+          "channel_id": "UCWyCqwsAYv0HSrayEke9eDA",
+          "title": "Бедняк получил от Горного Бога рентген-глаза пошел в горы искать редкие травы разбогател спас семью",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0aDT6eQ0WYA",
+          "channel_id": "UCN1jlpzF1qvzaLWserHPNqw",
+          "title": "«Свои 5 миллионов отпишешь моей матери, иначе развод!» — заявил муж",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0bAwA1ZWIXk",
+          "channel_id": "UCHqECTbAKIUbPLlpPJUeP9A",
+          "title": "Муж тайком встречался с бывшей. Но когда я потребовала объяснений, он признался в...",
+          "views_at_discovery": 5599,
+          "vph_at_discovery": 254.5
+        },
+        {
+          "video_id": "-0BRPfaoMj8",
+          "channel_id": "UCos8KyBPkux_8DabDMRZ3pg",
+          "title": "ОБМАН ДЛИНОЮ В ДЕСЯТЬ ЛЕТ — эту жизненную историю стоит услышать каждому",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0D54HCW0pP4",
+          "channel_id": "UCfuW0EVO8JCsHYzODQoDyGg",
+          "title": "👩‍🦰В 31 год я пошла💐на свидание вслепую.😔Я ему не понравилась, но его мать догнала меня...",
+          "views_at_discovery": 10175,
+          "vph_at_discovery": 10175.0
+        },
+        {
+          "video_id": "0dpg05Bn1VE",
+          "channel_id": "UCpqYIk9yzCClOsljHzZ5DIQ",
+          "title": "Бывшая зэчка бросилась к пилоту — смахнув снег, она обомлела",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0dYERDapBHE",
+          "channel_id": "UCMVFf2XDWBduKOJlOpTLkLQ",
+          "title": "Когда я лежала в больнице, свекровь шепнула мужу： “Поменяй замки, пока она не вернулась…” srt",
+          "views_at_discovery": 4,
+          "vph_at_discovery": 4.0
+        },
+        {
+          "video_id": "0E-tkcvVirA",
+          "channel_id": "UC7ChZ3N56kgt0e6RQ8zOmbg",
+          "title": "«Она тупая курица, сына в интернат, её в психушку». А подруга: «Твою квартиру продаёт самозванка!»",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0f7ptUm3eEM",
+          "channel_id": "UCjx2Q1BzLhxtIm9JG4YWeHA",
+          "title": "ЖУТЬ СЕНТЯБРЯ 2026 | Реальные криминальные истории начала осени...",
+          "views_at_discovery": 126860,
+          "vph_at_discovery": 6676.84
+        },
+        {
+          "video_id": "0ffvruqIs6A",
+          "channel_id": "UCkg3nGQpAQCwcvFrpI0iPMw",
+          "title": "Он потерял всю семью в лютый мороз... Но старый человек подарил ему второй шанс.",
+          "views_at_discovery": 10237,
+          "vph_at_discovery": 10237.0
+        },
+        {
+          "video_id": "0fUQJFdYL1w",
+          "channel_id": "UCioPArZvAduY1_vhOiuUzQw",
+          "title": "Муж привел нотариуса в день похорон бабушки： «Подписывай дарственную на маму, пока ребенок спит!»",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0FyjgTSAYt0",
+          "channel_id": "UCZ7x75A5fM7KFMZZTlXFtEg",
+          "title": "Я ЗАБЕРЕМЕНЕЛА В 60 ЛЕТ… 😱 СЫН МНЕ НЕ ПОВЕРИЛ! 💔 | История из жизни",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        }
+      ]
+    },
+    {
+      "packet_id": "keyword:148",
+      "direction": "что если",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "что если",
+      "meta": {
+        "keyword_id": 148,
+        "usable_title_rows": 394,
+        "distinct_channels_usable": 340,
+        "hits_sampled": 400
+      },
+      "rows": [
+        {
+          "video_id": "02t33h4hmsQ",
+          "channel_id": "UChPObCRxHgMvDkvryyb1r2w",
+          "title": "ЭДГАР КЕЙСИ РАСКРЫВАЕТ: ОДИН ГРЕХ, КОТОРЫЙ ОСОБЕННО ОГОРЧАЕТ ВАШЕГО АНГЕЛА-ХРАНИТЕЛЯ",
+          "views_at_discovery": 8206,
+          "vph_at_discovery": 8206.0
+        },
+        {
+          "video_id": "03ztqi7g6lQ",
+          "channel_id": "UCmXAukg1ANyDi55jAxUIfUQ",
+          "title": "ПРОТЯНИ МНЕ РУКУ… 💔 Если ещё любишь — не отпускай | RAMZES",
+          "views_at_discovery": 1140,
+          "vph_at_discovery": 1140.0
+        },
+        {
+          "video_id": "044o12_kz4M",
+          "channel_id": "UCHcmMZw3bG8V4zTivJPKJFA",
+          "title": "Шумерская табличка, которая описывает, что происходит, если после смерти отказаться идти на свет",
+          "views_at_discovery": 1835,
+          "vph_at_discovery": 1835.0
+        },
+        {
+          "video_id": "04YSB__f6MA",
+          "channel_id": "UCcWncZXNIgN_J8u0V8LZluw",
+          "title": "БЕЛОРУССКАЯ КОЛОТУХА с толстыми блинами! Не омлет и не запеканка. Так готовили деревенский завтрак",
+          "views_at_discovery": 33166,
+          "vph_at_discovery": 33166.0
+        },
+        {
+          "video_id": "058SvOWadQ0",
+          "channel_id": "UCxR5r4cTAlukF9Dh3u6Tnsg",
+          "title": "МУЖ СКАЗАЛ, ЧТО В КОМАНДИРОВКЕ… НО ПОДСЛУШАННЫЙ В ОФИСЕ РАЗГОВОР ШОКИРОВАЛ МАРИНУ…",
+          "views_at_discovery": 2821,
+          "vph_at_discovery": 2821.0
+        },
+        {
+          "video_id": "058w5fU6iwU",
+          "channel_id": "UCpQ79EtVYIX2KCOnJg5d5qw",
+          "title": "🔥ТАРО ДЛЯ МУЖЧИН💯Ты Больше Любого Образа и Представления О Себе 🎯",
+          "views_at_discovery": 1620,
+          "vph_at_discovery": 1620.0
+        },
+        {
+          "video_id": "05swl157c2I",
+          "channel_id": "UC3ElZ0_YUDLLpJZlgz0-AyQ",
+          "title": "*[Svetlana Busova] А что человеку нельзя отдавать ИИ, даже если он уже умеет это делать?",
+          "views_at_discovery": 2,
+          "vph_at_discovery": 2.0
+        },
+        {
+          "video_id": "06BxZhkqJVY",
+          "channel_id": "UCXes115LIH6UNGAEHzjuO5A",
+          "title": "Мы отправились по Армении и увидели ее настоящую",
+          "views_at_discovery": 2178,
+          "vph_at_discovery": 2178.0
+        },
+        {
+          "video_id": "07woKSRDVEM",
+          "channel_id": "UCvTHh14jVnY62Gk9XSd796A",
+          "title": "Что если бы ты родился в Индии?",
+          "views_at_discovery": 3,
+          "vph_at_discovery": 3.0
+        },
+        {
+          "video_id": "08b9Iyji7ok",
+          "channel_id": "UCGyZblDN5afu78KyIJ0Ovbg",
+          "title": "Я РОДИЛСЯ В БУНКЕРЕ ( AFTERMATH: Bunker Trader )",
+          "views_at_discovery": 16596,
+          "vph_at_discovery": 16596.0
+        },
+        {
+          "video_id": "0AoeAanNuAk",
+          "channel_id": "UCBMmubQeGHD24SySZYbmUqw",
+          "title": "ТРЕШ-СТРИМЕРЫ С KICK ШТУРМУЮТ ЯПОНИЮ (опять) // РЕАКЦИЯ ЛАГОДЫ",
+          "views_at_discovery": 2819,
+          "vph_at_discovery": 122.57
+        },
+        {
+          "video_id": "0Cu0kJcIo6g",
+          "channel_id": "UCquQ-3z5y6JiULOa5MXU59w",
+          "title": "5 вещей, которые влюбляют мужчин на уровне эмоций",
+          "views_at_discovery": 3445,
+          "vph_at_discovery": 3445.0
+        },
+        {
+          "video_id": "0gN2U2FklW8",
+          "channel_id": "UCMYuvY7SD6QReh2vklLg5cQ",
+          "title": "Serious Sam Classic: The Second Encounter | ПОТЕЮ НА СЛОЖНОСТИ - КРУТОЙ | ПРОХОЖДЕНИЕ #3",
+          "views_at_discovery": 11242,
+          "vph_at_discovery": 11242.0
+        },
+        {
+          "video_id": "0hbSsxY3jd8",
+          "channel_id": "UCG8cPgV7q4epBzKyfOqAljA",
+          "title": "Что если бы у ДЕКУ была ПРОКЛЯТАЯ ЭНЕРГИЯ | MHA x JJK |",
+          "views_at_discovery": 5465,
+          "vph_at_discovery": 5465.0
+        },
+        {
+          "video_id": "0HPTKH70O8Q",
+          "channel_id": "UCwk588JR3DIilGgNyT1ZtwQ",
+          "title": "СРЕДНЯЯ РОГАТКА — НОВЫЙ ПАРНАС? Почему бизнес-класс пришёл в самую спорную часть района?",
+          "views_at_discovery": 7149,
+          "vph_at_discovery": 7149.0
+        }
+      ]
+    },
+    {
+      "packet_id": "keyword:90",
+      "direction": "historical mysteries",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "historical mysteries",
+      "meta": {
+        "keyword_id": 90,
+        "usable_title_rows": 391,
+        "distinct_channels_usable": 370,
+        "hits_sampled": 400
+      },
+      "rows": [
+        {
+          "video_id": "00b__x1DFRM",
+          "channel_id": "UCsD717YeqgsgShS7KGoMZyA",
+          "title": "The Lost Persian Army: Did 50,000 Soldiers Really Vanish?",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "03ELJWa2JAk",
+          "channel_id": "UC8eQnMgdVK-peTD1PRyBcVw",
+          "title": "Before Jeffrey Epstein, There Was Robert Maxwell.....",
+          "views_at_discovery": 19,
+          "vph_at_discovery": 0.79
+        },
+        {
+          "video_id": "06GfED7aI-c",
+          "channel_id": "UC6uGYezl7-dtRlaXohwo5ew",
+          "title": "The King Who Sailed Into the Atlantic With 2,000 Ships in 1311 - And Never Came Back",
+          "views_at_discovery": 5102,
+          "vph_at_discovery": 5102.0
+        },
+        {
+          "video_id": "09b-lzmNMck",
+          "channel_id": "UC35CSeHunAJfKy0ZIvOc_FA",
+          "title": "The Dyatlov Pass Mystery: What Really Happened to 9 Hikers?",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0An-OBRiUNQ",
+          "channel_id": "UCeu74IhjZCm6Ks7BQBOVHlg",
+          "title": "Why is the Gupta period remembered as the Golden Age of ancient India?",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0b3a6k51zJU",
+          "channel_id": "UC3LP4BPsVxjyTfpR5hTo_5Q",
+          "title": "Thousands Came to Watch France’s LAST Guillotine Execution",
+          "views_at_discovery": 2,
+          "vph_at_discovery": 2.0
+        },
+        {
+          "video_id": "0cwpS4JWENk",
+          "channel_id": "UChd-38jsz-tzTccXh54hnIw",
+          "title": "Grok AI Analyzed Ancient Sumerian Texts — What They Say About Humanity Is Unsettling",
+          "views_at_discovery": 13,
+          "vph_at_discovery": 13.0
+        },
+        {
+          "video_id": "0DFJHDP3hAU",
+          "channel_id": "UC8QZuerR8g6vXkYXj-LjHGQ",
+          "title": "The Ghost Ship of Diamond Shoals: The Vanishing of the Carroll A. Deering",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0ExAoMvTkw8",
+          "channel_id": "UCaLJr7SNLYFi1O1nX_aBtUg",
+          "title": "Heracles: The Hero Who Became A God Through Endurance | History Legends",
+          "views_at_discovery": 2,
+          "vph_at_discovery": 2.0
+        },
+        {
+          "video_id": "0FK4V7rehIU",
+          "channel_id": "UC2wcgXqWEGQDJERrj9iCLNg",
+          "title": "THE PIRATE REPUBLIC THAT MAY HAVE NEVER EXISTED   Madagascar’s Lost Libertalia",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0g2Ek1d8_qI",
+          "channel_id": "UCf4UgmmLFhodSLcn4FoUYhw",
+          "title": "The Untold History of the Koh-i-Noor Diamond | From India to Britain",
+          "views_at_discovery": 2,
+          "vph_at_discovery": 2.0
+        },
+        {
+          "video_id": "0GLAyThWn84",
+          "channel_id": "UCJSJWOjKoc_-frbCohLoFvA",
+          "title": "How Ancient Looters ACTUALLY Broke Into Pyramids",
+          "views_at_discovery": 7,
+          "vph_at_discovery": 7.0
+        },
+        {
+          "video_id": "0GSTihqBS6g",
+          "channel_id": "UC7QwKB1v_RdblQ4CJdO5bbQ",
+          "title": "Egypt — The Secrets of the Land of the Pharaohs",
+          "views_at_discovery": 2,
+          "vph_at_discovery": 2.0
+        },
+        {
+          "video_id": "-0IkzL11EbQ",
+          "channel_id": "UChFDclmD0azjflaKndc6DTQ",
+          "title": "NORSE MYTHOLOGY: Tales of Legend. Historical Mysteries. Audio Documentary.",
+          "views_at_discovery": 278,
+          "vph_at_discovery": 278.0
+        },
+        {
+          "video_id": "0Jz9eTBcVzw",
+          "channel_id": "UCbHGRnSoSOwmj7kyqSOW8pg",
+          "title": "The 500 Year Old Map That Shouldn't Exist",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 1.0
+        }
+      ]
+    },
+    {
+      "packet_id": "keyword:143",
+      "direction": "путешествия",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "путешествия",
+      "meta": {
+        "keyword_id": 143,
+        "usable_title_rows": 388,
+        "distinct_channels_usable": 359,
+        "hits_sampled": 400
+      },
+      "rows": [
+        {
+          "video_id": "02Z-fxsazeU",
+          "channel_id": "UC8xY_vLywiy__AsODHRyQKA",
+          "title": "Великие путешественники: Марко Поло | Последнее великое путешествие | Жюль Верн",
+          "views_at_discovery": 30,
+          "vph_at_discovery": 30.0
+        },
+        {
+          "video_id": "039t2DkJ6L4",
+          "channel_id": "UC8RDlVUmPkkaW205UYpiE7A",
+          "title": "СТОИТ ЛИ ТОГО? Потратил $380$ на «Путь света» — ВОТ что я получил😱 ЭТО БЕЗУМИЕ. Whiteout Survival🔮",
+          "views_at_discovery": 16,
+          "vph_at_discovery": 16.0
+        },
+        {
+          "video_id": "03H32Gb1XBg",
+          "channel_id": "UCqr0zHJ_zBPDRXlTPRqYb0w",
+          "title": "vlog 5 дней в Ереване // что смотреть, куда ходить и где есть",
+          "views_at_discovery": 12,
+          "vph_at_discovery": 12.0
+        },
+        {
+          "video_id": "042ZE0IKgEI",
+          "channel_id": "UCuGI5mVE-wvNrBXK805GJSg",
+          "title": "Не приезжай заграницу пока не посмотришь этот эфир!",
+          "views_at_discovery": 346425,
+          "vph_at_discovery": 346425.0
+        },
+        {
+          "video_id": "05EXVolCKf0",
+          "channel_id": "UCPGYwTIEOrTIPUmrd9gv6nw",
+          "title": "【海外旅行パッキング】15泊イタリアひとり旅｜4kgのミニマリスト全荷物｜着替えなし",
+          "views_at_discovery": 428,
+          "vph_at_discovery": 428.0
+        },
+        {
+          "video_id": "0BAEicMKqIg",
+          "channel_id": "UC2DdcgLYGnvx8QKm-Cxo87w",
+          "title": "Опасная тропа по лавовым скалам на острове Чеджу! Южная Корея Влог #корея #работа #путешествия #влог",
+          "views_at_discovery": 144224,
+          "vph_at_discovery": 144224.0
+        },
+        {
+          "video_id": "0cVE_sNrnBk",
+          "channel_id": "UCOsrS29nzwZrvjTP4HOIuJA",
+          "title": "Асман парк#кыргызстан#путешествия#",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 1.0
+        },
+        {
+          "video_id": "0FX6vlEkYVg",
+          "channel_id": "UCmlXOnadhtuofIseK12pu6Q",
+          "title": "【1泊2日パッキング 】旅行にも最適なバックパック",
+          "views_at_discovery": 11454,
+          "vph_at_discovery": 477.25
+        },
+        {
+          "video_id": "0G0K-3lwEa8",
+          "channel_id": "UCwmSUCxHcp8y_TrnxOZjGQg",
+          "title": "Последний тестовый заезд...",
+          "views_at_discovery": 71,
+          "vph_at_discovery": 71.0
+        },
+        {
+          "video_id": "0g8JZcy7JyE",
+          "channel_id": "UCzsEaoavFxLqwpNNBGhKLPw",
+          "title": "МОИ ЛЮБИМЫЕ ТОВАРЫ ВО ВРЕМЯ ЖИЗНИ В ИСПАНИИ",
+          "views_at_discovery": 1439,
+          "vph_at_discovery": 1439.0
+        },
+        {
+          "video_id": "0g_arQXBspo",
+          "channel_id": "UCt4zyqwDxKrMCZ9maRj-4vg",
+          "title": "Хорошо провели выходные/ Роза Хутор 4 октября #выходные #октябрь #путешествия #горы #влог #сочи",
+          "views_at_discovery": 25,
+          "vph_at_discovery": 25.0
+        },
+        {
+          "video_id": "0ilsJ5aV1kA",
+          "channel_id": "UCQEE8bdGggyx1et4gUJrkEw",
+          "title": "После случайного путешествия во времени я услышала мысли холодного князя! Теперь смеяться нельзя! 😂",
+          "views_at_discovery": 82,
+          "vph_at_discovery": 82.0
+        },
+        {
+          "video_id": "0kR5_HvM0wE",
+          "channel_id": "UCXHO8wBQzaKwgnewkG4BmhQ",
+          "title": "День 461: бушующее море [велокочевник]",
+          "views_at_discovery": 8717,
+          "vph_at_discovery": 363.21
+        },
+        {
+          "video_id": "0kU0gr1bcXc",
+          "channel_id": "UC6rQTw7EH_TNKx1QGFf7VsA",
+          "title": "Мыс Утёсный. Поймали Симу. Кема. Максимовка. Экспедиция на север. Прокатимся",
+          "views_at_discovery": 7040,
+          "vph_at_discovery": 7040.0
+        },
+        {
+          "video_id": "0MsWYAAr8aI",
+          "channel_id": "UCDbt4A797WWt0Ldbj9p0O7g",
+          "title": "Хухуй - место, которое не похоже на Аргентину",
+          "views_at_discovery": 1870,
+          "vph_at_discovery": 1870.0
+        }
+      ]
+    },
+    {
+      "packet_id": "keyword:150",
+      "direction": "как это работает",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "как это работает",
+      "meta": {
+        "keyword_id": 150,
+        "usable_title_rows": 388,
+        "distinct_channels_usable": 348,
+        "hits_sampled": 400
+      },
+      "rows": [
+        {
+          "video_id": "01mZZX5Ys30",
+          "channel_id": "UC8qjk39Hk7i8i7VUNnWVVNQ",
+          "title": "Что я Нашел на Флешках с Авито?",
+          "views_at_discovery": 5246,
+          "vph_at_discovery": 5246.0
+        },
+        {
+          "video_id": "07LmPHcjO80",
+          "channel_id": "UCW2BKQiTJRp7GqdVFIn4ZaQ",
+          "title": "Индия в новом мировом порядке",
+          "views_at_discovery": 70396,
+          "vph_at_discovery": 70396.0
+        },
+        {
+          "video_id": "08XMstOwhX0",
+          "channel_id": "UCGpC6-u6TNlbKqMIAtfFaxg",
+          "title": "Красногорск захватил алкокартель",
+          "views_at_discovery": 11,
+          "vph_at_discovery": 11.0
+        },
+        {
+          "video_id": "0ANWxpd0YvI",
+          "channel_id": "UC_pRb9mC7MOW_ov0aFqt_WA",
+          "title": "Как я делаю работу в Excel в разы быстрее с ChatGPT или Claude",
+          "views_at_discovery": 4,
+          "vph_at_discovery": 4.0
+        },
+        {
+          "video_id": "0b9A91w1-io",
+          "channel_id": "UC76sARds5zToGonqFehtcuQ",
+          "title": "ПРАВИЛА ЖИЗНИ за 26 минут: Макиавелли",
+          "views_at_discovery": 70,
+          "vph_at_discovery": 70.0
+        },
+        {
+          "video_id": "0Bz9Q_fYqrE",
+          "channel_id": "UCzxG1CKVTmeANeNKQasy0ow",
+          "title": "Hassan Arrives at Muslim’s Home Upset 💔 | Muslim’s Family Is Heartbroken Over Their Father",
+          "views_at_discovery": 2235,
+          "vph_at_discovery": 2235.0
+        },
+        {
+          "video_id": "0CMeRyS2QLo",
+          "channel_id": "UCMZ8RrnFAvXIxSsBM4R23aQ",
+          "title": "Использование нейросетей: авторское право нейросети и риски",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 1.0
+        },
+        {
+          "video_id": "0CtnlSzPxOU",
+          "channel_id": "UCol9ED-s52-1KXjPgdDKJ-w",
+          "title": "Прорывает трубу, звонит давний друг, или посылку не доставили, когда вы решаете изменить свою жизнь?",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0dWFfgDwHxc",
+          "channel_id": "UCpis5AYvhiIq5Ls8dAMWsSw",
+          "title": "Beeline Kazakhstan Starlink. Протестировал технологию Direct-To-Cell от Starlink! Это не вероятно!",
+          "views_at_discovery": 114,
+          "vph_at_discovery": 114.0
+        },
+        {
+          "video_id": "0Dx26vAR4jU",
+          "channel_id": "UCi_lGWuexZeAFMJr0BA3XDw",
+          "title": "Чума в России - США опасаются ее быстрого распространения",
+          "views_at_discovery": 138602,
+          "vph_at_discovery": 138602.0
+        },
+        {
+          "video_id": "0edTEtUG_F4",
+          "channel_id": "UCT_ByszCE6jz15uUb3vG7Jw",
+          "title": "Почему быть СЧАСТЛИВЫМ так сложно? Как радоваться каждому моменту, даже если всё плохо?",
+          "views_at_discovery": 32,
+          "vph_at_discovery": 32.0
+        },
+        {
+          "video_id": "0EoXPMast-Y",
+          "channel_id": "UCE5vamtZ4K8hqZpXUtqn61g",
+          "title": "DOLA AI дает всё бесплатно! Это легально?",
+          "views_at_discovery": 237,
+          "vph_at_discovery": 237.0
+        },
+        {
+          "video_id": "0FcNH7-fVbA",
+          "channel_id": "UC74v1e7x52JPM3C4fSa1iwQ",
+          "title": "Best Packaging Box Factory in Delhi: Full Tour & Process |  Packaging Manufacturer and Supplier",
+          "views_at_discovery": 592,
+          "vph_at_discovery": 592.0
+        },
+        {
+          "video_id": "0hLTDVVoVR8",
+          "channel_id": "UCthcgF2GmZSJNDmpOpk215g",
+          "title": "УСТАНОВКА ИГР ОТ PS4 НА ПРОШИТУЮ PS5",
+          "views_at_discovery": 201,
+          "vph_at_discovery": 201.0
+        },
+        {
+          "video_id": "0HUQrWHPNjQ",
+          "channel_id": "UCY2z9noVRgOx0AZwqMCLuBA",
+          "title": "Германия устала: кризис, банкротства и правый поворот AfD,.Ина Олийник, Юрий Романенко",
+          "views_at_discovery": 25574,
+          "vph_at_discovery": 1346.0
+        }
+      ]
+    }
+  ]
+}

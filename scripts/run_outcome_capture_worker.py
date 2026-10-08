@@ -10,6 +10,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from app.utils.worker_stdio import configure_worker_stdio_utf8
+
+configure_worker_stdio_utf8()
+
 from app.api.deps import get_youtube_client
 from app.models.db import SessionLocal
 from app.services.delayed_outcome_capture_config import DEFAULT_OUTCOME_CAPTURE_INTERVAL_SECONDS

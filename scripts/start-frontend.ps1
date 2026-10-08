@@ -1,24 +1,26 @@
-# Запуск Next.js-фронтенда (порт 3000)
+﻿# Next.js frontend (port 3000). UTF-8 with BOM for Windows PowerShell 5.1.
 $ErrorActionPreference = "Stop"
-$Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
+$Root = Split-Path -Parent $PSScriptRoot
 $Frontend = Join-Path $Root "frontend"
-Set-Location $Frontend
+Set-Location -LiteralPath $Frontend
 
 Write-Host "=== YouTube Analytics: Frontend ===" -ForegroundColor Cyan
 
-$nodePaths = @(
-    (Get-Command node -ErrorAction SilentlyContinue)?.Source,
-    "C:\Program Files\nodejs\node.exe",
+$nodeCandidates = @()
+$nodeCmd = Get-Command node -ErrorAction SilentlyContinue
+if ($nodeCmd) {
+    $nodeCandidates += $nodeCmd.Source
+}
+$nodeCandidates += @(
+    "C:\Program Files\nodejs\node.exe"
     "$env:LOCALAPPDATA\Programs\node\node.exe"
-) | Where-Object { $_ -and (Test-Path $_) }
+)
+$nodePaths = @($nodeCandidates | Where-Object { $_ -and (Test-Path $_) })
 
-if (-not $nodePaths) {
+if (-not $nodePaths -or $nodePaths.Count -eq 0) {
     Write-Host ""
-    Write-Host "ОШИБКА: Node.js не установлен." -ForegroundColor Red
-    Write-Host ""
-    Write-Host "1. Скачайте LTS-версию: https://nodejs.org/" -ForegroundColor Yellow
-    Write-Host "2. Установите с галочкой 'Add to PATH'" -ForegroundColor Yellow
-    Write-Host "3. Перезапустите терминал и снова выполните этот скрипт." -ForegroundColor Yellow
+    Write-Host "ERROR: Node.js is not installed." -ForegroundColor Red
+    Write-Host "Install LTS from https://nodejs.org/ (Add to PATH), restart terminal." -ForegroundColor Yellow
     Write-Host ""
     exit 1
 }
@@ -30,14 +32,14 @@ if (-not (Test-Path $npmCmd)) {
 
 if (-not (Test-Path ".env.local")) {
     Copy-Item ".env.local.example" ".env.local"
-    Write-Host "Создан frontend/.env.local" -ForegroundColor Yellow
+    Write-Host "Created frontend/.env.local" -ForegroundColor Yellow
 }
 
 if (-not (Test-Path "node_modules")) {
-    Write-Host "Установка npm-зависимостей (первый раз может занять 1–2 мин)..." -ForegroundColor Gray
+    Write-Host "Running npm install (first time may take 1-2 min)..." -ForegroundColor Gray
     & $npmCmd install
 }
 
-Write-Host "Запуск сайта: http://localhost:3000" -ForegroundColor Green
-Write-Host "Убедитесь, что бэкенд запущен: scripts\start-backend.ps1" -ForegroundColor Gray
+Write-Host "Site: http://localhost:3000" -ForegroundColor Green
+Write-Host "Start backend first: scripts\start-backend.ps1" -ForegroundColor Gray
 & $npmCmd run dev

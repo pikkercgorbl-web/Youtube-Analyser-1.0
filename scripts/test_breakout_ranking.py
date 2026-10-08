@@ -17,7 +17,8 @@ from sqlalchemy.pool import StaticPool
 
 import app.models.orm  # noqa: F401
 from app.models.db import Base
-from app.models.orm import Channel, Video, VideoFormat, VideoSnapshot
+from app.models.orm import Channel, Video, VideoFormat, VideoFormatEnrichmentAttempt, VideoSnapshot
+from app.services.channel_subscriber_backfill import SUBSCRIBERS_API_KNOWN
 from app.services.breakout_ranking_service import (
     breakout_fundamental_eligibility,
     rank_breakout_v1,
@@ -128,6 +129,8 @@ def _seed_channel_video(
                 id=channel_id,
                 title=f"Channel {channel_id}",
                 subscribers_count=100,
+                subscribers_api_status=SUBSCRIBERS_API_KNOWN,
+                subscribers_api_checked_at=NOW,
                 created_at=NOW,
             ),
         )
@@ -140,9 +143,17 @@ def _seed_channel_video(
             likes_count=0,
             comments_count=0,
             published_at=pub,
+            published_at_source="api_snippet",
             duration_seconds=600,
             content_format=VideoFormat.MEDIUM,
             channel_id=channel_id,
+        ),
+    )
+    session.add(
+        VideoFormatEnrichmentAttempt(
+            video_id=video_id,
+            last_attempt_at=NOW,
+            last_outcome="confirmed_regular",
         ),
     )
     session.add(
@@ -165,10 +176,11 @@ def test_channel_cap_independence() -> None:
     engine = _engine()
     factory = sessionmaker(bind=engine)
     session = factory()
-    _seed_channel_video(session, "v1", vph=10.0, views=1000, age_hours=10.0)
-    _seed_channel_video(session, "v2", vph=20.0, views=2000, age_hours=12.0)
-    _seed_channel_video(session, "v3", vph=30.0, views=3000, age_hours=14.0)
-    _seed_channel_video(session, "v4", vph=500.0, views=5000, age_hours=40.0)
+    # Persisted snapshot.vph must match views/age at capture (derived read path ignores stale stored vph).
+    _seed_channel_video(session, "v1", vph=100.0, views=1000, age_hours=10.0)
+    _seed_channel_video(session, "v2", vph=2000 / 12.0, views=2000, age_hours=12.0)
+    _seed_channel_video(session, "v3", vph=3000 / 14.0, views=3000, age_hours=14.0)
+    _seed_channel_video(session, "v4", vph=500.0, views=20000, age_hours=40.0)
 
     policy = MonitoringTierPolicy(max_active_videos_per_channel=1)
     budget = ApiBudgetPolicy(max_active_monitored_videos=500)

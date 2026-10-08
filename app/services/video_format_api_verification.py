@@ -9,18 +9,29 @@ from app.models.orm import VideoFormat, VideoFormatEnrichmentAttempt
 from app.services.historical_video_format_verification import OUTCOME_CONFIRMED_REGULAR
 
 _PUBLISHABLE_OUTCOMES = frozenset({OUTCOME_CONFIRMED_REGULAR})
+_IN_CLAUSE_CHUNK = 400
 
 
 def load_api_format_confirmed_video_ids(
     session: Session,
     video_ids: list[str] | tuple[str, ...] | None = None,
 ) -> frozenset[str]:
-    stmt = select(VideoFormatEnrichmentAttempt.video_id).where(
-        VideoFormatEnrichmentAttempt.last_outcome.in_(_PUBLISHABLE_OUTCOMES),
-    )
-    if video_ids:
-        stmt = stmt.where(VideoFormatEnrichmentAttempt.video_id.in_(list(video_ids)))
-    return frozenset(session.scalars(stmt).all())
+    if not video_ids:
+        stmt = select(VideoFormatEnrichmentAttempt.video_id).where(
+            VideoFormatEnrichmentAttempt.last_outcome.in_(_PUBLISHABLE_OUTCOMES),
+        )
+        return frozenset(session.scalars(stmt).all())
+
+    ids = list(dict.fromkeys(video_ids))
+    confirmed: set[str] = set()
+    for start in range(0, len(ids), _IN_CLAUSE_CHUNK):
+        chunk = ids[start : start + _IN_CLAUSE_CHUNK]
+        stmt = select(VideoFormatEnrichmentAttempt.video_id).where(
+            VideoFormatEnrichmentAttempt.last_outcome.in_(_PUBLISHABLE_OUTCOMES),
+            VideoFormatEnrichmentAttempt.video_id.in_(chunk),
+        )
+        confirmed.update(session.scalars(stmt).all())
+    return frozenset(confirmed)
 
 
 def video_format_publishable(

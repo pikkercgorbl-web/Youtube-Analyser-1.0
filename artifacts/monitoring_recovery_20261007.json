@@ -1,0 +1,59 @@
+{
+  "incident": "monitoring_worker_stall",
+  "audit_reference": "artifacts/radar_inactivity_audit_out.json",
+  "pre_fix_evidence": "artifacts/monitoring_stall_evidence_pre_fix.json",
+  "monitoring_observation_gap": {
+    "last_completed_cycle_utc": "2026-10-07T03:26:38Z",
+    "first_completed_cycle_after_fix_utc": "2026-10-07T13:23:25Z",
+    "gap_hours": 9.95,
+    "note": "No monitoring_worker VideoSnapshot rows during gap; gap preserved in data (not backfilled)."
+  },
+  "root_cause": {
+    "monitoring": {
+      "code_path": "load_monitored_video_states → load_api_format_confirmed_video_ids(session, all_medium_long_ids)",
+      "failure_mode": "Single SQL IN (~90k video_id) + DEBUG SQLAlchemy echo printing every bind param to terminal",
+      "pg_stat_activity": "idle in transaction, wait_event ClientRead on channels SELECT since 2026-10-07T03:42:31Z — DB finished; Python blocked on fetch/processing/stdout",
+      "blocking_locks": "none"
+    },
+    "outcome": {
+      "code_path": "plan_delayed_outcome_capture → load all KeywordDiscoveryHit → get_snapshots_for_videos(all video_ids) one IN clause",
+      "failure_mode": "Same mega-IN + SQL echo after full-table hits load (query_start 2026-10-07T11:35:28Z)",
+      "note": "Outcome snapshots continued until ~10:35 UTC before planner stall; stall is not inferred from snapshot silence alone."
+    }
+  },
+  "fix_summary": [
+    "SQL prefilter + keyset pages in iter_monitoring_candidate_videos",
+    "Chunk IN clauses (400) in load_api_format_confirmed_video_ids and get_snapshots_for_videos",
+    "Outcome planner skips snapshot load for pending-only observations; chunked snapshot fetch otherwise",
+    "Workers: RADAR_SQL_ECHO=false and DEBUG=false via scripts/_radar_start_common.ps1; engine respects RADAR_SQL_ECHO"
+  ],
+  "post_fix_benchmark": {
+    "script": "scripts/benchmark_monitoring_load_path.py",
+    "elapsed_seconds": 0.445,
+    "eligible_state_count": 1548,
+    "sql_query_count": 17,
+    "max_in_clause_params": 401
+  },
+  "first_live_cycle_after_fix": {
+    "run_id": "monitoring_20261007T132324Z_b287a147",
+    "runtime_seconds": 1.003,
+    "loaded": 1548,
+    "eligible": 52,
+    "due": 0,
+    "overdue": 1,
+    "selected": 1,
+    "inserted_snapshots": 1,
+    "cycle_status": "ok"
+  },
+  "rapid_cycles_20261007_note": {
+    "observation": "First three ok cycles within ~1 minute (13:23–13:25 UTC)",
+    "cause": "Not lock bypass: one manual run_monitoring_cycle.py (13:23:25), monitoring worker PID 41836 (13:24:34), plus short-lived duplicate worker PID 11108 until stopped",
+    "lock": "Each run used normal acquire_monitoring_worker_lock; overlapping cycles were separate processes, not stale-lock takeover"
+  },
+  "enrichment_queue_velocity_note": {
+    "utc_day_budget": "channels_list/videos_list id_units_reserved=1000 each (unchanged by this fix)",
+    "discovery_hits_9h_pre_fix": 12302,
+    "enrichment_attempts_9h_pre_fix": 0,
+    "candidate_ingest_vs_processing": "Discovery still ingests; enrichment capped; monitoring load no longer scales with full pre-eligibility corpus."
+  }
+}

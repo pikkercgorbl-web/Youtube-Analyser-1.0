@@ -887,6 +887,26 @@ class RadarApiBudgetDay(Base):
     http_requests: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
 
+class ReadModelPublishLock(Base):
+    """Singleton publish lock per read model kind (Attention, keyword performance)."""
+
+    __tablename__ = "read_model_publish_locks"
+
+    kind: Mapped[str] = mapped_column(String(64), primary_key=True)
+    lock_holder: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    lock_token: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    lock_acquired_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
 class VideoFormatEnrichmentAttempt(Base):
     """Tracks videos.list format checks for daily budget and queue rotation (Stage 2.1)."""
 
@@ -1006,3 +1026,105 @@ class AttentionChannelMomentumRow(Base):
     rank: Mapped[int] = mapped_column(Integer, nullable=False)
     channel_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class TopicExplorationPass(Base):
+    """One broad exploration query execution within a discovery cycle (Stage 6)."""
+
+    __tablename__ = "topic_exploration_passes"
+    __table_args__ = (
+        UniqueConstraint(
+            "pass_discovery_run_id",
+            name="uq_topic_exploration_pass_run_id",
+        ),
+        Index("ix_topic_exploration_pass_query_observed", "exploration_query_id", "observed_at"),
+        Index("ix_topic_exploration_pass_cycle", "cycle_discovery_run_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    cycle_discovery_run_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    pass_discovery_run_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    exploration_query_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    exploration_query_text: Mapped[str] = mapped_column(String(512), nullable=False)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    finished_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False)
+    pages_requested: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    pages_scanned: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    unique_videos_observed: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    settings_version: Mapped[str] = mapped_column(String(32), nullable=False)
+    pass_fingerprint: Mapped[str] = mapped_column(String(64), nullable=False)
+    error_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    video_observations: Mapped[list[TopicExplorationVideoObservation]] = relationship(
+        back_populates="pass_row",
+        cascade="all, delete-orphan",
+    )
+    phrase_stats: Mapped[list[TopicExplorationPhrasePassStat]] = relationship(
+        back_populates="pass_row",
+        cascade="all, delete-orphan",
+    )
+
+
+class TopicExplorationVideoObservation(Base):
+    """Unique video seen in one exploration pass (deduped per pass)."""
+
+    __tablename__ = "topic_exploration_video_observations"
+    __table_args__ = (
+        UniqueConstraint(
+            "pass_id",
+            "video_id",
+            name="uq_topic_exploration_video_per_pass",
+        ),
+        Index("ix_topic_exploration_video_obs_video", "video_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    pass_id: Mapped[int] = mapped_column(
+        ForeignKey("topic_exploration_passes.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    channel_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    title: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+    pass_row: Mapped[TopicExplorationPass] = relationship(back_populates="video_observations")
+
+
+class TopicExplorationPhrasePassStat(Base):
+    """Phrase support counts for one exploration pass (novelty / audit)."""
+
+    __tablename__ = "topic_exploration_phrase_pass_stats"
+    __table_args__ = (
+        UniqueConstraint(
+            "pass_id",
+            "normalized_phrase",
+            name="uq_topic_exploration_phrase_per_pass",
+        ),
+        Index("ix_topic_exploration_phrase_fp", "normalized_phrase", "pass_fingerprint"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    pass_id: Mapped[int] = mapped_column(
+        ForeignKey("topic_exploration_passes.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    normalized_phrase: Mapped[str] = mapped_column(String(256), nullable=False)
+    distinct_video_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    distinct_channel_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    pass_fingerprint: Mapped[str] = mapped_column(String(64), nullable=False)
+    cycle_fingerprint: Mapped[str] = mapped_column(String(64), nullable=False)
+    exploration_query_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    recorded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    admitted_keyword_id: Mapped[int | None] = mapped_column(
+        ForeignKey("target_keywords.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    source_video_ids_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    source_channel_ids_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    pass_discovery_run_id: Mapped[str] = mapped_column(String(128), nullable=False)
+
+    pass_row: Mapped[TopicExplorationPass] = relationship(back_populates="phrase_stats")

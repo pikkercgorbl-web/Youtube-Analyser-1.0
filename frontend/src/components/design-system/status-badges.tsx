@@ -143,6 +143,10 @@ export function CheckpointBadge({
         return "border-checkpoint-done/40 text-checkpoint-done";
       case "stopped":
         return "border-border text-muted-foreground";
+      case "completed":
+        return "border-checkpoint-done/40 text-checkpoint-done";
+      case "fulfilled_late":
+        return "border-checkpoint-pending/50 text-muted-foreground";
       default:
         return "border-border text-muted-foreground";
     }

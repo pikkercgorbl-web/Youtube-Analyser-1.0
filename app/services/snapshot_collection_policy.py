@@ -12,7 +12,16 @@ from app.models.orm import VideoSnapshot
 from app.services.metrics import ensure_utc
 from app.services.video_snapshot_storage import get_snapshots_for_videos
 
-CheckpointStatus = Literal["pending", "due", "completed", "overdue", "expired"]
+CheckpointStatus = Literal[
+    "pending",
+    "due",
+    "completed",
+    "overdue",
+    "expired",
+    "fulfilled_late",
+]
+MONITORING_CAPTURE_SOURCE = "monitoring_worker"
+_SUCCESSFUL_CAPTURE_FETCH_STATUSES = frozenset({"ok", "refreshed"})
 MonitoringStatus = Literal["active", "stopped", "ineligible"]
 RecommendedAction = Literal["none", "capture_now", "wait"]
 CaptureReason = Literal["due", "overdue"]
@@ -36,6 +45,10 @@ class ExistingSnapshot:
     age_hours: float | None
     snapshot_id: int | None = None
     captured_at: datetime | None = None
+    source: str | None = None
+    fetch_status: str | None = None
+    target_checkpoint_hours: int | None = None
+    capture_reason: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -161,6 +174,49 @@ def snapshot_effective_age_hours(
     return None
 
 
+def snapshot_fulfills_checkpoint_late(
+    row: ExistingSnapshot,
+    checkpoint_hours: int,
+    *,
+    expected_source: str = MONITORING_CAPTURE_SOURCE,
+) -> bool:
+    """
+    Persisted monitoring capture for this checkpoint (not age-aligned measurement).
+
+    Uses snapshot metadata (video_id linkage is external); age alone must not qualify.
+    """
+    if row.snapshot_id is None:
+        return False
+    if row.target_checkpoint_hours != checkpoint_hours:
+        return False
+    if row.source is not None and row.source != expected_source:
+        return False
+    status = (row.fetch_status or "ok").strip().lower()
+    if status not in _SUCCESSFUL_CAPTURE_FETCH_STATUSES:
+        return False
+    reason = (row.capture_reason or "").strip().lower()
+    if reason and reason not in ("due", "overdue"):
+        return False
+    return True
+
+
+def find_late_checkpoint_fulfillment(
+    snapshots: Sequence[ExistingSnapshot],
+    checkpoint_hours: int,
+) -> ExistingSnapshot | None:
+    candidates = [
+        row
+        for row in snapshots
+        if snapshot_fulfills_checkpoint_late(row, checkpoint_hours)
+    ]
+    if not candidates:
+        return None
+    return max(
+        candidates,
+        key=lambda row: row.captured_at.timestamp() if row.captured_at is not None else 0.0,
+    )
+
+
 def find_matching_snapshot(
     snapshots: Sequence[ExistingSnapshot],
     checkpoint_hours: int,
@@ -183,7 +239,10 @@ def find_matching_snapshot(
     return min(
         matches,
         key=lambda row: (
-            abs(float(row.age_hours) - checkpoint_hours),  # type: ignore[arg-type]
+            abs(
+                float(snapshot_effective_age_hours(row, published_at=published_at) or 0.0)
+                - checkpoint_hours,
+            ),
             row.captured_at.timestamp() if row.captured_at is not None else 0.0,
         ),
     )
@@ -298,19 +357,42 @@ def plan_video_revisits(
                 cfg,
                 published_at=published_at,
             )
-            status, action, due_since = _checkpoint_status(
-                checkpoint_hours=checkpoint,
-                current_age_hours=current_age,
-                matched=matched,
-                policy=cfg,
+            late_fulfilled: ExistingSnapshot | None = None
+            if matched is None:
+                late_fulfilled = find_late_checkpoint_fulfillment(
+                    existing_snapshots,
+                    checkpoint,
+                )
+            if matched is not None:
+                status: CheckpointStatus = "completed"
+                action: RecommendedAction = "none"
+                due_since = None
+                linked = matched
+            elif late_fulfilled is not None:
+                status = "fulfilled_late"
+                action = "none"
+                due_since = None
+                linked = late_fulfilled
+            else:
+                status, action, due_since = _checkpoint_status(
+                    checkpoint_hours=checkpoint,
+                    current_age_hours=current_age,
+                    matched=None,
+                    policy=cfg,
+                )
+                linked = None
+            linked_age = (
+                snapshot_effective_age_hours(linked, published_at=published_at)
+                if linked is not None
+                else None
             )
             checkpoint_plans.append(
                 CheckpointPlan(
                     target_age_hours=checkpoint,
                     status=status,
-                    matched_snapshot_id=matched.snapshot_id if matched else None,
+                    matched_snapshot_id=linked.snapshot_id if linked else None,
                     matched_snapshot_age_hours=(
-                        float(matched.age_hours) if matched and matched.age_hours is not None else None
+                        round(float(linked_age), 4) if linked_age is not None else None
                     ),
                     min_match_age_hours=round(lower, 4),
                     max_match_age_hours=round(upper, 4),
@@ -417,10 +499,21 @@ def plan_revisits_for_videos(
 
 
 def existing_snapshot_from_orm(row: VideoSnapshot) -> ExistingSnapshot:
+    meta = row.raw_metadata if isinstance(row.raw_metadata, dict) else {}
+    cp_raw = meta.get("checkpoint_age_hours")
+    try:
+        target_cp = int(cp_raw) if cp_raw is not None else None
+    except (TypeError, ValueError):
+        target_cp = None
+    reason_raw = meta.get("capture_reason")
     return ExistingSnapshot(
         snapshot_id=row.id,
         age_hours=row.age_hours,
         captured_at=row.captured_at,
+        source=row.source,
+        fetch_status=row.fetch_status,
+        target_checkpoint_hours=target_cp,
+        capture_reason=str(reason_raw) if reason_raw is not None else None,
     )
 
 

@@ -1,0 +1,62 @@
+{
+  "checked_at_utc": "2026-10-07T15:21:30.166344+00:00",
+  "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+  "requested_model": "openai/gpt-oss-120b",
+  "synthetic_input_video_ids": [
+    "SYN_V001",
+    "SYN_V002",
+    "SYN_V003",
+    "SYN_V004"
+  ],
+  "note": "Success does not prove free tier; verify plan/limits in Groq Console.",
+  "groq_api_key_configured": true,
+  "http_status": 200,
+  "duration_seconds": 1.224,
+  "rate_limit_headers": {
+    "x-ratelimit-limit-requests": "1000",
+    "x-ratelimit-limit-tokens": "8000",
+    "x-ratelimit-remaining-requests": "999",
+    "x-ratelimit-remaining-tokens": "7164",
+    "x-ratelimit-reset-requests": "1m26.4s",
+    "x-ratelimit-reset-tokens": "6.27s",
+    "x-request-id": "req_01m4bjkkvzerb93zy0f3e2hzfg"
+  },
+  "ok": true,
+  "response_model": "openai/gpt-oss-120b",
+  "usage": {
+    "queue_time": 0.195108055,
+    "prompt_tokens": 324,
+    "prompt_time": 0.016935744,
+    "completion_tokens": 352,
+    "completion_time": 0.73884771,
+    "total_tokens": 676,
+    "total_time": 0.755783454,
+    "completion_tokens_details": {
+      "reasoning_tokens": 152
+    }
+  },
+  "assistant_content_length": 806,
+  "suggestions": [
+    {
+      "query": "cozy farming simulation games ranking 2025",
+      "reason": "Targets viewers looking for comparative reviews of recent cozy farming sims, matching the content of video V001.",
+      "source_video_ids": [
+        "SYN_V001"
+      ]
+    },
+    {
+      "query": "miniature painting wet palette tutorial beginners",
+      "reason": "Appeals to hobbyists seeking step\u2011by\u2011step guidance on using a wet palette for miniature painting, as shown in video V002.",
+      "source_video_ids": [
+        "SYN_V002"
+      ]
+    },
+    {
+      "query": "roguelike deckbuilder card room layout game concept",
+      "reason": "Captures interest in innovative roguelike deck\u2011building games where cards represent room layouts, reflecting the theme of video V004.",
+      "source_video_ids": [
+        "SYN_V004"
+      ]
+    }
+  ]
+}

@@ -448,7 +448,7 @@ def test_no_n_plus_one_snapshot_load() -> None:
     )
     session.commit()
     with patch(
-        "app.services.delayed_outcome_capture_planner.get_snapshots_for_videos",
+        "app.services.video_snapshot_storage.get_snapshots_for_videos",
         wraps=get_snapshots_for_videos,
     ) as mocked:
         plan_delayed_outcome_capture(session, reference=NOW)

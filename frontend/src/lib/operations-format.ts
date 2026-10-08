@@ -4,6 +4,16 @@ import type { ActivityState } from "./operations-types";
 
 export { formatDateTimeLocal, shortenRunId };
 
+/** Parse API timestamps; naive strings are treated as UTC (legacy rows). */
+export function parseApiInstant(iso: string): number {
+  const trimmed = iso.trim();
+  if (/[Zz]|[+-]\d{2}:\d{2}$/.test(trimmed)) {
+    return new Date(trimmed).getTime();
+  }
+  const normalized = trimmed.includes("T") ? trimmed : trimmed.replace(" ", "T");
+  return new Date(`${normalized}Z`).getTime();
+}
+
 /** Relative time from API reference clock (generated_at), not client wall clock. */
 export function formatRelativeTime(
   iso: string | null | undefined,
@@ -13,8 +23,8 @@ export function formatRelativeTime(
   if (!iso || !referenceIso) {
     return { relative: "—", title };
   }
-  const at = new Date(iso).getTime();
-  const ref = new Date(referenceIso).getTime();
+  const at = parseApiInstant(iso);
+  const ref = parseApiInstant(referenceIso);
   if (Number.isNaN(at) || Number.isNaN(ref)) {
     return { relative: "—", title };
   }

@@ -22,6 +22,7 @@ from app.services.video_format_outcomes import (
 )
 from app.services.format_enrichment_attempts import record_format_enrichment_attempt
 from app.services.video_format_from_api import infer_video_format_from_details
+from app.services.format_enrichment_snapshot import persist_format_enrichment_measurement
 from app.services.video_format_persistence import apply_api_details_to_video_content_format
 
 
@@ -78,6 +79,12 @@ def apply_format_details_for_batch(
         previous = row.content_format
         inferred = infer_video_format_from_details(details)
         apply_api_details_to_video_content_format(row, details)
+        persist_format_enrichment_measurement(
+            session,
+            video=row,
+            details=details,
+            captured_at=stamp,
+        )
         outcome = classify_api_format_outcome(
             previous=previous,
             current=row.content_format,

@@ -1,0 +1,1108 @@
+{
+  "generated_at_utc": "2026-10-08T10:46:17.768296+00:00",
+  "database": "local restore-check (from DATABASE_URL)",
+  "constraints": "read_only_no_api_no_writes",
+  "last_10_monitoring_cycles": [
+    {
+      "run_id": "monitoring_20261008T082748Z_cd5df434",
+      "started_at_utc": "2026-10-08T08:27:48.361982+00:00",
+      "finished_at_utc": "2026-10-08T08:27:48.906262+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2421,
+        "eligible": 38,
+        "unmonitored": 2383,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T08:27:48.906262+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1493,
+          "unmonitored": 927
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 617
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 64,
+          "B": 344,
+          "C": 1085
+        },
+        "due": 72,
+        "overdue": 118,
+        "capture_requests_built": 190,
+        "selected": 190,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "due": 72,
+          "pending": 2339,
+          "overdue": 118,
+          "expired": 1298,
+          "fulfilled_late": 4,
+          "completed": 35
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T084249Z_c2deb7a2",
+      "started_at_utc": "2026-10-08T08:42:49.541131+00:00",
+      "finished_at_utc": "2026-10-08T08:42:50.105137+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2421,
+        "eligible": 38,
+        "unmonitored": 2383,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T08:42:50.105137+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1492,
+          "unmonitored": 928
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 618
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 63,
+          "B": 342,
+          "C": 1087
+        },
+        "due": 65,
+        "overdue": 128,
+        "capture_requests_built": 193,
+        "selected": 193,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "due": 65,
+          "pending": 2329,
+          "overdue": 128,
+          "expired": 1296,
+          "fulfilled_late": 4,
+          "completed": 35
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T085750Z_9dbe3123",
+      "started_at_utc": "2026-10-08T08:57:50.747162+00:00",
+      "finished_at_utc": "2026-10-08T08:57:51.296679+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2421,
+        "eligible": 37,
+        "unmonitored": 2384,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T08:57:51.296679+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1490,
+          "unmonitored": 930
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 620
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 61,
+          "B": 343,
+          "C": 1086
+        },
+        "due": 66,
+        "overdue": 129,
+        "capture_requests_built": 195,
+        "selected": 195,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "overdue": 129,
+          "pending": 2321,
+          "expired": 1296,
+          "due": 66,
+          "fulfilled_late": 3,
+          "completed": 34
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T091251Z_58836aef",
+      "started_at_utc": "2026-10-08T09:12:51.954132+00:00",
+      "finished_at_utc": "2026-10-08T09:12:52.664829+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2421,
+        "eligible": 37,
+        "unmonitored": 2384,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T09:12:52.664829+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1488,
+          "unmonitored": 932
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 622
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 56,
+          "B": 344,
+          "C": 1088
+        },
+        "due": 89,
+        "overdue": 119,
+        "capture_requests_built": 208,
+        "selected": 208,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "overdue": 119,
+          "pending": 2292,
+          "expired": 1295,
+          "due": 89,
+          "fulfilled_late": 3,
+          "completed": 34
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T092753Z_367f54bd",
+      "started_at_utc": "2026-10-08T09:27:53.323505+00:00",
+      "finished_at_utc": "2026-10-08T09:27:53.892853+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2421,
+        "eligible": 36,
+        "unmonitored": 2385,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T09:27:53.892853+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1487,
+          "unmonitored": 933
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 623
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 55,
+          "B": 345,
+          "C": 1087
+        },
+        "due": 91,
+        "overdue": 122,
+        "capture_requests_built": 213,
+        "selected": 213,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "overdue": 122,
+          "pending": 2284,
+          "expired": 1296,
+          "due": 91,
+          "fulfilled_late": 2,
+          "completed": 34
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T094254Z_91147135",
+      "started_at_utc": "2026-10-08T09:42:54.573754+00:00",
+      "finished_at_utc": "2026-10-08T09:42:55.271138+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2421,
+        "eligible": 34,
+        "unmonitored": 2387,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T09:42:55.271138+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1482,
+          "unmonitored": 938
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 628
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 54,
+          "B": 343,
+          "C": 1085
+        },
+        "due": 88,
+        "overdue": 124,
+        "capture_requests_built": 212,
+        "selected": 212,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "overdue": 124,
+          "pending": 2272,
+          "expired": 1294,
+          "due": 88,
+          "fulfilled_late": 1,
+          "completed": 33
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T095755Z_dc7e3b83",
+      "started_at_utc": "2026-10-08T09:57:55.902897+00:00",
+      "finished_at_utc": "2026-10-08T09:57:56.572933+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2420,
+        "eligible": 32,
+        "unmonitored": 2388,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T09:57:56.572933+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1479,
+          "unmonitored": 941
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 631
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 54,
+          "B": 342,
+          "C": 1083
+        },
+        "due": 87,
+        "overdue": 128,
+        "capture_requests_built": 215,
+        "selected": 215,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "overdue": 128,
+          "pending": 2263,
+          "expired": 1294,
+          "due": 87,
+          "fulfilled_late": 1,
+          "completed": 31
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T101257Z_aab5b01b",
+      "started_at_utc": "2026-10-08T10:12:57.202859+00:00",
+      "finished_at_utc": "2026-10-08T10:12:57.858816+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2420,
+        "eligible": 32,
+        "unmonitored": 2388,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T10:12:57.858816+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1478,
+          "unmonitored": 942
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 632
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 48,
+          "B": 343,
+          "C": 1087
+        },
+        "due": 116,
+        "overdue": 118,
+        "capture_requests_built": 234,
+        "selected": 234,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "overdue": 118,
+          "pending": 2226,
+          "expired": 1294,
+          "due": 116,
+          "fulfilled_late": 1,
+          "completed": 31
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T102758Z_e4a8e395",
+      "started_at_utc": "2026-10-08T10:27:58.511099+00:00",
+      "finished_at_utc": "2026-10-08T10:27:59.320407+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2420,
+        "eligible": 32,
+        "unmonitored": 2388,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T10:27:59.320407+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1478,
+          "unmonitored": 942
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 632
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 48,
+          "B": 343,
+          "C": 1087
+        },
+        "due": 119,
+        "overdue": 119,
+        "capture_requests_built": 238,
+        "selected": 238,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "overdue": 119,
+          "pending": 2220,
+          "expired": 1296,
+          "due": 119,
+          "fulfilled_late": 1,
+          "completed": 31
+        },
+        "inferred_zero_capture_reason": null
+      }
+    },
+    {
+      "run_id": "monitoring_20261008T104259Z_39eb8ea9",
+      "started_at_utc": "2026-10-08T10:42:59.926612+00:00",
+      "finished_at_utc": "2026-10-08T10:43:00.554175+00:00",
+      "cycle_status": "ok",
+      "persisted": {
+        "loaded": 2420,
+        "eligible": 32,
+        "unmonitored": 2388,
+        "due": 0,
+        "overdue": 0,
+        "selected": 0,
+        "deferred": 0,
+        "inserted": 0
+      },
+      "replay_at_finished_at": {
+        "at_utc": "2026-10-08T10:43:00.554175+00:00",
+        "loaded_eligible_unmonitored": {
+          "loaded": 2420,
+          "eligible_active_tier": 1475,
+          "unmonitored": 945
+        },
+        "exclusion_breakdown": {
+          "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+          "tier_unmonitored_among_loaded": {
+            "missing_vph": 298,
+            "stale_discovery_age": 635
+          },
+          "channel_active_cap": 12,
+          "global_monitoring_cap": 0
+        },
+        "tier_counts": {
+          "A": 47,
+          "B": 341,
+          "C": 1087
+        },
+        "due": 120,
+        "overdue": 125,
+        "capture_requests_built": 245,
+        "selected": 245,
+        "deferred": 0,
+        "checkpoint_status_counts_active_pool": {
+          "overdue": 125,
+          "pending": 2205,
+          "expired": 1291,
+          "due": 120,
+          "fulfilled_late": 1,
+          "completed": 31
+        },
+        "inferred_zero_capture_reason": null
+      }
+    }
+  ],
+  "current_pool_diagnosis": {
+    "at_utc": "2026-10-08T10:46:17.768296+00:00",
+    "loaded_eligible_unmonitored": {
+      "loaded": 2420,
+      "eligible_active_tier": 1474,
+      "unmonitored": 946
+    },
+    "exclusion_breakdown": {
+      "not_loaded_radar_monitoring_filter": "see per_video_funnel; SQL candidate pool > loaded",
+      "tier_unmonitored_among_loaded": {
+        "missing_vph": 298,
+        "stale_discovery_age": 636
+      },
+      "channel_active_cap": 12,
+      "global_monitoring_cap": 0
+    },
+    "tier_counts": {
+      "A": 47,
+      "B": 341,
+      "C": 1086
+    },
+    "due": 121,
+    "overdue": 125,
+    "capture_requests_built": 246,
+    "selected": 246,
+    "deferred": 0,
+    "checkpoint_status_counts_active_pool": {
+      "overdue": 125,
+      "pending": 2203,
+      "expired": 1290,
+      "due": 121,
+      "fulfilled_late": 1,
+      "completed": 31
+    },
+    "inferred_zero_capture_reason": null
+  },
+  "funnel_last_24h": {
+    "window_start_utc": "2026-10-07T10:46:17.768296+00:00",
+    "window_end_utc": "2026-10-08T10:46:17.768296+00:00",
+    "discovery_hits_rows": 91422,
+    "unique_video_ids_discovered": 54927,
+    "stage_counts": {
+      "1_discovery_unique": 54927,
+      "2_known_subscribers_lte_100k": 1716,
+      "3_confirmed_regular": 705,
+      "4_monitoring_load_eligible": 705,
+      "5_active_tier_after_caps": 622,
+      "6_has_due_or_overdue_checkpoint": 246
+    },
+    "rejections_known_subs_gate": {
+      "unknown_subscribers": 50048,
+      "over_subscriber_limit": 450,
+      "stream": 91,
+      "short": 5
+    },
+    "rejections_monitoring_gate": {
+      "radar_target_ineligible": 50594,
+      "not_confirmed_regular": 1011
+    },
+    "age_hours_discovery_median": 13.36,
+    "age_hours_since_publication_median": 27.04
+  },
+  "next_future_checkpoint": {
+    "video_id": "qxIOUg8NVz4",
+    "checkpoint_hours": 24,
+    "due_at_utc": "2026-10-08T10:48:26+00:00",
+    "hours_until_due": 0.0356,
+    "current_age_hours": 23.9644
+  },
+  "no_future_captures_explanation": null,
+  "fulfilled_late_audit": {
+    "yVaPgwNlfLo": {
+      "video_id": "yVaPgwNlfLo",
+      "published_at": "2026-10-06T05:00:38+00:00",
+      "checkpoints_now": [
+        {
+          "target_hours": 6,
+          "status": "fulfilled_late",
+          "matched_snapshot_id": 123473,
+          "matched_age_hours": 11.7528
+        },
+        {
+          "target_hours": 12,
+          "status": "completed",
+          "matched_snapshot_id": 123473,
+          "matched_age_hours": 11.7528
+        },
+        {
+          "target_hours": 24,
+          "status": "fulfilled_late",
+          "matched_snapshot_id": 125358,
+          "matched_age_hours": 33.4009
+        },
+        {
+          "target_hours": 48,
+          "status": "due",
+          "matched_snapshot_id": null,
+          "matched_age_hours": null
+        },
+        {
+          "target_hours": 72,
+          "status": "pending",
+          "matched_snapshot_id": null,
+          "matched_age_hours": null
+        }
+      ],
+      "due_checkpoints_now": [
+        48
+      ],
+      "momentum_24h_age_aligned_measurement": null,
+      "snapshots": [
+        {
+          "snapshot_id": 123207,
+          "captured_at": "2026-10-06T13:23:33.214681+00:00",
+          "age_hours": 8.382,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 6,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 123312,
+          "captured_at": "2026-10-06T15:34:08.983768+00:00",
+          "age_hours": 10.5586,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 6,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 123332,
+          "captured_at": "2026-10-06T15:49:44.425140+00:00",
+          "age_hours": 10.8185,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 6,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 123346,
+          "captured_at": "2026-10-06T16:05:16.562260+00:00",
+          "age_hours": 11.0774,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 6,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 123360,
+          "captured_at": "2026-10-06T16:30:01.285169+00:00",
+          "age_hours": 11.4898,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 6,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 123473,
+          "captured_at": "2026-10-06T16:45:47.902188+00:00",
+          "age_hours": 11.7528,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 6,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 125252,
+          "captured_at": "2026-10-07T13:23:25.142089+00:00",
+          "age_hours": 32.3798,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 24,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 125253,
+          "captured_at": "2026-10-07T13:24:36.789709+00:00",
+          "age_hours": 32.3997,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 24,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 125354,
+          "captured_at": "2026-10-07T13:25:25.792726+00:00",
+          "age_hours": 32.4133,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 24,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 125355,
+          "captured_at": "2026-10-07T13:39:38.000755+00:00",
+          "age_hours": 32.65,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 24,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 125356,
+          "captured_at": "2026-10-07T13:54:39.089027+00:00",
+          "age_hours": 32.9003,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 24,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 125357,
+          "captured_at": "2026-10-07T14:09:40.093063+00:00",
+          "age_hours": 33.1506,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 24,
+          "capture_reason_meta": "overdue"
+        },
+        {
+          "snapshot_id": 125358,
+          "captured_at": "2026-10-07T14:24:41.117863+00:00",
+          "age_hours": 33.4009,
+          "source": "monitoring_worker",
+          "fetch_status": "ok",
+          "checkpoint_age_hours_meta": 24,
+          "capture_reason_meta": "overdue"
+        }
+      ],
+      "fulfilled_late_metadata_violations": [],
+      "interpretation": "fulfilled_late closes only the checkpoint matching target_checkpoint_hours metadata; momentum 24h requires age-aligned window, not late overdue capture."
+    }
+  },
+  "fresh_discovery_10": [
+    {
+      "video_id": "1aP67HXtC3Y",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "DtwuUGPaRV8",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "1UrJ9JpWNIM",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "sfnBPVmSkAo",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "arZmDnsP5mI",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "EjAlKOlOARA",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "k_3uXb8RoAk",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "W-EepwbhJz4",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "9VIwUeQLxQI",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    },
+    {
+      "video_id": "tqQLtH8LwsA",
+      "error": "video_not_found",
+      "discovered_at_utc": "2026-10-08T10:43:10.882180+00:00"
+    }
+  ],
+  "bootstrap_vph_cohort_735": {
+    "cohort_size_monitoring_load_24h": 705,
+    "active_tier_count": 622,
+    "inactive_reason_counts": {
+      "missing_vph": 80,
+      "channel_active_cap": 2,
+      "stale_discovery_age": 1
+    },
+    "cohort_still_missing_vph_after_discovery_bootstrap": 80,
+    "pre_fix_root_cause": "load_monitored_video_states did not pass KeywordDiscoveryHit into derive_latest_measurement (fixed in monitoring_video_source.py during audit)",
+    "not_in_loaded_sample": []
+  },
+  "missing_vph_traces_10": [
+    {
+      "video_id": "1xfyTYSxvDQ",
+      "video_views_count": 0,
+      "published_at": "2026-10-08T00:29:31+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-08T01:24:12.576363+00:00",
+        "views_at_discovery": null,
+        "vph_at_discovery": 0.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "unavailable",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_hits_present_but_unusable",
+      "bootstrap_branch_detail": {
+        "hits_count": 2,
+        "sample_views_at_discovery": [
+          null,
+          null
+        ]
+      },
+      "vph_none_reason": "no_usable_views_at_discovery_on_hits"
+    },
+    {
+      "video_id": "2IEdVKI07sA",
+      "video_views_count": 0,
+      "published_at": "2026-10-07T09:00:28+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-08T01:43:30.928141+00:00",
+        "views_at_discovery": null,
+        "vph_at_discovery": 0.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "unavailable",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_hits_present_but_unusable",
+      "bootstrap_branch_detail": {
+        "hits_count": 3,
+        "sample_views_at_discovery": [
+          null,
+          null,
+          null
+        ]
+      },
+      "vph_none_reason": "no_usable_views_at_discovery_on_hits"
+    },
+    {
+      "video_id": "3miyWVlYEzA",
+      "video_views_count": 0,
+      "published_at": "2026-10-07T21:15:20+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-08T01:43:30.928141+00:00",
+        "views_at_discovery": null,
+        "vph_at_discovery": 0.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "unavailable",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_hits_present_but_unusable",
+      "bootstrap_branch_detail": {
+        "hits_count": 2,
+        "sample_views_at_discovery": [
+          null,
+          null
+        ]
+      },
+      "vph_none_reason": "no_usable_views_at_discovery_on_hits"
+    },
+    {
+      "video_id": "3XZzfwXMkxI",
+      "video_views_count": 95,
+      "published_at": "2026-10-06T12:44:48+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-06T12:09:46.140558+00:00",
+        "views_at_discovery": 3,
+        "vph_at_discovery": 3.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "discovery",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_path",
+      "bootstrap_branch_detail": {
+        "earliest_hit_discovered_at": "2026-10-06T12:09:46.140558+00:00",
+        "views_at_discovery": 3,
+        "derived_age_hours": null,
+        "derived_vph": null,
+        "published_at_approximate": false
+      },
+      "vph_none_reason": "derive_snapshot_metrics_invalid_age_non_positive"
+    },
+    {
+      "video_id": "3yaGJYpGsDs",
+      "video_views_count": 7,
+      "published_at": "2026-10-07T12:00:29+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-07T11:47:23.659110+00:00",
+        "views_at_discovery": 1,
+        "vph_at_discovery": 1.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "discovery",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_path",
+      "bootstrap_branch_detail": {
+        "earliest_hit_discovered_at": "2026-10-07T11:47:23.659110+00:00",
+        "views_at_discovery": 1,
+        "derived_age_hours": null,
+        "derived_vph": null,
+        "published_at_approximate": false
+      },
+      "vph_none_reason": "derive_snapshot_metrics_invalid_age_non_positive"
+    },
+    {
+      "video_id": "4-l_s0TiddE",
+      "video_views_count": 4249,
+      "published_at": "2026-10-07T12:00:29+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-07T11:47:23.659110+00:00",
+        "views_at_discovery": 70,
+        "vph_at_discovery": 70.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "discovery",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_path",
+      "bootstrap_branch_detail": {
+        "earliest_hit_discovered_at": "2026-10-07T11:47:23.659110+00:00",
+        "views_at_discovery": 70,
+        "derived_age_hours": null,
+        "derived_vph": null,
+        "published_at_approximate": false
+      },
+      "vph_none_reason": "derive_snapshot_metrics_invalid_age_non_positive"
+    },
+    {
+      "video_id": "5hgyzB4NuhU",
+      "video_views_count": 0,
+      "published_at": "2026-10-07T15:02:08+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-08T01:17:56.775749+00:00",
+        "views_at_discovery": null,
+        "vph_at_discovery": 0.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "unavailable",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_hits_present_but_unusable",
+      "bootstrap_branch_detail": {
+        "hits_count": 1,
+        "sample_views_at_discovery": [
+          null
+        ]
+      },
+      "vph_none_reason": "no_usable_views_at_discovery_on_hits"
+    },
+    {
+      "video_id": "5V9vJHpTek4",
+      "video_views_count": 8,
+      "published_at": "2026-10-06T16:00:23+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-06T15:35:11.785651+00:00",
+        "views_at_discovery": 1,
+        "vph_at_discovery": 1.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "discovery",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_path",
+      "bootstrap_branch_detail": {
+        "earliest_hit_discovered_at": "2026-10-06T15:35:11.785651+00:00",
+        "views_at_discovery": 1,
+        "derived_age_hours": null,
+        "derived_vph": null,
+        "published_at_approximate": false
+      },
+      "vph_none_reason": "derive_snapshot_metrics_invalid_age_non_positive"
+    },
+    {
+      "video_id": "6azSPJvHyH8",
+      "video_views_count": 0,
+      "published_at": "2026-10-07T12:00:12+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-07T19:56:06.053834+00:00",
+        "views_at_discovery": null,
+        "vph_at_discovery": 0.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "unavailable",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_hits_present_but_unusable",
+      "bootstrap_branch_detail": {
+        "hits_count": 2,
+        "sample_views_at_discovery": [
+          null,
+          null
+        ]
+      },
+      "vph_none_reason": "no_usable_views_at_discovery_on_hits"
+    },
+    {
+      "video_id": "6OldsY4p2P8",
+      "video_views_count": 6,
+      "published_at": "2026-10-07T12:42:27+00:00",
+      "published_at_source": "api_snippet",
+      "api_published_at_rank_ok": true,
+      "keyword_discovery_hit": {
+        "discovered_at": "2026-10-07T12:36:16.924369+00:00",
+        "views_at_discovery": 6,
+        "vph_at_discovery": 6.0
+      },
+      "format_enrichment_stores_views": false,
+      "snapshot_count": 0,
+      "latest_snapshot_id": null,
+      "measurement_source": "discovery",
+      "measurement_average_vph": null,
+      "load_monitored_video_states_raw_vph": null,
+      "bootstrap_branch": "discovery_path",
+      "bootstrap_branch_detail": {
+        "earliest_hit_discovered_at": "2026-10-07T12:36:16.924369+00:00",
+        "views_at_discovery": 6,
+        "derived_age_hours": null,
+        "derived_vph": null,
+        "published_at_approximate": false
+      },
+      "vph_none_reason": "derive_snapshot_metrics_invalid_age_non_positive"
+    }
+  ],
+  "code_answers": {
+    "new_video_without_snapshot_first_capture": "Yes, if KeywordDiscoveryHit has views_at_discovery and API published_at: load_monitored_video_states bootstraps VPH at discovered_at (not now). Tier assignment then allows active pool; first capture when checkpoint due/overdue.",
+    "without_discovery_hit_or_snapshot": "No: derive_latest_measurement returns source=unavailable, raw_vph None, assign_monitoring_tiers excluded_reason missing_vph — no capture requests.",
+    "exploration_without_keyword_discovery_hit": "TopicExplorationVideoObservation stores no views; no bootstrap path today.",
+    "video_views_count_not_used": true
+  },
+  "vicious_circle_fix_applied_in_code": "monitoring_video_source._load_discovery_hits_by_video_id wired into load path (views at discovery time, not views_count/now).",
+  "confirmed_root_cause_zero_capture": null,
+  "unconfirmed_hypotheses": [
+    "Worker dry_run or missing youtube client (would yield inserted=0 despite selected>0)",
+    "API budget env override not visible in ORM cycle rows"
+  ]
+}

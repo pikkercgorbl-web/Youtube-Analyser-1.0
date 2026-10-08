@@ -84,6 +84,8 @@ export function checkpointStatusLabel(status: CheckpointStatus | null | undefine
       return "Снято с мониторинга";
     case "completed":
       return "Снимок снят";
+    case "fulfilled_late":
+      return "Поздний захват (без окна)";
     case "expired":
       return "Окно истекло";
     default:

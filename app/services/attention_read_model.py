@@ -171,6 +171,7 @@ def refresh_attention_engine(
     now: datetime | None = None,
     publishable_winner_video_ids: frozenset[str] | None = None,
     filter_unverified_format_winners: bool = True,
+    publish_token: str | None = None,
 ) -> AttentionEngineResult:
     cfg = config or AttentionEngineConfig()
     computed_at = ensure_utc(now or utc_now())
@@ -204,6 +205,13 @@ def refresh_attention_engine(
             families=result.families,
             channels=result.channels,
         )
+    if publish_token is not None:
+        from app.services.read_model_publish_lock import (
+            PUBLISH_LOCK_ATTENTION,
+            assert_publish_lock_token,
+        )
+
+        assert_publish_lock_token(session, kind=PUBLISH_LOCK_ATTENTION, token=publish_token)
     persist_attention_result(session, result, run_id=run_id)
     return result
 

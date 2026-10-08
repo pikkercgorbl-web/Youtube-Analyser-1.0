@@ -98,6 +98,30 @@ def test_pass_runs_without_discovery_results() -> None:
     client.get_videos.assert_not_called()
 
 
+def test_dry_run_and_budget_read_do_not_create_ledger_rows() -> None:
+    from app.services.radar_api_budget import BUDGET_KIND_CHANNELS_LIST, count_budget_rows, remaining_id_units
+    from app.services.radar_enrichment_config import radar_enrichment_settings
+
+    session = _session()
+    now = datetime.now(timezone.utc)
+    assert count_budget_rows(session) == 0
+    remaining_id_units(
+        session,
+        budget_kind=BUDGET_KIND_CHANNELS_LIST,
+        daily_limit=radar_enrichment_settings.channel_subscriber_enrichment_daily_limit,
+        now=now,
+    )
+    assert count_budget_rows(session) == 0
+    run_radar_enrichment_pass(
+        session,
+        MagicMock(),
+        context=RadarEnrichmentPassContext(pass_sequence=0),
+        dry_run=True,
+        now=now,
+    )
+    assert count_budget_rows(session) == 0
+
+
 def test_format_selection_skips_over_100k_subscribers() -> None:
     session = _session()
     now = datetime.now(timezone.utc)
@@ -454,6 +478,7 @@ def test_cycle_priority_over_backlog() -> None:
 def main() -> int:
     tests = [
         test_pass_runs_without_discovery_results,
+        test_dry_run_and_budget_read_do_not_create_ledger_rows,
         test_format_selection_skips_over_100k_subscribers,
         test_format_selection_does_not_require_snapshots,
         test_hidden_channel_cooldown_blocks_repeat,

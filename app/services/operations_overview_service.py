@@ -444,7 +444,8 @@ def build_snapshot_metrics_sequential(session: Session, *, now: datetime | None 
     since_1h = reference - timedelta(hours=1)
     since_24h = reference - timedelta(hours=24)
 
-    latest = session.scalar(select(func.max(VideoSnapshot.captured_at)))
+    latest_raw = session.scalar(select(func.max(VideoSnapshot.captured_at)))
+    latest = ensure_utc(latest_raw) if latest_raw is not None else None
     count_1h = session.scalar(
         select(func.count())
         .select_from(VideoSnapshot)

@@ -28,7 +28,6 @@ from app.services.keyword_performance_evaluation import (
     match_horizon_outcome,
 )
 from app.services.metrics import ensure_utc
-from app.services.video_snapshot_storage import get_snapshots_for_videos
 
 
 def _outcome_window(
@@ -153,10 +152,19 @@ def plan_delayed_outcome_capture(
     tolerance_hours: float = HORIZON_SNAPSHOT_TOLERANCE_HOURS,
 ) -> DelayedOutcomeCapturePlan:
     records = load_attributed_outcome_observations(session, attribution_mode=attribution_mode)
-    video_ids = sorted({row.video_id for row in records})
+    ref = ensure_utc(reference)
+    video_ids_needing_snapshots = sorted(
+        {
+            row.video_id
+            for row in records
+            if ref >= _outcome_window(row.discovered_at, horizon_hours=horizon_hours, tolerance_hours=tolerance_hours)[1]
+        },
+    )
     snapshots_by_video: dict[str, list] = {}
-    if video_ids:
-        for snap in get_snapshots_for_videos(session, video_ids):
+    if video_ids_needing_snapshots:
+        from app.services.video_snapshot_storage import get_snapshots_for_videos
+
+        for snap in get_snapshots_for_videos(session, video_ids_needing_snapshots):
             snapshots_by_video.setdefault(snap.video_id, []).append(snap)
 
     observations: list[OutcomeObservationPlan] = []

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Point app .env at local Postgres; backup prior DATABASE_URL to gitignored file."""
+"""Point app .env at local Docker Postgres (optional archive of prior remote URL)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,9 @@ from pathlib import Path
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
-BACKUP_NAME = ".env.supabase.remote"
+BACKUP_DIR = ROOT / "backups" / "migration_archive"
+BACKUP_FILE = BACKUP_DIR / "database_url_remote.env"
+LEGACY_BACKUP = ROOT / ".env.supabase.remote"
 LOCAL_HOST = "127.0.0.1"
 LOCAL_PORT = 5433
 LOCAL_DB = "youtube_radar_restore_check"
@@ -35,13 +37,14 @@ def _build_local_database_url(docker_env: dict[str, str]) -> str:
     return f"postgresql://{user}:{pw}@{LOCAL_HOST}:{LOCAL_PORT}/{LOCAL_DB}"
 
 
-def _is_remote_database_url(url: str) -> bool:
+def _is_local_database_url(url: str) -> bool:
     lower = url.lower()
-    if "sqlite" in lower:
-        return False
-    if LOCAL_HOST in lower and LOCAL_PORT == 5433 and LOCAL_DB in lower:
-        return False
-    return "postgresql" in lower or "postgres://" in lower
+    return LOCAL_HOST in lower and f":{LOCAL_PORT}/" in lower and LOCAL_DB in lower
+
+
+def _is_postgres_url(url: str) -> bool:
+    lower = url.lower()
+    return "postgresql" in lower or lower.startswith("postgres://")
 
 
 def _upsert_env_line(lines: list[str], key: str, value: str) -> list[str]:
@@ -56,10 +59,27 @@ def _upsert_env_line(lines: list[str], key: str, value: str) -> list[str]:
     return out
 
 
+def _ensure_remote_archive(current_url: str) -> None:
+    if not current_url or _is_local_database_url(current_url) or not _is_postgres_url(current_url):
+        return
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    if LEGACY_BACKUP.is_file() and not BACKUP_FILE.is_file():
+        LEGACY_BACKUP.replace(BACKUP_FILE)
+        print(f"Migrated legacy backup to {BACKUP_FILE.resolve()}")
+    if BACKUP_FILE.is_file():
+        print(f"Remote DATABASE_URL archive exists (not overwritten): {BACKUP_FILE.resolve()}")
+        return
+    BACKUP_FILE.write_text(
+        "# Archived remote DATABASE_URL (hosted Postgres migration).\n"
+        f"DATABASE_URL={current_url}\n",
+        encoding="utf-8",
+    )
+    print(f"Archived prior remote DATABASE_URL to {BACKUP_FILE.resolve()}")
+
+
 def main() -> int:
     env_path = ROOT / ".env"
     docker_path = ROOT / ".env.docker"
-    backup_path = ROOT / BACKUP_NAME
 
     if not docker_path.is_file():
         print("Missing .env.docker (RADAR_LOCAL_DB_USER/PASSWORD).", file=sys.stderr)
@@ -76,18 +96,10 @@ def main() -> int:
     if env_path.is_file():
         app_env = _load_dotenv(env_path)
         current = app_env.get("DATABASE_URL", "")
-        if current and _is_remote_database_url(current):
-            if not backup_path.is_file():
-                backup_path.write_text(
-                    "# Previous remote DATABASE_URL (Supabase / hosted Postgres).\n"
-                    f"DATABASE_URL={current}\n",
-                    encoding="utf-8",
-                )
-                print(f"Saved remote DATABASE_URL to {backup_path.resolve()}")
-            else:
-                print(f"Backup exists (not overwritten): {backup_path.resolve()}")
-        elif current and not _is_remote_database_url(current):
-            print("Current DATABASE_URL is already local; backup untouched.")
+        if current and not _is_local_database_url(current):
+            _ensure_remote_archive(current)
+        elif current and _is_local_database_url(current):
+            print("Current DATABASE_URL is already local; remote archive untouched.")
         lines = env_path.read_text(encoding="utf-8").splitlines()
     else:
         lines = ["# Local Radar (see docs/LOCAL_RADAR_LAPTOP.md)"]

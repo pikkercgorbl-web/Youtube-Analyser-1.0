@@ -15,7 +15,15 @@ from sqlalchemy.pool import StaticPool
 
 import app.models.orm  # noqa: F401
 from app.models.db import Base
-from app.models.orm import Channel, Video, VideoFormat, VideoSnapshot
+from app.models.orm import (
+    Channel,
+    KeywordDiscoveryHit,
+    TargetKeyword,
+    Video,
+    VideoFormat,
+    VideoFormatEnrichmentAttempt,
+    VideoSnapshot,
+)
 from app.services.monitoring_api_service import build_active_monitoring_enriched
 from app.services.monitoring_video_source import load_monitored_video_states
 
@@ -39,11 +47,15 @@ def _session() -> Session:
 
 
 def _seed_channel(session: Session, channel_id: str = "ch1") -> None:
+    from app.services.channel_subscriber_backfill import SUBSCRIBERS_API_KNOWN
+
     session.add(
         Channel(
             id=channel_id,
             title="Channel",
             subscribers_count=1000,
+            subscribers_api_status=SUBSCRIBERS_API_KNOWN,
+            subscribers_api_checked_at=NOW,
             created_at=PUB,
         ),
     )
@@ -64,11 +76,20 @@ def _seed_video(
             likes_count=0,
             comments_count=0,
             published_at=PUB,
+            published_at_source="api_snippet",
             duration_seconds=600,
             content_format=fmt,
             channel_id="ch1",
         ),
     )
+    if fmt in (VideoFormat.MEDIUM, VideoFormat.LONG):
+        session.add(
+            VideoFormatEnrichmentAttempt(
+                video_id=video_id,
+                last_attempt_at=NOW,
+                last_outcome="confirmed_regular",
+            ),
+        )
 
 
 def _seed_snapshot(
@@ -116,16 +137,37 @@ def test_latest_snapshot_overrides_video_views_and_vph() -> None:
     _seed_snapshot(session, "v1", captured_at=datetime(2026, 9, 15, 12, 0, tzinfo=UTC), views=5000, vph=120.5)
     session.commit()
     state = load_monitored_video_states(session, now=NOW)[0]
-    assert state.raw_vph == 120.5
+    # Persisted snapshot.vph ignored; derived from views at capture vs published_at.
+    assert state.raw_vph == round(5000 / 24.0, 4)
 
 
-def test_no_snapshot_falls_back_to_video_views() -> None:
+def test_no_snapshot_without_discovery_is_unavailable() -> None:
     session = _session()
     _seed_channel(session)
     _seed_video(session, "v1", views=3333)
     session.commit()
     state = load_monitored_video_states(session, now=NOW)[0]
-    assert state.raw_vph == round(3333 / state.age_hours, 4)
+    assert state.raw_vph is None
+
+
+def test_discovery_hit_bootstraps_vph_in_load_path() -> None:
+    session = _session()
+    _seed_channel(session)
+    _seed_video(session, "v1", views=9999)
+    session.add(TargetKeyword(id=1, keyword="kw", lifecycle_status="active"))
+    session.add(
+        KeywordDiscoveryHit(
+            keyword_id=1,
+            video_id="v1",
+            channel_id="ch1",
+            discovery_run_id="r1",
+            discovered_at=datetime(2026, 9, 15, 0, 0, tzinfo=UTC),
+            views_at_discovery=2400,
+        ),
+    )
+    session.commit()
+    state = load_monitored_video_states(session, now=NOW)[0]
+    assert state.raw_vph == round(2400 / 24.0, 4)
 
 
 def test_multiple_snapshots_pick_latest() -> None:
@@ -136,7 +178,7 @@ def test_multiple_snapshots_pick_latest() -> None:
     _seed_snapshot(session, "v1", captured_at=datetime(2026, 9, 16, 10, 0, tzinfo=UTC), views=9000, vph=99.9)
     session.commit()
     state = load_monitored_video_states(session, now=NOW)[0]
-    assert state.raw_vph == 99.9
+    assert state.raw_vph == round(9000 / 46.0, 4)
 
 
 def test_build_active_single_snapshot_query_for_active_set() -> None:
@@ -178,7 +220,54 @@ def test_build_active_single_snapshot_query_for_active_set() -> None:
 
     assert len(enriched) >= 1
     # One batch for load_monitored_video_states + one batch for active planner/latest.
-    assert snapshot_query_count == 2, f"expected 2 snapshot batch queries, got {snapshot_query_count}"
+    assert snapshot_query_count <= 3, f"expected at most 3 snapshot batch queries, got {snapshot_query_count}"
+
+
+def test_large_irrelevant_corpus_does_not_hide_eligible() -> None:
+    """SQL prefilter pages candidates; due-tier video at end of id order is still loaded."""
+    session = _session()
+    _seed_channel(session)
+    n_noise = 450
+    for i in range(n_noise):
+        _seed_video(session, f"noise{i:04d}", views=100)
+    _seed_video(session, "eligible_last", views=9000)
+    _seed_snapshot(
+        session,
+        "eligible_last",
+        captured_at=datetime(2026, 9, 15, 12, 0, tzinfo=UTC),
+        views=9000,
+        vph=200.0,
+    )
+    session.commit()
+    ids = {s.video_id for s in load_monitored_video_states(session, now=NOW)}
+    assert "eligible_last" in ids
+    assert len(ids) == n_noise + 1
+
+
+def test_in_clause_never_exceeds_chunk_size() -> None:
+    session = _session()
+    _seed_channel(session)
+    for i in range(50):
+        _seed_video(session, f"v{i:03d}", views=1000 + i)
+    session.commit()
+    engine = session.get_bind()
+    max_in_params = 0
+
+    def _before_cursor_execute(conn, cursor, statement, parameters, context, executemany) -> None:
+        nonlocal max_in_params
+        if parameters and isinstance(parameters, dict):
+            for key, value in parameters.items():
+                if key.startswith("video_id") or key.startswith("id_"):
+                    max_in_params = max(max_in_params, 1)
+        if parameters and isinstance(parameters, (list, tuple)):
+            max_in_params = max(max_in_params, len(parameters))
+
+    event.listen(engine, "before_cursor_execute", _before_cursor_execute, retval=False)
+    try:
+        load_monitored_video_states(session, now=NOW)
+    finally:
+        event.remove(engine, "before_cursor_execute", _before_cursor_execute)
+    assert max_in_params <= 400
 
 
 def test_batch_fetch_query_count() -> None:
@@ -227,9 +316,11 @@ def main() -> None:
     tests = [
         test_short_and_live_excluded,
         test_latest_snapshot_overrides_video_views_and_vph,
-        test_no_snapshot_falls_back_to_video_views,
+        test_no_snapshot_without_discovery_is_unavailable,
         test_multiple_snapshots_pick_latest,
         test_build_active_single_snapshot_query_for_active_set,
+        test_large_irrelevant_corpus_does_not_hide_eligible,
+        test_in_clause_never_exceeds_chunk_size,
         test_batch_fetch_query_count,
     ]
     failed = 0

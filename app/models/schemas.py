@@ -789,7 +789,7 @@ class MonitoringVideoListResponse(BaseModel):
 
 class MonitoringCheckpointResponse(BaseModel):
     target_age_hours: int
-    status: str
+    status: str  # completed = age-aligned; fulfilled_late = capture done, no window measurement
     matched_snapshot_age_hours: float | None = None
     due_since_hours: float | None = None
     expires_at_age_hours: float

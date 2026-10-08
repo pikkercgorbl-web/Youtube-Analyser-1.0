@@ -25,6 +25,14 @@ SOURCE_SUGGESTION = "suggestion"
 SOURCE_RELATED = "related"
 SOURCE_CHANNEL = "channel"
 SOURCE_LLM = "llm"
+SOURCE_EXPLORATION = "exploration"
+
+
+def is_exploration_query_anchor(record: object) -> bool:
+    """Anchor keywords hold exploration query text; they must not enter seed discovery scans."""
+    source = getattr(record, "source_type", None)
+    parent_id = getattr(record, "parent_keyword_id", None)
+    return source == SOURCE_EXPLORATION and parent_id is None
 
 PROBATION_READY_SCAN_COUNT = 3
 

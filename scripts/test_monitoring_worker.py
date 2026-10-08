@@ -72,28 +72,40 @@ def _add_video(
     views: int = 2400,
     content_format: VideoFormat = VideoFormat.MEDIUM,
 ) -> None:
-    if session.get(Channel, channel_id) is None:
+    from scripts.monitoring_test_seed_helpers import ensure_monitoring_eligible_video
+
+    if content_format in (VideoFormat.MEDIUM, VideoFormat.LONG):
+        ensure_monitoring_eligible_video(
+            session,
+            video_id,
+            channel_id=channel_id,
+            published_at=published_at,
+            views=views,
+            content_format=content_format,
+        )
+    else:
+        if session.get(Channel, channel_id) is None:
+            session.add(
+                Channel(
+                    id=channel_id,
+                    title="Channel",
+                    subscribers_count=1000,
+                    created_at=published_at,
+                ),
+            )
         session.add(
-            Channel(
-                id=channel_id,
-                title="Channel",
-                subscribers_count=1000,
-                created_at=published_at,
+            Video(
+                id=video_id,
+                title="Video",
+                views_count=views,
+                likes_count=0,
+                comments_count=0,
+                published_at=published_at,
+                duration_seconds=600,
+                content_format=content_format,
+                channel_id=channel_id,
             ),
         )
-    session.add(
-        Video(
-            id=video_id,
-            title="Video",
-            views_count=views,
-            likes_count=0,
-            comments_count=0,
-            published_at=published_at,
-            duration_seconds=600,
-            content_format=content_format,
-            channel_id=channel_id,
-        ),
-    )
     session.commit()
 
 

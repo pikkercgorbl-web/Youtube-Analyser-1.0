@@ -440,6 +440,11 @@ export function OperationsDashboard() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <SectionPanel title="Снимки">
+          <p className="mb-3 text-xs text-muted-foreground">
+            Все источники (<span className="font-mono">video_snapshots</span>): monitoring и outcome. «За 1 ч» и «За
+            24 ч» — скользящее окно от метки обновления (UTC). График — календарные сутки UTC; высота столбца
+            относительно максимума за 7 дней (не та же шкала, что 24 ч).
+          </p>
           {snapshots.snapshots_last_24h === 0 ? (
             <div data-testid="operations-snapshot-zero-24h">
               <ZeroContextNote>За последние 24 ч новые снимки не создавались.</ZeroContextNote>
@@ -464,7 +469,9 @@ export function OperationsDashboard() {
           </MetricGroup>
           {snapshots.daily_counts_last_7d.length > 0 ? (
             <div className="mt-2">
-              <p className="text-xs text-muted-foreground">Снимки по дням (UTC), 7 дней</p>
+              <p className="text-xs text-muted-foreground">
+                Снимки по календарным дням (UTC), 7 дней — наведите на столбец для точного count
+              </p>
               <DailyBars daily={snapshots.daily_counts_last_7d} />
             </div>
           ) : null}
