@@ -1,4 +1,11 @@
-import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -143,7 +150,9 @@ describe("KeywordPerformanceDashboard", () => {
     expect(within(table).getByText("Найдено видео")).toBeInTheDocument();
     expect(within(table).getByText("Новых для базы")).toBeInTheDocument();
     expect(within(table).getByText("VPH при находке")).toBeInTheDocument();
-    expect(within(table).queryByText(/Cross-kw|Атриб\./i)).not.toBeInTheDocument();
+    expect(
+      within(table).queryByText(/Cross-kw|Атриб\./i),
+    ).not.toBeInTheDocument();
     expect(within(table).queryByText(/p90/i)).not.toBeInTheDocument();
   });
 
@@ -161,20 +170,26 @@ describe("KeywordPerformanceDashboard", () => {
 
   it("shows evidence is not quality copy", async () => {
     render(<KeywordPerformanceDashboard />);
-    expect(await screen.findByText(/Evidence показывает объём наблюдений/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Evidence показывает объём наблюдений/i),
+    ).toBeInTheDocument();
   });
 
   it("shows lifecycle badge without quality verdict controls", async () => {
     render(<KeywordPerformanceDashboard />);
     await screen.findByText("Пробный");
     expect(screen.getByTitle(/не оценка его качества/i)).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /archive|activate|promote/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /archive|activate|promote/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("renders discovery summary strip", async () => {
     render(<KeywordPerformanceDashboard />);
     await waitFor(() => {
-      expect(screen.getByTestId("kp-summary-strip")).toHaveTextContent(/уникальных видео найдено/i);
+      expect(screen.getByTestId("kp-summary-strip")).toHaveTextContent(
+        /уникальных видео найдено/i,
+      );
     });
   });
 
@@ -186,7 +201,13 @@ describe("KeywordPerformanceDashboard", () => {
       listResponse({
         global_eligible_video_count: 100,
         ranking_version: "breakout_v1",
-        items: [{ ...baseItem, top_decile_breakout_rate: 0.1, top_decile_breakout_count: 1 }],
+        items: [
+          {
+            ...baseItem,
+            top_decile_breakout_rate: 0.1,
+            top_decile_breakout_count: 1,
+          },
+        ],
       }),
     );
     fireEvent.click(screen.getByTestId("metric-family-breakout"));
@@ -198,7 +219,9 @@ describe("KeywordPerformanceDashboard", () => {
         }),
       );
     });
-    expect(await screen.findByTestId("breakout-explainer")).toHaveTextContent(/top-decile/i);
+    expect(await screen.findByTestId("breakout-explainer")).toHaveTextContent(
+      /top-decile/i,
+    );
   });
 
   it("global eligible N=0 shows unavailable state not poor performance", async () => {
@@ -210,7 +233,9 @@ describe("KeywordPerformanceDashboard", () => {
     );
     render(<KeywordPerformanceDashboard />);
     fireEvent.click(await screen.findByTestId("metric-family-breakout"));
-    expect(await screen.findByTestId("breakout-global-unavailable")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("breakout-global-unavailable"),
+    ).toBeInTheDocument();
     await screen.findByTestId("breakout-table");
     expect(screen.getByTestId("breakout-rate-1")).toHaveTextContent("—");
     expect(screen.queryByText("0%")).not.toBeInTheDocument();
@@ -219,14 +244,22 @@ describe("KeywordPerformanceDashboard", () => {
   it("observed_72h=0 shows unavailable phrasing in cell", async () => {
     vi.mocked(api.fetchKeywordPerformanceList).mockResolvedValue(
       listResponse({
-        items: [{ ...baseItem, observed_72h_video_count: 0, missing_72h_video_count: 8 }],
+        items: [
+          {
+            ...baseItem,
+            observed_72h_video_count: 0,
+            missing_72h_video_count: 8,
+          },
+        ],
       }),
     );
     render(<KeywordPerformanceDashboard />);
     fireEvent.click(await screen.findByTestId("metric-family-outcomes"));
     await screen.findByTestId("outcomes-table");
     expect(await screen.findByTestId("outcomes-none-yet")).toBeInTheDocument();
-    expect(screen.getByTestId("observed-72h-1")).toHaveTextContent("Исходов пока нет");
+    expect(screen.getByTestId("observed-72h-1")).toHaveTextContent(
+      "Исходов пока нет",
+    );
   });
 
   it("attribution switch refetches", async () => {
@@ -245,23 +278,35 @@ describe("KeywordPerformanceDashboard", () => {
 
   it("renders attribution explanations in Russian", async () => {
     render(<KeywordPerformanceDashboard />);
-    expect(await screen.findByTestId("attribution-help")).toHaveTextContent("Первый источник");
-    expect(screen.getByTestId("attribution-help")).toHaveTextContent(/не causal/i);
+    expect(await screen.findByTestId("attribution-help")).toHaveTextContent(
+      "Первый источник",
+    );
+    expect(screen.getByTestId("attribution-help")).toHaveTextContent(
+      /не causal/i,
+    );
     expect(screen.queryByText("all_hits")).not.toBeInTheDocument();
   });
 
   it("cross-keyword duplicate hidden until expansion", async () => {
     render(<KeywordPerformanceDashboard />);
     await screen.findByTestId("discovery-table");
-    expect(screen.queryByText(/Пересечения с другими ключами/i)).not.toBeInTheDocument();
-    fireEvent.click(screen.getAllByRole("button", { name: /Аналитические детали/i })[0]);
-    expect(await screen.findByText(/Пересечения с другими ключами/i)).toBeInTheDocument();
+    expect(
+      screen.queryByText(/Пересечения с другими ключами/i),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getAllByRole("button", { name: /Аналитические детали/i })[0],
+    );
+    expect(
+      await screen.findByText(/Пересечения с другими ключами/i),
+    ).toBeInTheDocument();
   });
 
   it("p90 visible only in expansion", async () => {
     render(<KeywordPerformanceDashboard />);
     await screen.findByTestId("discovery-table");
-    fireEvent.click(screen.getAllByRole("button", { name: /Аналитические детали/i })[0]);
+    fireEvent.click(
+      screen.getAllByRole("button", { name: /Аналитические детали/i })[0],
+    );
     expect(await screen.findByText(/VPH p90 при находке/i)).toBeInTheDocument();
   });
 
@@ -279,7 +324,9 @@ describe("KeywordPerformanceDashboard", () => {
   });
 
   it("API error differs from empty state", async () => {
-    vi.mocked(api.fetchKeywordPerformanceList).mockRejectedValue(new Error("boom"));
+    vi.mocked(api.fetchKeywordPerformanceList).mockRejectedValue(
+      new Error("boom"),
+    );
     render(<KeywordPerformanceDashboard />);
     expect(await screen.findByTestId("api-error")).toBeInTheDocument();
     expect(screen.queryByTestId("empty-keywords")).not.toBeInTheDocument();
@@ -288,31 +335,46 @@ describe("KeywordPerformanceDashboard", () => {
   it("keeps data on refresh failure", async () => {
     render(<KeywordPerformanceDashboard />);
     await screen.findByText("alpha");
-    vi.mocked(api.fetchKeywordPerformanceList).mockRejectedValueOnce(new Error("refresh fail"));
+    vi.mocked(api.fetchKeywordPerformanceList).mockRejectedValueOnce(
+      new Error("refresh fail"),
+    );
     fireEvent.click(screen.getByTestId("kp-refresh"));
-    await waitFor(() => expect(screen.getByText(/Ошибка обновления/i)).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByText(/Ошибка обновления/i)).toBeInTheDocument(),
+    );
     expect(screen.getByText("alpha")).toBeInTheDocument();
   });
 
   it("uses single list fetch per mode switch", async () => {
     render(<KeywordPerformanceDashboard />);
     await screen.findByTestId("discovery-table");
-    const callsAfterLoad = vi.mocked(api.fetchKeywordPerformanceList).mock.calls.length;
+    const callsAfterLoad = vi.mocked(api.fetchKeywordPerformanceList).mock.calls
+      .length;
     fireEvent.click(screen.getByTestId("metric-family-breakout"));
     await waitFor(() =>
-      expect(api.fetchKeywordPerformanceList.mock.calls.length).toBeGreaterThan(callsAfterLoad),
+      expect(
+        vi.mocked(api.fetchKeywordPerformanceList).mock.calls.length,
+      ).toBeGreaterThan(callsAfterLoad),
     );
   });
 
   it("limit change refetches from additional filters", async () => {
     render(<KeywordPerformanceDashboard />);
     await screen.findByTestId("discovery-table");
-    fireEvent.click(screen.getByRole("button", { name: /Дополнительные фильтры/i }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /Дополнительные фильтры/i }),
+    );
     vi.mocked(api.fetchKeywordPerformanceList).mockClear();
-    fireEvent.change(screen.getByTestId("limit-select"), { target: { value: "50" } });
+    fireEvent.change(screen.getByTestId("limit-select"), {
+      target: { value: "50" },
+    });
     await waitFor(() => {
       expect(api.fetchKeywordPerformanceList).toHaveBeenCalledWith(
-        expect.objectContaining({ limit: 50, include_breakout: false, include_delayed: false }),
+        expect.objectContaining({
+          limit: 50,
+          include_breakout: false,
+          include_delayed: false,
+        }),
       );
     });
   });

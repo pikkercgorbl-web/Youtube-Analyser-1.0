@@ -6,13 +6,15 @@ import { Flame } from "lucide-react";
 import {
   ErrorState,
   LoadingState,
-  Metric,
   PageHeader,
   PageShell,
   SectionPanel,
   UnavailableState,
 } from "@/components/design-system";
-import { PatternFamilyCard } from "@/components/opportunities/pattern-family-card";
+import {
+  PatternFamilyCard,
+  isTopicCollection,
+} from "@/components/opportunities/pattern-family-card";
 import { RisingChannelsSection } from "@/components/opportunities/rising-channels";
 import { WinnersTable } from "@/components/opportunities/winners-table";
 import {
@@ -33,7 +35,6 @@ import type {
   AttentionSummary,
   AttentionVideoWinner,
 } from "@/lib/attention-types";
-import { surfaces } from "@/lib/design-system/layout";
 import { formatDateTimeLocal } from "@/lib/monitoring-format";
 import { cn } from "@/lib/utils";
 
@@ -51,17 +52,21 @@ type FeedState =
     };
 
 export function OpportunitiesDashboard() {
+  const [section, setSection] = useState<"videos" | "channels" | "families">(
+    "videos",
+  );
   const [state, setState] = useState<FeedState>({ status: "loading" });
 
   const load = useCallback(async () => {
     setState({ status: "loading" });
     try {
-      const [summaryRes, videosRes, familiesRes, channelsRes] = await Promise.all([
-        getAttentionSummary(),
-        getAttentionVideos({ limit: 50 }),
-        getAttentionPatternFamilies({ limit: 100 }),
-        getAttentionChannels({ limit: 50 }),
-      ]);
+      const [summaryRes, videosRes, familiesRes, channelsRes] =
+        await Promise.all([
+          getAttentionSummary(),
+          getAttentionVideos({ limit: 50 }),
+          getAttentionPatternFamilies({ limit: 100 }),
+          getAttentionChannels({ limit: 50 }),
+        ]);
       const source = summaryRes.data_source;
       if (source === "unavailable" || !summaryRes.summary) {
         setState({ status: "unavailable" });
@@ -78,7 +83,10 @@ export function OpportunitiesDashboard() {
     } catch (error) {
       setState({
         status: "error",
-        message: error instanceof Error ? error.message : "Не удалось загрузить снимок Attention.",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Не удалось загрузить снимок Attention.",
       });
     }
   }, []);
@@ -93,9 +101,9 @@ export function OpportunitiesDashboard() {
         <PageHeader
           icon={<Flame className="h-6 w-6 text-primary" />}
           title="Возможности"
-          lead="Три типа сигналов Radar: ранние видео, динамика канала и повторяющиеся форматы. Данные из сохранённого снимка Attention."
+          lead="Видео, каналы и темы, которые стоит изучить."
         />
-        <LoadingState title="Загрузка снимка Attention…" />
+        <LoadingState title="Ищем сохранённые находки…" />
       </PageShell>
     );
   }
@@ -106,9 +114,13 @@ export function OpportunitiesDashboard() {
         <PageHeader
           icon={<Flame className="h-6 w-6 text-primary" />}
           title="Возможности"
-          lead="Три типа сигналов Radar: ранние видео, динамика канала и повторяющиеся форматы."
+          lead="Видео, каналы и темы, которые стоит изучить."
         />
-        <ErrorState title="Не удалось загрузить Attention snapshot" description={state.message} onRetry={load} />
+        <ErrorState
+          title="Не удалось загрузить находки"
+          description={state.message}
+          onRetry={load}
+        />
       </PageShell>
     );
   }
@@ -119,11 +131,11 @@ export function OpportunitiesDashboard() {
         <PageHeader
           icon={<Flame className="h-6 w-6 text-primary" />}
           title="Возможности"
-          lead="Три типа сигналов Radar: ранние видео, динамика канала и повторяющиеся форматы."
+          lead="Видео, каналы и темы, которые стоит изучить."
         />
         <UnavailableState
-          title="Attention Engine ещё не рассчитан."
-          description="Это не live-лента. Сначала нужно сохранить снимок."
+          title="Подборка ещё не готова."
+          description="После первого расчёта Radar здесь появятся находки. Состояние сбора можно проверить в разделе «Состояние системы»."
         />
         <p className="text-xs text-muted-foreground" data-testid="refresh-hint">
           python scripts/refresh_attention_engine.py
@@ -135,97 +147,178 @@ export function OpportunitiesDashboard() {
   const { summary, videos, families, channels, dataSource } = state;
   const confirmed = confirmed72hCount(videos);
 
+  const repeated = families.filter((family) => !isTopicCollection(family));
+  const topics = families.filter(isTopicCollection);
+  const stale =
+    Date.now() - new Date(summary.computed_at).getTime() > 3 * 3600_000;
   return (
     <PageShell>
       <PageHeader
-        icon={<Flame className="h-6 w-6 text-primary" />}
+        icon={<Flame className="h-7 w-7 text-primary" />}
         title="Возможности"
-        lead="Три независимых блока без общего рейтинга: Video Winners (ранний сигнал по видео), Channel Momentum (сравнение канала с самим собой), Pattern Families (похожие форматы на разных каналах)."
+        lead="Найдите следующий повод для разведки. От отдельного ролика — к повторяющемуся результату."
       />
-
-      <div className={cn(surfaces.section, "space-y-3 p-4")} data-testid="snapshot-meta">
-        <p className="text-sm font-medium">{snapshotFreshnessLabel(summary.computed_at)}</p>
-        <p className="text-sm text-muted-foreground">
-          {windowHoursLabel(summary.window_hours)} · {candidateCountLabel(summary.candidate_video_count)}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Снимок: {formatDateTimeLocal(summary.computed_at)} ({summary.timezone_name})
-          {summary.run_id ? ` · ${summary.run_id}` : ""} · source={dataSource}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Окно 72&nbsp;ч для delayed outcome — накопление наблюдений после discovery, а не задержка показа ранних
-          Winners. VPH в таблице — средняя с публикации по последнему snapshot; ускорение между snapshots показывается
-          только при acceleration_state=accelerating (≥3 точек VPH).
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3" data-testid="summary-cards">
-        <a href="#video-winners" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
-          <Metric
-            label="Видео набирают обороты"
-            value={summary.winner_count}
-            helper="Video Winners в снимке"
-            testId="metric-winners"
-          />
-        </a>
-        <a href="#channel-momentum" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
-          <Metric
-            label="Растущие каналы"
-            value={summary.channel_momentum_count}
-            helper="Channel Momentum"
-            testId="metric-channels"
-          />
-        </a>
-        <a href="#pattern-families" className={cn(surfaces.sectionMuted, "p-4 hover:border-primary/40")}>
-          <Metric
-            label="Повторяющиеся форматы"
-            value={families.length || summary.pattern_count}
-            helper="Pattern Families"
-            testId="metric-patterns"
-          />
-        </a>
-      </div>
-
-      <SectionPanel
-        title="Видео набирают обороты"
-        description="Отдельные Video Winners — ранний сигнал по одному ролику, не доказательство роста всего канала. Поиск, сортировка и ссылки на YouTube — в таблице ниже."
+      <div
+        className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4"
+        data-testid="snapshot-meta"
       >
-        <div id="video-winners" className="space-y-2">
-          <p className="text-xs text-muted-foreground">
-            Подтверждённый рост views за 72&nbsp;ч после discovery (delayed outcome): {confirmed} из {videos.length} в
-            текущем топе — только где есть hit и snapshot в tolerance-окне.
+        <div>
+          <p
+            className={cn(
+              "text-sm font-medium",
+              stale ? "text-amber-300" : "text-primary",
+            )}
+          >
+            {snapshotFreshnessLabel(summary.computed_at)}
           </p>
-          <WinnersTable videos={videos} />
+          <p className="mt-1 text-sm text-muted-foreground">
+            {windowHoursLabel(summary.window_hours)} ·{" "}
+            {candidateCountLabel(summary.candidate_video_count)}
+          </p>
         </div>
-      </SectionPanel>
-
-      <SectionPanel
-        title="Растущие каналы"
-        description="Channel Momentum: ≥2 recent и ≥2 previous с confirmed regular и snapshots ~24h от публикации; минимум два recent каждый ≥1.5× median previous на том же горизонте. Breakout / keyword 72h / подписчики — только контекст."
-      >
-        <div id="channel-momentum">
-          <RisingChannelsSection channels={channels} winnerLookup={videos} />
-        </div>
-      </SectionPanel>
-
-      <SectionPanel
-        title="Повторяющиеся форматы"
-        description="Pattern Families группируют похожие title/keyword/topic на разных каналах. Совпадение тем или фраз само по себе не доказывает успешность — смотрите breakout_eligible_count и исходные patterns."
-      >
-        <div id="pattern-families">
-          {families.length === 0 ? (
-            <p className="text-sm text-muted-foreground" data-testid="patterns-empty">
-              В текущем снимке семейств паттернов нет.
+        <details className="max-w-xl text-sm text-muted-foreground">
+          <summary>О данных</summary>
+          <div className="mt-3 space-y-2">
+            <p>
+              Расчёт: {formatDateTimeLocal(summary.computed_at)} (местное
+              время).{" "}
+              {stale
+                ? "Подборка давно не обновлялась. Проверьте состояние системы."
+                : "Показана сохранённая подборка."}
             </p>
-          ) : (
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {families.map((family) => (
-                <PatternFamilyCard key={family.family_key} family={family} runId={summary.run_id} />
+            <p className="break-all text-xs">
+              {summary.run_id} · source={dataSource}
+            </p>
+            <p>
+              Рост через 72 часа после обнаружения подтверждён у {confirmed} из{" "}
+              {videos.length} видео. Ранние находки доступны до этого срока.
+            </p>
+          </div>
+        </details>
+      </div>
+      <div
+        className="grid grid-cols-3 gap-2 sm:gap-3"
+        data-testid="summary-cards"
+        aria-label="Тип находок"
+      >
+        {(
+          [
+            [
+              "videos",
+              "Видео для разведки",
+              summary.winner_count,
+              "Отдельные ранние сигналы",
+              "metric-winners",
+            ],
+            [
+              "channels",
+              "Растущие каналы",
+              summary.channel_momentum_count,
+              "Повторяемый результат",
+              "metric-channels",
+            ],
+            [
+              "families",
+              "Похожие находки",
+              families.length,
+              "Сходство заголовков и тем",
+              "metric-patterns",
+            ],
+          ] as const
+        ).map(([key, label, count, helper, testId]) => (
+          <button
+            key={key}
+            type="button"
+            aria-pressed={section === key}
+            onClick={() => setSection(key)}
+            className={cn(
+              "rounded-2xl border p-3 sm:p-5 text-left transition-colors",
+              section === key
+                ? "border-primary/50 bg-primary/10"
+                : "border-border bg-card hover:border-primary/30",
+            )}
+          >
+            <span className="text-xs sm:text-sm text-muted-foreground">
+              {label}
+            </span>
+            <span
+              className="mt-2 block text-3xl font-semibold tabular-nums"
+              data-testid={testId}
+            >
+              {count}
+            </span>
+            <span className="mt-2 hidden text-sm text-muted-foreground sm:block">
+              {helper}
+            </span>
+          </button>
+        ))}
+      </div>
+      <div hidden={section !== "videos"}>
+        <SectionPanel
+          title="Видео для разведки"
+          description="Изучите сам ролик и соседние публикации канала. Один удачный результат ещё не доказывает повторяемость."
+        >
+          <div id="video-winners">
+            <WinnersTable videos={videos} />
+          </div>
+        </SectionPanel>
+      </div>
+      <div hidden={section !== "channels"}>
+        <SectionPanel
+          title="Растущие каналы"
+          description="Несколько недавних видео показывают улучшение относительно предыдущих роликов канала на одинаковом возрасте."
+        >
+          <div id="channel-momentum">
+            <RisingChannelsSection channels={channels} winnerLookup={videos} />
+          </div>
+        </SectionPanel>
+      </div>
+      <div
+        hidden={section !== "families"}
+        className="space-y-8"
+        id="pattern-families"
+      >
+        <SectionPanel
+          title="Повторяющиеся находки"
+          description="Сходство заголовков на разных каналах — повод сравнить видео, а не готовый рецепт успеха."
+        >
+          {repeated.length ? (
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {repeated.map((family) => (
+                <PatternFamilyCard
+                  key={family.family_key}
+                  family={family}
+                  runId={summary.run_id}
+                />
               ))}
             </div>
+          ) : (
+            <p
+              className="rounded-2xl border border-dashed border-border p-6 text-muted-foreground"
+              data-testid="patterns-empty"
+            >
+              Пока нет групп со сходством заголовков. Тематические подборки
+              доступны ниже, если они есть в текущем расчёте.
+            </p>
           )}
-        </div>
-      </SectionPanel>
+        </SectionPanel>
+        {topics.length > 0 ? (
+          <SectionPanel
+            title="Подборки по теме"
+            description="Видео объединены общим запросом или темой. Повторяемость производственного формата здесь не установлена."
+          >
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {topics.map((family) => (
+                <PatternFamilyCard
+                  key={family.family_key}
+                  family={family}
+                  runId={summary.run_id}
+                />
+              ))}
+            </div>
+          </SectionPanel>
+        ) : null}
+      </div>
     </PageShell>
   );
 }

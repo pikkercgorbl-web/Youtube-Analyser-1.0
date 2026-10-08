@@ -21,7 +21,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StateMessage } from "@/components/ui/state-message";
-import { DiscoveryCyclesTable, MonitoringCyclesTable } from "@/components/operations/operations-cycle-tables";
+import {
+  DiscoveryCyclesTable,
+  MonitoringCyclesTable,
+} from "@/components/operations/operations-cycle-tables";
 import { getOperationsOverview } from "@/lib/api";
 import { METRIC_TOOLTIPS } from "@/lib/design-system/labels";
 import { surfaces } from "@/lib/design-system/layout";
@@ -60,7 +63,9 @@ function DailyBars({ daily }: { daily: { date: string; count: number }[] }) {
             style={{ height: `${Math.max(4, (row.count / max) * 48)}px` }}
             title={`${row.date}: ${row.count}`}
           />
-          <span className="text-[10px] text-muted-foreground">{row.date.slice(5)}</span>
+          <span className="text-[10px] text-muted-foreground">
+            {row.date.slice(5)}
+          </span>
         </div>
       ))}
     </div>
@@ -78,7 +83,11 @@ function MaturityStack({
 }) {
   const total = pending + valid + missing;
   if (total <= 0) {
-    return <p className="text-sm text-muted-foreground">Нет наблюдений для отображения.</p>;
+    return (
+      <p className="text-sm text-muted-foreground">
+        Нет наблюдений для отображения.
+      </p>
+    );
   }
   const pct = (n: number) => `${Math.max(0, (n / total) * 100)}%`;
   return (
@@ -122,7 +131,8 @@ export function OperationsDashboard() {
   const [initialError, setInitialError] = useState<string | null>(null);
   const [refreshError, setRefreshError] = useState<string | null>(null);
   const [livePlanner, setLivePlanner] = useState(false);
-  const [attribution, setAttribution] = useState<OutcomeAttributionMode>("all_hits");
+  const [attribution, setAttribution] =
+    useState<OutcomeAttributionMode>("all_hits");
 
   const inFlight = useRef(false);
   const hasLoaded = useRef(false);
@@ -154,7 +164,10 @@ export function OperationsDashboard() {
         setRefreshError(null);
         hasLoaded.current = true;
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Не удалось загрузить обзор операций";
+        const message =
+          err instanceof Error
+            ? err.message
+            : "Не удалось загрузить обзор операций";
         if (!hasLoaded.current) {
           setInitialError(message);
         } else {
@@ -197,7 +210,11 @@ export function OperationsDashboard() {
   if (initialError && !data) {
     return (
       <PageShell>
-        <StateMessage variant="error" title="Не удалось загрузить операции" description={initialError} />
+        <StateMessage
+          variant="error"
+          title="Не удалось загрузить операции"
+          description={initialError}
+        />
         <Button className="mt-4" onClick={() => void load(false)}>
           Повторить
         </Button>
@@ -227,24 +244,34 @@ export function OperationsDashboard() {
     recent_cycles,
   } = data;
   const refIso = data.generated_at;
-  const discoveryCycleRel = formatRelativeTime(discovery.last_cycle_finished_at, refIso).relative;
+  const discoveryCycleRel = formatRelativeTime(
+    discovery.last_cycle_finished_at,
+    refIso,
+  ).relative;
   const blocked = operationsBlockedSummary(discovery, monitoring, errors);
 
-  const discoverySummary = discoveryOperationsSummary(discovery, discoveryCycleRel);
-  const monitoringSummary = monitoringOperationsSummary(monitoring, snapshots.snapshots_last_24h);
+  const discoverySummary = discoveryOperationsSummary(
+    discovery,
+    discoveryCycleRel,
+  );
+  const monitoringSummary = monitoringOperationsSummary(
+    monitoring,
+    snapshots.snapshots_last_24h,
+  );
   const snapshotSummary = snapshotOperationsSummary(snapshots);
   const outcomeSummary = outcome72hOperationsSummary(outcomes);
   const outcomeCaptureSummary = outcomeCaptureOperationsSummary(outcomeCapture);
 
   const hasErrors =
-    Boolean(errors.discovery_last_cycle_error) || errors.monitoring_recent_error_summaries.length > 0;
+    Boolean(errors.discovery_last_cycle_error) ||
+    errors.monitoring_recent_error_summaries.length > 0;
 
   return (
     <PageShell>
       <PageHeader
         icon={<Activity className="h-6 w-6 text-primary" aria-hidden />}
-        title="Операции"
-        lead="Работают ли discovery, monitoring и накопление снимков. Не оценка качества ключей или видео."
+        title="Состояние системы"
+        lead="Здоровье сбора данных: поиск новых видео, наблюдение, ошибки и свежесть измерений."
         actions={
           <Button
             variant="outline"
@@ -253,7 +280,10 @@ export function OperationsDashboard() {
             onClick={() => void load(true)}
             data-testid="operations-refresh"
           >
-            <RefreshCw className={cn("mr-2 h-4 w-4", refreshing && "animate-spin")} aria-hidden />
+            <RefreshCw
+              className={cn("mr-2 h-4 w-4", refreshing && "animate-spin")}
+              aria-hidden
+            />
             Обновить
           </Button>
         }
@@ -270,7 +300,11 @@ export function OperationsDashboard() {
 
       <div className="space-y-3" data-testid="operations-summary-layer">
         {blocked ? (
-          <SummaryStrip tone={blocked.tone} lines={blocked.lines} data-testid="operations-blocked-summary" />
+          <SummaryStrip
+            tone={blocked.tone}
+            lines={blocked.lines}
+            data-testid="operations-blocked-summary"
+          />
         ) : null}
         <SummaryStrip
           tone={discoverySummary.tone}
@@ -308,8 +342,14 @@ export function OperationsDashboard() {
             testId="operations-discovery-due-now"
             tooltip={METRIC_TOOLTIPS.dueKeyword}
           />
-          <Metric label="В ближайший 1 ч" value={formatCount(discovery.keywords_due_next_1h)} />
-          <Metric label="В ближайшие 24 ч" value={formatCount(discovery.keywords_due_next_24h)} />
+          <Metric
+            label="В ближайший 1 ч"
+            value={formatCount(discovery.keywords_due_next_1h)}
+          />
+          <Metric
+            label="В ближайшие 24 ч"
+            value={formatCount(discovery.keywords_due_next_24h)}
+          />
           <Metric
             label="Найдено видео в последнем цикле"
             value={formatCount(discovery.unique_videos_last_cycle)}
@@ -322,16 +362,24 @@ export function OperationsDashboard() {
         <Disclosure summary="Технические детали последнего цикла">
           <dl className="grid gap-3 text-sm sm:grid-cols-2">
             <div>
-              <dt className="text-muted-foreground">Сырьевые кандидаты (raw)</dt>
-              <dd className="tabular-nums">{formatCount(discovery.raw_candidates_last_cycle)}</dd>
+              <dt className="text-muted-foreground">
+                Сырьевые кандидаты (raw)
+              </dt>
+              <dd className="tabular-nums">
+                {formatCount(discovery.raw_candidates_last_cycle)}
+              </dd>
             </div>
             <div>
               <dt className="text-muted-foreground">Длительность</dt>
-              <dd>{formatRuntimeSeconds(discovery.last_cycle_runtime_seconds)}</dd>
+              <dd>
+                {formatRuntimeSeconds(discovery.last_cycle_runtime_seconds)}
+              </dd>
             </div>
             <div>
               <dt className="text-muted-foreground">Run ID</dt>
-              <dd className="font-mono text-xs">{discovery.last_run_id ?? "—"}</dd>
+              <dd className="font-mono text-xs">
+                {discovery.last_run_id ?? "—"}
+              </dd>
             </div>
             <div>
               <dt className="text-muted-foreground">Ошибки ключей</dt>
@@ -347,7 +395,9 @@ export function OperationsDashboard() {
             </div>
             <div className="sm:col-span-2">
               <dt className="text-muted-foreground">Lock / воркер</dt>
-              <dd className="text-xs text-muted-foreground">{discovery.worker.liveness_note}</dd>
+              <dd className="text-xs text-muted-foreground">
+                {discovery.worker.liveness_note}
+              </dd>
             </div>
           </dl>
         </Disclosure>
@@ -357,18 +407,32 @@ export function OperationsDashboard() {
         <div className="flex flex-wrap items-center gap-2">
           <SystemStatusBadge state={monitoring.worker.activity_state} />
         </div>
-        {monitoring.loaded_video_count > 0 && monitoring.eligible_video_count === 0 ? (
+        {monitoring.loaded_video_count > 0 &&
+        monitoring.eligible_video_count === 0 ? (
           <div data-testid="operations-monitoring-no-eligible">
             <ZeroContextNote>
-              Видео в базе есть, но сейчас нет видео, подходящих под текущие правила мониторинга.
+              Видео в базе есть, но сейчас нет видео, подходящих под текущие
+              правила мониторинга.
             </ZeroContextNote>
           </div>
         ) : null}
         <MetricGroup>
-          <Metric label="Проверено видео" value={formatCount(monitoring.loaded_video_count)} />
-          <Metric label="Подходит для наблюдения" value={formatCount(monitoring.eligible_video_count)} />
-          <Metric label="Выбрано для снимка" value={formatCount(monitoring.selected_capture_count)} />
-          <Metric label="Снимков сохранено" value={formatCount(monitoring.inserted_snapshot_count)} />
+          <Metric
+            label="Проверено видео"
+            value={formatCount(monitoring.loaded_video_count)}
+          />
+          <Metric
+            label="Подходит для наблюдения"
+            value={formatCount(monitoring.eligible_video_count)}
+          />
+          <Metric
+            label="Выбрано для снимка"
+            value={formatCount(monitoring.selected_capture_count)}
+          />
+          <Metric
+            label="Снимков сохранено"
+            value={formatCount(monitoring.inserted_snapshot_count)}
+          />
           <Metric
             label="Пора обработать"
             value={formatCount(monitoring.due_count_at_last_cycle)}
@@ -395,7 +459,8 @@ export function OperationsDashboard() {
           </label>
           {livePlanner && monitoring.live_planner_due_count != null ? (
             <p className="text-xs text-muted-foreground">
-              Сейчас по планировщику: пора {formatCount(monitoring.live_planner_due_count)}, просрочено{" "}
+              Сейчас по планировщику: пора{" "}
+              {formatCount(monitoring.live_planner_due_count)}, просрочено{" "}
               {formatCount(monitoring.live_planner_overdue_count ?? 0)}
             </p>
           ) : null}
@@ -420,11 +485,15 @@ export function OperationsDashboard() {
             </div>
             <div>
               <dt className="text-muted-foreground">Длительность</dt>
-              <dd>{formatRuntimeSeconds(monitoring.last_cycle_runtime_seconds)}</dd>
+              <dd>
+                {formatRuntimeSeconds(monitoring.last_cycle_runtime_seconds)}
+              </dd>
             </div>
             <div>
               <dt className="text-muted-foreground">Run ID</dt>
-              <dd className="font-mono text-xs">{monitoring.last_run_id ?? "—"}</dd>
+              <dd className="font-mono text-xs">
+                {monitoring.last_run_id ?? "—"}
+              </dd>
             </div>
             <div>
               <dt className="text-muted-foreground">Начало</dt>
@@ -441,17 +510,23 @@ export function OperationsDashboard() {
       <div className="grid gap-8 lg:grid-cols-2">
         <SectionPanel title="Снимки">
           <p className="mb-3 text-xs text-muted-foreground">
-            Все источники (<span className="font-mono">video_snapshots</span>): monitoring и outcome. «За 1 ч» и «За
-            24 ч» — скользящее окно от метки обновления (UTC). График — календарные сутки UTC; высота столбца
-            относительно максимума за 7 дней (не та же шкала, что 24 ч).
+            Все источники (<span className="font-mono">video_snapshots</span>):
+            monitoring и outcome. «За 1 ч» и «За 24 ч» — скользящее окно от
+            метки обновления (UTC). График — календарные сутки UTC; высота
+            столбца относительно максимума за 7 дней (не та же шкала, что 24 ч).
           </p>
           {snapshots.snapshots_last_24h === 0 ? (
             <div data-testid="operations-snapshot-zero-24h">
-              <ZeroContextNote>За последние 24 ч новые снимки не создавались.</ZeroContextNote>
+              <ZeroContextNote>
+                За последние 24 ч новые снимки не создавались.
+              </ZeroContextNote>
             </div>
           ) : null}
           <MetricGroup>
-            <Metric label="За последний час" value={formatCount(snapshots.snapshots_last_1h)} />
+            <Metric
+              label="За последний час"
+              value={formatCount(snapshots.snapshots_last_1h)}
+            />
             <Metric
               label="За 24 ч"
               value={formatCount(snapshots.snapshots_last_24h)}
@@ -463,14 +538,18 @@ export function OperationsDashboard() {
             />
             <Metric
               label="Последний снимок"
-              value={formatRelativeTime(snapshots.latest_snapshot_at, refIso).relative}
+              value={
+                formatRelativeTime(snapshots.latest_snapshot_at, refIso)
+                  .relative
+              }
               helper={formatDateTimeLocal(snapshots.latest_snapshot_at)}
             />
           </MetricGroup>
           {snapshots.daily_counts_last_7d.length > 0 ? (
             <div className="mt-2">
               <p className="text-xs text-muted-foreground">
-                Снимки по календарным дням (UTC), 7 дней — наведите на столбец для точного count
+                Снимки по календарным дням (UTC), 7 дней — наведите на столбец
+                для точного count
               </p>
               <DailyBars daily={snapshots.daily_counts_last_7d} />
             </div>
@@ -485,7 +564,9 @@ export function OperationsDashboard() {
               <select
                 className="h-8 rounded-md border border-input bg-background/50 px-2 text-sm text-foreground"
                 value={attribution}
-                onChange={(e) => setAttribution(e.target.value as OutcomeAttributionMode)}
+                onChange={(e) =>
+                  setAttribution(e.target.value as OutcomeAttributionMode)
+                }
                 aria-label="Режим атрибуции 72 ч"
                 data-testid="operations-attribution-select"
               >
@@ -506,9 +587,19 @@ export function OperationsDashboard() {
             missing={outcomes.missing_72h_outcome_count}
           />
           <MetricGroup>
-            <Metric label="Всего наблюдений" value={formatCount(outcomes.attributed_observation_count)} />
-            <Metric label="Ожидают 72 ч" value={formatCount(outcomes.pending_72h_count)} testId="operations-outcome-pending" />
-            <Metric label="Созрело" value={formatCount(outcomes.matured_72h_count)} />
+            <Metric
+              label="Всего наблюдений"
+              value={formatCount(outcomes.attributed_observation_count)}
+            />
+            <Metric
+              label="Ожидают 72 ч"
+              value={formatCount(outcomes.pending_72h_count)}
+              testId="operations-outcome-pending"
+            />
+            <Metric
+              label="Созрело"
+              value={formatCount(outcomes.matured_72h_count)}
+            />
             <Metric
               label="Исход измерен"
               value={formatCount(outcomes.valid_72h_outcome_count)}
@@ -519,14 +610,26 @@ export function OperationsDashboard() {
               value={formatCount(outcomes.missing_72h_outcome_count)}
               testId="operations-outcome-missing"
             />
-            <Metric label="Дозреет через 6 ч" value={formatCount(outcomes.matures_next_6h)} testId="operations-upcoming-6h" />
-            <Metric label="Дозреет через 24 ч" value={formatCount(outcomes.matures_next_24h)} testId="operations-upcoming-24h" />
-            <Metric label="Дозреет через 48 ч" value={formatCount(outcomes.matures_next_48h)} testId="operations-upcoming-48h" />
+            <Metric
+              label="Дозреет через 6 ч"
+              value={formatCount(outcomes.matures_next_6h)}
+              testId="operations-upcoming-6h"
+            />
+            <Metric
+              label="Дозреет через 24 ч"
+              value={formatCount(outcomes.matures_next_24h)}
+              testId="operations-upcoming-24h"
+            />
+            <Metric
+              label="Дозреет через 48 ч"
+              value={formatCount(outcomes.matures_next_48h)}
+              testId="operations-upcoming-48h"
+            />
           </MetricGroup>
           {attribution === "first_discovery" ? (
             <p className="text-xs text-muted-foreground">
-              Первый источник: видео засчитывается ключу с самым ранним обнаружением; при равном времени — меньший
-              keyword_id.
+              Первый источник: видео засчитывается ключу с самым ранним
+              обнаружением; при равном времени — меньший keyword_id.
             </p>
           ) : null}
         </SectionPanel>
@@ -536,7 +639,12 @@ export function OperationsDashboard() {
         <section className="space-y-3" data-testid="operations-errors-section">
           <SummaryStrip
             tone="error"
-            lines={[{ text: "В последних циклах зафиксированы ошибки.", emphasis: true }]}
+            lines={[
+              {
+                text: "В последних циклах зафиксированы ошибки.",
+                emphasis: true,
+              },
+            ]}
           />
           <Disclosure summary="Технические детали ошибок" defaultOpen>
             <div className="space-y-2 text-sm">
@@ -546,7 +654,10 @@ export function OperationsDashboard() {
                 </p>
               ) : null}
               {errors.monitoring_recent_error_summaries.map((msg) => (
-                <p key={msg} className="rounded-lg border border-destructive/30 bg-destructive/5 p-3">
+                <p
+                  key={msg}
+                  className="rounded-lg border border-destructive/30 bg-destructive/5 p-3"
+                >
                   Monitoring: {msg}
                 </p>
               ))}
@@ -557,17 +668,26 @@ export function OperationsDashboard() {
 
       <SectionPanel title="Циклы discovery">
         <div data-testid="operations-discovery-cycles">
-          <DiscoveryCyclesTable rows={recent_cycles.discovery} refIso={refIso} />
+          <DiscoveryCyclesTable
+            rows={recent_cycles.discovery}
+            refIso={refIso}
+          />
         </div>
       </SectionPanel>
 
       <SectionPanel title="Циклы monitoring">
         <div data-testid="operations-monitoring-cycles">
-          <MonitoringCyclesTable rows={recent_cycles.monitoring} refIso={refIso} />
+          <MonitoringCyclesTable
+            rows={recent_cycles.monitoring}
+            refIso={refIso}
+          />
         </div>
       </SectionPanel>
 
-      <p className="text-center text-xs text-muted-foreground" data-testid="operations-liveness-note">
+      <p
+        className="text-center text-xs text-muted-foreground"
+        data-testid="operations-liveness-note"
+      >
         Срез API: {formatDateTimeLocal(data.generated_at)}
         {discovery.worker.liveness_note ? ` · ${LIVENESS_DISCLAIMER}` : null}
       </p>

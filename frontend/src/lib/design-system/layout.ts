@@ -2,9 +2,9 @@
 
 export const pageLayout = {
   /** Main content padding */
-  padding: "p-4 md:p-6 lg:p-8",
+  padding: "p-5 md:p-8 lg:p-10 w-full max-w-[1600px] mx-auto",
   /** Vertical rhythm between major sections */
-  sectionGap: "space-y-6",
+  sectionGap: "space-y-8",
   /** Inner section spacing */
   blockGap: "space-y-4",
   /** Max readable width for summary strips */
@@ -18,8 +18,7 @@ export const pageLayout = {
 } as const;
 
 export const surfaces = {
-  section:
-    "rounded-xl border border-border/70 bg-surface-raised/80",
+  section: "rounded-xl border border-border/70 bg-surface-raised/80",
   sectionMuted: "rounded-xl border border-border/60 bg-card/40",
   sunken: "rounded-lg border border-border/50 bg-surface-sunken/50",
 } as const;

@@ -9,12 +9,12 @@ import {
   rewriteHumanReason,
   snapshotFreshnessLabel,
 } from "@/lib/attention-format";
-import { SAVED_TOPIC_DISABLED_HINT, savedTopicAffordance } from "@/lib/saved-topics";
+import { savedTopicAffordance } from "@/lib/saved-topics";
 
 describe("attention format", () => {
   it("does not present breakout-eligible as winner", () => {
     const text = rewriteHumanReason("57 breakout-eligible videos");
-    expect(text).toContain("входят в выборку Breakout");
+    expect(text).toContain("подходят для анализа Breakout");
     expect(text.toLowerCase()).not.toContain("winner");
     expect(claimsBreakoutWinner(text)).toBe(false);
   });
@@ -28,8 +28,8 @@ describe("attention format", () => {
 
   it("labels grouping sources", () => {
     expect(groupingSourceLabel("title_phrase")).toContain("фраз");
-    expect(groupingSourceLabel("keyword_provenance")).toContain("keyword");
-    expect(groupingSourceLabel("video_topic")).toContain("topic");
+    expect(groupingSourceLabel("keyword_provenance")).toContain("запрос");
+    expect(groupingSourceLabel("video_topic")).toContain("тема");
   });
 
   it("renders activity windows without virality wording", () => {
@@ -68,14 +68,19 @@ describe("attention format", () => {
   it("describes snapshot freshness from computed_at", () => {
     const computed = "2026-10-01T12:00:00.000Z";
     const now = Date.parse("2026-10-01T12:12:00.000Z");
-    expect(snapshotFreshnessLabel(computed, now)).toBe("Обновлено 12 мин назад");
+    expect(snapshotFreshnessLabel(computed, now)).toBe(
+      "Обновлено 12 мин назад",
+    );
   });
 });
 
 describe("saved topics hook", () => {
   it("does not fake persistence", () => {
-    const affordance = savedTopicAffordance({ familyKey: "family:phrase:abc", runId: "run-1" });
-    expect(affordance.enabled).toBe(false);
-    expect(affordance.hint).toBe(SAVED_TOPIC_DISABLED_HINT);
+    const affordance = savedTopicAffordance({
+      familyKey: "family:phrase:abc",
+      runId: "run-1",
+    });
+    expect(affordance.enabled).toBe(true);
+    expect(affordance.hint).toContain("Сохранить");
   });
 });
