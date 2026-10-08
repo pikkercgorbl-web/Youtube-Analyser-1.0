@@ -153,11 +153,16 @@ export function OpportunitiesDashboard() {
     Date.now() - new Date(summary.computed_at).getTime() > 3 * 3600_000;
   return (
     <PageShell>
-      <PageHeader
-        icon={<Flame className="h-7 w-7 text-primary" />}
-        title="Возможности"
-        lead="Найдите следующий повод для разведки. От отдельного ролика — к повторяющемуся результату."
-      />
+      <section className="radar-hero" aria-label="Обзор разведки">
+        <div className="radar-orbit" aria-hidden="true" />
+        <p className="mb-5 text-[11px] font-medium uppercase tracking-[0.24em] text-primary">NicheScope / Разведка YouTube</p>
+        <div className="relative max-w-2xl">
+          <PageHeader
+            title="Возможности"
+            lead="Замечайте сигналы. Изучайте видео. Находите свою следующую идею."
+          />
+        </div>
+      </section>
       <div
         className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4"
         data-testid="snapshot-meta"
@@ -232,7 +237,7 @@ export function OpportunitiesDashboard() {
             aria-pressed={section === key}
             onClick={() => setSection(key)}
             className={cn(
-              "rounded-2xl border p-3 sm:p-5 text-left transition-colors",
+              "radar-panel rounded-2xl border p-3 sm:p-5 text-left transition-colors",
               section === key
                 ? "neon-active border-primary/30"
                 : "border-border bg-card hover:border-primary/30",
