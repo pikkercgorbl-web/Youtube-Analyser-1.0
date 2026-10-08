@@ -8,7 +8,8 @@
     --foreground: 220 14% 88%;
     --card: 225 11% 11%;
     --card-foreground: 220 14% 88%;
-    --primary: 218 28% 76%;
+    --primary: 330 85% 75%;
+    --neon-violet: 263 72% 72%;
     --primary-foreground: 225 18% 12%;
     --secondary: 225 10% 17%;
     --secondary-foreground: 220 14% 88%;
@@ -20,7 +21,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 225 10% 22%;
     --input: 225 10% 25%;
-    --ring: 218 28% 76%;
+    --ring: 330 85% 75%;
     --radius: 0.625rem;
 
     /* Surfaces (design system 1.21B) */
@@ -62,7 +63,7 @@
       "calt" 1;
     -webkit-tap-highlight-color: transparent;
     color-scheme: dark;
-    background-image: radial-gradient(ellipse at 75% 0%, hsl(220 25% 30% / 0.13), transparent 55%);
+    background-image: radial-gradient(ellipse at 85% 0%, hsl(263 72% 55% / 0.12), transparent 48%), radial-gradient(ellipse at 15% 30%, hsl(330 80% 45% / 0.07), transparent 50%);
     background-attachment: fixed;
   }
 
@@ -78,8 +79,22 @@
     box-shadow: inset 0 1px 0 hsl(220 15% 90% / 0.035), 0 8px 28px hsl(225 15% 2% / 0.16);
   }
 
+  .neon-active {
+    background: linear-gradient(115deg, hsl(var(--primary) / 0.10), hsl(var(--neon-violet) / 0.07));
+    border-color: hsl(var(--primary) / 0.30);
+    box-shadow: inset 2px 0 0 hsl(var(--primary) / 0.70), 0 0 24px hsl(var(--primary) / 0.045);
+  }
+
+  .neon-button {
+    background: linear-gradient(110deg, hsl(330 85% 78%), hsl(295 65% 80%), hsl(263 65% 81%));
+    box-shadow: 0 0 18px hsl(var(--primary) / 0.10);
+  }
+  .neon-button:hover {
+    box-shadow: 0 0 24px hsl(var(--neon-violet) / 0.20);
+  }
+
   .gradient-text {
-    @apply bg-gradient-to-r from-slate-200 to-slate-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-pink-200 via-fuchsia-200 to-violet-300 bg-clip-text text-transparent;
   }
 }
 
@@ -111,5 +126,75 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+@layer components {
+  .radar-workspace {
+    background: radial-gradient(ellipse at 90% 0%, hsl(270 70% 45% / .10), transparent 50%), hsl(var(--background));
+  }
+  .radar-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 220px;
+    padding: clamp(24px, 4vw, 48px);
+    border: 1px solid hsl(var(--primary) / .18);
+    border-radius: 24px 6px 24px 6px;
+    background: radial-gradient(ellipse at 85% 70%, hsl(280 75% 48% / .24), transparent 55%), linear-gradient(115deg, #121116, #19101e);
+    box-shadow: inset 0 1px 0 hsl(var(--primary) / .15), 0 20px 70px #00000020;
+  }
+  .radar-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: linear-gradient(hsl(var(--primary) / .035) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / .035) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(90deg, transparent, black);
+  }
+  .radar-hero::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 32px;
+    width: 38%;
+    height: 2px;
+    background: linear-gradient(90deg, #f773bd, #a978f7, transparent);
+    box-shadow: 0 0 20px #eb54bc60;
+  }
+  .radar-orbit {
+    position: absolute;
+    pointer-events: none;
+    width: 330px;
+    height: 330px;
+    right: -30px;
+    top: -50px;
+    border-radius: 50%;
+    border: 1px solid #df77db40;
+    background: repeating-radial-gradient(circle, transparent 0 52px, #da7bd420 53px 54px, transparent 55px 78px), conic-gradient(from 220deg, transparent 65%, #f064cb22, transparent 95%);
+    box-shadow: 0 0 70px #b638d420, inset 0 0 55px #b638d420;
+    z-index: -1;
+  }
+  .radar-hero h1 {
+    font-size: clamp(2.3rem, 5vw, 4rem);
+    letter-spacing: -.055em;
+    font-weight: 650;
+  }
+  .radar-panel {
+    background: linear-gradient(135deg, hsl(270 15% 12% / .9), hsl(240 12% 8% / .95));
+    box-shadow: inset 0 1px 0 hsl(300 40% 80% / .04);
+  }
+  .radar-video-card {
+    background: linear-gradient(155deg, #1b1820, #111014 65%);
+    transition: border-color 180ms, box-shadow 180ms;
+  }
+  .radar-video-card:hover, .radar-video-card:focus-within {
+    border-color: hsl(var(--primary) / .35);
+    box-shadow: 0 8px 32px #00000035, 0 0 20px hsl(var(--primary) / .045);
+  }
+  @media (max-width: 640px) {
+    .radar-orbit { opacity: .4; right: -180px; }
+    .radar-hero { min-height: auto; }
   }
 }

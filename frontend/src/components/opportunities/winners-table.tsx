@@ -97,7 +97,7 @@ export function WinnersTable({ videos }: { videos: AttentionVideoWinner[] }) {
             key={row.video_id}
             className={cn(
               surfaces.section,
-              "overflow-hidden rounded-2xl transition-colors hover:border-primary/40",
+              "radar-video-card overflow-hidden rounded-2xl transition-colors hover:border-primary/40",
             )}
             data-testid="winner-row"
           >
