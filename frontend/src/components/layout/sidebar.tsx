@@ -105,7 +105,7 @@ export function Sidebar() {
         </div>
 
         <div>
-          <p className="text-xl font-semibold tracking-tight">NicheScope</p>
+          <p className="gradient-text text-xl font-semibold tracking-tight">NicheScope</p>
 
           <p className="text-xs text-muted-foreground">Разведка YouTube</p>
         </div>

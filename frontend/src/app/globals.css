@@ -8,7 +8,8 @@
     --foreground: 220 14% 88%;
     --card: 225 11% 11%;
     --card-foreground: 220 14% 88%;
-    --primary: 218 28% 76%;
+    --primary: 190 70% 73%;
+    --neon-violet: 263 72% 72%;
     --primary-foreground: 225 18% 12%;
     --secondary: 225 10% 17%;
     --secondary-foreground: 220 14% 88%;
@@ -20,7 +21,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 225 10% 22%;
     --input: 225 10% 25%;
-    --ring: 218 28% 76%;
+    --ring: 190 70% 73%;
     --radius: 0.625rem;
 
     /* Surfaces (design system 1.21B) */
@@ -62,7 +63,7 @@
       "calt" 1;
     -webkit-tap-highlight-color: transparent;
     color-scheme: dark;
-    background-image: radial-gradient(ellipse at 75% 0%, hsl(220 25% 30% / 0.13), transparent 55%);
+    background-image: radial-gradient(ellipse at 85% 0%, hsl(263 72% 55% / 0.12), transparent 48%), radial-gradient(ellipse at 15% 30%, hsl(190 70% 45% / 0.06), transparent 50%);
     background-attachment: fixed;
   }
 
@@ -78,8 +79,22 @@
     box-shadow: inset 0 1px 0 hsl(220 15% 90% / 0.035), 0 8px 28px hsl(225 15% 2% / 0.16);
   }
 
+  .neon-active {
+    background: linear-gradient(115deg, hsl(var(--primary) / 0.10), hsl(var(--neon-violet) / 0.07));
+    border-color: hsl(var(--primary) / 0.30);
+    box-shadow: inset 2px 0 0 hsl(var(--primary) / 0.70), 0 0 24px hsl(var(--primary) / 0.045);
+  }
+
+  .neon-button {
+    background: linear-gradient(110deg, hsl(190 65% 78%), hsl(230 65% 82%), hsl(263 65% 81%));
+    box-shadow: 0 0 18px hsl(var(--primary) / 0.10);
+  }
+  .neon-button:hover {
+    box-shadow: 0 0 24px hsl(var(--neon-violet) / 0.20);
+  }
+
   .gradient-text {
-    @apply bg-gradient-to-r from-slate-200 to-slate-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-cyan-200 via-sky-200 to-violet-300 bg-clip-text text-transparent;
   }
 }
 
