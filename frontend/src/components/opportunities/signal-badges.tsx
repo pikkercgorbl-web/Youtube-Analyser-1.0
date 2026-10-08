@@ -53,7 +53,7 @@ export function AttentionSignalBadges({
     items.push({
       key: "72h",
       label: "Рост через 72 ч",
-      className: "border-emerald-400/40 text-emerald-200",
+      className: "border-status-ok/25 text-status-ok",
     });
   }
   if (flags.smallChannel) {
@@ -67,7 +67,7 @@ export function AttentionSignalBadges({
     items.push({
       key: "rel",
       label: "Сильнее нормы канала",
-      className: "border-violet-400/40 text-violet-200",
+      className: "border-primary/25 text-primary",
     });
   }
   if (items.length === 0) {
