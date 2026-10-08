@@ -234,7 +234,7 @@ export function OpportunitiesDashboard() {
             className={cn(
               "rounded-2xl border p-3 sm:p-5 text-left transition-colors",
               section === key
-                ? "border-primary/50 bg-primary/10"
+                ? "border-primary/30 bg-gradient-to-br from-primary/10 to-card shadow-sm"
                 : "border-border bg-card hover:border-primary/30",
             )}
           >
