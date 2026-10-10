@@ -320,6 +320,15 @@ def run_monitoring_cycle(
             session,
         )
         session.commit()
+        from app.services.monitoring_capture_outcome_storage import (
+            persist_monitoring_capture_outcomes_safe,
+        )
+
+        persist_monitoring_capture_outcomes_safe(
+            session,
+            monitoring_run_id=cycle_run_id,
+            results=execution.results,
+        )
         exec_summary = execution.summary
         summary.inserted_snapshot_count = exec_summary.inserted_snapshot_count
         summary.duplicate_snapshot_count = exec_summary.duplicate_snapshot_count

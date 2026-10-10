@@ -40,6 +40,7 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_video_snapshots_table(engine)
     ensure_monitoring_worker_state_table(engine)
     ensure_monitoring_cycle_runs_table(engine)
+    ensure_monitoring_capture_outcomes_table(engine)
     ensure_monitoring_video_queue_table(engine)
     ensure_discovery_worker_state_table(engine)
     ensure_keyword_performance_tables(engine)
@@ -219,6 +220,18 @@ def ensure_monitoring_cycle_runs_table(engine: Engine) -> None:
 
     MonitoringCycleRun.__table__.create(bind=engine, checkfirst=True)
     logger.info("Created monitoring_cycle_runs table")
+
+
+def ensure_monitoring_capture_outcomes_table(engine: Engine) -> None:
+    """Create monitoring_capture_outcomes table when missing."""
+    inspector = inspect(engine)
+    if "monitoring_capture_outcomes" in inspector.get_table_names():
+        return
+
+    from app.models.orm import MonitoringCaptureOutcome
+
+    MonitoringCaptureOutcome.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created monitoring_capture_outcomes table")
 
 
 def ensure_monitoring_video_queue_table(engine: Engine) -> None:

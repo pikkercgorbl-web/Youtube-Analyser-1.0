@@ -1,0 +1,11 @@
+﻿{
+    "action":  "DryRun",
+    "task_name":  "NicheScope-Radar-DailyObservationReport",
+    "schedule_local":  "DAILY at 06:05 (machine local timezone; UTC+6 в‰€ after UTC midnight)",
+    "wrapper_script":  "C:\\Projects\\Сайт анализ ниш1\\scripts\\scheduled\\run_daily_observation_report.ps1",
+    "cli_equivalent":  "python scripts/radar_daily_observation_report.py --catch-up --max-days 14",
+    "log_file_pattern":  "C:\\Projects\\Сайт анализ ниш1\\logs\\scheduled\\daily_observation_*.log",
+    "tasks_created_disabled":  false,
+    "enable_command":  ".\\scripts\\setup_daily_observation_scheduled_task.ps1 -Action Enable",
+    "manual_run":  ".\\scripts\\scheduled\\run_daily_observation_report.ps1"
+}

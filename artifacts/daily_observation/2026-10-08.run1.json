@@ -1,0 +1,344 @@
+{
+  "report_version": 2,
+  "temporal_semantics_legend": {
+    "event_in_utc_day": "Count or sum of rows/events with timestamp in [window_start, window_end).",
+    "state_at_utc_day_end": "Persisted state for the UTC calendar day or last publish strictly before window_end.",
+    "current_at_generation": "Snapshot at generated_at_utc; not an end-of-day historical total."
+  },
+  "generated_at_utc": "2026-10-09T14:16:25.451888+00:00",
+  "utc_day": "2026-10-08",
+  "window_start_utc": "2026-10-08T00:00:00+00:00",
+  "window_end_utc": "2026-10-09T00:00:00+00:00",
+  "day_complete": true,
+  "table_availability": {
+    "outcome_capture_cycle_runs": "available",
+    "keyword_expansion_events": "available",
+    "topic_exploration_passes": "available",
+    "topic_exploration_video_observations": "available",
+    "topic_exploration_phrase_pass_stats": "available",
+    "keyword_lifecycle_events": "available"
+  },
+  "discovery": {
+    "section_temporal_semantics": "event_in_utc_day",
+    "distinct_discovery_run_ids_completed_in_window": {
+      "value": 187,
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "inferred_cycle_status_counts": {
+      "value": {
+        "ok": 186,
+        "partial": 1
+      },
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "keyword_scan_runs_finished_in_window": {
+      "value": 748,
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "discovery_hits_in_window": {
+      "value": 93285,
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "unique_video_id_from_hits_in_window": {
+      "value": 56389,
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "cycle_completion_rule": "COUNT DISTINCT discovery_run_id WHERE max(keyword_scan_runs.finished_at) in [window_start, window_end).",
+    "status_inference_note": "Cycle status inferred from keyword_scan_runs in that discovery_run_id only: ok = every scan row status ok (not proof of full worker keyword batch).",
+    "last_all_keyword_scans_ok_cycle_in_window": {
+      "temporal_semantics": "event_in_utc_day",
+      "discovery_run_id": "discovery_20261008T235731Z_43e0ac62",
+      "finished_at_utc": "2026-10-08T23:58:28.866082+00:00"
+    },
+    "last_failed_or_partial_cycle_in_window": {
+      "temporal_semantics": "event_in_utc_day",
+      "discovery_run_id": "discovery_20261008T195654Z_7a8dfc51",
+      "finished_at_utc": "2026-10-08T19:59:41.226145+00:00",
+      "inferred_status": "partial"
+    },
+    "units_note": "hits != unique videos; scan-runs != cycles (748 scans vs 187 discovery_run_id)."
+  },
+  "enrichment": {
+    "radar_enrichment_after_discovery": {
+      "value": true,
+      "temporal_semantics": "current_at_generation"
+    },
+    "utc_day_ledger": {
+      "temporal_semantics": "state_at_utc_day_end",
+      "utc_day": "2026-10-08",
+      "kinds": {
+        "channels_list": {
+          "id_units_reserved": 1000,
+          "http_batches": 20,
+          "daily_id_units_limit": 1000,
+          "id_units_remaining": 0,
+          "note": "Ledger counts reserved ID units and batch HTTP calls (get_channels/get_videos), not YouTube quota units."
+        },
+        "videos_list": {
+          "id_units_reserved": 1000,
+          "http_batches": 20,
+          "daily_id_units_limit": 1000,
+          "id_units_remaining": 0,
+          "note": "Ledger counts reserved ID units and batch HTTP calls (get_channels/get_videos), not YouTube quota units."
+        }
+      }
+    },
+    "attempt_table_outcomes_in_window": {
+      "channel_subscriber_enrichment_attempts": null,
+      "video_format_enrichment_attempts": null,
+      "explanation": "Tables store last outcome per channel_id/video_id only; not a daily attempt history — daily conversion is not measured."
+    }
+  },
+  "monitoring": {
+    "section_temporal_semantics": "event_in_utc_day",
+    "completed_cycles_by_status": {
+      "value": {
+        "ok": 53,
+        "partial": 40
+      },
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "completed_cycle_count": {
+      "value": 93,
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "aggregated_across_cycles_in_window": {
+      "temporal_semantics": "event_in_utc_day",
+      "loaded_video_count": {
+        "value": 221603,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "eligible_video_count": {
+        "value": 61083,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "selected_request_count": {
+        "value": 689,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "inserted_snapshot_count": {
+        "value": 598,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "deferred_request_count": {
+        "value": 0,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "due_count": {
+        "value": 503,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "overdue_count": {
+        "value": 186,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "duplicate_snapshot_count": {
+        "value": 0,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "missing_count": {
+        "value": 91,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "fetch_failed_count": {
+        "value": 0,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "validation_failed_count": {
+        "value": 0,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "persistence_failed_count": {
+        "value": 0,
+        "temporal_semantics": "event_in_utc_day"
+      }
+    },
+    "selected_vs_inserted_reconciliation": {
+      "temporal_semantics": "event_in_utc_day",
+      "selected_request_count_sum": 689,
+      "inserted_snapshot_count_sum": 598,
+      "outcome_counts_from_cycle_summaries": {
+        "inserted_snapshot_count": 598,
+        "duplicate_snapshot_count": 0,
+        "missing_count": 91,
+        "fetch_failed_count": 0,
+        "validation_failed_count": 0,
+        "persistence_failed_count": 0,
+        "sum_of_outcome_counters": 689
+      },
+      "gap_selected_minus_sum_of_outcome_counters": 0,
+      "note": "selected_request_count is budget-selected capture requests per cycle; execution deduplicates requests before fetch. Outcome counters are per unique request after dedup — their sum may be less than selected. duplicate/missing/fetch/validation/persistence explain non-insert paths; residual gap is not guaranteed zero."
+    },
+    "snapshots_in_window_by_source": {
+      "value": {
+        "keyword_outcome_worker": {
+          "snapshot_rows": 2211,
+          "unique_video_id": 1070
+        },
+        "monitoring_worker": {
+          "snapshot_rows": 598,
+          "unique_video_id": 557
+        }
+      },
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "last_completed_cycle_in_window": {
+      "temporal_semantics": "event_in_utc_day",
+      "run_id": "monitoring_20261008T235824Z_65311d65",
+      "finished_at_utc": "2026-10-08T23:58:26.191003+00:00",
+      "cycle_status": "partial",
+      "selected_request_count": 2,
+      "inserted_snapshot_count": 0,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 2,
+      "due_count": 0,
+      "overdue_count": 2,
+      "error_summary": null
+    },
+    "units_note": "Cycles vs snapshots vs selected requests are separate units; loaded/eligible sums repeat each cycle."
+  },
+  "outcome_capture": {
+    "section_status": "available",
+    "completed_cycles_by_status": {
+      "ok": 23
+    },
+    "completed_cycle_count": 23,
+    "aggregated_across_cycles_in_window": {
+      "selected_video_count": 2300,
+      "inserted_snapshot_count": 2211,
+      "fetch_failed_count": 0
+    },
+    "snapshots_source_keyword_outcome_worker": {
+      "snapshot_rows": 2211,
+      "unique_video_id": 1070
+    },
+    "last_completed_cycle_in_window": {
+      "run_id": "outcome_20261008T230012Z_b486b789",
+      "finished_at_utc": "2026-10-08T23:00:34.860585+00:00",
+      "cycle_status": "ok",
+      "error_summary": null
+    }
+  },
+  "read_models": {
+    "retention_note": "Attention and Keyword Performance use replace-on-publish; older runs are not retained. publish_as_of_utc_day_end uses the latest row with evaluated/computed_at < window_end.",
+    "attention": {
+      "publish_as_of_utc_day_end": null,
+      "latest_in_database_at_generation": {
+        "temporal_semantics": "current_at_generation",
+        "run_id": "attention_20261009T124113Z",
+        "computed_at_utc": "2026-10-09T12:41:13.798560+00:00",
+        "age_hours_relative_to_report_generation": 1.59,
+        "winner_count": 50,
+        "pattern_count": 20,
+        "channel_momentum_count": 0
+      }
+    },
+    "keyword_performance": {
+      "publish_as_of_utc_day_end": null,
+      "latest_in_database_at_generation": {
+        "temporal_semantics": "current_at_generation",
+        "run_id": "keyword_performance_20261009T115604Z",
+        "evaluated_at_utc": "2026-10-09T11:56:04.309944+00:00",
+        "age_hours_relative_to_report_generation": 2.34,
+        "published_keyword_rows_first_discovery": 1787,
+        "global_eligible_video_count": 1249
+      }
+    }
+  },
+  "expansion_and_exploration": {
+    "llm_expansion": {
+      "status": "not_connected",
+      "note": "No LLM query integration in application runtime."
+    },
+    "expansion_events_by_source_type": {
+      "value": {
+        "channel": 2583,
+        "related": 1222,
+        "suggestion": 1240
+      },
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "probation_keywords_created": {
+      "value": 1175,
+      "temporal_semantics": "event_in_utc_day"
+    },
+    "exploration": {
+      "section_temporal_semantics": "event_in_utc_day",
+      "passes_by_status": {
+        "value": {
+          "ok": 187
+        },
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "pass_count": {
+        "value": 187,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "video_observations_in_window": {
+        "value": 2573,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "unique_video_id_observed": {
+        "value": 234,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "phrase_rows_in_window": {
+        "value": 0,
+        "temporal_semantics": "event_in_utc_day"
+      },
+      "phrases_admitted_to_keywords": {
+        "value": 0,
+        "temporal_semantics": "event_in_utc_day"
+      }
+    }
+  },
+  "diagnostics_for_utc_day": [
+    {
+      "code": "monitoring_selected_without_insert",
+      "severity": "warning",
+      "message": "Monitoring cycle monitoring_20261008T155641Z_8bcf07d4: selected_request_count=2 but inserted_snapshot_count=0."
+    },
+    {
+      "code": "monitoring_selected_without_insert",
+      "severity": "warning",
+      "message": "Monitoring cycle monitoring_20261008T205749Z_d954dc64: selected_request_count=2 but inserted_snapshot_count=0."
+    },
+    {
+      "code": "monitoring_selected_without_insert",
+      "severity": "warning",
+      "message": "Monitoring cycle monitoring_20261008T222806Z_7dc59d47: selected_request_count=2 but inserted_snapshot_count=0."
+    },
+    {
+      "code": "monitoring_selected_without_insert",
+      "severity": "warning",
+      "message": "Monitoring cycle monitoring_20261008T232818Z_209efd94: selected_request_count=2 but inserted_snapshot_count=0."
+    },
+    {
+      "code": "monitoring_selected_without_insert",
+      "severity": "warning",
+      "message": "Monitoring cycle monitoring_20261008T235824Z_65311d65: selected_request_count=2 but inserted_snapshot_count=0."
+    },
+    {
+      "code": "monitoring_quiet_pool",
+      "severity": "info",
+      "message": "43 monitoring cycle(s) in window with selected=0, due=0, overdue=0 (expected quiet pool, not an error)."
+    },
+    {
+      "code": "enrichment_budget_exhausted",
+      "severity": "warning",
+      "message": "UTC-day channels_list id_units_remaining=0 (limit=1000)."
+    },
+    {
+      "code": "enrichment_budget_exhausted",
+      "severity": "warning",
+      "message": "UTC-day videos_list id_units_remaining=0 (limit=1000)."
+    }
+  ],
+  "diagnostics_at_generation": [],
+  "day_over_day": {
+    "status": "skipped",
+    "reason": "previous_utc_day_file_missing",
+    "previous_utc_day": null,
+    "deltas": []
+  }
+}

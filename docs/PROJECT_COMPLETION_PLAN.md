@@ -150,6 +150,16 @@ python scripts/stage3_operations_preflight.py      # read-only restore-check
 | Monitoring | `monitoring_20261006T153349Z_5ea24b57` | eligible 52, due 0, overdue 14 → **14** snapshots, 0 errors |
 | Outcome | `outcome_20261006T153350Z_6169e806` | due backlog large; **97** captures inserted, status ok |
 
+**Ежедневный read-only отчёт наблюдения (UTC-день, без workers/API):**
+```text
+python scripts/radar_daily_observation_report.py --catch-up --max-days 14
+python scripts/radar_daily_observation_report.py --day YYYY-MM-DD
+python scripts/radar_daily_observation_report.py --day YYYY-MM-DD --recalculate
+python scripts/test_radar_daily_observation_report.py
+.\scripts\setup_daily_observation_scheduled_task.ps1 -Action DryRun
+```
+Артефакты: `artifacts/daily_observation/original/{day}.json|.md` (immutable), `revisions/{day}/`, `index_last_14_complete_utc_days.json`. **Original** фиксирует события выбранного UTC-дня и read models **на момент `generated_at_utc`**, не гарантированно на 23:59:59 UTC; для минимизации drift — расписание после полуночи UTC (06:05 local UTC+6). **Catch-up** до начала непрерывного наблюдения — восстановленные ретроспективные original, не «живые» дни теста. Task Scheduler: `NicheScope-Radar-DailyObservationReport` (Register-ScheduledTask при кириллице в пути).
+
 **Аудиты (read-only, переиспользованы):**
 ```text
 python scripts/stage4_worker_state_snapshot.py

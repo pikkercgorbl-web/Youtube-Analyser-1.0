@@ -518,6 +518,21 @@ class MonitoringCycleRun(Base):
     error_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
+class MonitoringCaptureOutcome(Base):
+    """Per-request capture outcome for monitoring cycles (diagnostic; non-insert paths)."""
+
+    __tablename__ = "monitoring_capture_outcomes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    monitoring_run_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    video_id: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    checkpoint_age_hours: Mapped[int] = mapped_column(Integer, nullable=False)
+    capture_run_id: Mapped[str] = mapped_column(String(256), nullable=False)
+    attempted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    outcome: Mapped[str] = mapped_column(String(32), nullable=False)
+    reason_code: Mapped[str] = mapped_column(String(64), nullable=False)
+
+
 class OutcomeCaptureCycleRun(Base):
     """Append-only summary of one delayed outcome capture cycle (Stage 1.20E.2)."""
 
