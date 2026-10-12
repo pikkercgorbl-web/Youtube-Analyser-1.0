@@ -8,6 +8,14 @@
 # Local DB dumps and migration archives (may contain old remote DATABASE_URL)
 backups/
 
+# Local-only runtime artifacts (Security Cleanup A — does not rewrite Git history)
+/database.db
+/data/*.db
+/debug_yt_response.json
+/artifacts.zip
+/calibration_out/*.csv
+/data/target_keywords.json
+
 # Python / FastAPI
 __pycache__/
 *.py[cod]
