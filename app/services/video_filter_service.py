@@ -95,6 +95,8 @@ class VideoFilterService:
         self,
         videos: list[EnrichedVideoModel],
         filters_config: dict,
+        *,
+        allow_incomplete_channel: bool = False,
     ) -> list[EnrichedVideoModel]:
         """Sequentially filter videos according to ``filters_config``."""
         filtered = list(videos)
@@ -104,7 +106,11 @@ class VideoFilterService:
         filtered = self._filter_by_published_within(filtered, filters_config)
         filtered = self._filter_hieroglyphs(filtered, filters_config)
         filtered = self._filter_virality_toggle(filtered, filters_config)
-        filtered = self._filter_ranges(filtered, filters_config)
+        filtered = self._filter_ranges(
+            filtered,
+            filters_config,
+            allow_incomplete_channel=allow_incomplete_channel,
+        )
 
         return filtered
 
@@ -192,6 +198,8 @@ class VideoFilterService:
         self,
         videos: list[EnrichedVideoModel],
         filters_config: dict,
+        *,
+        allow_incomplete_channel: bool = False,
     ) -> list[EnrichedVideoModel]:
         result: list[EnrichedVideoModel] = []
         for item in videos:
@@ -215,6 +223,9 @@ class VideoFilterService:
                 "subscribers_min",
                 "subscribers_max",
             ):
+                continue
+            if allow_incomplete_channel:
+                result.append(item)
                 continue
             if not _matches_range(
                 item.channel.total_views,

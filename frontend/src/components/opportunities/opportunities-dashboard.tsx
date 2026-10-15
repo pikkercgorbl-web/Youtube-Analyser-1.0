@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Flame } from "lucide-react";
 
 import {
@@ -11,10 +11,12 @@ import {
   SectionPanel,
   UnavailableState,
 } from "@/components/design-system";
+import { PatternFamilyCard } from "@/components/opportunities/pattern-family-card";
 import {
-  PatternFamilyCard,
-  isTopicCollection,
-} from "@/components/opportunities/pattern-family-card";
+  isNeedsReviewFamily,
+  isRepeatingIdeaFamily,
+  isSearchCollectionFamily,
+} from "@/lib/opportunity-family-presentation";
 import { RisingChannelsSection } from "@/components/opportunities/rising-channels";
 import { WinnersTable } from "@/components/opportunities/winners-table";
 import {
@@ -35,8 +37,10 @@ import type {
   AttentionSummary,
   AttentionVideoWinner,
 } from "@/lib/attention-types";
+import type { RelatedFamilyRef } from "@/lib/saved-research-types";
 import { formatDateTimeLocal } from "@/lib/monitoring-format";
 import { cn } from "@/lib/utils";
+import { parseWinnerVideoIdFromHash } from "@/lib/opportunity-family-presentation";
 
 type FeedState =
   | { status: "loading" }
@@ -55,7 +59,23 @@ export function OpportunitiesDashboard() {
   const [section, setSection] = useState<"videos" | "channels" | "families">(
     "videos",
   );
+  const [focusWinnerVideoId, setFocusWinnerVideoId] = useState<string | null>(
+    null,
+  );
   const [state, setState] = useState<FeedState>({ status: "loading" });
+
+  const focusWinnerFromLocation = useCallback(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const videoId = parseWinnerVideoIdFromHash(window.location.hash);
+    if (!videoId) {
+      return;
+    }
+    setSection("videos");
+    setFocusWinnerVideoId(null);
+    window.requestAnimationFrame(() => setFocusWinnerVideoId(videoId));
+  }, []);
 
   const load = useCallback(async () => {
     setState({ status: "loading" });
@@ -94,6 +114,45 @@ export function OpportunitiesDashboard() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  const [locationHash, setLocationHash] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const syncHash = () => setLocationHash(window.location.hash);
+    syncHash();
+    window.addEventListener("hashchange", syncHash);
+    return () => window.removeEventListener("hashchange", syncHash);
+  }, []);
+
+  useEffect(() => {
+    if (state.status !== "ready") {
+      return;
+    }
+    focusWinnerFromLocation();
+    window.addEventListener("hashchange", focusWinnerFromLocation);
+    return () =>
+      window.removeEventListener("hashchange", focusWinnerFromLocation);
+  }, [state.status, locationHash, focusWinnerFromLocation]);
+
+  const relatedFamiliesByVideoId = useMemo(() => {
+    if (state.status !== "ready") {
+      return {} as Record<string, RelatedFamilyRef[]>;
+    }
+    const map: Record<string, RelatedFamilyRef[]> = {};
+    for (const family of state.families) {
+      const ref = { family_key: family.family_key, label: family.label };
+      for (const videoId of family.participating_video_ids) {
+        map[videoId] = [...(map[videoId] ?? []), ref];
+      }
+    }
+    for (const key of Object.keys(map)) {
+      map[key].sort((a, b) => a.label.localeCompare(b.label, "ru"));
+    }
+    return map;
+  }, [state]);
 
   if (state.status === "loading") {
     return (
@@ -147,8 +206,12 @@ export function OpportunitiesDashboard() {
   const { summary, videos, families, channels, dataSource } = state;
   const confirmed = confirmed72hCount(videos);
 
-  const repeated = families.filter((family) => !isTopicCollection(family));
-  const topics = families.filter(isTopicCollection);
+  const repeatingIdeas = families.filter(isRepeatingIdeaFamily);
+  const needsReview = families.filter(isNeedsReviewFamily);
+  const searchCollections = families.filter(isSearchCollectionFamily);
+  const winnerTitleById = Object.fromEntries(
+    videos.map((row) => [row.video_id, row.title]),
+  );
   const stale =
     Date.now() - new Date(summary.computed_at).getTime() > 3 * 3600_000;
   return (
@@ -224,9 +287,9 @@ export function OpportunitiesDashboard() {
             ],
             [
               "families",
-              "Похожие находки",
+              "Группы для исследования",
               families.length,
-              "Сходство заголовков и тем",
+              "Подборки и сходства заголовков",
               "metric-patterns",
             ],
           ] as const
@@ -264,7 +327,13 @@ export function OpportunitiesDashboard() {
           description="Изучите сам ролик и соседние публикации канала. Один удачный результат ещё не доказывает повторяемость."
         >
           <div id="video-winners">
-            <WinnersTable videos={videos} />
+            <WinnersTable
+              videos={videos}
+              runId={summary.run_id}
+              relatedFamiliesByVideoId={relatedFamiliesByVideoId}
+              focusVideoId={focusWinnerVideoId}
+              onFocusVideoHandled={() => setFocusWinnerVideoId(null)}
+            />
           </div>
         </SectionPanel>
       </div>
@@ -283,41 +352,68 @@ export function OpportunitiesDashboard() {
         className="space-y-8"
         id="pattern-families"
       >
-        <SectionPanel
-          title="Повторяющиеся находки"
-          description="Сходство заголовков на разных каналах — повод сравнить видео, а не готовый рецепт успеха."
-        >
-          {repeated.length ? (
+        {repeatingIdeas.length > 0 ? (
+          <SectionPanel
+            title="Повторяющиеся идеи"
+            description="Только группы, где узкий признак в названиях совпал минимум у двух видео с разных каналов и есть минимум два Winner с разных каналов."
+          >
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {repeated.map((family) => (
+              {repeatingIdeas.map((family) => (
                 <PatternFamilyCard
                   key={family.family_key}
                   family={family}
                   runId={summary.run_id}
+                  winnerTitlesById={winnerTitleById}
                 />
               ))}
             </div>
-          ) : (
-            <p
-              className="rounded-2xl border border-dashed border-border p-6 text-muted-foreground"
-              data-testid="patterns-empty"
+          </SectionPanel>
+        ) : (
+          <p
+            className="rounded-2xl border border-dashed border-border px-4 py-3 text-sm text-muted-foreground"
+            data-testid="patterns-empty"
+          >
+            Повторяющих идей в этом снимке нет. Winners ({summary.winner_count})
+            — во вкладке{" "}
+            <button
+              type="button"
+              className="text-primary underline-offset-2 hover:underline"
+              onClick={() => setSection("videos")}
             >
-              Пока нет групп со сходством заголовков. Тематические подборки
-              доступны ниже, если они есть в текущем расчёте.
-            </p>
-          )}
-        </SectionPanel>
-        {topics.length > 0 ? (
+              «Видео для разведки»
+            </button>
+            ; подборки поиска — ниже.
+          </p>
+        )}
+        {needsReview.length > 0 ? (
           <SectionPanel
-            title="Подборки по теме"
-            description="Видео объединены общим запросом или темой. Повторяемость производственного формата здесь не установлена."
+            title="Требует проверки"
+            description="Сходство заголовков видно по сохранённым evidence — сравните ролики вручную."
           >
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {topics.map((family) => (
+              {needsReview.map((family) => (
                 <PatternFamilyCard
                   key={family.family_key}
                   family={family}
                   runId={summary.run_id}
+                  winnerTitlesById={winnerTitleById}
+                />
+              ))}
+            </div>
+          </SectionPanel>
+        ) : null}
+        {searchCollections.length > 0 ? (
+          <SectionPanel
+            title="Подборки поиска"
+            description="Видео объединены одним запросом или темой из метаданных. Это не подтверждённая возможность и не доказанный формат."
+          >
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {searchCollections.map((family) => (
+                <PatternFamilyCard
+                  key={family.family_key}
+                  family={family}
+                  runId={summary.run_id}
+                  winnerTitlesById={winnerTitleById}
                 />
               ))}
             </div>

@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models.orm import KeywordDiscoveryHit, Video
+from app.models.orm import DailyIntelligenceRunWinnerAppearance, KeywordDiscoveryHit, Video
+from app.services.delayed_outcome_capture_config import OutcomeCaptureBudgetPolicy
 from app.services.keyword_performance_evaluation import (
     HORIZON_HOURS,
     HORIZON_SNAPSHOT_TOLERANCE_HOURS,
@@ -15,6 +16,7 @@ from app.services.keyword_performance_evaluation import (
 from app.services.delayed_outcome_capture_types import (
     DelayedOutcomeCapturePlan,
     OutcomeAttributionMode,
+    OutcomeCaptureSelectionInstrumentation,
     OutcomeCaptureState,
     OutcomeObservationPlan,
     OutcomeObservationRecord,
@@ -28,6 +30,9 @@ from app.services.keyword_performance_evaluation import (
     match_horizon_outcome,
 )
 from app.services.metrics import ensure_utc
+
+_UTC = timezone.utc
+_FAR_FUTURE = datetime(9999, 1, 1, tzinfo=_UTC)
 
 
 def _outcome_window(
@@ -104,6 +109,81 @@ def classify_outcome_observation(
     )
 
 
+def load_di_winner_priority_video_ids(session: Session) -> frozenset[str]:
+    """Distinct video_id from DI run winner appearances (Stage 1.23C.1A)."""
+    rows = session.scalars(
+        select(DailyIntelligenceRunWinnerAppearance.video_id).distinct(),
+    ).all()
+    return frozenset(str(vid) for vid in rows)
+
+
+def select_fetch_candidates_for_cycle(
+    candidates: list[OutcomeVideoFetchCandidate],
+    *,
+    budget: OutcomeCaptureBudgetPolicy,
+    di_winner_video_ids: frozenset[str],
+) -> tuple[list[OutcomeVideoFetchCandidate], OutcomeCaptureSelectionInstrumentation]:
+    """
+    Apply cycle budget. When priority is disabled, preserve legacy global sort + head slice.
+    """
+    total_cap = budget.max_videos_per_cycle
+    if not budget.di_winner_priority_enabled:
+        selected = candidates[:total_cap]
+        bg_due = len(candidates)
+        bg_sel = len(selected)
+        return selected, OutcomeCaptureSelectionInstrumentation(
+            priority_enabled=False,
+            background_due=bg_due,
+            background_selected=bg_sel,
+            background_deferred=max(0, bg_due - bg_sel),
+        )
+
+    priority_pool: list[OutcomeVideoFetchCandidate] = []
+    background_pool: list[OutcomeVideoFetchCandidate] = []
+    for candidate in candidates:
+        if candidate.video_id in di_winner_video_ids:
+            priority_pool.append(
+                OutcomeVideoFetchCandidate(
+                    video_id=candidate.video_id,
+                    channel_id=candidate.channel_id,
+                    priority_hours_to_window_end=candidate.priority_hours_to_window_end,
+                    observation_count=candidate.observation_count,
+                    states=candidate.states,
+                    window_end=candidate.window_end,
+                    is_di_winner_priority=True,
+                ),
+            )
+        else:
+            background_pool.append(candidate)
+
+    priority_pool.sort(
+        key=lambda c: (ensure_utc(c.window_end) if c.window_end else _FAR_FUTURE, c.video_id),
+    )
+
+    pri_cap = min(len(priority_pool), budget.priority_max_slots)
+    pri_selected = priority_pool[:pri_cap]
+    slots_left = total_cap - len(pri_selected)
+
+    bg_count = min(len(background_pool), slots_left)
+    if len(background_pool) >= budget.background_min_slots:
+        bg_count = max(
+            bg_count,
+            min(budget.background_min_slots, len(background_pool), slots_left),
+        )
+    bg_selected = background_pool[:bg_count]
+    selected = pri_selected + bg_selected
+
+    return selected, OutcomeCaptureSelectionInstrumentation(
+        priority_enabled=True,
+        priority_due=len(priority_pool),
+        background_due=len(background_pool),
+        priority_selected=len(pri_selected),
+        background_selected=len(bg_selected),
+        priority_deferred=max(0, len(priority_pool) - len(pri_selected)),
+        background_deferred=max(0, len(background_pool) - len(bg_selected)),
+    )
+
+
 def load_attributed_outcome_observations(
     session: Session,
     *,
@@ -150,6 +230,7 @@ def plan_delayed_outcome_capture(
     attribution_mode: OutcomeAttributionMode = "all_hits",
     horizon_hours: int = HORIZON_HOURS,
     tolerance_hours: float = HORIZON_SNAPSHOT_TOLERANCE_HOURS,
+    budget: OutcomeCaptureBudgetPolicy | None = None,
 ) -> DelayedOutcomeCapturePlan:
     records = load_attributed_outcome_observations(session, attribution_mode=attribution_mode)
     ref = ensure_utc(reference)
@@ -196,6 +277,7 @@ def plan_delayed_outcome_capture(
     candidates: list[OutcomeVideoFetchCandidate] = []
     for video_id, rows in due_by_video.items():
         min_hours = min(r.hours_until_window_end or 0.0 for r in rows)
+        window_end = min(ensure_utc(r.window_end) for r in rows)
         candidates.append(
             OutcomeVideoFetchCandidate(
                 video_id=video_id,
@@ -203,10 +285,35 @@ def plan_delayed_outcome_capture(
                 priority_hours_to_window_end=min_hours,
                 observation_count=len(rows),
                 states=tuple(sorted({r.state for r in rows})),
+                window_end=window_end,
             ),
         )
     candidates.sort(
         key=lambda c: (c.priority_hours_to_window_end, c.video_id),
+    )
+
+    budget_cfg = budget or OutcomeCaptureBudgetPolicy()
+    di_ids = (
+        load_di_winner_priority_video_ids(session)
+        if budget_cfg.di_winner_priority_enabled
+        else frozenset()
+    )
+    if di_ids:
+        due_with_baseline = {
+            row.video_id
+            for row in observations
+            if row.state in ("capture_due", "capture_overdue")
+        }
+        usable_baseline = {
+            record.video_id
+            for record in records
+            if record.views_at_discovery is not None and record.video_id in due_with_baseline
+        }
+        di_ids = frozenset(vid for vid in di_ids if vid in usable_baseline)
+    selected, selection = select_fetch_candidates_for_cycle(
+        candidates,
+        budget=budget_cfg,
+        di_winner_video_ids=di_ids,
     )
 
     return DelayedOutcomeCapturePlan(
@@ -221,6 +328,8 @@ def plan_delayed_outcome_capture(
         unique_due_video_count=len(candidates),
         observations=observations,
         fetch_candidates=candidates,
+        selected_fetch_candidates=selected,
+        selection=selection,
     )
 
 

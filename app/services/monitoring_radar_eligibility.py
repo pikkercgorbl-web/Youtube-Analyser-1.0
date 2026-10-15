@@ -22,6 +22,8 @@ def monitoring_video_eligible(
     latest_snapshot: VideoSnapshot | None,
     confirmed_regular_ids: frozenset[str] | None = None,
 ) -> bool:
+    if video.automatic_monitoring_withheld:
+        return False
     if not radar_target_eligible(
         video=video,
         channel=channel,

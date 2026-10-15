@@ -226,6 +226,7 @@ class YouTubeApiClient:
     _INNERTUBE_CHANNEL_DELAY_SECONDS = 0.25
     _INNERTUBE_SUGGESTIONS_TIMEOUT = 8.0
     _SEARCH_SUGGESTIONS_LIMIT = 10
+    _CHANNEL_DETAILS_CACHE_TTL_SECONDS = 300.0
 
     def __init__(
         self,
@@ -239,6 +240,7 @@ class YouTubeApiClient:
         self._innertube_metrics = (
             innertube_metrics if innertube_metrics is not None else NULL_INNERTUBE_METRICS
         )
+        self._channel_details_cache: dict[str, tuple[ChannelDetailModel, float]] = {}
 
     def search_videos(
         self,
@@ -417,6 +419,7 @@ class YouTubeApiClient:
         max_results: int = 50,
         max_pages: int | None = None,
         sort_by_upload_date: bool = False,
+        timing: Any | None = None,
     ) -> list[VideoSearchModel]:
         """Search videos through InnerTube and return parsed Pydantic models."""
         if not query.strip():
@@ -447,11 +450,17 @@ class YouTubeApiClient:
                 if sort_by_upload_date:
                     payload["params"] = "EgQIAhAB"
 
+            search_started = time.perf_counter()
             response = await self._innertube_request(
                 payload,
                 url=self.INNERTUBE_SEARCH_URL,
             )
+            if timing is not None:
+                timing.innertube_search_requests += 1
+                timing.innertube_search_wall_ms += (time.perf_counter() - search_started) * 1000.0
             pages_fetched += 1
+            if timing is not None:
+                timing.innertube_search_pages = pages_fetched
             page_videos, parse_skipped, renderer_counts = _parse_search_videos(response)
             parse_skipped_total += parse_skipped
             _log_search_page_renderer_counts(
@@ -496,8 +505,14 @@ class YouTubeApiClient:
             )
 
         if not results and _contains_cyrillic(query):
+            html_started = time.perf_counter()
             results = await self._fetch_search_via_html_page(query, limit=result_limit)
+            if timing is not None:
+                timing.html_fallback_used = True
+                timing.html_fallback_wall_ms += (time.perf_counter() - html_started) * 1000.0
 
+        if timing is not None:
+            timing.result_count = len(results[:result_limit])
         return results[:result_limit]
 
     async def iter_search_pages(
@@ -638,18 +653,33 @@ class YouTubeApiClient:
         suggestions = await self.get_search_suggestions(query)
         return _filter_related_suggestions(query, suggestions, max_suggestions=max_suggestions)
 
-    async def get_channel_details(self, channel_id: str) -> ChannelDetailModel:
+    async def get_channel_details(
+        self,
+        channel_id: str,
+        *,
+        timing: Any | None = None,
+    ) -> ChannelDetailModel:
         """Fetch detailed public channel metadata through InnerTube browse."""
         if not channel_id.strip():
             msg = "channel_id must not be empty"
             raise ValueError(msg)
 
+        now = time.monotonic()
+        cached = self._channel_details_cache.get(channel_id)
+        if cached is not None and (now - cached[1]) <= self._CHANNEL_DETAILS_CACHE_TTL_SECONDS:
+            if timing is not None:
+                timing.channel_cache_hits += 1
+            return cached[0]
+
+        work_started = time.perf_counter()
         context = _build_innertube_context()
         initial_payload = {
             "context": context,
             "browseId": channel_id,
         }
         initial_response = await self._innertube_request(initial_payload)
+        if timing is not None:
+            timing.channel_browse_http_requests += 1
 
         about_params = (
             _find_tab_params(initial_response, ("about", "о канале"))
@@ -662,6 +692,8 @@ class YouTubeApiClient:
                 "params": about_params,
             },
         )
+        if timing is not None:
+            timing.channel_browse_http_requests += 1
 
         responses = [initial_response, about_response]
         continuation_token = _extract_about_panel_continuation(initial_response)
@@ -676,38 +708,36 @@ class YouTubeApiClient:
             except YouTubeApiError:
                 pass
             else:
+                if timing is not None:
+                    timing.channel_browse_http_requests += 1
                 responses.append(about_panel_response)
 
-        return _parse_channel_details(responses)
+        details = _parse_channel_details(responses)
+        self._channel_details_cache[channel_id] = (details, now)
+        if timing is not None:
+            timing.channel_browse_work_ms += (time.perf_counter() - work_started) * 1000.0
+        return details
 
-    async def get_enriched_search_results(
+    async def fetch_channel_details_map(
         self,
-        query: str,
-        max_results: int = 50,
+        channel_ids: list[str],
         *,
-        sort_by_upload_date: bool = False,
-    ) -> list[EnrichedVideoModel]:
-        """Search videos and enrich each result with InnerTube channel metadata."""
-        videos = await self.search(
-            query,
-            max_results=max_results,
-            sort_by_upload_date=sort_by_upload_date,
-        )
-        if not videos:
-            return []
+        timing: Any | None = None,
+    ) -> dict[str, ChannelDetailModel]:
+        unique_channel_ids = list(dict.fromkeys(cid for cid in channel_ids if cid))
+        if timing is not None:
+            timing.channel_browse_unique_channels = len(unique_channel_ids)
+        if not unique_channel_ids:
+            return {}
 
-        videos = await self._fill_missing_channel_metadata(videos)
-
-        unique_channel_ids = list(
-            dict.fromkeys(video.channel_id for video in videos if video.channel_id),
-        )
         semaphore = asyncio.Semaphore(self._INNERTUBE_CHANNEL_CONCURRENCY)
+        browse_started = time.perf_counter()
 
         async def fetch_channel(channel_id: str) -> tuple[str, ChannelDetailModel]:
             async with semaphore:
                 await asyncio.sleep(self._INNERTUBE_CHANNEL_DELAY_SECONDS)
                 try:
-                    details = await self.get_channel_details(channel_id)
+                    details = await self.get_channel_details(channel_id, timing=timing)
                 except (YouTubeApiError, ValueError):
                     details = ChannelDetailModel()
                 return channel_id, details
@@ -715,24 +745,43 @@ class YouTubeApiClient:
         channel_pairs = await asyncio.gather(
             *(fetch_channel(channel_id) for channel_id in unique_channel_ids),
         )
-        channel_map = dict(channel_pairs)
+        if timing is not None:
+            timing.channel_browse_wall_ms += (time.perf_counter() - browse_started) * 1000.0
+        return dict(channel_pairs)
 
-        enriched: list[EnrichedVideoModel] = []
-        for video in videos:
-            channel = channel_map.get(video.channel_id, ChannelDetailModel())
-            subscribers = max(channel.subscribers_count, 0)
-            video_views = max(video.views_count, 0)
-            enriched.append(
-                EnrichedVideoModel(
-                    video=video,
-                    channel=channel,
-                    virality_coefficient=calc_virality_coefficient(
-                        video_views,
-                        subscribers,
-                    ),
-                ),
-            )
-        return enriched
+    async def get_enriched_search_results(
+        self,
+        query: str,
+        max_results: int = 50,
+        *,
+        sort_by_upload_date: bool = False,
+        fetch_channel_browse: bool = True,
+        timing: Any | None = None,
+    ) -> list[EnrichedVideoModel]:
+        """Search videos and enrich each result with InnerTube channel metadata."""
+        videos = await self.search(
+            query,
+            max_results=max_results,
+            sort_by_upload_date=sort_by_upload_date,
+            timing=timing,
+        )
+        if not videos:
+            return []
+
+        videos = await self._fill_missing_channel_metadata(videos, timing=timing)
+
+        from app.services.manual_search_pipeline import enriched_models_from_search_cards, merge_channel_details
+
+        if not fetch_channel_browse:
+            if timing is not None:
+                timing.channel_browse_skipped = True
+            return enriched_models_from_search_cards(videos)
+
+        channel_map = await self.fetch_channel_details_map(
+            [video.channel_id for video in videos if video.channel_id],
+            timing=timing,
+        )
+        return merge_channel_details(enriched_models_from_search_cards(videos), channel_map)
 
     async def fetch_video_channel_info(self, video_id: str) -> tuple[str, str]:
         """
@@ -756,12 +805,17 @@ class YouTubeApiClient:
     async def _fill_missing_channel_metadata(
         self,
         videos: list[VideoSearchModel],
+        *,
+        timing: Any | None = None,
     ) -> list[VideoSearchModel]:
         """Backfill channel id/title for Shorts that omit channel data in search JSON."""
         missing = [video for video in videos if not video.channel_id.strip()]
         if not missing:
             return videos
 
+        if timing is not None:
+            timing.player_backfill_requests = len(missing)
+        backfill_started = time.perf_counter()
         semaphore = asyncio.Semaphore(self._INNERTUBE_CHANNEL_CONCURRENCY)
 
         async def resolve(video: VideoSearchModel) -> tuple[str, str, str]:
@@ -776,6 +830,8 @@ class YouTubeApiClient:
                 return video.video_id, channel_id, channel_title
 
         resolved_pairs = await asyncio.gather(*(resolve(video) for video in missing))
+        if timing is not None:
+            timing.player_backfill_wall_ms += (time.perf_counter() - backfill_started) * 1000.0
         resolved_map = {
             video_id: (channel_id, channel_title)
             for video_id, channel_id, channel_title in resolved_pairs
@@ -3543,6 +3599,8 @@ async def get_enriched_search_results(
     *,
     sort_by_upload_date: bool = False,
     save_to_db: bool = False,
+    fetch_channel_browse: bool = True,
+    timing: Any | None = None,
 ) -> list[EnrichedVideoModel]:
     """Run InnerTube search and enrich each video with channel metadata."""
     client = _get_innertube_client()
@@ -3550,6 +3608,8 @@ async def get_enriched_search_results(
         query,
         max_results=max_results,
         sort_by_upload_date=sort_by_upload_date,
+        fetch_channel_browse=fetch_channel_browse,
+        timing=timing,
     )
     if save_to_db and results:
         from app.services.explosive_channels_service import ExplosiveChannelsService

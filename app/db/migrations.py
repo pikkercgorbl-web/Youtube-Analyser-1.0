@@ -57,9 +57,38 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_videos_published_at_source_column(engine)
     ensure_saved_topics_tables(engine)
     ensure_saved_topics_1_22d_tables(engine)
+    ensure_saved_research_tables(engine)
+    ensure_saved_research_events_table(engine)
+    ensure_saved_research_feedback_table(engine)
+    ensure_saved_video_manual_refresh_lease_column(engine)
     ensure_read_model_publish_locks_table(engine)
     ensure_read_model_publish_lock_token_column(engine)
     ensure_topic_exploration_evidence_tables(engine)
+    ensure_daily_intelligence_tables(engine)
+    ensure_videos_automatic_monitoring_withheld_column(engine)
+
+
+def ensure_videos_automatic_monitoring_withheld_column(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "videos" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("videos")}
+    if "automatic_monitoring_withheld" in column_names:
+        return
+    dialect = engine.dialect.name
+    if dialect == "postgresql":
+        ddl = (
+            "ALTER TABLE videos ADD COLUMN automatic_monitoring_withheld "
+            "BOOLEAN NOT NULL DEFAULT false"
+        )
+    else:
+        ddl = (
+            "ALTER TABLE videos ADD COLUMN automatic_monitoring_withheld "
+            "BOOLEAN NOT NULL DEFAULT 0"
+        )
+    with engine.begin() as connection:
+        connection.execute(text(ddl))
+    logger.info("Added videos.automatic_monitoring_withheld column")
 
 
 def ensure_videos_published_at_source_column(engine: Engine) -> None:
@@ -161,6 +190,91 @@ def ensure_saved_topics_1_22d_tables(engine: Engine) -> None:
     if "saved_topic_feedback" not in names:
         SavedTopicFeedback.__table__.create(bind=engine, checkfirst=True)
         logger.info("Created saved_topic_feedback table")
+
+
+def ensure_saved_research_tables(engine: Engine) -> None:
+    """Saved Research: saved_videos, saved_families + observations (Stage 1.22C)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        SavedFamily,
+        SavedFamilyObservation,
+        SavedVideo,
+        SavedVideoObservation,
+    )
+
+    for model, label in (
+        (SavedVideo, "saved_videos"),
+        (SavedVideoObservation, "saved_video_observations"),
+        (SavedFamily, "saved_families"),
+        (SavedFamilyObservation, "saved_family_observations"),
+    ):
+        if label not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", label)
+
+
+def ensure_saved_research_events_table(engine: Engine) -> None:
+    """Append-only decision events for SavedVideo / SavedFamily (Stage 1.22D.1)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import SavedResearchEvent
+
+    if "saved_research_events" not in names:
+        SavedResearchEvent.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created saved_research_events table")
+
+
+def ensure_daily_intelligence_tables(engine: Engine) -> None:
+    """Daily intelligence archive (Stage 1.23A)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        DailyIntelligenceReport,
+        DailyIntelligenceReportFamilyFinding,
+        DailyIntelligenceReportWinnerFinding,
+        DailyIntelligenceRunFamilyAppearance,
+        DailyIntelligenceRunSnapshot,
+        DailyIntelligenceRunWinnerAppearance,
+    )
+
+    for table_name, model in (
+        ("daily_intelligence_reports", DailyIntelligenceReport),
+        ("daily_intelligence_run_snapshots", DailyIntelligenceRunSnapshot),
+        ("daily_intelligence_run_winner_appearances", DailyIntelligenceRunWinnerAppearance),
+        ("daily_intelligence_run_family_appearances", DailyIntelligenceRunFamilyAppearance),
+        ("daily_intelligence_report_winner_findings", DailyIntelligenceReportWinnerFinding),
+        ("daily_intelligence_report_family_findings", DailyIntelligenceReportFamilyFinding),
+    ):
+        if table_name not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", table_name)
+
+
+def ensure_saved_research_feedback_table(engine: Engine) -> None:
+    """Append-only analyst feedback for SavedVideo / SavedFamily (Stage 1.22D.2)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import SavedResearchFeedback
+
+    if "saved_research_feedback" not in names:
+        SavedResearchFeedback.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created saved_research_feedback table")
+
+
+def ensure_saved_video_manual_refresh_lease_column(engine: Engine) -> None:
+    """Lease column for in-flight manual SavedVideo refresh (Stage 1.22C.2)."""
+    inspector = inspect(engine)
+    if "saved_videos" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("saved_videos")}
+    if "manual_refresh_lease_until" in column_names:
+        return
+    with engine.begin() as connection:
+        connection.execute(
+            text("ALTER TABLE saved_videos ADD COLUMN manual_refresh_lease_until TIMESTAMP"),
+        )
+    logger.info("Added saved_videos.manual_refresh_lease_until column")
 
 
 def ensure_attention_engine_tables(engine: Engine) -> None:

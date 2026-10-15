@@ -143,6 +143,13 @@ class Video(Base):
         nullable=False,
         index=True,
     )
+    automatic_monitoring_withheld: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default="false",
+        comment="When true, automatic Monitoring must not enroll this video until Discovery handoff",
+    )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
@@ -1023,6 +1030,176 @@ class SavedTopicObservation(Base):
     payload_json: Mapped[str] = mapped_column(Text, nullable=False)
 
 
+class SavedResearchStatus(str, enum.Enum):
+    WATCHING = "WATCHING"
+    WANT_TO_TEST = "WANT_TO_TEST"
+    TESTING = "TESTING"
+    DROPPED = "DROPPED"
+
+
+class SavedVideo(Base):
+    """User bookmark for one VideoWinner / canonical video (Stage 1.22C Saved Research)."""
+
+    __tablename__ = "saved_videos"
+    __table_args__ = (UniqueConstraint("video_id", name="uq_saved_videos_video_id"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    saved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(32),
+        nullable=False,
+        default=SavedResearchStatus.WATCHING.value,
+    )
+    notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    tags_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    archived_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    created_from_attention_run_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    frozen_title: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    frozen_channel_id: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    frozen_channel_title: Mapped[str] = mapped_column(String(256), nullable=False, default="")
+    frozen_payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+    latest_observed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    manual_refresh_lease_until: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class SavedVideoObservation(Base):
+    __tablename__ = "saved_video_observations"
+    __table_args__ = (
+        UniqueConstraint("saved_video_id", "attention_run_id", name="uq_saved_video_observation_run"),
+        Index("ix_saved_video_observations_video_observed", "saved_video_id", "observed_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_video_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_videos.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    attention_run_id: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    video_present_in_attention: Mapped[bool] = mapped_column(nullable=False, default=False)
+    monitoring_snapshot_available: Mapped[bool] = mapped_column(nullable=False, default=False)
+    views: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    vph: Mapped[float | None] = mapped_column(nullable=True)
+    subscriber_count: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    breakout_rank: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    acceleration_state: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    delayed_outcome_state: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    family_keys_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    reason_codes_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class SavedFamily(Base):
+    """User bookmark for a PatternFamily (Stage 1.22C Saved Research)."""
+
+    __tablename__ = "saved_families"
+    __table_args__ = (UniqueConstraint("family_key", name="uq_saved_families_family_key"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    family_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    saved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(32),
+        nullable=False,
+        default=SavedResearchStatus.WATCHING.value,
+    )
+    notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    tags_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    archived_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    created_from_attention_run_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    frozen_label: Mapped[str] = mapped_column(String(256), nullable=False, default="")
+    frozen_kind: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    frozen_payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+    latest_observed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class SavedFamilyObservation(Base):
+    __tablename__ = "saved_family_observations"
+    __table_args__ = (
+        UniqueConstraint("saved_family_id", "attention_run_id", name="uq_saved_family_observation_run"),
+        Index("ix_saved_family_observations_family_observed", "saved_family_id", "observed_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_family_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_families.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    attention_run_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    family_present: Mapped[bool] = mapped_column(nullable=False, default=False)
+    label: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    video_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    channel_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    keyword_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    last_24h_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    previous_24h_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    previous_48_24h_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    support_sources_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    quality_flags_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class SavedResearchEvent(Base):
+    """Append-only user decision log for SavedVideo / SavedFamily (Stage 1.22D.1)."""
+
+    __tablename__ = "saved_research_events"
+    __table_args__ = (
+        Index("ix_saved_research_events_entity_occurred", "entity_kind", "entity_id", "occurred_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    entity_kind: Mapped[str] = mapped_column(String(16), nullable=False, index=True)
+    entity_id: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    event_type: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
+class SavedResearchFeedback(Base):
+    """Append-only analyst verdict on SavedVideo / SavedFamily (Stage 1.22D.2)."""
+
+    __tablename__ = "saved_research_feedback"
+    __table_args__ = (
+        Index(
+            "ix_saved_research_feedback_entity_created",
+            "entity_kind",
+            "entity_id",
+            "created_at",
+            "id",
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    entity_kind: Mapped[str] = mapped_column(String(16), nullable=False, index=True)
+    entity_id: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    verdict: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    reason: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
 class AttentionChannelMomentumRow(Base):
     """Persisted ChannelMomentum row for one attention run."""
 
@@ -1143,3 +1320,131 @@ class TopicExplorationPhrasePassStat(Base):
     pass_discovery_run_id: Mapped[str] = mapped_column(String(128), nullable=False)
 
     pass_row: Mapped[TopicExplorationPass] = relationship(back_populates="phrase_stats")
+
+
+class DailyIntelligenceReport(Base):
+    """UTC daily edition of Attention winners/families (Stage 1.23A)."""
+
+    __tablename__ = "daily_intelligence_reports"
+
+    report_date: Mapped[date] = mapped_column(Date, primary_key=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    source_run_id: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
+    source_computed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    source_window_start: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    source_window_end: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    source_window_hours: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    locked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    publish_attempt: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    coverage_gaps_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    summary_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
+class DailyIntelligenceRunSnapshot(Base):
+    """Append-only record of one published Attention run (Stage 1.23A)."""
+
+    __tablename__ = "daily_intelligence_run_snapshots"
+
+    source_run_id: Mapped[str] = mapped_column(String(128), primary_key=True)
+    report_date: Mapped[date] = mapped_column(Date, nullable=False, index=True)
+    source_computed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    winner_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    family_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+
+
+class DailyIntelligenceRunWinnerAppearance(Base):
+    __tablename__ = "daily_intelligence_run_winner_appearances"
+    __table_args__ = (
+        UniqueConstraint("source_run_id", "video_id", name="uq_di_run_winner_run_video"),
+        Index("ix_di_run_winner_video_computed", "video_id", "source_computed_at"),
+        Index("ix_di_run_winner_run_rank", "source_run_id", "rank"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    source_run_id: Mapped[str] = mapped_column(
+        ForeignKey("daily_intelligence_run_snapshots.source_run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    report_date: Mapped[date] = mapped_column(Date, nullable=False, index=True)
+    source_computed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    title: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    channel_id: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    discovery_provenance_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class DailyIntelligenceRunFamilyAppearance(Base):
+    __tablename__ = "daily_intelligence_run_family_appearances"
+    __table_args__ = (
+        UniqueConstraint("source_run_id", "family_key", name="uq_di_run_family_run_key"),
+        Index("ix_di_run_family_key_computed", "family_key", "source_computed_at"),
+        Index("ix_di_run_family_run_rank", "source_run_id", "rank"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    source_run_id: Mapped[str] = mapped_column(
+        ForeignKey("daily_intelligence_run_snapshots.source_run_id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    report_date: Mapped[date] = mapped_column(Date, nullable=False, index=True)
+    source_computed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    family_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    label: Mapped[str] = mapped_column(String(256), nullable=False, default="")
+    video_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    channel_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class DailyIntelligenceReportWinnerFinding(Base):
+    """Frozen daily edition row for one winner (Stage 1.23A)."""
+
+    __tablename__ = "daily_intelligence_report_winner_findings"
+    __table_args__ = (
+        UniqueConstraint("report_date", "video_id", name="uq_di_report_winner_date_video"),
+        Index("ix_di_report_winner_date_rank", "report_date", "rank"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    report_date: Mapped[date] = mapped_column(
+        ForeignKey("daily_intelligence_reports.report_date", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    title: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    channel_id: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    channel_title: Mapped[str] = mapped_column(String(256), nullable=False, default="")
+    youtube_url: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    discovery_provenance_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+    is_repeat_in_prior_reports: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class DailyIntelligenceReportFamilyFinding(Base):
+    __tablename__ = "daily_intelligence_report_family_findings"
+    __table_args__ = (
+        UniqueConstraint("report_date", "family_key", name="uq_di_report_family_date_key"),
+        Index("ix_di_report_family_date_rank", "report_date", "rank"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    report_date: Mapped[date] = mapped_column(
+        ForeignKey("daily_intelligence_reports.report_date", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    family_key: Mapped[str] = mapped_column(String(160), nullable=False, index=True)
+    rank: Mapped[int] = mapped_column(Integer, nullable=False)
+    label: Mapped[str] = mapped_column(String(256), nullable=False, default="")
+    video_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    channel_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    is_repeat_in_prior_reports: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False)

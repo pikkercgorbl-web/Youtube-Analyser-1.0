@@ -22,7 +22,9 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { StateMessage } from "@/components/ui/state-message";
 import { KeywordPoolTable } from "@/components/keyword-pool/keyword-pool-table";
-import { fetchTargetKeywords } from "@/lib/api";
+import { fetchKeywordPoolSummary, fetchTargetKeywords } from "@/lib/api";
+import { keywordPoolQueueContextLines } from "@/lib/keyword-pool-queue-context";
+import type { KeywordPoolSummary } from "@/lib/keyword-pool-types";
 import {
   ARCHIVED_POOL_HELP,
   CLIENT_FILTER_NOTE,
@@ -50,6 +52,7 @@ const POLL_MS = 60_000;
 
 export function KeywordPoolDashboard() {
   const [rows, setRows] = useState<TargetKeywordItem[] | null>(null);
+  const [poolSummary, setPoolSummary] = useState<KeywordPoolSummary | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -74,8 +77,12 @@ export function KeywordPoolDashboard() {
       setError(null);
     }
     try {
-      const data = await fetchTargetKeywords();
+      const [data, summary] = await Promise.all([
+        fetchTargetKeywords(),
+        fetchKeywordPoolSummary(),
+      ]);
       setRows(data);
+      setPoolSummary(summary);
       setNowMs(Date.now());
       hasLoaded.current = true;
       setError(null);
@@ -177,6 +184,21 @@ export function KeywordPoolDashboard() {
             tone={metrics.dueNow > 0 ? "warning" : "neutral"}
             lines={summaryLines}
           />
+          {poolSummary ? (
+            <div
+              className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm text-muted-foreground space-y-1"
+              data-testid="keyword-pool-queue-context"
+            >
+              {keywordPoolQueueContextLines(poolSummary, metrics.dueNow).map((line) => (
+                <p
+                  key={line.text}
+                  className={line.emphasis ? "font-medium text-foreground" : undefined}
+                >
+                  {line.text}
+                </p>
+              ))}
+            </div>
+          ) : null}
 
           <HelpText>{POOL_LIFECYCLE_HELP}</HelpText>
           <p className="text-xs text-muted-foreground">{ARCHIVED_POOL_HELP}</p>

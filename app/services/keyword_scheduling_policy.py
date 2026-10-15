@@ -65,8 +65,13 @@ class KeywordSchedulingPolicy:
         self,
         lifecycle_status: str,
         finished_at: datetime,
+        *,
+        probation_interval_seconds: int | None = None,
     ) -> datetime | None:
-        seconds = self.interval_seconds_for(lifecycle_status)
+        if lifecycle_status == LIFECYCLE_PROBATION and probation_interval_seconds is not None:
+            seconds = int(probation_interval_seconds)
+        else:
+            seconds = self.interval_seconds_for(lifecycle_status)
         if seconds is None:
             return None
         return ensure_utc(finished_at) + timedelta(seconds=seconds)

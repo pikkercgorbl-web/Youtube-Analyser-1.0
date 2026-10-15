@@ -133,12 +133,14 @@ def compute_attention_engine(
         now=computed_at,
         publishable_confirmed_ids=publishable_confirmed,
     )
+    pattern_build_stats: dict[str, int] = {}
     patterns = build_pattern_candidates(
         bundle,
         cfg,
         winners=winners,
         now=computed_at,
         publishable_confirmed_ids=publishable_confirmed,
+        pattern_build_stats=pattern_build_stats,
     )
     first_seen: dict[str, datetime] = {}
     titles: dict[str, str] = {}
@@ -212,6 +214,7 @@ def compute_attention_engine(
                 "per window AttentionVideoRecord (one row per video_id in bundle.records); "
                 "rejections.stream counts videos with content_format=LIVE in DB"
             ),
+            "pattern_candidate_build": pattern_build_stats,
         },
     )
     return AttentionEngineResult(

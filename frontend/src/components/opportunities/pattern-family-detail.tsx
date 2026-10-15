@@ -1,367 +1,814 @@
 "use client";
 
+
+
 import { useCallback, useEffect, useMemo, useState } from "react";
+
 import Link from "next/link";
+
 import { ArrowLeft } from "lucide-react";
 
+
+
 import {
-  Disclosure,
+
   ErrorState,
+
   LoadingState,
-  PageHeader,
+
   PageShell,
+
   SectionPanel,
+
   UnavailableState,
+
 } from "@/components/design-system";
-import { Button, buttonVariants } from "@/components/ui/button";
+
+import { buttonVariants } from "@/components/ui/button";
+
 import { Input } from "@/components/ui/input";
+
+import { patternActivity, patternDetailHref, snapshotFreshnessLabel } from "@/lib/attention-format";
+
 import {
-  canonicalYoutubeUrl,
-  formatOptionalAge,
-  formatOptionalSubscribers,
-  formatOptionalViews,
-  formatOptionalVph,
-  groupingSourceLabel,
-  patternActivity,
-  patternDetailHref,
-} from "@/lib/attention-format";
-import type {
-  AttentionPatternFamilyDetailResponse,
-  AttentionPatternMemberVideo,
-} from "@/lib/attention-types";
+
+  familyDetailHeadline,
+
+  familyDetailSearchDisclaimer,
+
+  familyMergedPatternsSectionDescription,
+
+  familyMergedPatternsSectionTitle,
+
+  familyRelatedKeywordsSectionDescription,
+
+  familyRelatedKeywordsSectionTitle,
+
+  familySnapshotMetaLine,
+
+  familyVideoListSectionDescription,
+
+  familyVideoListSectionTitle,
+
+  familyWhyTogetherLead,
+
+} from "@/lib/family-detail-copy";
+
+import {
+
+  familyDiagnosticIntro,
+
+  humanizeGroupingReason,
+
+  humanizeQualityFlag,
+
+  humanizeSupportSource,
+
+} from "@/lib/family-diagnostic-copy";
+
+import type { AttentionPatternFamilyDetailResponse } from "@/lib/attention-types";
+
 import { getAttentionPatternFamilyDetail } from "@/lib/api";
+
+import { isSearchCollectionFamily } from "@/lib/opportunity-family-presentation";
+
 import { surfaces } from "@/lib/design-system/layout";
-import { SaveTopicButton } from "@/components/saved-topics/save-topic-button";
+
+import { SaveFamilyButton } from "@/components/saved-research/save-family-button";
+
 import { cn } from "@/lib/utils";
 
-import { AttentionSignalBadges, HumanReasonsList } from "./signal-badges";
-import { YoutubeThumb } from "./youtube-thumb";
 
-type SortKey = "newest" | "vph" | "views";
+
+import { FamilyMemberCard } from "./family-member-card";
+
+
 
 export function PatternFamilyDetailView({ familyKey }: { familyKey: string }) {
+
   const [state, setState] = useState<"loading" | "error" | "ready">("loading");
+
   const [message, setMessage] = useState("");
+
   const [detail, setDetail] =
+
     useState<AttentionPatternFamilyDetailResponse | null>(null);
+
   const [channelFilter, setChannelFilter] = useState("all");
-  const [breakoutFilter, setBreakoutFilter] = useState<
-    "all" | "in_top" | "rest"
-  >("all");
-  const [sort, setSort] = useState<SortKey>("newest");
+
+  const [winnerFilter, setWinnerFilter] = useState<"all" | "winners" | "rest">(
+
+    "all",
+
+  );
+
   const [query, setQuery] = useState("");
 
+
+
   const load = useCallback(async () => {
+
     setState("loading");
+
     try {
+
       const data = await getAttentionPatternFamilyDetail(familyKey);
+
       setDetail(data);
+
       setState("ready");
+
     } catch (error) {
+
       setMessage(
+
         error instanceof Error ? error.message : "Семейство не найдено",
+
       );
+
       setState("error");
+
     }
+
   }, [familyKey]);
 
+
+
   useEffect(() => {
+
     void load();
+
   }, [load]);
 
+
+
+  const feedWinnerIds = useMemo(
+
+    () => new Set(detail?.family?.feed_winner_video_ids ?? []),
+
+    [detail?.family?.feed_winner_video_ids],
+
+  );
+
+
+
   const videos = useMemo(() => {
+
     const items = detail?.videos ?? [];
+
     const q = query.trim().toLowerCase();
-    let next = items.filter((row) => {
-      if (channelFilter !== "all" && row.channel_id !== channelFilter)
+
+    return items.filter((row) => {
+
+      if (channelFilter !== "all" && row.channel_id !== channelFilter) {
+
         return false;
-      if (breakoutFilter === "in_top" && !row.in_winner_snapshot) return false;
-      if (breakoutFilter === "rest" && row.in_winner_snapshot) return false;
-      if (!q) return true;
+
+      }
+
+      if (winnerFilter === "winners" && !row.in_winner_snapshot) {
+
+        return false;
+
+      }
+
+      if (winnerFilter === "rest" && row.in_winner_snapshot) {
+
+        return false;
+
+      }
+
+      if (!q) {
+
+        return true;
+
+      }
+
       return (
+
         row.title.toLowerCase().includes(q) ||
+
         row.channel_title.toLowerCase().includes(q) ||
+
         row.video_id.toLowerCase().includes(q)
+
       );
+
     });
-    const missing = (value: number | null | undefined, fallback: number) =>
-      value == null || Number.isNaN(value) ? fallback : value;
-    next = next.slice().sort((a, b) => {
-      if (sort === "vph") return missing(b.vph, -1) - missing(a.vph, -1);
-      if (sort === "views") return missing(b.views, -1) - missing(a.views, -1);
-      const aTime = a.published_at ? new Date(a.published_at).getTime() : 0;
-      const bTime = b.published_at ? new Date(b.published_at).getTime() : 0;
-      return bTime - aTime;
-    });
-    return next;
-  }, [detail, channelFilter, breakoutFilter, sort, query]);
+
+  }, [detail, channelFilter, winnerFilter, query]);
+
+
 
   if (state === "loading") {
+
     return (
+
       <PageShell>
-        <LoadingState title="Загрузка семейства паттернов…" />
+
+        <LoadingState title="Загрузка подборки…" />
+
       </PageShell>
+
     );
+
   }
+
   if (state === "error") {
+
     return (
+
       <PageShell>
+
         <ErrorState
-          title="Не удалось открыть семейство"
+
+          title="Не удалось открыть подборку"
+
           description={message}
+
           onRetry={load}
+
         />
+
       </PageShell>
+
     );
+
   }
+
   if (!detail?.family || detail.data_source === "unavailable") {
+
     return (
+
       <PageShell>
+
         <UnavailableState title="Attention Engine ещё не рассчитан." />
+
       </PageShell>
+
     );
+
   }
+
+
 
   const family = detail.family;
+
   const activity = patternActivity(family);
+
+  const headline = familyDetailHeadline(family, detail.related_keywords);
+
+  const winnerInFeedCount = family.feed_winner_video_ids.length;
+
+
+
   return (
+
     <PageShell>
+
       <Link
+
         href="/opportunities"
+
         className={cn(
+
           buttonVariants({ variant: "ghost", size: "sm" }),
+
           "w-fit",
+
         )}
+
       >
+
         <ArrowLeft className="h-4 w-4" />К возможностям
+
       </Link>
-      <PageHeader
-        title={family.label}
-        lead={groupingSourceLabel(family.family_kind)}
-      />
 
-      <div className={cn(surfaces.section, "space-y-3 p-4")}>
-        <p className="text-sm font-medium">Почему Radar сгруппировал это</p>
-        <p className="text-sm text-muted-foreground">
-          {groupingSourceLabel(family.family_kind)}. Сравните конкретные ролики
-          ниже: сходство темы или заголовков ещё не доказывает повторяемый
-          успех.
-        </p>
-        <details className="text-sm text-muted-foreground">
-          <summary>Технические основания группировки</summary>
-          <div className="mt-2">
-            <p>{family.grouping_reasons.join(" · ")}</p>
-            <p data-testid="family-support">
-              {family.support_sources.join(" · ")}
-            </p>
-            <p data-testid="family-flags">{family.quality_flags.join(" · ")}</p>
-          </div>
-        </details>
-        <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-          <div>
-            <p className="text-xs text-muted-foreground">Уникальные видео</p>
-            <p className="text-lg font-semibold">{family.video_count}</p>
-          </div>
-          <div data-testid="pattern-channel-diversity">
-            <p className="text-xs text-muted-foreground">Независимых каналов</p>
-            <p className="text-lg font-semibold">{family.channel_count}</p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Запросы</p>
-            <p className="text-lg font-semibold">{family.keyword_count}</p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Выборка Breakout</p>
-            <p className="text-sm">
-              {family.breakout_eligible_count} видео подходят для анализа
-              Breakout (не топ Winners)
-            </p>
-          </div>
-        </div>
-        <div data-testid="pattern-activity">
-          <p className="text-xs text-muted-foreground">
-            Активность по периодам
-          </p>
-          <p className="text-lg font-semibold">
-            {activity.available ? activity.label : "Недостаточно истории"}
-          </p>
-        </div>
-        <SaveTopicButton familyKey={family.family_key} runId={detail.run_id} />
-      </div>
 
-      <SectionPanel title="Исходные паттерны">
-        <ul className="space-y-1 text-sm" data-testid="family-member-patterns">
-          {family.member_pattern_keys.map((key, index) => (
-            <li key={key}>
-              <Link
-                href={patternDetailHref(key)}
-                className="text-primary hover:underline"
-              >
-                {family.member_labels[index] ?? key}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </SectionPanel>
 
-      <SectionPanel title="Связанные запросы">
-        {detail.related_keywords.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Связанные запросы не указаны.
+      <header className="space-y-3" data-testid="family-detail-header">
+
+        <h1 className="text-2xl font-semibold tracking-tight">{headline}</h1>
+
+        {isSearchCollectionFamily(family) ? (
+
+          <p className="max-w-3xl text-sm text-muted-foreground">
+
+            {familyDetailSearchDisclaimer()}
+
           </p>
+
         ) : (
-          <ul className="flex flex-wrap gap-2">
-            {detail.related_keywords.map((row) => (
-              <li
-                key={row.keyword_id}
-                className="rounded-full border border-border/60 px-3 py-1 text-sm"
-              >
-                {row.keyword}
-              </li>
-            ))}
-          </ul>
+
+          <p className="max-w-3xl text-sm text-muted-foreground">
+
+            {familyWhyTogetherLead(family)}
+
+          </p>
+
         )}
-      </SectionPanel>
 
-      <SectionPanel title="Участвующие каналы">
-        <ul className="grid gap-2 sm:grid-cols-2">
-          {detail.channels.map((channel) => (
-            <li key={channel.channel_id} className="text-sm">
-              {channel.channel_title}{" "}
-              <span className="text-muted-foreground">
-                ({channel.video_count})
-              </span>
-            </li>
-          ))}
-        </ul>
-      </SectionPanel>
+        <dl className="grid gap-3 sm:grid-cols-3">
 
-      <SectionPanel title="Все уникальные видео семейства">
-        <div className="flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center">
-          <Input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Поиск"
-            className="max-w-xs"
-          />
-          <label className="text-sm text-muted-foreground">
-            Канал{" "}
-            <select
-              className="rounded-md border border-input bg-transparent px-2 py-1 text-foreground"
-              value={channelFilter}
-              onChange={(event) => setChannelFilter(event.target.value)}
-            >
-              <option value="all">Все</option>
-              {detail.channels.map((channel) => (
-                <option key={channel.channel_id} value={channel.channel_id}>
-                  {channel.channel_title}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="text-sm text-muted-foreground">
-            В топе дня{" "}
-            <select
-              className="rounded-md border border-input bg-transparent px-2 py-1 text-foreground"
-              value={breakoutFilter}
-              onChange={(event) =>
-                setBreakoutFilter(
-                  event.target.value as "all" | "in_top" | "rest",
-                )
-              }
-            >
-              <option value="all">Все</option>
-              <option value="in_top">В сегодняшнем топе</option>
-              <option value="rest">Только остальные</option>
-            </select>
-          </label>
-          <label className="text-sm text-muted-foreground">
-            Сортировка{" "}
-            <select
-              className="rounded-md border border-input bg-transparent px-2 py-1 text-foreground"
-              value={sort}
-              onChange={(event) => setSort(event.target.value as SortKey)}
-            >
-              <option value="newest">Сначала новые</option>
-              <option value="vph">VPH</option>
-              <option value="views">Views</option>
-            </select>
-          </label>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          Показано {videos.length} из {detail.videos.length}
-        </p>
-        <div className="space-y-2" data-testid="family-member-list">
-          {videos.map((row) => (
-            <MemberRow key={row.video_id} video={row} />
-          ))}
-        </div>
-      </SectionPanel>
+          <div className={cn(surfaces.sectionMuted, "rounded-lg p-3")}>
 
-      <Disclosure summary="Технические детали">
-        <dl className="space-y-1 font-mono text-xs text-muted-foreground">
-          <div>family_key: {family.family_key}</div>
-          <div>family_kind: {family.family_kind}</div>
-          <div>run_id: {detail.run_id ?? "—"}</div>
-          <div>
-            member_pattern_keys: {family.member_pattern_keys.join(", ")}
+            <dt className="text-xs text-muted-foreground">Видео в подборке</dt>
+
+            <dd className="text-xl font-semibold tabular-nums">{family.video_count}</dd>
+
+            <dd className="text-[11px] text-muted-foreground">
+
+              Уникальные video_id в снимке Attention
+
+            </dd>
+
           </div>
+
+          <div
+
+            className={cn(surfaces.sectionMuted, "rounded-lg p-3")}
+
+            data-testid="pattern-channel-diversity"
+
+          >
+
+            <dt className="text-xs text-muted-foreground">Независимых каналов</dt>
+
+            <dd className="text-xl font-semibold tabular-nums">{family.channel_count}</dd>
+
+            <dd className="text-[11px] text-muted-foreground">На момент группировки</dd>
+
+          </div>
+
+          <div
+
+            className={cn(surfaces.sectionMuted, "rounded-lg p-3")}
+
+            data-testid="family-detail-feed-winners"
+
+          >
+
+            <dt className="text-xs text-muted-foreground">В ленте Winners</dt>
+
+            <dd className="text-xl font-semibold tabular-nums">{winnerInFeedCount}</dd>
+
+            <dd className="text-[11px] text-muted-foreground">
+
+              Из этого run, не «успешных» по запросу
+
+            </dd>
+
+          </div>
+
         </dl>
-      </Disclosure>
+
+        <p
+
+          className="text-xs text-muted-foreground"
+
+          data-testid="family-snapshot-meta"
+
+        >
+
+          {familySnapshotMetaLine(detail.computed_at, detail.run_id)} ·{" "}
+
+          {snapshotFreshnessLabel(detail.computed_at)}
+
+        </p>
+
+        <SaveFamilyButton familyKey={family.family_key} runId={detail.run_id} />
+
+      </header>
+
+
+
+      <SectionPanel
+
+        title={familyVideoListSectionTitle(family)}
+
+        description={familyVideoListSectionDescription(family)}
+
+      >
+
+        <div className="flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center">
+
+          <Input
+
+            value={query}
+
+            onChange={(event) => setQuery(event.target.value)}
+
+            placeholder="Поиск по названию или каналу"
+
+            aria-label="Поиск по названию или каналу"
+
+            className="max-w-xs"
+
+          />
+
+          <label className="text-sm text-muted-foreground">
+
+            Канал{" "}
+
+            <select
+
+              className="rounded-md border border-input bg-transparent px-2 py-1 text-foreground"
+
+              value={channelFilter}
+
+              onChange={(event) => setChannelFilter(event.target.value)}
+
+            >
+
+              <option value="all">Все</option>
+
+              {detail.channels.map((channel) => (
+
+                <option key={channel.channel_id} value={channel.channel_id}>
+
+                  {channel.channel_title}
+
+                </option>
+
+              ))}
+
+            </select>
+
+          </label>
+
+          <label className="text-sm text-muted-foreground">
+
+            Сигнал Winners{" "}
+
+            <select
+
+              className="rounded-md border border-input bg-transparent px-2 py-1 text-foreground"
+
+              value={winnerFilter}
+
+              onChange={(event) =>
+
+                setWinnerFilter(event.target.value as "all" | "winners" | "rest")
+
+              }
+
+            >
+
+              <option value="all">Все ролики</option>
+
+              <option value="winners">Только Winners run</option>
+
+              <option value="rest">Без сигнала Winners</option>
+
+            </select>
+
+          </label>
+
+        </div>
+
+        <p className="text-xs text-muted-foreground" aria-live="polite">
+
+          Показано {videos.length} из {detail.videos.length} · порядок снимка
+
+          Attention
+
+        </p>
+
+        <div
+
+          className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+
+          data-testid="family-member-list"
+
+        >
+
+          {videos.map((row) => (
+
+            <FamilyMemberCard
+
+              key={row.video_id}
+
+              video={row}
+
+              snapshotComputedAt={detail.computed_at}
+
+              highlightFeedWinner={feedWinnerIds.has(row.video_id)}
+
+            />
+
+          ))}
+
+        </div>
+
+      </SectionPanel>
+
+
+
+      <details
+
+        className={cn(surfaces.section, "rounded-xl p-4 text-sm")}
+
+        data-testid="family-formation-details"
+
+      >
+
+        <summary className="cursor-pointer font-medium">
+
+          Как сформирована подборка
+
+        </summary>
+
+        <div className="mt-4 space-y-4 text-muted-foreground">
+
+          <p>{familyDiagnosticIntro(family)}</p>
+
+          <p data-testid="family-tier-reason">{familyWhyTogetherLead(family)}</p>
+
+          {family.tier_reason ? (
+
+            <p className="text-xs">{family.tier_reason}</p>
+
+          ) : null}
+
+
+
+          <div>
+
+            <p className="font-medium text-foreground">
+
+              {familyRelatedKeywordsSectionTitle()}
+
+            </p>
+
+            <p className="text-xs">{familyRelatedKeywordsSectionDescription()}</p>
+
+            {detail.related_keywords.length === 0 ? (
+
+              <p className="mt-1 text-xs">keyword_id в снимке не указаны.</p>
+
+            ) : (
+
+              <ul className="mt-2 flex flex-wrap gap-2">
+
+                {detail.related_keywords.map((row) => (
+
+                  <li
+
+                    key={row.keyword_id}
+
+                    className="rounded-full border border-border/60 px-3 py-1 text-xs text-foreground"
+
+                  >
+
+                    {row.keyword}{" "}
+
+                    <span className="font-mono text-muted-foreground">
+
+                      #{row.keyword_id}
+
+                    </span>
+
+                  </li>
+
+                ))}
+
+              </ul>
+
+            )}
+
+          </div>
+
+
+
+          <div>
+
+            <p className="font-medium text-foreground">
+
+              {familyMergedPatternsSectionTitle(family)}
+
+            </p>
+
+            <p className="text-xs">{familyMergedPatternsSectionDescription(family)}</p>
+
+            <ul className="mt-2 space-y-1" data-testid="family-member-patterns">
+
+              {family.member_pattern_keys.map((key, index) => (
+
+                <li key={key}>
+
+                  <Link href={patternDetailHref(key)} className="text-primary hover:underline">
+
+                    {family.member_labels[index] ?? key}
+
+                  </Link>
+
+                </li>
+
+              ))}
+
+            </ul>
+
+          </div>
+
+
+
+          {family.quality_flags.length > 0 ? (
+
+            <div data-testid="family-flags">
+
+              <p className="font-medium text-foreground">Предупреждения качества</p>
+
+              <ul className="mt-1 list-disc pl-4 text-xs">
+
+                {family.quality_flags.map((flag) => (
+
+                  <li key={flag}>
+
+                    <span className="font-mono text-[10px]">{flag}</span> —{" "}
+
+                    {humanizeQualityFlag(flag)}
+
+                  </li>
+
+                ))}
+
+              </ul>
+
+            </div>
+
+          ) : null}
+
+
+
+          {family.grouping_reasons.length > 0 ? (
+
+            <div>
+
+              <p className="font-medium text-foreground">Основания объединения</p>
+
+              <ul className="mt-1 list-disc pl-4 text-xs">
+
+                {family.grouping_reasons.map((reason) => (
+
+                  <li key={reason}>
+
+                    <span className="font-mono text-[10px]">{reason}</span> —{" "}
+
+                    {humanizeGroupingReason(reason)}
+
+                  </li>
+
+                ))}
+
+              </ul>
+
+            </div>
+
+          ) : null}
+
+
+
+          {family.support_sources.length > 0 ? (
+
+            <div data-testid="family-support">
+
+              <p className="font-medium text-foreground">Источники поддержки группы</p>
+
+              <ul className="mt-1 list-disc pl-4 text-xs">
+
+                {family.support_sources.map((source) => (
+
+                  <li key={source}>
+
+                    <span className="font-mono text-[10px]">{source}</span> —{" "}
+
+                    {humanizeSupportSource(source)}
+
+                  </li>
+
+                ))}
+
+              </ul>
+
+            </div>
+
+          ) : null}
+
+
+
+          <div data-testid="pattern-activity">
+
+            <p className="font-medium text-foreground">
+
+              История появления видео в группе (UTC-окна Attention)
+
+            </p>
+
+            <p className="text-xs">
+
+              Счётчики новых участников по периодам снимка — не текущие просмотры
+
+              роликов ниже.
+
+            </p>
+
+            <p className="mt-1 text-foreground">
+
+              {activity.available ? activity.label : "Недостаточно истории в снимке"}
+
+            </p>
+
+          </div>
+
+
+
+          {detail.channels.length > 0 ? (
+
+            <div>
+
+              <p className="font-medium text-foreground">Каналы в подборке</p>
+
+              <ul className="mt-1 grid gap-1 sm:grid-cols-2 text-xs">
+
+                {detail.channels.map((channel) => (
+
+                  <li key={channel.channel_id}>
+
+                    {channel.channel_title}{" "}
+
+                    <span className="text-muted-foreground">
+
+                      ({channel.video_count} видео)
+
+                    </span>
+
+                  </li>
+
+                ))}
+
+              </ul>
+
+            </div>
+
+          ) : null}
+
+
+
+          <div className="border-t border-border/60 pt-3 font-mono text-[11px]">
+
+            <p className="mb-2 font-sans text-xs font-medium text-foreground">
+
+              Технические идентификаторы (заморожены в run)
+
+            </p>
+
+            <div>family_key: {family.family_key}</div>
+
+            <div>family_kind: {family.family_kind}</div>
+
+            <div>grouping_basis_kind: {family.grouping_basis_kind}</div>
+
+            <div>run_id: {detail.run_id ?? "—"}</div>
+
+            <div>
+
+              keyword_ids:{" "}
+
+              {family.participating_keyword_ids.length
+
+                ? family.participating_keyword_ids.join(", ")
+
+                : "—"}
+
+            </div>
+
+            <div>
+
+              frozen video_ids ({family.participating_video_ids.length}):{" "}
+
+              {family.participating_video_ids.slice(0, 8).join(", ")}
+
+              {family.participating_video_ids.length > 8 ? " …" : ""}
+
+            </div>
+
+            <div>
+
+              breakout_eligible_count (диагностика, не успех):{" "}
+
+              {family.breakout_eligible_count}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </details>
+
     </PageShell>
+
   );
+
 }
 
-function MemberRow({ video }: { video: AttentionPatternMemberVideo }) {
-  const href = canonicalYoutubeUrl(video.video_id, video.youtube_url);
-  return (
-    <article
-      className={cn(surfaces.sectionMuted, "flex gap-3 p-3")}
-      data-testid="pattern-member"
-    >
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="shrink-0"
-      >
-        <YoutubeThumb
-          videoId={video.video_id}
-          title={video.title}
-          className="h-20 w-36 rounded"
-        />
-      </a>
-      <div className="min-w-0 flex-1">
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-medium hover:text-primary"
-        >
-          {video.title}
-        </a>
-        <p className="text-xs text-muted-foreground">{video.channel_title}</p>
-        <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-          {formatOptionalViews(video.views) ? (
-            <span>{formatOptionalViews(video.views)}</span>
-          ) : null}
-          {formatOptionalVph(video.vph) ? (
-            <span>{formatOptionalVph(video.vph)}</span>
-          ) : null}
-          {formatOptionalAge(video.age_hours) ? (
-            <span>{formatOptionalAge(video.age_hours)}</span>
-          ) : null}
-          {video.in_winner_snapshot ? <span>в сегодняшнем топе</span> : null}
-        </div>
-        <AttentionSignalBadges
-          treatAsWinner={video.in_winner_snapshot}
-          inWinnerSnapshot={video.in_winner_snapshot}
-          reasonCodes={video.reason_codes}
-          accelerationState={video.acceleration_state}
-          delayedOutcomeState={video.delayed_outcome_state}
-        />
-        <HumanReasonsList reasons={video.human_reasons} />
-      </div>
-    </article>
-  );
-}

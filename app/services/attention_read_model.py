@@ -37,6 +37,7 @@ from app.services.attention_engine_types import (
 )
 from app.services.attention_pattern_families import upsert_family_identity
 from app.services.metrics import ensure_utc, utc_now
+from app.services.saved_research import append_saved_research_observations_for_result
 from app.services.saved_topics import append_saved_topic_observations_for_result
 
 AttentionReadSource = Literal["snapshot", "live_compute", "unavailable"]
@@ -62,6 +63,9 @@ def persist_attention_result(session: Session, result: AttentionEngineResult, *,
     have no relationship() to AttentionRun, so a single mixed flush can INSERT
     patterns before the parent row exists (Postgres FK violation).
     """
+    from app.services.daily_intelligence_capture import capture_daily_intelligence_for_publish
+
+    capture_daily_intelligence_for_publish(session, result, run_id=run_id)
     session.execute(delete(AttentionPatternFamilyVideoRow))
     session.execute(delete(AttentionPatternFamilyMemberRow))
     session.execute(delete(AttentionPatternFamilyRow))
@@ -162,6 +166,7 @@ def persist_attention_result(session: Session, result: AttentionEngineResult, *,
     if mapping:
         upsert_family_identity(session, mapping, now=summary.computed_at)
     append_saved_topic_observations_for_result(session, run_id=run_id, result=result)
+    append_saved_research_observations_for_result(session, run_id=run_id, result=result)
 
 
 def refresh_attention_engine(

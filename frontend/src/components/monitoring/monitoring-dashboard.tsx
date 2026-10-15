@@ -50,6 +50,11 @@ import {
   TIER_OPERATIONAL_HELP,
 } from "@/lib/monitoring-summaries";
 import {
+  cycleStatusDetailLabel,
+  latestCycleAsPresentationRow,
+  monitoringExecutionErrorCount,
+} from "@/lib/monitoring-cycle-presentation";
+import {
   formatDateTimeLocal,
   formatMonitoringVph,
   shortenRunId,
@@ -614,11 +619,28 @@ export function MonitoringDashboard() {
               <dt className="text-muted-foreground">Завершён</dt>
               <dd>{formatDateTimeLocal(overview.latest_cycle.finished_at)}</dd>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-1 sm:col-span-2">
               <dt className="text-muted-foreground">Статус</dt>
-              <dd>
+              <dd className="flex flex-col gap-1">
                 <CycleStatusBadge status={overview.latest_cycle.cycle_status} />
+                {(() => {
+                  const detail = cycleStatusDetailLabel(
+                    latestCycleAsPresentationRow(overview.latest_cycle),
+                  );
+                  return detail ? (
+                    <p
+                      className="text-xs text-muted-foreground"
+                      data-testid="latest-cycle-status-detail"
+                    >
+                      {detail}
+                    </p>
+                  ) : null;
+                })()}
               </dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">Нет в ответе API</dt>
+              <dd>{overview.latest_cycle.missing_count}</dd>
             </div>
             <div>
               <dt className="text-muted-foreground">Загружено</dt>
@@ -668,7 +690,8 @@ export function MonitoringDashboard() {
                 <DataTableTh align="right">Загружено</DataTableTh>
                 <DataTableTh align="right">Выбрано</DataTableTh>
                 <DataTableTh align="right">Сохранено</DataTableTh>
-                <DataTableTh align="right">Сбоев</DataTableTh>
+                <DataTableTh align="right">Нет в API</DataTableTh>
+                <DataTableTh align="right">Ошибки захвата</DataTableTh>
                 <DataTableTh align="right">Длительность</DataTableTh>
               </tr>
             </DataTableHead>
@@ -676,7 +699,7 @@ export function MonitoringDashboard() {
               {cycles.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-3 py-6 text-center text-muted-foreground"
                   >
                     История циклов пуста.
@@ -691,15 +714,27 @@ export function MonitoringDashboard() {
                       )}
                     </DataTableTd>
                     <DataTableTd>
-                      <CycleStatusBadge status={cycle.cycle_status} />
+                      <div className="space-y-1">
+                        <CycleStatusBadge status={cycle.cycle_status} />
+                        {cycleStatusDetailLabel(cycle) ? (
+                          <p
+                            className="max-w-xs text-xs text-muted-foreground"
+                            data-testid="cycle-status-detail"
+                          >
+                            {cycleStatusDetailLabel(cycle)}
+                          </p>
+                        ) : null}
+                      </div>
                     </DataTableTd>
                     <DataTableTd align="right">{cycle.loaded}</DataTableTd>
                     <DataTableTd align="right">{cycle.selected}</DataTableTd>
                     <DataTableTd align="right">{cycle.inserted}</DataTableTd>
-                    <DataTableTd align="right">
-                      {cycle.fetch_failed +
-                        cycle.validation_failed +
-                        cycle.persistence_failed}
+                    <DataTableTd align="right" data-testid="cycle-missing-count">
+                      {cycle.missing}
+                    </DataTableTd>
+                    <DataTableTd align="right" data-testid="cycle-execution-errors">
+                      {cycle.execution_error_count ??
+                        monitoringExecutionErrorCount(cycle)}
                     </DataTableTd>
                     <DataTableTd align="right">
                       {cycle.runtime_seconds.toFixed(1)} с

@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Play, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Play, User, Users } from "lucide-react";
 import { runMassAnalysis } from "@/lib/api";
+import { buildChannelSingleAnalysisFromRefUrl } from "@/lib/channel-single-analysis-url";
 import type { MassAnalysisResponse } from "@/lib/types";
 import { parseChannelRefs } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 import { TrendsTable } from "@/components/mass-analysis/trends-table";
 import { TrendsTableSkeleton } from "@/components/mass-analysis/trends-table-skeleton";
 import { Button } from "@/components/ui/button";
@@ -16,6 +19,8 @@ const MIN_CHANNELS = 3;
 const MAX_CHANNELS = 20;
 
 export default function MassAnalysisPage() {
+  const router = useRouter();
+  const [singleRef, setSingleRef] = useState("");
   const [rawInput, setRawInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +59,33 @@ export default function MassAnalysisPage() {
           сравнит каждое видео со средними просмотрами канала и покажет самые аномально популярные ролики.
         </p>
       </header>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <User className="h-4 w-4" />
+            Один канал
+          </CardTitle>
+          <CardDescription>
+            Ссылка, @handle или UC… — публикации автора и сравнение выбранного ролика.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3 sm:flex-row">
+          <Input
+            placeholder="https://youtube.com/@channel или UCxxxxxxxx"
+            value={singleRef}
+            onChange={(e) => setSingleRef(e.target.value)}
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={!singleRef.trim()}
+            onClick={() => router.push(buildChannelSingleAnalysisFromRefUrl(singleRef))}
+          >
+            Анализ канала
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

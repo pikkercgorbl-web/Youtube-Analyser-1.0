@@ -6,25 +6,30 @@ import { SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  DEFAULT_SEARCH_FILTERS,
-  parseOptionalNumber,
-  type SearchFilters,
-} from "@/lib/search-filters";
-import { cn } from "@/lib/utils";
-
-type FiltersTab = "video" | "channel";
+  DEFAULT_MANUAL_SEARCH_FILTERS,
+  type ManualSearchFilters,
+  type ManualSearchPeriod,
+  type ManualSearchVideoType,
+  validateManualSearchFilters,
+} from "@/lib/manual-search-filters";
 
 interface FiltersModalProps {
   open: boolean;
-  filters: SearchFilters;
+  filters: ManualSearchFilters;
   onClose: () => void;
-  onApply: (filters: SearchFilters) => void;
+  onApply: (filters: ManualSearchFilters) => void;
 }
 
-interface FilterToggleProps {
-  label: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
+function parseOptionalNumber(value: string): number | null {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+  const parsed = Number(trimmed);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return null;
+  }
+  return parsed;
 }
 
 interface RangeFieldProps {
@@ -34,20 +39,7 @@ interface RangeFieldProps {
   onMinChange: (value: string) => void;
   onMaxChange: (value: string) => void;
   step?: string;
-}
-
-function FilterToggle({ label, checked, onChange }: FilterToggleProps) {
-  return (
-    <label className="flex cursor-pointer items-center justify-between rounded-md border border-border/60 bg-muted/20 px-3 py-2.5">
-      <span className="text-sm">{label}</span>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        className="h-4 w-4 rounded border-border accent-primary"
-      />
-    </label>
-  );
+  unit?: string;
 }
 
 function RangeField({
@@ -57,13 +49,14 @@ function RangeField({
   onMinChange,
   onMaxChange,
   step = "1",
+  unit,
 }: RangeFieldProps) {
   return (
     <div className="space-y-2">
       <p className="text-sm font-medium text-muted-foreground">{label}</p>
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
-          <label className="text-xs text-muted-foreground">От</label>
+          <label className="text-xs text-muted-foreground">От{unit ? `, ${unit}` : ""}</label>
           <Input
             type="number"
             min="0"
@@ -74,7 +67,7 @@ function RangeField({
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs text-muted-foreground">До</label>
+          <label className="text-xs text-muted-foreground">До{unit ? `, ${unit}` : ""}</label>
           <Input
             type="number"
             min="0"
@@ -89,33 +82,54 @@ function RangeField({
   );
 }
 
+const PERIOD_OPTIONS: { value: ManualSearchPeriod; label: string }[] = [
+  { value: "all", label: "Всё время" },
+  { value: "week", label: "За неделю" },
+  { value: "month", label: "За месяц" },
+  { value: "year", label: "За год" },
+];
+
+const VIDEO_TYPE_OPTIONS: { value: ManualSearchVideoType; label: string }[] = [
+  { value: "all", label: "Все" },
+  { value: "regular", label: "Обычные видео" },
+  { value: "shorts", label: "Shorts" },
+  { value: "streams", label: "Трансляции" },
+];
+
 export function FiltersModal({ open, filters, onClose, onApply }: FiltersModalProps) {
-  const [activeTab, setActiveTab] = useState<FiltersTab>("video");
-  const [draft, setDraft] = useState<SearchFilters>(filters);
+  const [draft, setDraft] = useState<ManualSearchFilters>(filters);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) {
       return;
     }
     setDraft(filters);
-    setActiveTab("video");
+    setValidationError(null);
   }, [open, filters]);
 
   if (!open) {
     return null;
   }
 
-  function updateDraft(patch: Partial<SearchFilters>) {
+  function updateDraft(patch: Partial<ManualSearchFilters>) {
     setDraft((current) => ({ ...current, ...patch }));
+    setValidationError(null);
   }
 
   function handleApply() {
+    const error = validateManualSearchFilters(draft);
+    if (error) {
+      setValidationError(error);
+      return;
+    }
     onApply(draft);
     onClose();
   }
 
   function handleReset() {
-    setDraft(DEFAULT_SEARCH_FILTERS);
+    setDraft(DEFAULT_MANUAL_SEARCH_FILTERS);
+    setValidationError(null);
   }
 
   return (
@@ -130,7 +144,7 @@ export function FiltersModal({ open, filters, onClose, onApply }: FiltersModalPr
           <div className="flex items-center gap-2">
             <SlidersHorizontal className="h-4 w-4 text-primary" />
             <h2 id="filters-modal-title" className="text-lg font-semibold">
-              Расширенные фильтры
+              Фильтры
             </h2>
           </div>
           <button
@@ -143,116 +157,77 @@ export function FiltersModal({ open, filters, onClose, onApply }: FiltersModalPr
           </button>
         </div>
 
-        <div className="flex border-b border-border/60 px-5">
-          <button
-            type="button"
-            className={cn(
-              "border-b-2 px-4 py-3 text-sm font-medium transition-colors",
-              activeTab === "video"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground",
-            )}
-            onClick={() => setActiveTab("video")}
-          >
-            Фильтры видео
-          </button>
-          <button
-            type="button"
-            className={cn(
-              "border-b-2 px-4 py-3 text-sm font-medium transition-colors",
-              activeTab === "channel"
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground",
-            )}
-            onClick={() => setActiveTab("channel")}
-          >
-            Фильтры канала
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-5 py-4">
-          {activeTab === "video" ? (
-            <div className="space-y-5">
-              <div className="grid gap-2 sm:grid-cols-2">
-                <FilterToggle
-                  label="Скрыть Shorts"
-                  checked={draft.hide_shorts}
-                  onChange={(checked) => updateDraft({ hide_shorts: checked })}
-                />
-                <FilterToggle
-                  label="Скрыть обычные видео"
-                  checked={draft.hide_regular}
-                  onChange={(checked) => updateDraft({ hide_regular: checked })}
-                />
-                <FilterToggle
-                  label="Скрыть трансляции"
-                  checked={draft.hide_streams}
-                  onChange={(checked) => updateDraft({ hide_streams: checked })}
-                />
-                <FilterToggle
-                  label="Скрыть видео с иероглифами"
-                  checked={draft.hide_hieroglyphs}
-                  onChange={(checked) => updateDraft({ hide_hieroglyphs: checked })}
-                />
-                <FilterToggle
-                  label="Только виральность > 1.0"
-                  checked={draft.virality_only_above_one}
-                  onChange={(checked) => updateDraft({ virality_only_above_one: checked })}
-                />
-              </div>
-
-              <RangeField
-                label="Коэффициент просмотров к подписчикам"
-                minValue={draft.virality_min?.toString() ?? ""}
-                maxValue={draft.virality_max?.toString() ?? ""}
-                onMinChange={(value) => updateDraft({ virality_min: parseOptionalNumber(value) })}
-                onMaxChange={(value) => updateDraft({ virality_max: parseOptionalNumber(value) })}
-                step="0.01"
-              />
-
-              <RangeField
-                label="Просмотры видео"
-                minValue={draft.views_min?.toString() ?? ""}
-                maxValue={draft.views_max?.toString() ?? ""}
-                onMinChange={(value) => updateDraft({ views_min: parseOptionalNumber(value) })}
-                onMaxChange={(value) => updateDraft({ views_max: parseOptionalNumber(value) })}
-              />
+        <div className="flex-1 space-y-6 overflow-y-auto px-5 py-4">
+          <fieldset className="space-y-2">
+            <legend className="text-sm font-medium text-muted-foreground">Дата публикации</legend>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {PERIOD_OPTIONS.map((option) => (
+                <label
+                  key={option.value}
+                  className="flex cursor-pointer items-center gap-2 rounded-md border border-border/60 bg-muted/20 px-3 py-2.5 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary/10"
+                >
+                  <input
+                    type="radio"
+                    name="publishedPeriod"
+                    value={option.value}
+                    checked={draft.publishedPeriod === option.value}
+                    onChange={() => updateDraft({ publishedPeriod: option.value })}
+                    className="accent-primary"
+                  />
+                  {option.label}
+                </label>
+              ))}
             </div>
-          ) : (
-            <div className="space-y-5">
-              <RangeField
-                label="Подписчики канала"
-                minValue={draft.subscribers_min?.toString() ?? ""}
-                maxValue={draft.subscribers_max?.toString() ?? ""}
-                onMinChange={(value) => updateDraft({ subscribers_min: parseOptionalNumber(value) })}
-                onMaxChange={(value) => updateDraft({ subscribers_max: parseOptionalNumber(value) })}
-              />
+          </fieldset>
 
-              <RangeField
-                label="Общее количество просмотров канала"
-                minValue={draft.channel_views_min?.toString() ?? ""}
-                maxValue={draft.channel_views_max?.toString() ?? ""}
-                onMinChange={(value) => updateDraft({ channel_views_min: parseOptionalNumber(value) })}
-                onMaxChange={(value) => updateDraft({ channel_views_max: parseOptionalNumber(value) })}
-              />
+          <RangeField
+            label="Длительность"
+            unit="мин"
+            minValue={draft.durationMinMinutes?.toString() ?? ""}
+            maxValue={draft.durationMaxMinutes?.toString() ?? ""}
+            onMinChange={(value) =>
+              updateDraft({ durationMinMinutes: parseOptionalNumber(value) })
+            }
+            onMaxChange={(value) =>
+              updateDraft({ durationMaxMinutes: parseOptionalNumber(value) })
+            }
+          />
 
-              <RangeField
-                label="Всего видео на канале"
-                minValue={draft.channel_videos_min?.toString() ?? ""}
-                maxValue={draft.channel_videos_max?.toString() ?? ""}
-                onMinChange={(value) => updateDraft({ channel_videos_min: parseOptionalNumber(value) })}
-                onMaxChange={(value) => updateDraft({ channel_videos_max: parseOptionalNumber(value) })}
-              />
+          <RangeField
+            label="Просмотры"
+            minValue={draft.viewsMin?.toString() ?? ""}
+            maxValue={draft.viewsMax?.toString() ?? ""}
+            onMinChange={(value) => updateDraft({ viewsMin: parseOptionalNumber(value) })}
+            onMaxChange={(value) => updateDraft({ viewsMax: parseOptionalNumber(value) })}
+          />
 
-              <RangeField
-                label="Возраст канала (в днях)"
-                minValue={draft.channel_age_min?.toString() ?? ""}
-                maxValue={draft.channel_age_max?.toString() ?? ""}
-                onMinChange={(value) => updateDraft({ channel_age_min: parseOptionalNumber(value) })}
-                onMaxChange={(value) => updateDraft({ channel_age_max: parseOptionalNumber(value) })}
-              />
+          <fieldset className="space-y-2">
+            <legend className="text-sm font-medium text-muted-foreground">Тип видео</legend>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {VIDEO_TYPE_OPTIONS.map((option) => (
+                <label
+                  key={option.value}
+                  className="flex cursor-pointer items-center gap-2 rounded-md border border-border/60 bg-muted/20 px-3 py-2.5 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary/10"
+                >
+                  <input
+                    type="radio"
+                    name="videoType"
+                    value={option.value}
+                    checked={draft.videoType === option.value}
+                    onChange={() => updateDraft({ videoType: option.value })}
+                    className="accent-primary"
+                  />
+                  {option.label}
+                </label>
+              ))}
             </div>
-          )}
+          </fieldset>
+
+          {validationError ? (
+            <p className="text-sm text-red-500" role="alert">
+              {validationError}
+            </p>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-3 border-t border-border/60 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">

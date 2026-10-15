@@ -117,6 +117,13 @@ def _to_response(overview: OperationsOverview) -> OperationsOverviewResponse:
             fetch_failed_count_last_cycle=oc.fetch_failed_count_last_cycle,
             duplicate_snapshot_count_last_cycle=oc.duplicate_snapshot_count_last_cycle,
             missing_video_count_last_cycle=oc.missing_video_count_last_cycle,
+            priority_selection_enabled=oc.priority_selection_enabled,
+            priority_due_videos=oc.priority_due_videos,
+            background_due_videos=oc.background_due_videos,
+            priority_selected_last_cycle=oc.priority_selected_last_cycle,
+            background_selected_last_cycle=oc.background_selected_last_cycle,
+            priority_inserted_last_cycle=oc.priority_inserted_last_cycle,
+            background_inserted_last_cycle=oc.background_inserted_last_cycle,
         ),
         snapshots=SnapshotOperationsBlockResponse(
             latest_snapshot_at=overview.snapshots.latest_snapshot_at,

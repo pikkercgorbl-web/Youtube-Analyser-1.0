@@ -9,23 +9,27 @@ export function YoutubeThumb({
   videoId,
   title,
   className,
+  compact = false,
 }: {
   videoId: string;
   title: string;
   className?: string;
+  /** Smaller placeholder for list thumbnails (~144×81). */
+  compact?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
   if (!videoId || failed) {
     return (
       <div
         className={cn(
-          "flex flex-col gap-2 items-center justify-center bg-muted/60 text-xs text-muted-foreground",
+          "flex flex-col items-center justify-center bg-muted/60 text-muted-foreground",
+          compact ? "gap-0.5 text-[10px] leading-tight" : "gap-2 text-xs",
           className,
         )}
         aria-hidden
       >
-        <span className="text-2xl">▶</span>
-        <span>Обложка недоступна</span>
+        <span className={compact ? "text-base" : "text-2xl"}>▶</span>
+        {!compact ? <span>Обложка недоступна</span> : null}
       </div>
     );
   }

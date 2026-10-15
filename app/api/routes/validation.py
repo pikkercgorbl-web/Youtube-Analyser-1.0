@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app.models.db import get_db
 from app.models.schemas import ValidationReportResponse
 from app.services.metrics import ensure_utc
+from app.services.research_portfolio_report import build_research_portfolio_report
 from app.services.saved_topic_validation import build_validation_report
 
 router = APIRouter()
@@ -24,4 +25,10 @@ def validation_report(
     start = ensure_utc(period_start) if period_start else None
     end = ensure_utc(period_end) if period_end else None
     payload = build_validation_report(db, period_start=start, period_end=end)
+    payload["research_portfolio"] = build_research_portfolio_report(
+        db,
+        period_start=start,
+        period_end=end,
+        legacy_topics_saved_in_period=int(payload.get("topics_saved_in_period") or 0),
+    )
     return ValidationReportResponse.model_validate(payload)

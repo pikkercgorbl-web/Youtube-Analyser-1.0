@@ -1,0 +1,336 @@
+"""Product Fix 1A — unified research portfolio (SQLite fixtures only)."""
+
+from __future__ import annotations
+
+import json
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from sqlalchemy import create_engine, event, func, select
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import StaticPool
+
+import app.models.orm  # noqa: F401
+from app.models.db import Base
+from app.models.orm import (
+    SavedFamily,
+    SavedFamilyObservation,
+    SavedResearchEvent,
+    SavedResearchFeedback,
+    SavedTopic,
+    SavedVideo,
+    SavedVideoObservation,
+)
+from app.models.db import get_db
+from app.services.research_portfolio_report import build_research_portfolio_report
+from app.services.saved_research_decisions import record_status_change
+from app.services.saved_topic_validation import build_validation_report
+from app.services.saved_topics import patch_topic
+
+UTC = timezone.utc
+T0 = datetime(2026, 9, 1, 12, 0, tzinfo=UTC)
+T_SAVE = datetime(2026, 10, 5, 12, 0, tzinfo=UTC)
+T_DECISION = datetime(2026, 10, 10, 12, 0, tzinfo=UTC)
+T_AFTER = datetime(2026, 10, 20, 12, 0, tzinfo=UTC)
+
+
+def _engine():
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    Base.metadata.create_all(engine)
+    return engine
+
+
+def _session() -> Session:
+    return sessionmaker(bind=_engine())()
+
+
+def _video(
+    session: Session,
+    *,
+    saved_at: datetime,
+    video_id: str = "vid-portfolio-1",
+    archived_at: datetime | None = None,
+) -> SavedVideo:
+    row = SavedVideo(
+        video_id=video_id,
+        saved_at=saved_at,
+        status="WATCHING",
+        notes="",
+        tags_json="[]",
+        frozen_title="Portfolio Video",
+        frozen_channel_id="ch1",
+        frozen_channel_title="Channel",
+        frozen_payload_json=json.dumps({"identity": {"title": "Portfolio Video"}, "evidence": {"views": 100}}),
+        created_at=saved_at,
+        updated_at=saved_at,
+        archived_at=archived_at,
+    )
+    session.add(row)
+    session.flush()
+    session.add(
+        SavedVideoObservation(
+            saved_video_id=row.id,
+            attention_run_id="run-1",
+            observed_at=saved_at,
+            video_present_in_attention=True,
+            monitoring_snapshot_available=True,
+            views=100,
+            vph=1.0,
+            payload_json="{}",
+        ),
+    )
+    return row
+
+
+def _family(session: Session, *, key: str, saved_at: datetime, archived_at: datetime | None = None) -> SavedFamily:
+    row = SavedFamily(
+        family_key=key,
+        saved_at=saved_at,
+        status="WATCHING",
+        notes="",
+        tags_json="[]",
+        frozen_label=f"Label {key}",
+        frozen_kind="keyword",
+        frozen_payload_json=json.dumps(
+            {"family": {"label": key, "video_count": 2, "channel_count": 1, "family_kind": "keyword"}},
+        ),
+        created_at=saved_at,
+        updated_at=saved_at,
+        archived_at=archived_at,
+    )
+    session.add(row)
+    session.flush()
+    session.add(
+        SavedFamilyObservation(
+            saved_family_id=row.id,
+            attention_run_id="run-1",
+            observed_at=saved_at,
+            family_present=True,
+            video_count=2,
+            channel_count=1,
+            payload_json="{}",
+        ),
+    )
+    return row
+
+
+def test_combined_total_three_no_topics() -> None:
+    session = _session()
+    _video(session, saved_at=T_SAVE)
+    _family(session, key="family:a", saved_at=T_SAVE)
+    _family(session, key="family:b", saved_at=T_SAVE)
+    session.commit()
+    legacy = build_validation_report(session, period_start=None, period_end=None)
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=None,
+        period_end=None,
+        legacy_topics_saved_in_period=legacy["topics_saved_in_period"],
+    )
+    assert portfolio["saved_in_period"]["combined_total"] == 3
+    assert portfolio["saved_in_period"]["videos"] == 1
+    assert portfolio["saved_in_period"]["families"] == 2
+
+
+def test_save_before_period_decision_inside_period() -> None:
+    session = _session()
+    video = _video(session, saved_at=T0)
+    session.commit()
+    record_status_change(
+        session,
+        entity_kind="video",
+        entity_id=video.id,
+        previous="WATCHING",
+        new="TESTING",
+    )
+    for ev in session.scalars(select(SavedResearchEvent)):
+        ev.occurred_at = T_DECISION
+    session.commit()
+    period_start = datetime(2026, 10, 9, tzinfo=UTC)
+    period_end = datetime(2026, 10, 11, tzinfo=UTC)
+    legacy = build_validation_report(session, period_start=period_start, period_end=period_end)
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=period_start,
+        period_end=period_end,
+        legacy_topics_saved_in_period=legacy["topics_saved_in_period"],
+    )
+    assert portfolio["saved_in_period"]["videos"] == 0
+    assert portfolio["decisions_in_period"]["status_changed_events"] == 1
+    assert portfolio["decisions_in_period"]["status_transition_events"]["to_TESTING"] == 1
+
+
+def test_save_inside_period_decision_after_period() -> None:
+    session = _session()
+    video = _video(session, saved_at=T_SAVE)
+    session.commit()
+    record_status_change(
+        session,
+        entity_kind="video",
+        entity_id=video.id,
+        previous="WATCHING",
+        new="WANT_TO_TEST",
+    )
+    for ev in session.scalars(select(SavedResearchEvent)):
+        ev.occurred_at = T_AFTER
+    session.commit()
+    period_start = datetime(2026, 10, 1, tzinfo=UTC)
+    period_end = datetime(2026, 10, 15, tzinfo=UTC)
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=period_start,
+        period_end=period_end,
+        legacy_topics_saved_in_period=0,
+    )
+    assert portfolio["saved_in_period"]["videos"] == 1
+    assert portfolio["decisions_in_period"]["status_changed_events"] == 0
+
+
+def test_archived_still_in_saved_cohort() -> None:
+    session = _session()
+    archived_at = T_AFTER
+    _family(session, key="family:arch", saved_at=T_SAVE, archived_at=archived_at)
+    session.commit()
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=None,
+        period_end=None,
+        legacy_topics_saved_in_period=0,
+    )
+    assert portfolio["saved_in_period"]["families"] == 1
+    assert portfolio["current_status_counts"].get("ARCHIVED") == 1
+
+
+def test_legacy_topic_backward_compat() -> None:
+    session = _session()
+    topic = SavedTopic(
+        family_key="family:legacy",
+        status="WATCHING",
+        notes="",
+        tags_json="[]",
+        frozen_snapshot_json=json.dumps({"family": {"family_kind": "keyword", "support_sources": ["keyword"]}}),
+        created_at=T_SAVE,
+        updated_at=T_SAVE,
+    )
+    session.add(topic)
+    session.flush()
+    patch_topic(session, topic.id, status="TESTING")
+    session.commit()
+    legacy = build_validation_report(session, period_start=None, period_end=None)
+    assert legacy["topics_saved_in_period"] == 1
+    assert legacy["status_transition_events"]["to_TESTING"] == 1
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=None,
+        period_end=None,
+        legacy_topics_saved_in_period=legacy["topics_saved_in_period"],
+    )
+    assert portfolio["saved_in_period"]["legacy_topics"] == 1
+    assert portfolio["saved_in_period"]["combined_total"] == 1
+
+
+def test_feedback_counts_no_double_entity() -> None:
+    session = _session()
+    video = _video(session, saved_at=T_SAVE)
+    session.add(
+        SavedResearchFeedback(
+            entity_kind="video",
+            entity_id=video.id,
+            verdict="USEFUL",
+            reason="ok",
+            created_at=T_SAVE,
+        ),
+    )
+    session.commit()
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=None,
+        period_end=None,
+        legacy_topics_saved_in_period=0,
+    )
+    assert portfolio["latest_feedback"]["cohort_with_latest_feedback"] == 1
+    assert portfolio["latest_feedback"]["research_verdict_distribution"]["USEFUL"] == 1
+    assert portfolio["portfolio_hints"]["has_decisions_in_period"] is True
+
+
+def test_api_response_includes_portfolio_and_legacy_fields() -> None:
+    session = _session()
+    _video(session, saved_at=T_SAVE)
+    session.commit()
+
+    def _override_db():
+        yield session
+
+    from fastapi.testclient import TestClient
+
+    from app.main import app
+
+    app.dependency_overrides[get_db] = _override_db
+    client = TestClient(app)
+    try:
+        resp = client.get("/api/validation/report")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "topics_saved_in_period" in data
+        assert data["research_portfolio"]["saved_in_period"]["videos"] == 1
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_query_count_bounded() -> None:
+    engine = _engine()
+    SessionLocal = sessionmaker(bind=engine)
+    session = SessionLocal()
+    for i in range(8):
+        _video(session, saved_at=T_SAVE + timedelta(hours=i), video_id=f"vid-portfolio-{i}")
+        _family(session, key=f"family:{i}", saved_at=T_SAVE + timedelta(hours=i))
+    session.commit()
+
+    count = {"n": 0}
+
+    def _before(_conn, _cursor, _statement, _parameters, _context, _executemany):
+        count["n"] += 1
+
+    event.listen(engine, "before_cursor_execute", _before)
+    try:
+        legacy = build_validation_report(session, period_start=None, period_end=None)
+        build_research_portfolio_report(
+            session,
+            period_start=None,
+            period_end=None,
+            legacy_topics_saved_in_period=legacy["topics_saved_in_period"],
+        )
+    finally:
+        event.remove(engine, "before_cursor_execute", _before)
+
+    assert count["n"] < 25, f"expected batched queries, got {count['n']}"
+
+
+def main() -> None:
+    tests = [
+        test_combined_total_three_no_topics,
+        test_save_before_period_decision_inside_period,
+        test_save_inside_period_decision_after_period,
+        test_archived_still_in_saved_cohort,
+        test_legacy_topic_backward_compat,
+        test_feedback_counts_no_double_entity,
+        test_api_response_includes_portfolio_and_legacy_fields,
+        test_query_count_bounded,
+    ]
+    for test in tests:
+        test()
+        print(f"OK {test.__name__}")
+    print(f"All {len(tests)} Fix 1A tests passed.")
+
+
+if __name__ == "__main__":
+    main()

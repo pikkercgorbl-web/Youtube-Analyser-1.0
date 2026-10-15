@@ -8,6 +8,7 @@ import {
   Activity,
   BarChart3,
   Bookmark,
+  CalendarDays,
   Flame,
   Layers,
   Menu,
@@ -42,8 +43,9 @@ const NAV_GROUPS = [
     label: "Разведка",
     items: [
       { href: "/opportunities", label: "Возможности", icon: Flame },
-      { href: "/saved-topics", label: "Сохранённые темы", icon: Bookmark },
-      { href: "/validation", label: "Результаты решений", icon: BarChart3 },
+      { href: "/daily-intelligence", label: "Архив отчётов", icon: CalendarDays },
+      { href: "/saved", label: "Сохранённое", icon: Bookmark },
+      { href: "/validation", label: "Итоги исследований", icon: BarChart3 },
     ],
   },
   {

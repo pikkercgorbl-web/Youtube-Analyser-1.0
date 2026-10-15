@@ -119,6 +119,46 @@ describe("MonitoringDashboard", () => {
     expect(screen.queryByText("След. контрольная точка")).not.toBeInTheDocument();
   });
 
+  it("shows missing vs execution errors for partial cycles", async () => {
+    vi.mocked(api.getMonitoringCycles).mockResolvedValue({
+      items: [
+        {
+          run_id: "monitoring_test",
+          started_at: "2026-10-13T10:00:00Z",
+          finished_at: "2026-10-13T10:00:05Z",
+          runtime_seconds: 5,
+          cycle_status: "partial",
+          loaded: 100,
+          tier_a: 1,
+          tier_b: 0,
+          tier_c: 0,
+          due: 2,
+          overdue: 1,
+          selected: 2,
+          deferred: 0,
+          inserted: 1,
+          missing: 1,
+          fetch_failed: 0,
+          validation_failed: 0,
+          persistence_failed: 0,
+          duplicate_snapshot_count: 0,
+          partial_primary_cause: "missing_only",
+          execution_error_count: 0,
+          cycle_status_detail: "Частично: 1 missing",
+        },
+      ],
+      limit: 10,
+    });
+    render(<MonitoringDashboard />);
+    expect(await screen.findByText("Нет в API")).toBeInTheDocument();
+    expect(screen.getByText("Ошибки захвата")).toBeInTheDocument();
+    await waitFor(() => {
+      const missingCells = screen.getAllByTestId("cycle-missing-count");
+      expect(missingCells.some((el) => el.textContent === "1")).toBe(true);
+    });
+    expect(await screen.findByTestId("cycle-status-detail")).toBeInTheDocument();
+  });
+
   it("translates due/overdue in badges", async () => {
     vi.mocked(api.getMonitoringVideos).mockResolvedValue({
       items: [{ ...videoItem, due_checkpoint_hours: [12], overdue_checkpoint_hours: [] }],

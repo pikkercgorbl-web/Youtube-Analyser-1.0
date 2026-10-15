@@ -64,3 +64,38 @@ def test_pattern_detail_hydrates_members_without_recompute() -> None:
     assert all(row["youtube_url"].startswith("https://www.youtube.com/watch?v=") for row in body["videos"])
     assert "channels" in body
     assert "related_keywords" in body
+
+
+def test_video_detail_reads_snapshot_without_recompute() -> None:
+    engine = _engine()
+    factory = sessionmaker(bind=engine)
+    session = factory()
+    _seed_pair(session)
+    refresh_attention_engine(session, config=AttentionEngineConfig(), now=NOW)
+    session.commit()
+    session.close()
+
+    api = FastAPI()
+    api.include_router(attention_routes.router, prefix="/api/attention")
+
+    def override_get_db() -> Generator[Session, None, None]:
+        db = factory()
+        try:
+            yield db
+        finally:
+            db.close()
+
+    api.dependency_overrides[get_db] = override_get_db
+    client = TestClient(api)
+    listed = client.get("/api/attention/videos")
+    assert listed.json()["data_source"] == "snapshot"
+    items = listed.json()["items"]
+    assert items
+    video_id = items[0]["video_id"]
+    with patch("app.api.routes.attention.compute_attention_engine") as live:
+        detail = client.get(f"/api/attention/videos/{video_id}")
+        live.assert_not_called()
+    body = detail.json()
+    assert body["data_source"] == "snapshot"
+    assert body["video"]["video_id"] == video_id
+    assert client.get("/api/attention/videos/not-in-snapshot").status_code == 404

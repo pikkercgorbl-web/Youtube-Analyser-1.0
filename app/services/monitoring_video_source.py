@@ -66,6 +66,7 @@ def iter_monitoring_candidate_videos(
             .join(Channel, Video.channel_id == Channel.id)
             .where(
                 Video.content_format.in_((VideoFormat.MEDIUM, VideoFormat.LONG)),
+                Video.automatic_monitoring_withheld.is_(False),
                 _confirmed_regular_exists(),
                 or_(channel_ok, channel_snapshot_fallback),
             )

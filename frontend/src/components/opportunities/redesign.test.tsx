@@ -14,12 +14,14 @@ describe("Analyst presentation", () => {
         isTopicCollection({
           family_kind,
           quality_flags: [],
+          opportunity_presentation_tier: "search_collection",
         } as unknown as AttentionPatternFamily),
       ).toBe(true);
     expect(
       isTopicCollection({
         family_kind: "title_phrase",
         quality_flags: [],
+        opportunity_presentation_tier: "needs_review",
       } as unknown as AttentionPatternFamily),
     ).toBe(false);
   });
@@ -54,9 +56,14 @@ describe("Analyst presentation", () => {
       target: { value: "Video 13" },
     });
     expect(screen.getAllByTestId("winner-row")).toHaveLength(1);
-    expect(
-      screen.getByRole("link", { name: "Динамика видео →" }),
-    ).toHaveAttribute("href", "/monitoring/videos/v13");
+    expect(screen.getByRole("link", { name: "Детали видео" })).toHaveAttribute(
+      "href",
+      "/opportunities/videos/v13",
+    );
+    expect(screen.getByRole("link", { name: "Динамика видео" })).toHaveAttribute(
+      "href",
+      "/monitoring/videos/v13",
+    );
     fireEvent.change(screen.getByLabelText("Поиск по названию или каналу"), {
       target: { value: "absent" },
     });

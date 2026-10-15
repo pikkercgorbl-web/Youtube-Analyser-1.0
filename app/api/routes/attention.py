@@ -20,6 +20,7 @@ from app.models.schemas import (
     AttentionRelatedKeywordResponse,
     AttentionSummaryApiResponse,
     AttentionSummaryResponse,
+    AttentionVideoDetailResponse,
     AttentionVideoListResponse,
     AttentionVideoWinnerResponse,
     ChannelRelativeSignalResponse,
@@ -40,11 +41,74 @@ from app.services.attention_pattern_hydrate import (
     hydrate_videos_by_ids,
 )
 from app.services.attention_read_model import load_attention_snapshot
+from app.services.opportunity_family_presentation import (
+    OpportunityFamilyPresentation,
+    load_video_title_channel_maps,
+    present_opportunity_family,
+)
 
 router = APIRouter()
 
 
-def _video_response(row: VideoWinner) -> AttentionVideoWinnerResponse:
+def _family_presentation_context(
+    db: Session,
+    result: AttentionEngineResult,
+    families: list[PatternFamily],
+) -> tuple[frozenset[str], dict[str, str], dict[str, str]]:
+    winner_id_set = frozenset(row.video_id for row in result.video_winners)
+    video_ids: set[str] = set()
+    for family in families:
+        video_ids.update(family.video_ids)
+    titles, channels = load_video_title_channel_maps(
+        db,
+        video_ids,
+        winner_rows=result.video_winners,
+    )
+    return winner_id_set, titles, channels
+
+
+def _family_response(
+    row: PatternFamily,
+    presentation: OpportunityFamilyPresentation | None = None,
+) -> AttentionPatternFamilyResponse:
+    pres = presentation
+    return AttentionPatternFamilyResponse(
+        family_key=row.family_key,
+        label=row.label,
+        family_kind=row.family_kind,
+        member_pattern_keys=list(row.member_pattern_keys),
+        member_labels=list(row.member_labels),
+        video_count=row.video_count,
+        channel_count=row.channel_count,
+        keyword_count=row.keyword_count,
+        breakout_eligible_count=row.breakout_eligible_count,
+        videos_last_24h=row.videos_last_24h,
+        videos_previous_24h=row.videos_previous_24h,
+        videos_previous_48_24h=row.videos_previous_48_24h,
+        grouping_reasons=list(row.grouping_reasons),
+        quality_flags=list(row.quality_flags),
+        support_sources=list(row.support_sources),
+        first_seen_at=row.first_seen_at,
+        latest_seen_at=row.latest_seen_at,
+        participating_video_ids=list(row.video_ids),
+        participating_channel_ids=list(row.channel_ids),
+        participating_keyword_ids=list(row.keyword_ids),
+        opportunity_presentation_tier=(
+            pres.opportunity_presentation_tier if pres else "search_collection"
+        ),
+        grouping_basis_kind=pres.grouping_basis_kind if pres else "unknown",
+        grouping_basis_label=pres.grouping_basis_label if pres else "",
+        tier_reason=pres.tier_reason if pres else "",
+        feed_winner_video_ids=list(pres.feed_winner_video_ids) if pres else [],
+        title_evidence_video_ids=list(pres.title_evidence_video_ids) if pres else [],
+    )
+
+
+def _video_response(
+    row: VideoWinner,
+    *,
+    keyword_by_id: dict[int, str] | None = None,
+) -> AttentionVideoWinnerResponse:
     rel = None
     if row.channel_relative_signal is not None:
         rel = ChannelRelativeSignalResponse(
@@ -74,6 +138,11 @@ def _video_response(row: VideoWinner) -> AttentionVideoWinnerResponse:
         reason_codes=list(row.reason_codes),
         human_reasons=list(row.human_reasons),
         keyword_ids=list(row.keyword_ids),
+        discovery_keywords=[
+            AttentionRelatedKeywordResponse(keyword_id=int(kid), keyword=keyword_by_id[int(kid)])
+            for kid in row.keyword_ids
+            if keyword_by_id is not None and int(kid) in keyword_by_id
+        ],
     )
 
 
@@ -97,31 +166,6 @@ def _pattern_response(row: PatternCandidate) -> AttentionPatternResponse:
         participating_keyword_ids=list(row.participating_keyword_ids),
         reason_codes=list(row.reason_codes),
         human_reasons=list(row.human_reasons),
-    )
-
-
-def _family_response(row: PatternFamily) -> AttentionPatternFamilyResponse:
-    return AttentionPatternFamilyResponse(
-        family_key=row.family_key,
-        label=row.label,
-        family_kind=row.family_kind,
-        member_pattern_keys=list(row.member_pattern_keys),
-        member_labels=list(row.member_labels),
-        video_count=row.video_count,
-        channel_count=row.channel_count,
-        keyword_count=row.keyword_count,
-        breakout_eligible_count=row.breakout_eligible_count,
-        videos_last_24h=row.videos_last_24h,
-        videos_previous_24h=row.videos_previous_24h,
-        videos_previous_48_24h=row.videos_previous_48_24h,
-        grouping_reasons=list(row.grouping_reasons),
-        quality_flags=list(row.quality_flags),
-        support_sources=list(row.support_sources),
-        first_seen_at=row.first_seen_at,
-        latest_seen_at=row.latest_seen_at,
-        participating_video_ids=list(row.video_ids),
-        participating_channel_ids=list(row.channel_ids),
-        participating_keyword_ids=list(row.keyword_ids),
     )
 
 
@@ -222,14 +266,45 @@ def list_attention_videos(
             total=0,
         )
     items = result.video_winners[offset : offset + limit]
+    keyword_ids = list(dict.fromkeys(int(k) for row in items for k in row.keyword_ids))
+    keyword_rows = hydrate_related_keywords(db, keyword_ids)
+    keyword_by_id = {row["keyword_id"]: row["keyword"] for row in keyword_rows}
     return AttentionVideoListResponse(
-        items=[_video_response(row) for row in items],
+        items=[_video_response(row, keyword_by_id=keyword_by_id) for row in items],
         data_source=source,
         run_id=result.summary.run_id,
         computed_at=result.summary.computed_at,
         limit=limit,
         offset=offset,
         total=len(result.video_winners),
+    )
+
+
+@router.get("/videos/{video_id}", response_model=AttentionVideoDetailResponse)
+def get_attention_video(
+    video_id: str,
+    db: Session = Depends(get_db),
+    live: bool = Query(False),
+) -> AttentionVideoDetailResponse:
+    result, source = _load_result(db, live=live)
+    if result is None:
+        return AttentionVideoDetailResponse(
+            video=None,
+            data_source=source,
+            run_id=None,
+            computed_at=None,
+        )
+    row = next((item for item in result.video_winners if item.video_id == video_id), None)
+    if row is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Video not in current winner snapshot")
+    keyword_ids = list(dict.fromkeys(int(k) for k in row.keyword_ids))
+    keyword_rows = hydrate_related_keywords(db, keyword_ids)
+    keyword_by_id = {row["keyword_id"]: row["keyword"] for row in keyword_rows}
+    return AttentionVideoDetailResponse(
+        video=_video_response(row, keyword_by_id=keyword_by_id),
+        data_source=source,
+        run_id=result.summary.run_id,
+        computed_at=result.summary.computed_at,
     )
 
 
@@ -317,8 +392,20 @@ def list_attention_pattern_families(
             total=0,
         )
     items = result.families[offset : offset + limit]
+    winner_id_set, titles, channels = _family_presentation_context(db, result, list(items))
     return AttentionPatternFamilyListResponse(
-        items=[_family_response(row) for row in items],
+        items=[
+            _family_response(
+                row,
+                present_opportunity_family(
+                    row,
+                    feed_winner_id_set=winner_id_set,
+                    video_titles=titles,
+                    video_channels=channels,
+                ),
+            )
+            for row in items
+        ],
         data_source=source,
         run_id=result.summary.run_id,
         computed_at=result.summary.computed_at,
@@ -348,8 +435,15 @@ def get_attention_pattern_family(
             )
             patterns_by_key = {item.pattern_key: item for item in result.patterns}
             members = [patterns_by_key[key] for key in row.member_pattern_keys if key in patterns_by_key]
+            winner_id_set, titles, channel_map = _family_presentation_context(db, result, [row])
+            presentation = present_opportunity_family(
+                row,
+                feed_winner_id_set=winner_id_set,
+                video_titles=titles,
+                video_channels=channel_map,
+            )
             return AttentionPatternFamilyDetailResponse(
-                family=_family_response(row),
+                family=_family_response(row, presentation),
                 data_source=source,
                 run_id=result.summary.run_id,
                 computed_at=result.summary.computed_at,

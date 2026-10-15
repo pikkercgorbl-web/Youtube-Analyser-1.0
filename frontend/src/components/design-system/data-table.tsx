@@ -90,13 +90,14 @@ export function DataTableTd({
   emphasis,
   muted,
   className,
+  ...rest
 }: {
   children: React.ReactNode;
   align?: "left" | "right";
   emphasis?: boolean;
   muted?: boolean;
   className?: string;
-}) {
+} & React.TdHTMLAttributes<HTMLTableCellElement>) {
   return (
     <td
       className={cn(
@@ -105,6 +106,7 @@ export function DataTableTd({
         emphasis ? "font-medium text-foreground" : muted ? textRoles.tableCellMuted : textRoles.tableCell,
         className,
       )}
+      {...rest}
     >
       {children}
     </td>

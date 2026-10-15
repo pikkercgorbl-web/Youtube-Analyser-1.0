@@ -28,6 +28,7 @@ export type AttentionVideoWinner = {
   reason_codes: string[];
   human_reasons: string[];
   keyword_ids: number[];
+  discovery_keywords?: AttentionRelatedKeyword[];
 };
 
 export type AttentionPattern = {
@@ -121,6 +122,13 @@ export type AttentionVideoListResponse = AttentionListMeta & {
   items: AttentionVideoWinner[];
 };
 
+export type AttentionVideoDetailResponse = {
+  video: AttentionVideoWinner | null;
+  data_source: AttentionDataSource | string;
+  run_id: string | null;
+  computed_at: string | null;
+};
+
 export type AttentionPatternListResponse = AttentionListMeta & {
   items: AttentionPattern[];
 };
@@ -149,7 +157,18 @@ export type AttentionPatternMemberVideo = {
   reason_codes: string[];
   human_reasons: string[];
   keyword_ids: number[];
+  views_measurement_status?: ViewsMeasurementStatus;
+  discovery_keywords?: AttentionRelatedKeyword[];
 };
+
+export type ViewsMeasurementStatus =
+  | "from_winner_snapshot"
+  | "from_snapshot"
+  | "zero_in_winner_snapshot"
+  | "zero_in_snapshot"
+  | "unknown_in_winner_snapshot"
+  | "unknown_in_snapshot"
+  | "missing_snapshot";
 
 export type AttentionRelatedKeyword = {
   keyword_id: number;
@@ -193,6 +212,15 @@ export type AttentionPatternFamily = {
   participating_video_ids: string[];
   participating_channel_ids: string[];
   participating_keyword_ids: number[];
+  opportunity_presentation_tier:
+    | "repeating_idea"
+    | "needs_review"
+    | "search_collection";
+  grouping_basis_kind: string;
+  grouping_basis_label: string;
+  tier_reason: string;
+  feed_winner_video_ids: string[];
+  title_evidence_video_ids: string[];
 };
 
 export type AttentionPatternFamilyListResponse = AttentionListMeta & {

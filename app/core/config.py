@@ -37,6 +37,17 @@ class Settings(BaseSettings):
         ge=60,
         validation_alias="EXPLOSIVE_RADAR_INTERVAL_SECONDS",
     )
+    outcome_capture_di_winner_priority_enabled: bool = Field(
+        default=False,
+        validation_alias="OUTCOME_CAPTURE_DI_WINNER_PRIORITY",
+    )
+
+    @field_validator("outcome_capture_di_winner_priority_enabled", mode="before")
+    @classmethod
+    def _parse_outcome_capture_di_winner_priority(cls, value: object) -> bool:
+        from app.core.env_parsing import parse_outcome_capture_di_winner_priority_value
+
+        return parse_outcome_capture_di_winner_priority_value(value)
 
     @field_validator("database_url", mode="before")
     @classmethod

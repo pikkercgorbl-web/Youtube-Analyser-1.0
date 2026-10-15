@@ -40,6 +40,10 @@ vi.mock("next/link", () => ({
 vi.mock("@/lib/api", () => ({
   listSavedTopics: vi.fn().mockResolvedValue({ items: [] }),
   saveSavedTopic: vi.fn(),
+  listSavedVideos: vi.fn().mockResolvedValue({ items: [] }),
+  listSavedFamilies: vi.fn().mockResolvedValue({ items: [] }),
+  saveSavedVideo: vi.fn(),
+  saveSavedFamily: vi.fn(),
   getAttentionSummary: vi.fn(),
   getAttentionVideos: vi.fn(),
   getAttentionPatterns: vi.fn(),
@@ -163,6 +167,13 @@ const families = (): AttentionPatternFamilyListResponse => ({
       participating_video_ids: ["vid-a", "vid-b"],
       participating_channel_ids: ["ch-a", "ch-b"],
       participating_keyword_ids: [1],
+      opportunity_presentation_tier: "needs_review",
+      grouping_basis_kind: "title_phrase_similarity",
+      grouping_basis_label:
+        "похожие формулировки в названиях (например: «ai se kaise banaye»)",
+      tier_reason: "сходство заголовков видно по сохранённым evidence",
+      feed_winner_video_ids: ["vid-a"],
+      title_evidence_video_ids: ["vid-a", "vid-b"],
     },
   ],
   data_source: "snapshot",
@@ -229,14 +240,20 @@ describe("Opportunities feed", () => {
       screen.getAllByRole("link", { name: /AI cartoon tutorial/ })[0],
     ).toHaveAttribute("href", "https://www.youtube.com/watch?v=vid-a");
     expect(screen.queryByText("Subscribers: 0")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /Похожие находки/ }));
+    fireEvent.click(
+      screen.getByRole("button", { name: /Группы для исследования/ }),
+    );
+    expect(screen.getByTestId("patterns-empty")).toBeInTheDocument();
     expect(screen.getByTestId("pattern-family-card")).toHaveTextContent(
       "ai se kaise banaye",
     );
     expect(screen.getByTestId("pattern-channel-diversity")).toHaveTextContent(
       "56",
     );
-    expect(screen.getByTestId("family-grouping")).toHaveTextContent("фраз");
+    expect(screen.getByTestId("family-grouping")).toHaveTextContent("назван");
+    expect(screen.getByTestId("family-feed-winners")).toHaveTextContent(
+      "AI cartoon tutorial",
+    );
     expect(
       screen.getAllByText(/подходят для анализа Breakout/i).length,
     ).toBeGreaterThan(0);
@@ -249,13 +266,44 @@ describe("Opportunities feed", () => {
     );
     expect(screen.queryByText("Растущих каналов нет")).not.toBeInTheDocument();
     expect(screen.queryByText(/магическ/i)).not.toBeInTheDocument();
-    const save = screen.getByTestId("save-pattern");
+    const familyCard = screen.getByTestId("pattern-family-card");
     await waitFor(() =>
-      expect(screen.getByTestId("save-pattern")).toBeEnabled(),
+      expect(
+        familyCard.querySelector('[data-testid="save-family"]'),
+      ).not.toHaveAttribute("disabled"),
     );
 
     expect(api.getAttentionSummary).toHaveBeenCalled();
     expect(vi.mocked(api.getAttentionSummary).mock.calls[0]).toEqual([]);
+  });
+
+  it("opens winners tab and focuses row when following hash from family card", async () => {
+    window.history.pushState({}, "", "/opportunities");
+    mockReady();
+    render(<OpportunitiesDashboard />);
+    await waitFor(() =>
+      expect(screen.getByTestId("summary-cards")).toBeInTheDocument(),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: /Группы для исследования/ }),
+    );
+    expect(screen.getByTestId("metric-winners").closest("button")).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+    const winnerLink = screen.getByRole("link", { name: /AI cartoon tutorial/ });
+    expect(winnerLink).toHaveAttribute("href", "/opportunities#winner-vid-a");
+    fireEvent.click(winnerLink);
+    await waitFor(() =>
+      expect(screen.getByTestId("metric-winners").closest("button")).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      ),
+    );
+    const row = document.getElementById("winner-vid-a");
+    expect(row).toBeTruthy();
+    expect(row?.closest("[hidden]")).toBeNull();
+    window.location.hash = "";
   });
 
   it("does not request live recompute", async () => {

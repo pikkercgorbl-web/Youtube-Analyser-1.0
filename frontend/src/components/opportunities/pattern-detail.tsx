@@ -16,23 +16,18 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  canonicalYoutubeUrl,
-  formatOptionalAge,
-  formatOptionalSubscribers,
-  formatOptionalViews,
-  formatOptionalVph,
   groupingSourceLabel,
   humanReasonsForDisplay,
   patternActivity,
 } from "@/lib/attention-format";
-import type { AttentionPatternDetailResponse, AttentionPatternMemberVideo } from "@/lib/attention-types";
+import type { AttentionPatternDetailResponse } from "@/lib/attention-types";
 import { getAttentionPatternDetail } from "@/lib/api";
 import { surfaces } from "@/lib/design-system/layout";
 import { savedTopicAffordance } from "@/lib/saved-topics";
 import { cn } from "@/lib/utils";
 
-import { AttentionSignalBadges, HumanReasonsList } from "./signal-badges";
-import { YoutubeThumb } from "./youtube-thumb";
+import { HumanReasonsList } from "./signal-badges";
+import { PatternMemberRow } from "./pattern-member-row";
 
 type SortKey = "newest" | "vph" | "views";
 
@@ -268,7 +263,7 @@ export function PatternDetailView({ patternKey }: { patternKey: string }) {
         </p>
         <div className="space-y-2" data-testid="pattern-member-list">
           {videos.map((row) => (
-            <MemberRow key={row.video_id} video={row} />
+            <PatternMemberRow key={row.video_id} video={row} />
           ))}
         </div>
       </SectionPanel>
@@ -285,37 +280,3 @@ export function PatternDetailView({ patternKey }: { patternKey: string }) {
   );
 }
 
-function MemberRow({ video }: { video: AttentionPatternMemberVideo }) {
-  const href = canonicalYoutubeUrl(video.video_id, video.youtube_url);
-  return (
-    <article className={cn(surfaces.sectionMuted, "flex gap-3 p-3")} data-testid="pattern-member">
-      <a href={href} target="_blank" rel="noopener noreferrer" className="shrink-0">
-        <YoutubeThumb videoId={video.video_id} title={video.title} className="h-20 w-36 rounded" />
-      </a>
-      <div className="min-w-0 flex-1">
-        <a href={href} target="_blank" rel="noopener noreferrer" className="font-medium hover:text-primary">
-          {video.title}
-        </a>
-        <p className="text-xs text-muted-foreground">{video.channel_title}</p>
-        <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-          {formatOptionalViews(video.views) ? <span>{formatOptionalViews(video.views)}</span> : null}
-          {formatOptionalVph(video.vph) ? <span>{formatOptionalVph(video.vph)}</span> : null}
-          {formatOptionalAge(video.age_hours) ? <span>{formatOptionalAge(video.age_hours)}</span> : null}
-          {video.breakout_rank != null ? <span>Breakout #{video.breakout_rank}</span> : null}
-          {formatOptionalSubscribers(video.subscribers) ? (
-            <span>{formatOptionalSubscribers(video.subscribers)} подп.</span>
-          ) : null}
-          {video.in_winner_snapshot ? <span>в сегодняшнем топе</span> : null}
-        </div>
-        <AttentionSignalBadges
-          treatAsWinner={video.in_winner_snapshot}
-          inWinnerSnapshot={video.in_winner_snapshot}
-          reasonCodes={video.reason_codes}
-          accelerationState={video.acceleration_state}
-          delayedOutcomeState={video.delayed_outcome_state}
-        />
-        <HumanReasonsList reasons={video.human_reasons} />
-      </div>
-    </article>
-  );
-}

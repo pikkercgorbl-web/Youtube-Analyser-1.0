@@ -14,6 +14,7 @@ vi.mock("next/link", () => ({
 
 vi.mock("@/lib/api", () => ({
   fetchTargetKeywords: vi.fn(),
+  fetchKeywordPoolSummary: vi.fn(),
 }));
 
 function hoursFromNow(h: number): string {
@@ -42,9 +43,35 @@ function baseRow(partial: Partial<TargetKeywordItem>): TargetKeywordItem {
 }
 
 describe("KeywordPoolDashboard", () => {
+  beforeEach(() => {
+    vi.mocked(api.fetchKeywordPoolSummary).mockResolvedValue({
+      snapshot_at: "2026-10-13T10:00:00Z",
+      due_now: 100,
+      due_next_1h: 10,
+      due_next_24h: 200,
+      not_archived_count: 500,
+      unique_keywords_scanned_last_24h: 42,
+      keyword_scan_runs_last_24h: 50,
+      probation_interval_hours: 6,
+      active_interval_hours: 24,
+      weak_interval_hours: 72,
+      failed_scan_retry_hours: 2,
+    });
+  });
+
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+  });
+
+  it("shows queue context with 24h throughput next to due count", async () => {
+    vi.mocked(api.fetchTargetKeywords).mockResolvedValue([
+      baseRow({ id: 1, keyword: "due-key", next_scan_at: hoursAgo(2) }),
+    ]);
+    render(<KeywordPoolDashboard />);
+    const ctx = await screen.findByTestId("keyword-pool-queue-context");
+    expect(ctx.textContent).toMatch(/42/);
+    expect(ctx.textContent).toMatch(/Пора просканировать/i);
   });
 
   it("shows due keywords as Пора сканировать and no VPH columns", async () => {
