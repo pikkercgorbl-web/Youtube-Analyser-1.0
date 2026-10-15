@@ -16,7 +16,7 @@ import type { ManualSearchVideoContextItem } from "@/lib/api";
 
 import { buildChannelSingleAnalysisUrl } from "@/lib/channel-single-analysis-url";
 import { formatViewsAndAgeLine, parseDurationSeconds } from "@/lib/manual-search-published-format";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 import {
 
@@ -28,7 +28,7 @@ import {
 
 import type { EnrichedVideoModel } from "@/lib/types";
 
-import { formatCompactNumber, youtubeThumbnail, youtubeVideoUrl } from "@/lib/utils";
+import { cn, formatCompactNumber, youtubeThumbnail, youtubeVideoUrl } from "@/lib/utils";
 
 
 
@@ -262,8 +262,9 @@ export function ManualSearchVideoCard({ item, ctx, metricsPending, onSaved }: Pr
 
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           {item.video.channel_id?.trim() ? (
-            <Button variant="outline" size="sm" className="w-full sm:w-auto" asChild>
-              <Link
+            <Link
+                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "w-full sm:w-auto")}
+
                 href={buildChannelSingleAnalysisUrl({
                   channelId: item.video.channel_id.trim(),
                   focusVideoId: videoId,
@@ -271,7 +272,6 @@ export function ManualSearchVideoCard({ item, ctx, metricsPending, onSaved }: Pr
               >
                 Анализ канала
               </Link>
-            </Button>
           ) : null}
           <SaveVideoButton
             videoId={videoId}
