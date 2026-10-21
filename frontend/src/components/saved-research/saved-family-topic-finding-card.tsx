@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 
 import { YoutubeThumb } from "@/components/opportunities/youtube-thumb";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { formatOptionalViews } from "@/lib/attention-format";
 import type { SavedFamilyTopicFinding } from "@/lib/saved-research-types";
 
@@ -47,12 +47,15 @@ export function SavedFamilyTopicFindingCard({ row, onSave }: Props) {
           >
             {row.saved_to_research ? "Уже в сохранённых" : "Сохранить в исследования"}
           </Button>
-          <Button type="button" size="sm" variant="ghost" asChild>
-            <Link href={row.youtube_url} target="_blank" rel="noopener noreferrer">
-              YouTube
-              <ExternalLink className="ml-1 h-3 w-3" />
-            </Link>
-          </Button>
+          <Link
+            href={row.youtube_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "ghost", size: "sm" })}
+          >
+            YouTube
+  <ExternalLink className="ml-1 h-3 w-3" />
+</Link>
         </div>
       </div>
     </li>
