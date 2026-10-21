@@ -66,6 +66,77 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_topic_exploration_evidence_tables(engine)
     ensure_daily_intelligence_tables(engine)
     ensure_videos_automatic_monitoring_withheld_column(engine)
+    ensure_saved_video_similar_watch_tables(engine)
+    ensure_saved_video_similar_watch_batch_query_offset_column(engine)
+    ensure_saved_video_similar_finding_feedback_table(engine)
+    ensure_saved_family_topic_watch_tables(engine)
+
+
+def ensure_saved_video_similar_watch_tables(engine: Engine) -> None:
+    """SavedVideo similar-search watch tables (v1)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        SavedVideoSimilarFinding,
+        SavedVideoSimilarScan,
+        SavedVideoSimilarWatch,
+    )
+
+    for model, label in (
+        (SavedVideoSimilarWatch, "saved_video_similar_watches"),
+        (SavedVideoSimilarScan, "saved_video_similar_scans"),
+        (SavedVideoSimilarFinding, "saved_video_similar_findings"),
+    ):
+        if label not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", label)
+
+
+def ensure_saved_video_similar_watch_batch_query_offset_column(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "saved_video_similar_watches" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("saved_video_similar_watches")}
+    if "batch_query_offset" in column_names:
+        return
+    dialect = engine.dialect.name
+    if dialect == "postgresql":
+        ddl = "ALTER TABLE saved_video_similar_watches ADD COLUMN batch_query_offset INTEGER NOT NULL DEFAULT 0"
+    else:
+        ddl = "ALTER TABLE saved_video_similar_watches ADD COLUMN batch_query_offset INTEGER NOT NULL DEFAULT 0"
+    with engine.begin() as connection:
+        connection.execute(text(ddl))
+    logger.info("Added saved_video_similar_watches.batch_query_offset column")
+
+
+def ensure_saved_video_similar_finding_feedback_table(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "saved_video_similar_finding_feedback" in inspector.get_table_names():
+        return
+    from app.models.orm import SavedVideoSimilarFindingFeedback
+
+    SavedVideoSimilarFindingFeedback.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created saved_video_similar_finding_feedback table")
+
+
+def ensure_saved_family_topic_watch_tables(engine: Engine) -> None:
+    """SavedFamily topic video search watch tables (shares similar-watch budget)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        SavedFamilyTopicFinding,
+        SavedFamilyTopicScan,
+        SavedFamilyTopicWatch,
+    )
+
+    for model, label in (
+        (SavedFamilyTopicWatch, "saved_family_topic_watches"),
+        (SavedFamilyTopicScan, "saved_family_topic_scans"),
+        (SavedFamilyTopicFinding, "saved_family_topic_findings"),
+    ):
+        if label not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", label)
 
 
 def ensure_videos_automatic_monitoring_withheld_column(engine: Engine) -> None:

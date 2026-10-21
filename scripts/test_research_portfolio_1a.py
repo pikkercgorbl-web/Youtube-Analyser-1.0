@@ -27,7 +27,11 @@ from app.models.orm import (
     SavedVideoObservation,
 )
 from app.models.db import get_db
-from app.services.research_portfolio_report import build_research_portfolio_report
+from app.services.research_portfolio_report import (
+    NEW_ANALYTICAL_OBSERVATION_IN_PERIOD_DEFINITION,
+    build_research_portfolio_report,
+)
+from app.services.saved_research_daily_intelligence import DAILY_INTELLIGENCE_SAVE_ANCHOR_KIND
 from app.services.saved_research_decisions import record_status_change
 from app.services.saved_topic_validation import build_validation_report
 from app.services.saved_topics import patch_topic
@@ -76,6 +80,7 @@ def _video(
     )
     session.add(row)
     session.flush()
+    row.latest_observed_at = saved_at
     session.add(
         SavedVideoObservation(
             saved_video_id=row.id,
@@ -120,7 +125,51 @@ def _family(session: Session, *, key: str, saved_at: datetime, archived_at: date
             payload_json="{}",
         ),
     )
+    row.latest_observed_at = saved_at
     return row
+
+
+def _append_video_obs(
+    session: Session,
+    *,
+    saved_video_id: int,
+    observed_at: datetime,
+    run_id: str = "run-follow-up",
+    payload: dict | None = None,
+) -> None:
+    session.add(
+        SavedVideoObservation(
+            saved_video_id=saved_video_id,
+            attention_run_id=run_id,
+            observed_at=observed_at,
+            video_present_in_attention=True,
+            monitoring_snapshot_available=True,
+            views=200,
+            vph=2.0,
+            payload_json=json.dumps(payload or {"attention_run_id": run_id}),
+        ),
+    )
+
+
+def _append_family_obs(
+    session: Session,
+    *,
+    saved_family_id: int,
+    observed_at: datetime,
+    run_id: str = "run-follow-up",
+    payload: dict | None = None,
+) -> None:
+    session.add(
+        SavedFamilyObservation(
+            saved_family_id=saved_family_id,
+            attention_run_id=run_id,
+            observed_at=observed_at,
+            family_present=True,
+            video_count=3,
+            channel_count=1,
+            payload_json=json.dumps(payload or {}),
+        ),
+    )
 
 
 def test_combined_total_three_no_topics() -> None:
@@ -139,6 +188,9 @@ def test_combined_total_three_no_topics() -> None:
     assert portfolio["saved_in_period"]["combined_total"] == 3
     assert portfolio["saved_in_period"]["videos"] == 1
     assert portfolio["saved_in_period"]["families"] == 2
+    video_item = next(i for i in portfolio["saved_in_period_items"] if i["kind"] == "video")
+    assert video_item["video_id"] == "vid-portfolio-1"
+    assert video_item["latest_observed_at"] is not None
 
 
 def test_save_before_period_decision_inside_period() -> None:
@@ -315,6 +367,146 @@ def test_query_count_bounded() -> None:
     assert count["n"] < 25, f"expected batched queries, got {count['n']}"
 
 
+def test_new_analytical_obs_family_saved_before_period() -> None:
+    """Scenario 1: saved before period, follow-up observation inside period counts."""
+    session = _session()
+    family = _family(session, key="family:old", saved_at=T0)
+    _append_family_obs(session, saved_family_id=family.id, observed_at=T_AFTER, run_id="run-2")
+    session.commit()
+    period_start = datetime(2026, 10, 15, tzinfo=UTC)
+    period_end = datetime(2026, 10, 21, tzinfo=UTC)
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=period_start,
+        period_end=period_end,
+        legacy_topics_saved_in_period=0,
+    )
+    assert portfolio["saved_in_period"]["families"] == 0
+    assert portfolio["observations"]["cohort_with_new_analytical_observation_in_period"] == 1
+
+
+def test_new_analytical_obs_initial_save_only_not_counted() -> None:
+    """Scenario 2: only first analytical row at save — not a new measurement."""
+    session = _session()
+    _video(session, saved_at=T_SAVE)
+    session.commit()
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=datetime(2026, 10, 1, tzinfo=UTC),
+        period_end=datetime(2026, 10, 31, tzinfo=UTC),
+        legacy_topics_saved_in_period=0,
+    )
+    assert portfolio["saved_in_period"]["videos"] == 1
+    assert portfolio["observations"]["cohort_with_new_analytical_observation_in_period"] == 0
+
+
+def test_new_analytical_obs_status_change_only() -> None:
+    """Scenario 3: user status event without observation rows."""
+    session = _session()
+    video = _video(session, saved_at=T0)
+    session.commit()
+    record_status_change(
+        session,
+        entity_kind="video",
+        entity_id=video.id,
+        previous="WATCHING",
+        new="TESTING",
+    )
+    for ev in session.scalars(select(SavedResearchEvent)):
+        ev.occurred_at = T_AFTER
+    session.commit()
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=datetime(2026, 10, 15, tzinfo=UTC),
+        period_end=datetime(2026, 10, 21, tzinfo=UTC),
+        legacy_topics_saved_in_period=0,
+    )
+    assert portfolio["decisions_in_period"]["status_changed_events"] == 1
+    assert portfolio["observations"]["cohort_with_new_analytical_observation_in_period"] == 0
+
+
+def test_new_analytical_obs_duplicate_rows_one_entity() -> None:
+    """Scenario 4: multiple in-period follow-ups still count once."""
+    session = _session()
+    video = _video(session, saved_at=T0)
+    _append_video_obs(session, saved_video_id=video.id, observed_at=T_DECISION, run_id="run-2")
+    _append_video_obs(session, saved_video_id=video.id, observed_at=T_AFTER, run_id="run-3")
+    session.commit()
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=datetime(2026, 10, 9, tzinfo=UTC),
+        period_end=datetime(2026, 10, 21, tzinfo=UTC),
+        legacy_topics_saved_in_period=0,
+    )
+    assert portfolio["observations"]["cohort_with_new_analytical_observation_in_period"] == 1
+
+
+def test_new_analytical_obs_empty_period_and_mixed_cohort() -> None:
+    """Scenario 5: null without bounds; video + family each with one follow-up."""
+    session = _session()
+    video = _video(session, saved_at=T0, video_id="vid-mix")
+    family = _family(session, key="family:mix", saved_at=T0)
+    _append_video_obs(session, saved_video_id=video.id, observed_at=T_AFTER, run_id="run-v2")
+    _append_family_obs(session, saved_family_id=family.id, observed_at=T_AFTER, run_id="run-f2")
+    session.commit()
+    all_time = build_research_portfolio_report(
+        session,
+        period_start=None,
+        period_end=None,
+        legacy_topics_saved_in_period=0,
+    )
+    assert all_time["observations"]["cohort_with_new_analytical_observation_in_period"] is None
+
+    bounded = build_research_portfolio_report(
+        session,
+        period_start=datetime(2026, 10, 15, tzinfo=UTC),
+        period_end=datetime(2026, 10, 21, tzinfo=UTC),
+        legacy_topics_saved_in_period=0,
+    )
+    assert bounded["observations"]["cohort_with_new_analytical_observation_in_period"] == 2
+
+
+def test_daily_intelligence_anchor_excluded_from_new_analytical() -> None:
+    session = _session()
+    video = _video(session, saved_at=T0)
+    _append_video_obs(
+        session,
+        saved_video_id=video.id,
+        observed_at=T_AFTER,
+        run_id="di-anchor-only",
+        payload={"observation_kind": DAILY_INTELLIGENCE_SAVE_ANCHOR_KIND},
+    )
+    session.commit()
+    portfolio = build_research_portfolio_report(
+        session,
+        period_start=datetime(2026, 10, 15, tzinfo=UTC),
+        period_end=datetime(2026, 10, 21, tzinfo=UTC),
+        legacy_topics_saved_in_period=0,
+    )
+    assert portfolio["observations"]["cohort_with_new_analytical_observation_in_period"] == 0
+    assert "saved_video_observations" in NEW_ANALYTICAL_OBSERVATION_IN_PERIOD_DEFINITION
+    assert "archived" in NEW_ANALYTICAL_OBSERVATION_IN_PERIOD_DEFINITION.lower()
+
+
+def test_observation_kind_sqlite_uses_json_extract() -> None:
+    from sqlalchemy import func, select
+    from sqlalchemy.dialects import sqlite
+
+    from app.models.orm import SavedVideoObservation
+    from app.services.research_portfolio_report import _observation_kind_expr
+
+    engine = _engine()
+    SessionLocal = sessionmaker(bind=engine)
+    with SessionLocal() as session:
+        kind = _observation_kind_expr(session, SavedVideoObservation.payload_json)
+        sql = str(
+            select(kind)
+            .limit(1)
+            .compile(dialect=sqlite.dialect(), compile_kwargs={"literal_binds": True}),
+        )
+    assert "json_extract" in sql
+
+
 def main() -> None:
     tests = [
         test_combined_total_three_no_topics,
@@ -325,6 +517,13 @@ def main() -> None:
         test_feedback_counts_no_double_entity,
         test_api_response_includes_portfolio_and_legacy_fields,
         test_query_count_bounded,
+        test_new_analytical_obs_family_saved_before_period,
+        test_new_analytical_obs_initial_save_only_not_counted,
+        test_new_analytical_obs_status_change_only,
+        test_new_analytical_obs_duplicate_rows_one_entity,
+        test_new_analytical_obs_empty_period_and_mixed_cohort,
+        test_daily_intelligence_anchor_excluded_from_new_analytical,
+        test_observation_kind_sqlite_uses_json_extract,
     ]
     for test in tests:
         test()

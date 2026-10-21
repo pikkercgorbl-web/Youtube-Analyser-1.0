@@ -66,6 +66,8 @@ import type {
   SavedFamilyDetail,
   SavedFamilyHistoryResponse,
   SavedFamilyListItem,
+  SavedFamilyTopicFindingsList,
+  SavedFamilyTopicWatch,
   SavedResearchStatus,
   SavedVideoDetail,
   SavedVideoHistoryResponse,
@@ -161,6 +163,26 @@ export async function fetchSuggestions(query: string): Promise<string[]> {
   const { data } = await api.get<string[]>("/api/suggestions", {
     params: { query },
   });
+  return data;
+}
+
+export async function fetchCompetitorChannelPreview(
+  payload: {
+    input_ref?: string;
+    channel_ref?: string;
+    channel_id?: string;
+  },
+  signal?: AbortSignal,
+): Promise<import("@/lib/types").CompetitorChannelPreviewResponse> {
+  const { data } = await api.post<import("@/lib/types").CompetitorChannelPreviewResponse>(
+    "/api/analysis/competitors/channel",
+    {
+      input_ref: payload.input_ref ?? null,
+      channel_ref: payload.channel_ref ?? null,
+      channel_id: payload.channel_id ?? null,
+    },
+    { timeout: 120_000, signal },
+  );
   return data;
 }
 
@@ -755,6 +777,67 @@ export async function refreshSavedVideoMetrics(
   return data;
 }
 
+export async function getSavedVideoSimilarWatch(id: number): Promise<import("./saved-research-types").SavedVideoSimilarWatch> {
+  const { data } = await api.get(`/api/saved-videos/${id}/similar-watch`);
+  return data;
+}
+
+export async function confirmSavedVideoSimilarWatch(
+  id: number,
+  queries: string[],
+): Promise<import("./saved-research-types").SavedVideoSimilarWatch> {
+  const { data } = await api.post(`/api/saved-videos/${id}/similar-watch/confirm`, { queries });
+  return data;
+}
+
+export async function runSavedVideoSimilarWatchNow(id: number): Promise<{
+  scan_id: number;
+  display_state: string;
+}> {
+  const { data } = await api.post(`/api/saved-videos/${id}/similar-watch/run-now`);
+  return data;
+}
+
+export async function pauseSavedVideoSimilarWatch(id: number): Promise<import("./saved-research-types").SavedVideoSimilarWatch> {
+  const { data } = await api.post(`/api/saved-videos/${id}/similar-watch/pause`);
+  return data;
+}
+
+export async function resumeSavedVideoSimilarWatch(id: number): Promise<import("./saved-research-types").SavedVideoSimilarWatch> {
+  const { data } = await api.post(`/api/saved-videos/${id}/similar-watch/resume`);
+  return data;
+}
+
+export async function getSavedVideoSimilarFindings(
+  id: number,
+  params?: { primary_limit?: number; other_limit?: number },
+): Promise<import("./saved-research-types").SavedVideoSimilarFindingsList> {
+  const { data } = await api.get(`/api/saved-videos/${id}/similar-watch/findings`, { params });
+  return data;
+}
+
+export async function saveSimilarFinding(
+  savedVideoId: number,
+  findingId: number,
+): Promise<{ item: import("./saved-research-types").SavedVideoDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post(
+    `/api/saved-videos/${savedVideoId}/similar-watch/findings/${findingId}/save`,
+  );
+  return data;
+}
+
+export async function setSimilarFindingFeedback(
+  savedVideoId: number,
+  findingId: number,
+  verdict: "fit" | "not_fit",
+): Promise<import("./saved-research-types").SavedVideoSimilarFinding> {
+  const { data } = await api.post(
+    `/api/saved-videos/${savedVideoId}/similar-watch/findings/${findingId}/feedback`,
+    { verdict },
+  );
+  return data;
+}
+
 export async function saveSavedFamily(familyKey: string): Promise<{ item: SavedFamilyDetail; created: boolean; idempotent: boolean }> {
   const { data } = await api.post("/api/saved-families", { family_key: familyKey });
   return data;
@@ -789,6 +872,55 @@ export async function archiveSavedFamily(id: number): Promise<SavedFamilyDetail>
 
 export async function restoreSavedFamily(id: number): Promise<SavedFamilyDetail> {
   const { data } = await api.post(`/api/saved-families/${id}/restore`);
+  return data;
+}
+
+export async function getSavedFamilyTopicWatch(id: number): Promise<SavedFamilyTopicWatch> {
+  const { data } = await api.get(`/api/saved-families/${id}/topic-watch`);
+  return data;
+}
+
+export async function confirmSavedFamilyTopicWatch(
+  id: number,
+  queries: string[],
+): Promise<SavedFamilyTopicWatch> {
+  const { data } = await api.post(`/api/saved-families/${id}/topic-watch/confirm`, { queries });
+  return data;
+}
+
+export async function runSavedFamilyTopicWatchNow(id: number): Promise<{
+  scan_id: number;
+  display_state: string;
+}> {
+  const { data } = await api.post(`/api/saved-families/${id}/topic-watch/run-now`);
+  return data;
+}
+
+export async function pauseSavedFamilyTopicWatch(id: number): Promise<SavedFamilyTopicWatch> {
+  const { data } = await api.post(`/api/saved-families/${id}/topic-watch/pause`);
+  return data;
+}
+
+export async function resumeSavedFamilyTopicWatch(id: number): Promise<SavedFamilyTopicWatch> {
+  const { data } = await api.post(`/api/saved-families/${id}/topic-watch/resume`);
+  return data;
+}
+
+export async function getSavedFamilyTopicFindings(
+  id: number,
+  params?: { limit?: number; offset?: number },
+): Promise<SavedFamilyTopicFindingsList> {
+  const { data } = await api.get(`/api/saved-families/${id}/topic-watch/findings`, { params });
+  return data;
+}
+
+export async function saveFamilyTopicFinding(
+  savedFamilyId: number,
+  findingId: number,
+): Promise<{ item: SavedVideoDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post(
+    `/api/saved-families/${savedFamilyId}/topic-watch/findings/${findingId}/save`,
+  );
   return data;
 }
 

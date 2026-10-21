@@ -10,10 +10,12 @@ import {
   PageShell,
   SectionPanel,
 } from "@/components/design-system";
+import { LegacyArchivedBanner } from "@/components/layout/legacy-archived-banner";
 import { Input } from "@/components/ui/input";
 import { buttonVariants } from "@/components/ui/button";
 import { listSavedTopics } from "@/lib/api";
 import { familyDetailHref } from "@/lib/attention-format";
+import { listCardSummary } from "@/lib/saved-topic-watch";
 import { SAVED_TOPIC_STATUS_LABELS } from "@/lib/saved-topics";
 import type { SavedTopicListItem } from "@/lib/saved-topics-types";
 import { cn } from "@/lib/utils";
@@ -55,6 +57,11 @@ export function SavedTopicsListView() {
       <PageHeader
         title="Сохранённые темы"
         lead="Ваши темы для дальнейшей разведки. Сравнивайте изменения, оставляйте заметки и фиксируйте решения."
+      />
+      <LegacyArchivedBanner
+        route="saved-topics"
+        primaryHref="/saved"
+        primaryLabel="Новые темы — в «Сохранённое»"
       />
       <SectionPanel title="Фильтры">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -120,13 +127,19 @@ export function SavedTopicsListView() {
                       {SAVED_TOPIC_STATUS_LABELS[item.status] ?? item.status}
                       {item.tags.length ? ` · ${item.tags.join(", ")}` : ""}
                     </p>
-                    {item.latest_observation_at ? (
+                    <p className="mt-2 text-sm text-foreground">
+                      {listCardSummary(item)}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Сохранена{" "}
+                      {new Date(item.created_at).toLocaleString()}
+                      {item.latest_observation_at
+                        ? ` · последнее наблюдение ${new Date(item.latest_observation_at).toLocaleString()}`
+                        : ""}
+                    </p>
+                    {item.watch_stale_message ? (
                       <p className="text-xs text-muted-foreground">
-                        Последнее наблюдение:{" "}
-                        {new Date(item.latest_observation_at).toLocaleString()}
-                        {item.present_in_latest_snapshot === false
-                          ? " · нет в текущей выборке"
-                          : ""}
+                        {item.watch_stale_message}
                       </p>
                     ) : null}
                   </div>

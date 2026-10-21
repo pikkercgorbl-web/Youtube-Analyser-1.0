@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { ErrorState, LoadingState, PageShell } from "@/components/design-system";
+import { Disclosure, ErrorState, LoadingState, PageShell } from "@/components/design-system";
 import { buttonVariants } from "@/components/ui/button";
 import {
   getDailyIntelligenceReport,
@@ -26,6 +26,7 @@ import type {
 } from "@/lib/daily-intelligence-types";
 
 import { DailyIntelligenceWinnerAttentionBlock } from "./daily-intelligence-winner-attention-block";
+import { DailyIntelligenceWinnerCompactInsights } from "./daily-intelligence-winner-compact-insights";
 import { DailyIntelligenceWinnerHero } from "./daily-intelligence-winner-hero";
 import { DailyIntelligenceWinnerObservationTimeline } from "./daily-intelligence-winner-observation-timeline";
 import { DailyIntelligenceWinnerOutcomeStory } from "./daily-intelligence-winner-outcome-story";
@@ -199,37 +200,54 @@ export function DailyIntelligenceWinnerDetailView({
           videoId={videoId}
         />
 
-        <DailyIntelligenceWinnerAttentionBlock metrics={metrics} editionRank={winner.rank} />
-
-        <DailyIntelligenceWinnerOutcomeStory
-          followUp={followUp}
-          loading={followUpLoading}
-          error={followUpError}
-          onRetry={() => void loadFollowUp()}
-        />
-
-        <DailyIntelligenceWinnerObservationTimeline
-          reportDate={reportDate}
-          editionRank={winner.rank}
-          appearances={appearances}
-          appearanceTotal={appearanceTotal}
-          appearanceOffset={appearanceOffset}
-          appearancesLoading={appearancesLoading}
-          appearancesError={appearancesError}
-          followUp={followUp}
-          onPageChange={(o) => void loadAppearances(o)}
-          onRetry={() => void loadAppearances(appearanceOffset)}
-        />
-
-        <DailyIntelligenceWinnerTechnicalEvidence
+        <DailyIntelligenceWinnerCompactInsights
+          report={report}
           winner={winner}
-          metrics={metrics}
-          unknowns={unknowns}
-          followUp={followUp}
-          followUpLoading={followUpLoading}
-          followUpError={followUpError}
-          onFollowUpRetry={() => void loadFollowUp()}
+          hasOutcomeFollowUp={Boolean(followUp) || followUpLoading}
         />
+
+        {followUpError && !followUp ? (
+          <p className="text-sm text-muted-foreground max-w-3xl" data-testid="di-followup-inline-error">
+            Статус контрольного измерения недоступен ({followUpError}). Остальная карточка — по
+            замороженному снимку отчёта.
+          </p>
+        ) : null}
+
+        <Disclosure summary="Данные и расчёт">
+          <div className="space-y-8">
+            <DailyIntelligenceWinnerAttentionBlock metrics={metrics} editionRank={winner.rank} />
+
+            <DailyIntelligenceWinnerOutcomeStory
+              followUp={followUp}
+              loading={followUpLoading}
+              error={followUpError}
+              onRetry={() => void loadFollowUp()}
+            />
+
+            <DailyIntelligenceWinnerObservationTimeline
+              reportDate={reportDate}
+              editionRank={winner.rank}
+              appearances={appearances}
+              appearanceTotal={appearanceTotal}
+              appearanceOffset={appearanceOffset}
+              appearancesLoading={appearancesLoading}
+              appearancesError={appearancesError}
+              followUp={followUp}
+              onPageChange={(o) => void loadAppearances(o)}
+              onRetry={() => void loadAppearances(appearanceOffset)}
+            />
+
+            <DailyIntelligenceWinnerTechnicalEvidence
+              winner={winner}
+              metrics={metrics}
+              unknowns={unknowns}
+              followUp={followUp}
+              followUpLoading={followUpLoading}
+              followUpError={followUpError}
+              onFollowUpRetry={() => void loadFollowUp()}
+            />
+          </div>
+        </Disclosure>
       </div>
     </PageShell>
   );

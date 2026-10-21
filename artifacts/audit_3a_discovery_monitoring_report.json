@@ -1,0 +1,566 @@
+{
+  "snapshot_at_utc": "2026-10-13T10:23:45.354344+00:00",
+  "database_url_redacted": "127.0.0.1:5433/youtube_radar_restore_check",
+  "discovery_due_counts_backend": {
+    "due_now": 1659,
+    "due_next_1h_exclusive": 32,
+    "due_next_24h_cumulative": 207,
+    "source": "app.services.operations_overview_queries.count_keywords_due_batch"
+  },
+  "discovery_due_crosscheck": {
+    "not_archived_keywords": 1866,
+    "due_now_rows": 1659,
+    "due_with_null_next_scan_at": 0
+  },
+  "discovery_due_overdue_buckets": {
+    "overdue_0_1h": 31,
+    "overdue_1_24h": 738,
+    "overdue_1_7d": 890
+  },
+  "discovery_by_lifecycle_not_archived": {
+    "probation": 1786,
+    "active": 80
+  },
+  "discovery_by_source_type_not_archived": {
+    "suggestion": 1772,
+    "seed": 80,
+    "related": 10,
+    "channel": 4
+  },
+  "discovery_due_by_source_type": {
+    "suggestion": 1592,
+    "seed": 53,
+    "related": 10,
+    "channel": 4
+  },
+  "discovery_due_by_lifecycle": {
+    "probation": 1606,
+    "active": 53
+  },
+  "discovery_scan_activity_last_24h": {
+    "keyword_scan_run_rows": 728,
+    "distinct_keyword_ids_scanned": 728,
+    "distinct_discovery_run_ids": 182,
+    "scan_run_status_counts": {
+      "ok": 728
+    },
+    "note": "Historical scan activity; not equal to 'became due' count (no due-event log)."
+  },
+  "discovery_scan_activity_last_72h": {
+    "keyword_scan_run_rows": 2232,
+    "distinct_keyword_ids_scanned": 1861,
+    "distinct_discovery_run_ids": 558,
+    "scan_run_status_counts": {
+      "ok": 2232
+    },
+    "note": "Historical scan activity; not equal to 'became due' count (no due-event log)."
+  },
+  "discovery_cycles_last_72h_sample": [
+    {
+      "discovery_run_id": "discovery_20261013T101754Z_29baf9e8",
+      "started_at": "2026-10-13T10:17:57.369410+00:00",
+      "finished_at": "2026-10-13T10:19:07.259933+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T101102Z_a5d4b700",
+      "started_at": "2026-10-13T10:11:05.603222+00:00",
+      "finished_at": "2026-10-13T10:12:35.831002+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T100141Z_2405db4e",
+      "started_at": "2026-10-13T10:01:44.067686+00:00",
+      "finished_at": "2026-10-13T10:04:22.454077+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T095521Z_7ef626c6",
+      "started_at": "2026-10-13T09:55:23.736619+00:00",
+      "finished_at": "2026-10-13T09:56:28.293128+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T094719Z_b41de66b",
+      "started_at": "2026-10-13T09:47:21.907007+00:00",
+      "finished_at": "2026-10-13T09:49:00.797917+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T093943Z_f2e5aff1",
+      "started_at": "2026-10-13T09:39:45.649585+00:00",
+      "finished_at": "2026-10-13T09:41:14.410285+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T093309Z_1c791a7f",
+      "started_at": "2026-10-13T09:33:11.788290+00:00",
+      "finished_at": "2026-10-13T09:34:28.156430+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T092319Z_ea812a0c",
+      "started_at": "2026-10-13T09:23:21.106164+00:00",
+      "finished_at": "2026-10-13T09:26:50.840586+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T091616Z_0faac9b8",
+      "started_at": "2026-10-13T09:16:18.285064+00:00",
+      "finished_at": "2026-10-13T09:18:08.845961+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T090740Z_f2538eae",
+      "started_at": "2026-10-13T09:07:42.539816+00:00",
+      "finished_at": "2026-10-13T09:10:14.968566+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T085846Z_b0f07390",
+      "started_at": "2026-10-13T08:58:48.695660+00:00",
+      "finished_at": "2026-10-13T09:01:53.912524+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T085222Z_b071c98c",
+      "started_at": "2026-10-13T08:52:25.775664+00:00",
+      "finished_at": "2026-10-13T08:53:29.191386+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T084514Z_a5a641ae",
+      "started_at": "2026-10-13T08:45:16.203129+00:00",
+      "finished_at": "2026-10-13T08:46:07.934466+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T083903Z_8dca567e",
+      "started_at": "2026-10-13T08:39:05.371439+00:00",
+      "finished_at": "2026-10-13T08:40:05.011336+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T083139Z_cb301b47",
+      "started_at": "2026-10-13T08:31:42.034104+00:00",
+      "finished_at": "2026-10-13T08:32:52.530106+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T082438Z_f668b606",
+      "started_at": "2026-10-13T08:24:41.331785+00:00",
+      "finished_at": "2026-10-13T08:25:40.614880+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T081558Z_4463906f",
+      "started_at": "2026-10-13T08:16:00.998482+00:00",
+      "finished_at": "2026-10-13T08:19:27.387996+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T080549Z_b6771ec9",
+      "started_at": "2026-10-13T08:05:51.093751+00:00",
+      "finished_at": "2026-10-13T08:09:15.886334+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T075822Z_5fcfd179",
+      "started_at": "2026-10-13T07:58:24.569381+00:00",
+      "finished_at": "2026-10-13T08:00:40.164458+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T074908Z_bebf2903",
+      "started_at": "2026-10-13T07:49:09.927058+00:00",
+      "finished_at": "2026-10-13T07:52:25.671516+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T074137Z_fc71c9b0",
+      "started_at": "2026-10-13T07:41:39.791271+00:00",
+      "finished_at": "2026-10-13T07:43:16.808702+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T073433Z_19acd610",
+      "started_at": "2026-10-13T07:34:35.093213+00:00",
+      "finished_at": "2026-10-13T07:36:24.341105+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T072522Z_4024dd60",
+      "started_at": "2026-10-13T07:25:24.226917+00:00",
+      "finished_at": "2026-10-13T07:28:19.790117+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T071627Z_149ccbe6",
+      "started_at": "2026-10-13T07:16:29.863486+00:00",
+      "finished_at": "2026-10-13T07:20:13.105867+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T070825Z_dd69c6fa",
+      "started_at": "2026-10-13T07:08:28.213219+00:00",
+      "finished_at": "2026-10-13T07:09:48.481457+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T070003Z_9645db26",
+      "started_at": "2026-10-13T07:00:06.519759+00:00",
+      "finished_at": "2026-10-13T07:02:25.330053+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T065205Z_5d8db5ac",
+      "started_at": "2026-10-13T06:52:07.238377+00:00",
+      "finished_at": "2026-10-13T06:54:51.002197+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T064422Z_e2403564",
+      "started_at": "2026-10-13T06:44:24.023845+00:00",
+      "finished_at": "2026-10-13T06:46:04.502418+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T063738Z_3bbc8ff2",
+      "started_at": "2026-10-13T06:37:39.623903+00:00",
+      "finished_at": "2026-10-13T06:39:13.071915+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    },
+    {
+      "discovery_run_id": "discovery_20261013T063006Z_21edbe71",
+      "started_at": "2026-10-13T06:30:07.729615+00:00",
+      "finished_at": "2026-10-13T06:31:48.660398+00:00",
+      "keyword_scan_rows": 4,
+      "distinct_keywords": 4,
+      "failed_scans": 0,
+      "ok_scans": 0
+    }
+  ],
+  "discovery_repeat_failed_keywords_72h": [],
+  "discovery_worker_state": {
+    "status": "running",
+    "lock_holder": "LAPTOP-K7VTSODB:discovery",
+    "lock_acquired_at": "2026-10-12T15:59:35.502579+00:00",
+    "last_cycle_started_at": "2026-10-13T10:17:54.787598+00:00",
+    "last_cycle_finished_at": "2026-10-13T10:19:12.924732+00:00",
+    "last_cycle_status": "ok",
+    "last_run_id": "discovery_20261013T101754Z_29baf9e8",
+    "last_error": null
+  },
+  "monitoring_last_10_cycles": [
+    {
+      "run_id": "monitoring_20261013T100950Z_5287cad2",
+      "started_at": "2026-10-13T10:09:50.626774+00:00",
+      "finished_at": "2026-10-13T10:09:56.165541+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1631,
+      "due_count": 11,
+      "overdue_count": 1,
+      "selected_request_count": 12,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 11,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T095438Z_5bf2d3b2",
+      "started_at": "2026-10-13T09:54:38.520958+00:00",
+      "finished_at": "2026-10-13T09:54:44.010848+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1669,
+      "due_count": 5,
+      "overdue_count": 1,
+      "selected_request_count": 6,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 5,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T093924Z_b13fd89e",
+      "started_at": "2026-10-13T09:39:24.726047+00:00",
+      "finished_at": "2026-10-13T09:39:32.527308+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1678,
+      "due_count": 9,
+      "overdue_count": 1,
+      "selected_request_count": 10,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 9,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T092413Z_538ac08d",
+      "started_at": "2026-10-13T09:24:13.761029+00:00",
+      "finished_at": "2026-10-13T09:24:20.344046+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1688,
+      "due_count": 13,
+      "overdue_count": 1,
+      "selected_request_count": 14,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 13,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T090903Z_b62d6ff8",
+      "started_at": "2026-10-13T09:09:03.585358+00:00",
+      "finished_at": "2026-10-13T09:09:09.633122+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1697,
+      "due_count": 12,
+      "overdue_count": 1,
+      "selected_request_count": 13,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 12,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T085351Z_d0949ebb",
+      "started_at": "2026-10-13T08:53:51.962574+00:00",
+      "finished_at": "2026-10-13T08:53:58.462175+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1720,
+      "due_count": 5,
+      "overdue_count": 1,
+      "selected_request_count": 6,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 5,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T083842Z_5987616b",
+      "started_at": "2026-10-13T08:38:42.331108+00:00",
+      "finished_at": "2026-10-13T08:38:48.041017+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1724,
+      "due_count": 5,
+      "overdue_count": 1,
+      "selected_request_count": 6,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 5,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T082330Z_93f55c02",
+      "started_at": "2026-10-13T08:23:30.968477+00:00",
+      "finished_at": "2026-10-13T08:23:36.459072+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1730,
+      "due_count": 9,
+      "overdue_count": 1,
+      "selected_request_count": 10,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 9,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T080819Z_48a7c90c",
+      "started_at": "2026-10-13T08:08:19.696094+00:00",
+      "finished_at": "2026-10-13T08:08:25.352797+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1735,
+      "due_count": 8,
+      "overdue_count": 1,
+      "selected_request_count": 9,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 8,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    },
+    {
+      "run_id": "monitoring_20261013T075309Z_56c9643f",
+      "started_at": "2026-10-13T07:53:09.533388+00:00",
+      "finished_at": "2026-10-13T07:53:15.322811+00:00",
+      "cycle_status": "partial",
+      "loaded_video_count": 6570,
+      "eligible_video_count": 1742,
+      "due_count": 2,
+      "overdue_count": 1,
+      "selected_request_count": 3,
+      "deferred_request_count": 0,
+      "inserted_snapshot_count": 2,
+      "duplicate_snapshot_count": 0,
+      "missing_count": 1,
+      "fetch_failed_count": 0,
+      "validation_failed_count": 0,
+      "persistence_failed_count": 0,
+      "partial_reason_from_stored_counts": "missing=1",
+      "error_summary": null
+    }
+  ],
+  "monitoring_last_10_status_mix": {
+    "partial": 10,
+    "ok": 0,
+    "other": 0
+  },
+  "monitoring_cycle_status_last_72h": {
+    "ok": 91,
+    "partial": 181
+  },
+  "monitoring_partial_decomposition_72h": {
+    "partial_cycles": 181,
+    "partial_with_missing": 181,
+    "partial_with_fetch_failed": 0,
+    "partial_with_validation_failed": 0,
+    "partial_with_persistence_failed": 0,
+    "partial_all_failure_counts_zero": 0
+  },
+  "monitoring_worker_state": {
+    "status": "running",
+    "lock_holder": "LAPTOP-K7VTSODB:1",
+    "lock_acquired_at": "2026-10-12T15:59:39.944067+00:00",
+    "updated_at": "2026-10-13T10:09:56.165541+00:00"
+  }
+}

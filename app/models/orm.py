@@ -1073,6 +1073,197 @@ class SavedVideo(Base):
     )
 
 
+class SavedVideoSimilarWatch(Base):
+    """User-confirmed similar-video search watch for one SavedVideo (v1)."""
+
+    __tablename__ = "saved_video_similar_watches"
+
+    saved_video_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_videos.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="draft")
+    queries_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    suggested_queries_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    next_scan_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    last_scan_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_scan_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    last_display_state: Mapped[str] = mapped_column(String(32), nullable=False, default="not_configured")
+    scan_lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    batch_query_offset: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class SavedVideoSimilarScan(Base):
+    __tablename__ = "saved_video_similar_scans"
+    __table_args__ = (
+        UniqueConstraint("scan_run_id", name="uq_saved_video_similar_scan_run_id"),
+        Index("ix_saved_video_similar_scans_video_started", "saved_video_id", "started_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_video_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_videos.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    scan_run_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    trigger: Mapped[str] = mapped_column(String(16), nullable=False)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="running")
+    queries_attempted: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    queries_failed: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    new_findings_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
+class SavedVideoSimilarFindingFeedback(Base):
+    """User fit / not-fit on a similar-watch finding (measurement only, v1)."""
+
+    __tablename__ = "saved_video_similar_finding_feedback"
+    __table_args__ = (
+        UniqueConstraint("saved_video_id", "finding_id", name="uq_similar_finding_feedback"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_video_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_videos.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    finding_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_video_similar_findings.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    verdict: Mapped[str] = mapped_column(String(16), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class SavedVideoSimilarFinding(Base):
+    __tablename__ = "saved_video_similar_findings"
+    __table_args__ = (
+        UniqueConstraint("saved_video_id", "video_id", name="uq_saved_video_similar_finding_video"),
+        Index("ix_saved_video_similar_findings_video_last", "saved_video_id", "last_found_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_video_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_videos.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    matched_query: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    first_scan_id: Mapped[int | None] = mapped_column(
+        ForeignKey("saved_video_similar_scans.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    last_scan_id: Mapped[int | None] = mapped_column(
+        ForeignKey("saved_video_similar_scans.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    first_found_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    last_found_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
+class SavedFamilyTopicWatch(Base):
+    """User-confirmed topic video search watch for one SavedFamily (shares similar-watch budget)."""
+
+    __tablename__ = "saved_family_topic_watches"
+
+    saved_family_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_families.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="draft")
+    queries_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    suggested_queries_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    next_scan_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    last_scan_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_scan_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    last_display_state: Mapped[str] = mapped_column(String(32), nullable=False, default="not_configured")
+    scan_lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    batch_query_offset: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class SavedFamilyTopicScan(Base):
+    __tablename__ = "saved_family_topic_scans"
+    __table_args__ = (
+        UniqueConstraint("scan_run_id", name="uq_saved_family_topic_scan_run_id"),
+        Index("ix_saved_family_topic_scans_family_started", "saved_family_id", "started_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_family_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_families.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    scan_run_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    trigger: Mapped[str] = mapped_column(String(16), nullable=False)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="running")
+    queries_attempted: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    queries_failed: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    new_findings_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
+class SavedFamilyTopicFinding(Base):
+    __tablename__ = "saved_family_topic_findings"
+    __table_args__ = (
+        UniqueConstraint("saved_family_id", "video_id", name="uq_saved_family_topic_finding_video"),
+        Index("ix_saved_family_topic_findings_family_last", "saved_family_id", "last_found_at"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    saved_family_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_families.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    video_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    matched_query: Mapped[str] = mapped_column(String(512), nullable=False, default="")
+    first_scan_id: Mapped[int | None] = mapped_column(
+        ForeignKey("saved_family_topic_scans.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    last_scan_id: Mapped[int | None] = mapped_column(
+        ForeignKey("saved_family_topic_scans.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    first_found_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    last_found_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    payload_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+
+
 class SavedVideoObservation(Base):
     __tablename__ = "saved_video_observations"
     __table_args__ = (

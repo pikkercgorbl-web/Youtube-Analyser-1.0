@@ -1,0 +1,169 @@
+{
+  "database": "youtube_radar_restore_check",
+  "transaction_read_only": "on",
+  "checks": [
+    {
+      "name": "has_findings",
+      "ok": true,
+      "detail": "2026-10-10"
+    },
+    {
+      "name": "coverage_pydantic",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "name": "coverage_sum_equals_winner_count",
+      "ok": true,
+      "detail": {
+        "winner_count": 50,
+        "sum_counts": 50,
+        "counts": {
+          "MEASURED_POST_SIGNAL": 18,
+          "NOT_MATURED": 32
+        }
+      }
+    },
+    {
+      "name": "coverage_one_entry_per_finding",
+      "ok": true,
+      "detail": {
+        "items_len": 50,
+        "unique": 50
+      }
+    },
+    {
+      "name": "http_outcome_coverage",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "name": "http_outcome_follow_up",
+      "ok": true,
+      "detail": 200
+    }
+  ],
+  "coverage_by_date": {
+    "2026-10-10": {
+      "winner_count": 50,
+      "coverage_by_category": {
+        "MEASURED_POST_SIGNAL": 18,
+        "NOT_MATURED": 32
+      },
+      "edition_signal": "2026-10-10T23:42:46.664947+00:00",
+      "reference_evaluated_at": "2026-10-12T14:56:05.956343+00:00"
+    }
+  },
+  "examples": {
+    "MEASURED_POST_SIGNAL": {
+      "video_id": "kdYkW0mjt5E",
+      "rank": 1,
+      "coverage_category": "MEASURED_POST_SIGNAL",
+      "outcome_window_phase": "closed",
+      "edition_signal": "2026-10-10T23:42:46.664947+00:00",
+      "discovered_at": "2026-10-09T19:58:59.709873+00:00",
+      "outcome_window_target_at": "2026-10-12T19:58:59.709873+00:00",
+      "horizon_hours": 72,
+      "tolerance_hours": 12,
+      "outcome_snapshot_at": "2026-10-12T14:07:24.650705+00:00",
+      "attention_views_source": "frozen_payload_unknown_source",
+      "baseline_provenance_verified": false,
+      "metrics_interpretation": "verified_post_signal_growth_unavailable",
+      "comparison_metrics": {
+        "views_at_attention_frozen": 89802,
+        "views_at_outcome_horizon": 98001,
+        "delta_views_descriptive": 8199,
+        "descriptive_growth_ratio": 1.091301,
+        "verified_post_signal_growth": null,
+        "verified_post_signal_growth_ratio": null,
+        "elapsed_hours_edition_signal_to_outcome": 38.4106,
+        "metrics_reason": "baseline_measurement_time_not_verified"
+      },
+      "frozen_delayed_outcome": {
+        "delayed_outcome_state": "pending",
+        "delayed_outcome_growth": null
+      },
+      "reference_evaluated_at": "2026-10-12T14:56:06.012004+00:00",
+      "followup_service_ms": 22.03,
+      "nullable_zero_issues": []
+    },
+    "NOT_MATURED": {
+      "video_id": "mwxI0_-hXvk",
+      "rank": 2,
+      "coverage_category": "NOT_MATURED",
+      "outcome_window_phase": "open_awaiting_measurement",
+      "edition_signal": "2026-10-10T23:42:46.664947+00:00",
+      "discovered_at": "2026-10-10T01:03:25.624516+00:00",
+      "outcome_window_target_at": "2026-10-13T01:03:25.624516+00:00",
+      "horizon_hours": 72,
+      "tolerance_hours": 12,
+      "outcome_snapshot_at": null,
+      "attention_views_source": "frozen_payload_unknown_source",
+      "baseline_provenance_verified": false,
+      "metrics_interpretation": "no_outcome_measurement",
+      "comparison_metrics": {
+        "views_at_attention_frozen": 38351,
+        "views_at_outcome_horizon": null,
+        "delta_views_descriptive": null,
+        "descriptive_growth_ratio": null,
+        "verified_post_signal_growth": null,
+        "verified_post_signal_growth_ratio": null,
+        "elapsed_hours_edition_signal_to_outcome": null,
+        "metrics_reason": "no_valid_outcome_measurement"
+      },
+      "frozen_delayed_outcome": {
+        "delayed_outcome_state": "pending",
+        "delayed_outcome_growth": null
+      },
+      "reference_evaluated_at": "2026-10-12T14:56:06.030607+00:00",
+      "followup_service_ms": 17.73,
+      "nullable_zero_issues": []
+    }
+  },
+  "api_http": {
+    "outcome_coverage": {
+      "status": 200,
+      "ok": true
+    },
+    "outcome_follow_up": {
+      "status": 200,
+      "video_id": "kdYkW0mjt5E",
+      "ok": true
+    }
+  },
+  "performance": {
+    "coverage_service_ms": 134.99
+  },
+  "verdict_inputs": {
+    "categories_on_primary_date": [
+      "MEASURED_POST_SIGNAL",
+      "NOT_MATURED"
+    ],
+    "missing_categories_on_primary_date": [
+      "MEASURED_PRE_SIGNAL",
+      "MATURED_MISSING",
+      "INVALID_TIMELINE",
+      "INSUFFICIENT_EVIDENCE"
+    ],
+    "top_report_dates_by_winners": [
+      {
+        "report_date": "2026-10-10",
+        "winners": 50
+      },
+      {
+        "report_date": "2026-10-11",
+        "winners": 50
+      },
+      {
+        "report_date": "2026-10-12",
+        "winners": 50
+      }
+    ]
+  },
+  "summary": {
+    "primary_report_date": "2026-10-10",
+    "checks_passed": 6,
+    "checks_failed": 0,
+    "failed_names": []
+  }
+}

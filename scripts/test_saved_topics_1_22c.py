@@ -259,6 +259,7 @@ def test_absence_not_zero_counts() -> None:
     assert payload["present_in_snapshot"] is False
     assert payload["absence_message"] == FAMILY_ABSENCE_MESSAGE
     assert "counts" not in payload
+    assert payload.get("observation_status") == "absent"
 
 
 def test_archive_restore() -> None:
@@ -309,6 +310,34 @@ def test_observation_failure_rolls_back_publication() -> None:
     assert run.run_id == "run_a"
 
 
+def test_api_watch_summary_absent_and_milestones() -> None:
+    session = _session()
+    persist_attention_result(session, _result(run_id="run_a"), run_id="run_a")
+    session.commit()
+    save_topic(session, family_key="family:test:one")
+    session.commit()
+    persist_attention_result(
+        session,
+        _result(run_id="run_b", stamp=NOW.replace(hour=15), include_family=False),
+        run_id="run_b",
+    )
+    session.commit()
+    client = _api_client(session)
+    topic_id = session.scalar(select(SavedTopic.id))
+    detail = client.get(f"/api/saved-topics/{topic_id}")
+    assert detail.status_code == 200
+    body = detail.json()
+    ws = body["watch_summary"]
+    assert ws["observation_count"] == 2
+    assert ws["analysis_lifecycle"] == "absent_in_latest"
+    assert ws["present_in_latest_snapshot"] is False
+    assert any(m["kind"] == "saved" for m in ws["milestones"])
+    assert any(m["kind"] == "not_detected" for m in ws["milestones"])
+    listed = client.get("/api/saved-topics").json()["items"][0]
+    assert listed["watch_headline"]
+    assert listed["observation_count"] == 2
+
+
 def test_api_save_and_list() -> None:
     session = _session()
     persist_attention_result(session, _result(run_id="run_api"), run_id="run_api")
@@ -333,6 +362,7 @@ def main() -> None:
         test_absence_not_zero_counts,
         test_archive_restore,
         test_observation_failure_rolls_back_publication,
+        test_api_watch_summary_absent_and_milestones,
         test_api_save_and_list,
     ]
     for test in tests:

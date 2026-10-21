@@ -263,15 +263,17 @@ export function ManualSearchVideoCard({ item, ctx, metricsPending, onSaved }: Pr
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           {item.video.channel_id?.trim() ? (
             <Link
-                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "w-full sm:w-auto")}
-
-                href={buildChannelSingleAnalysisUrl({
-                  channelId: item.video.channel_id.trim(),
-                  focusVideoId: videoId,
-                })}
-              >
-                Анализ канала
-              </Link>
+              href={buildChannelSingleAnalysisUrl({
+                channelId: item.video.channel_id.trim(),
+                focusVideoId: videoId,
+              })}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "sm" }),
+                "w-full sm:w-auto",
+              )}
+            >
+              Анализ канала
+            </Link>
           ) : null}
           <SaveVideoButton
             videoId={videoId}

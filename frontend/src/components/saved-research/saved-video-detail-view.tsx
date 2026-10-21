@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
@@ -17,6 +18,7 @@ import { SavedResearchAnalystFeedbackPanel } from "@/components/saved-research/s
 import { SavedResearchMetadataForm } from "@/components/saved-research/saved-research-metadata-form";
 import { SavedResearchValidationPanel } from "@/components/saved-research/saved-research-validation-panel";
 import { YoutubeThumb } from "@/components/opportunities/youtube-thumb";
+import { savedResearchBackLink } from "@/lib/saved-research-return-nav";
 import {
   familyDetailHref,
   formatOptionalAge,
@@ -34,6 +36,8 @@ import {
 } from "@/lib/api";
 import { ChannelBaselinePanel } from "@/components/opportunities/channel-baseline-panel";
 import { VideoDiscoveryKeywords } from "@/components/opportunities/video-discovery-keywords";
+import { FrozenVideoHighlightBlock } from "@/components/saved-research/frozen-video-highlight-block";
+import { frozenVideoHighlightFromPayload } from "@/lib/opportunity-winner-presentation";
 import {
   channelRelativeFromEvidence,
   familyLabelsFromContext,
@@ -54,6 +58,7 @@ import type {
   SavedVideoObservation,
 } from "@/lib/saved-research-types";
 import { buildManualSearchFromSavedUrl } from "@/lib/manual-search-url";
+import { SavedVideoSimilarWatchPanel } from "@/components/saved-research/saved-video-similar-watch-panel";
 import { cn } from "@/lib/utils";
 
 const HISTORY_PAGE = 20;
@@ -66,6 +71,11 @@ function winnerFromObservation(obs: SavedVideoObservation | null): Record<string
 }
 
 export function SavedVideoDetailView({ videoId }: { videoId: number }) {
+  const searchParams = useSearchParams();
+  const backLink = useMemo(
+    () => savedResearchBackLink(searchParams.get("returnTo")),
+    [searchParams],
+  );
   const [detail, setDetail] = useState<SavedVideoDetail | null>(null);
   const [history, setHistory] = useState<SavedVideoObservation[]>([]);
   const [historyTotal, setHistoryTotal] = useState(0);
@@ -130,6 +140,10 @@ export function SavedVideoDetailView({ videoId }: { videoId: number }) {
   const frozenRel = channelRelativeFromEvidence(frozenEvidence);
   const liveRel = channelRelativeFromEvidence(
     liveWinner ? (liveWinner as Record<string, unknown>) : null,
+  );
+  const frozenHighlight = useMemo(
+    () => frozenVideoHighlightFromPayload(detail?.frozen_snapshot ?? {}),
+    [detail?.frozen_snapshot],
   );
 
   const onRefreshMetrics = async () => {
@@ -205,31 +219,25 @@ export function SavedVideoDetailView({ videoId }: { videoId: number }) {
   );
   const savedFamilies = familyLabelsFromContext(frozen);
   const liveFamilies = live?.family_memberships ?? [];
-  const reasons = frozenHumanReasons(frozen);
+  const frozenReasonCodes = Array.isArray(frozenEvidence?.reason_codes)
+    ? (frozenEvidence!.reason_codes as string[])
+    : [];
+  const frozenHumanReasonLines = frozenHumanReasons(frozen);
 
   return (
     <PageShell>
       <Link
-        href="/saved"
+        href={backLink.href}
         className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "w-fit")}
       >
         <ArrowLeft className="mr-1 h-4 w-4" />
-        Сохранённое
+        {backLink.label}
       </Link>
       <div className="mt-4 grid gap-6 lg:grid-cols-[minmax(0,280px)_1fr]">
         <YoutubeThumb videoId={detail.video_id} title={title} className="aspect-video w-full rounded-xl" />
         <div>
           <PageHeader title={title} lead={String(identity.channel_title ?? "")} />
-          {reasons.length > 0 ? (
-            <div className="mt-3 rounded-xl border border-border/60 bg-muted/20 p-3 text-sm">
-              <p className="font-medium">Почему сохранили (снимок Winners)</p>
-              <ul className="mt-2 list-disc pl-5 space-y-1 text-muted-foreground">
-                {reasons.map((r) => (
-                  <li key={r}>{r}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+          <FrozenVideoHighlightBlock view={frozenHighlight} />
           <div className="mt-2 flex flex-wrap gap-2">
             {!detail.archived_at ? (
               <Link
@@ -329,6 +337,32 @@ export function SavedVideoDetailView({ videoId }: { videoId: number }) {
             </div>
           </dl>
           <ChannelBaselinePanel rel={frozenRel} className="mt-3" />
+          {frozenHumanReasonLines.length > 0 ||
+          frozenReasonCodes.length > 0 ||
+          frozenRel ? (
+            <details className="mt-4 text-sm" data-testid="saved-video-how-calculated">
+              <summary className="cursor-pointer font-medium text-foreground">
+                Как рассчитано
+              </summary>
+              <div className="mt-3 space-y-3 text-muted-foreground">
+                {frozenHumanReasonLines.length > 0 ? (
+                  <ul className="list-disc space-y-1 pl-5">
+                    {frozenHumanReasonLines.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Текстовые пояснения Radar в снимке не сохранены.</p>
+                )}
+                {frozenReasonCodes.length > 0 ? (
+                  <p className="font-mono text-xs text-muted-foreground">
+                    reason_codes: {frozenReasonCodes.join(", ")}
+                  </p>
+                ) : null}
+                {frozenRel ? <ChannelBaselinePanel rel={frozenRel} /> : null}
+              </div>
+            </details>
+          ) : null}
         </SectionPanel>
 
         <SectionPanel title="Сейчас (последнее наблюдение)" description="Не пересчитывает Attention">
@@ -336,6 +370,19 @@ export function SavedVideoDetailView({ videoId }: { videoId: number }) {
             <>
               {detail.attention_absence_message ? (
                 <p className="text-sm text-muted-foreground">{detail.attention_absence_message}</p>
+              ) : null}
+              {!live.video_present_in_attention && live.monitoring_snapshot_available ? (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Видео не в текущей подборке Attention, но в Monitoring уже есть снимки — оно могло
+                  попасть в corpus раньше (Discovery), независимо от того, откуда вы его сохранили.
+                </p>
+              ) : null}
+              {!live.video_present_in_attention && !live.monitoring_snapshot_available ? (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Сохранение в портфель не включает автоматический Monitoring и не добавляет ролик в
+                  подборку Attention. Наблюдение в Radar идёт через Discovery и read model; здесь вы
+                  фиксируете заметку и метрики вручную.
+                </p>
               ) : null}
               <dl className="grid grid-cols-2 gap-3 text-sm">
                 <div>
@@ -389,6 +436,13 @@ export function SavedVideoDetailView({ videoId }: { videoId: number }) {
           keywords={detail.discovery_keywords ?? []}
         />
       </SectionPanel>
+
+      <div className="mt-6">
+        <SavedVideoSimilarWatchPanel
+          savedVideoId={detail.id}
+          archived={Boolean(detail.archived_at)}
+        />
+      </div>
 
       <SectionPanel title="Подборки с этим видео" className="mt-6">
         <p className="text-sm font-medium">На момент сохранения</p>

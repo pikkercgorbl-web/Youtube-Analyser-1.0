@@ -48,10 +48,19 @@ export function ObservationHistoryPanel(props: VideoProps | FamilyProps) {
     intro = `Точек наблюдения: ${total}.`;
   }
 
+  const sectionTitle = props.kind === "family" ? "Наблюдения Attention" : "История наблюдений";
+  const sectionLead =
+    props.kind === "family"
+      ? "Снимки темы из прогонов Attention Engine — отдельно от поиска новых видео по теме выше."
+      : intro;
+
   return (
     <section className="rounded-xl border border-border p-4 space-y-3">
-      <h2 className="font-semibold">История наблюдений</h2>
-      <p className="text-sm text-muted-foreground">{intro}</p>
+      <h2 className="font-semibold">{sectionTitle}</h2>
+      <p className="text-sm text-muted-foreground">{props.kind === "family" ? sectionLead : intro}</p>
+      {props.kind === "family" && total > 0 ? (
+        <p className="text-sm text-muted-foreground">{intro}</p>
+      ) : null}
       <ul className="space-y-3">
         {props.kind === "video"
           ? props.items.map((row) => (

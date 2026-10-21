@@ -6,7 +6,8 @@ import json
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import func, select
+from sqlalchemy import cast, func, select
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Session
 
 from app.models.orm import (
@@ -19,7 +20,20 @@ from app.models.orm import (
 from app.services.metrics import ensure_utc
 from app.services.saved_research import export_frozen_family, export_frozen_video, latest_family_observations, latest_video_observations
 from app.services.saved_research_feedback import latest_feedback_by_entities
+from app.services.saved_research_daily_intelligence import DAILY_INTELLIGENCE_SAVE_ANCHOR_KIND
 from app.services.saved_research_validation import compute_family_validation, compute_video_validation
+
+NEW_ANALYTICAL_OBSERVATION_IN_PERIOD_DEFINITION = (
+    "Distinct SavedVideo / SavedFamily entities (every row in saved_videos / saved_families, "
+    "including archived bookmarks — archive does not delete observation history; not limited to "
+    "saved_in_period) with at least one row in saved_video_observations or "
+    "saved_family_observations where observed_at is within the report period, "
+    "observation_kind is not "
+    f"{DAILY_INTELLIGENCE_SAVE_ANCHOR_KIND!r} (Daily Intelligence save anchor), "
+    "and observed_at is strictly after the entity's earliest such analytical row. "
+    "User SavedResearchEvent rows (status, notes) are excluded. "
+    "Each entity counts at most once."
+)
 
 
 def _parse_json(text: str) -> dict[str, Any]:
@@ -58,6 +72,81 @@ def _observation_counts_videos(session: Session, ids: list[int]) -> dict[int, in
         .group_by(SavedVideoObservation.saved_video_id),
     ).all()
     return {int(r[0]): int(r[1]) for r in rows}
+
+
+def _observation_kind_expr(session: Session, payload_column):
+    """SQLite: json_extract; PostgreSQL: payload_json::jsonb ->> 'observation_kind'."""
+    if session.get_bind().dialect.name == "postgresql":
+        return cast(payload_column, JSONB).op("->>")("observation_kind")
+    return func.json_extract(payload_column, "$.observation_kind")
+
+
+def _is_analytical_observation_kind(kind_expr):
+    return (kind_expr.is_(None)) | (kind_expr != DAILY_INTELLIGENCE_SAVE_ANCHOR_KIND)
+
+
+def _count_entities_with_new_analytical_observation_in_period(
+    session: Session,
+    observation_model: type[SavedVideoObservation] | type[SavedFamilyObservation],
+    entity_fk_column,
+    *,
+    period_start: datetime | None,
+    period_end: datetime | None,
+) -> int:
+    if period_start is None and period_end is None:
+        return 0
+
+    kind = _observation_kind_expr(session, observation_model.payload_json)
+    analytical = _is_analytical_observation_kind(kind)
+
+    first_analytical = (
+        select(
+            entity_fk_column.label("entity_id"),
+            func.min(observation_model.observed_at).label("first_at"),
+        )
+        .where(analytical)
+        .group_by(entity_fk_column)
+        .subquery()
+    )
+
+    stmt = select(func.count(func.distinct(entity_fk_column))).select_from(observation_model)
+    stmt = stmt.join(
+        first_analytical,
+        first_analytical.c.entity_id == entity_fk_column,
+    )
+    stmt = stmt.where(analytical)
+    stmt = stmt.where(observation_model.observed_at > first_analytical.c.first_at)
+    if period_start is not None:
+        stmt = stmt.where(observation_model.observed_at >= ensure_utc(period_start))
+    if period_end is not None:
+        stmt = stmt.where(observation_model.observed_at <= ensure_utc(period_end))
+
+    return int(session.scalar(stmt) or 0)
+
+
+def _cohort_with_new_analytical_observation_in_period(
+    session: Session,
+    *,
+    period_start: datetime | None,
+    period_end: datetime | None,
+) -> int | None:
+    if period_start is None and period_end is None:
+        return None
+    videos = _count_entities_with_new_analytical_observation_in_period(
+        session,
+        SavedVideoObservation,
+        SavedVideoObservation.saved_video_id,
+        period_start=period_start,
+        period_end=period_end,
+    )
+    families = _count_entities_with_new_analytical_observation_in_period(
+        session,
+        SavedFamilyObservation,
+        SavedFamilyObservation.saved_family_id,
+        period_start=period_start,
+        period_end=period_end,
+    )
+    return videos + families
 
 
 def _observation_counts_families(session: Session, ids: list[int]) -> dict[int, int]:
@@ -192,6 +281,12 @@ def build_research_portfolio_report(
         state = validation["evidence_state"]
         evidence_state_distribution[state] = evidence_state_distribution.get(state, 0) + 1
 
+    new_analytical_obs_in_period = _cohort_with_new_analytical_observation_in_period(
+        session,
+        period_start=period_start,
+        period_end=period_end,
+    )
+
     research_events = _load_research_events_in_period(
         session,
         period_start=period_start,
@@ -209,6 +304,7 @@ def build_research_portfolio_report(
 
     saved_items: list[dict[str, Any]] = []
     for row in cohort_videos:
+        latest_obs = row.latest_observed_at
         saved_items.append(
             {
                 "kind": "video",
@@ -218,9 +314,12 @@ def build_research_portfolio_report(
                 "current_status": _current_status_key(row.archived_at, row.status),
                 "has_latest_feedback": row.id in fb_videos,
                 "observation_count": obs_counts_v.get(row.id, 0),
+                "video_id": row.video_id,
+                "latest_observed_at": ensure_utc(latest_obs).isoformat() if latest_obs else None,
             },
         )
     for row in cohort_families:
+        latest_obs = row.latest_observed_at
         saved_items.append(
             {
                 "kind": "family",
@@ -230,6 +329,8 @@ def build_research_portfolio_report(
                 "current_status": _current_status_key(row.archived_at, row.status),
                 "has_latest_feedback": row.id in fb_families,
                 "observation_count": obs_counts_f.get(row.id, 0),
+                "video_id": None,
+                "latest_observed_at": ensure_utc(latest_obs).isoformat() if latest_obs else None,
             },
         )
     saved_items.sort(key=lambda item: item["saved_at"], reverse=True)
@@ -255,6 +356,7 @@ def build_research_portfolio_report(
             "observations": (
                 "Append-only saved_*_observations; evidence buckets use latest row and counts."
             ),
+            "new_analytical_observation_in_period": NEW_ANALYTICAL_OBSERVATION_IN_PERIOD_DEFINITION,
             "legacy_topics_saved_in_period": (
                 "SavedTopic.created_at within period; see top-level topics_saved_in_period."
             ),
@@ -277,6 +379,7 @@ def build_research_portfolio_report(
             "cohort_with_any_observation": cohort_with_any_observation,
             "cohort_with_multiple_observations": cohort_with_multiple_observations,
             "evidence_state_distribution": evidence_state_distribution,
+            "cohort_with_new_analytical_observation_in_period": new_analytical_obs_in_period,
         },
         "pending_signals": {
             "cohort_still_watching": still_watching,

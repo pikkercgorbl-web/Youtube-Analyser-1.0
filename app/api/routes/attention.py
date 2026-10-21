@@ -9,6 +9,7 @@ from app.models.db import get_db
 from app.models.schemas import (
     AttentionChannelListResponse,
     AttentionChannelMomentumResponse,
+    AttentionChannelRepresentativeVideoResponse,
     AttentionParticipatingChannelResponse,
     AttentionPatternDetailResponse,
     AttentionPatternFamilyDetailResponse,
@@ -40,6 +41,7 @@ from app.services.attention_pattern_hydrate import (
     hydrate_related_keywords,
     hydrate_videos_by_ids,
 )
+from app.services.attention_channel_momentum_hydrate import resolve_channel_representative_videos
 from app.services.attention_read_model import load_attention_snapshot
 from app.services.opportunity_family_presentation import (
     OpportunityFamilyPresentation,
@@ -169,7 +171,12 @@ def _pattern_response(row: PatternCandidate) -> AttentionPatternResponse:
     )
 
 
-def _channel_response(row: ChannelMomentum) -> AttentionChannelMomentumResponse:
+def _channel_response(
+    row: ChannelMomentum,
+    *,
+    representative_videos: list[dict] | None = None,
+) -> AttentionChannelMomentumResponse:
+    rep_payload = representative_videos or []
     return AttentionChannelMomentumResponse(
         channel_id=row.channel_id,
         channel_title=row.channel_title,
@@ -188,6 +195,9 @@ def _channel_response(row: ChannelMomentum) -> AttentionChannelMomentumResponse:
         first_observed_at=row.first_observed_at,
         latest_observed_at=row.latest_observed_at,
         representative_video_ids=list(row.representative_video_ids),
+        representative_videos=[
+            AttentionChannelRepresentativeVideoResponse(**item) for item in rep_payload
+        ],
         reason_codes=list(row.reason_codes),
         human_reasons=list(row.human_reasons),
         recent_window_days=row.recent_window_days,
@@ -480,8 +490,16 @@ def list_attention_channels(
             total=0,
         )
     items = result.channels[offset : offset + limit]
+    rep_by_channel = resolve_channel_representative_videos(
+        db,
+        items,
+        attention_computed_at=result.summary.computed_at,
+    )
     return AttentionChannelListResponse(
-        items=[_channel_response(row) for row in items],
+        items=[
+            _channel_response(row, representative_videos=rep_by_channel.get(row.channel_id, []))
+            for row in items
+        ],
         data_source=source,
         run_id=result.summary.run_id,
         computed_at=result.summary.computed_at,

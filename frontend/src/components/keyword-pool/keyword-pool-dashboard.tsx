@@ -333,11 +333,13 @@ export function KeywordPoolDashboard() {
             </div>
 
             {metrics.total === 0 ? (
-              <EmptyState
-                title="Пул ключей пуст."
-                description="Добавьте ключи через исследование ниш или backend-очередь."
-                compact
-              />
+              <div data-testid="keyword-pool-empty">
+                <EmptyState
+                  title="Пул ключей пуст"
+                  description="Это не ошибка сервера: в базе нет строк target_keywords. Первичное заполнение — по READ.ME (§2.3): скопируйте data/target_keywords.example.json в data/target_keywords.json и выполните python -m scripts.seed_target_keywords. Discovery worker использует этот пул; без ключей сканы не дадут новых находок для Attention."
+                  compact
+                />
+              </div>
             ) : filtered.length === 0 ? (
               <EmptyState
                 title="Нет ключей по фильтрам"

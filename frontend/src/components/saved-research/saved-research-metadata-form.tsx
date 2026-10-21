@@ -2,6 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  nativeSelectClassName,
+  nativeSelectOptionClassName,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { SAVED_RESEARCH_STATUS_LABELS } from "@/lib/saved-research-labels";
 import type { SavedResearchStatus } from "@/lib/saved-research-types";
@@ -47,16 +51,17 @@ export function SavedResearchMetadataForm({
   return (
     <section className="rounded-xl border border-border p-4 space-y-4">
       <h2 className="font-semibold">Ваши заметки</h2>
-      <label className="block text-sm">
-        Статус
+      <label className="block text-sm text-foreground">
+        <span className="font-medium">Статус</span>
         <select
-          className="mt-1 w-full rounded-md border border-input bg-transparent px-2 py-2"
+          aria-label="Статус сохранённого исследования"
+          className={`mt-1 ${nativeSelectClassName}`}
           value={status}
           onChange={(e) => onStatusChange(e.target.value as SavedResearchStatus)}
           disabled={Boolean(archivedAt)}
         >
           {STATUSES.map((s) => (
-            <option key={s} value={s}>
+            <option key={s} value={s} className={nativeSelectOptionClassName}>
               {SAVED_RESEARCH_STATUS_LABELS[s]}
             </option>
           ))}

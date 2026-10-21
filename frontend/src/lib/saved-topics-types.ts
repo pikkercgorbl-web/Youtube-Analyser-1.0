@@ -7,6 +7,31 @@ export type SavedTopicObservation = {
   payload: Record<string, unknown>;
 };
 
+export type SavedTopicWatchMilestone = {
+  kind: "saved" | "detected_again" | "not_detected";
+  occurred_at: string;
+  attention_run_id?: string | null;
+};
+
+export type SavedTopicWatchSummary = {
+  headline: string;
+  observation_count: number;
+  saved_at: string;
+  last_observation_at: string | null;
+  last_present_at: string | null;
+  last_absent_at: string | null;
+  latest_attention_run_at: string | null;
+  present_in_latest_snapshot: boolean | null;
+  analysis_lifecycle:
+    | "present_in_latest"
+    | "absent_in_latest"
+    | "no_new_attention_run"
+    | "awaiting_first_follow_up"
+    | "no_observations";
+  stale_message: string | null;
+  milestones: SavedTopicWatchMilestone[];
+};
+
 export type SavedTopicListItem = {
   id: number;
   family_key: string;
@@ -19,6 +44,10 @@ export type SavedTopicListItem = {
   archived_at: string | null;
   latest_observation_at: string | null;
   present_in_latest_snapshot: boolean | null;
+  watch_headline?: string | null;
+  watch_stale_message?: string | null;
+  analysis_lifecycle?: string | null;
+  observation_count?: number;
 };
 
 export type FindingRating = "USEFUL" | "NOT_USEFUL" | "UNCLEAR";
@@ -48,6 +77,7 @@ export type SavedTopicDetail = {
   live_observation: SavedTopicObservation | null;
   count_deltas: Record<string, number> | null;
   latest_feedback: SavedTopicFeedback | null;
+  watch_summary?: SavedTopicWatchSummary | null;
 };
 
 export type SavedTopicTimelineItem = {

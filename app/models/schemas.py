@@ -348,6 +348,91 @@ class ChannelSingleAnalysisEnrichResponse(BaseModel):
     enrichment_error: str | None = None
 
 
+class FormatReconnaissanceDirectionResponse(BaseModel):
+    query: str
+    rationale: str
+
+
+class FormatReconnaissancePublicationExample(BaseModel):
+    video_id: str
+    title: str
+    views_count: int = 0
+    published_text: str | None = None
+    published_at: str | None = None
+    duration_text: str | None = None
+    duration_seconds: int | None = None
+    match_tier: str | None = None
+    match_score: int | None = None
+    match_reasons: list[str] = Field(default_factory=list)
+    matched_query: str | None = None
+    url: str = ""
+
+
+class FormatReconnaissanceChannelResponse(BaseModel):
+    channel_id: str
+    channel_title: str = ""
+    subscribers_count: int | None = None
+    search_hits: int = 0
+    feed_loaded_count: int = 0
+    likely_format_count: int = 0
+    partial_or_better_count: int = 0
+    pattern_label: str = ""
+    example_publications: list[FormatReconnaissancePublicationExample] = Field(default_factory=list)
+    preview_error: str | None = None
+
+
+class FormatReconnaissanceRequest(BaseModel):
+    format_description: str = Field(..., min_length=10, max_length=4000)
+    example_video_url: str | None = Field(default=None, max_length=512)
+    search_queries: list[str] | None = Field(
+        default=None,
+        max_length=3,
+        description="Optional override of suggested queries (max 3)",
+    )
+    results_per_query: int = Field(default=25, ge=10, le=50)
+    max_channel_previews: int = Field(default=6, ge=1, le=10)
+
+
+class FormatReconnaissanceResponse(BaseModel):
+    format_description: str
+    example_video_title: str | None = None
+    suggested_directions: list[FormatReconnaissanceDirectionResponse] = Field(default_factory=list)
+    queries_used: list[str] = Field(default_factory=list)
+    search_hits_total: int = 0
+    unique_channels_in_search: int = 0
+    channels: list[FormatReconnaissanceChannelResponse] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+    query_cost_note: str = ""
+    manual_verification: list[str] = Field(default_factory=list)
+    generated_at: datetime
+
+
+class CompetitorChannelPreviewRequest(BaseModel):
+    """One channel for competitor overview (read-only)."""
+
+    input_ref: str | None = Field(
+        default=None,
+        max_length=512,
+        description="Original user ref for retry/display",
+    )
+    channel_id: str | None = Field(default=None, max_length=64)
+    channel_ref: str | None = Field(default=None, max_length=512)
+
+
+class CompetitorChannelPreviewResponse(BaseModel):
+    input_ref: str
+    channel_id: str
+    channel_title: str = ""
+    subscribers_count: int | None = Field(default=None, ge=0)
+    channel_avatar_url: str = ""
+    feed_loaded_count: int = Field(ge=0)
+    regular_confirmed_count: int = Field(ge=0)
+    publications: list[ChannelSingleAnalysisPublication]
+    load_status: str = Field(description="ready | partial")
+    enrichment_error: str | None = None
+    fetched_at: datetime
+
+
 class ChannelSingleCompareRequest(BaseModel):
     """Recompute peer comparison from already enriched feed (optional focus fetch only)."""
 
@@ -1542,6 +1627,24 @@ class AttentionPatternResponse(BaseModel):
     human_reasons: list[str]
 
 
+class AttentionChannelRepresentativeVideoResponse(BaseModel):
+    """Age-aligned momentum evidence for one representative video (DB read path)."""
+
+    video_id: str
+    title: str | None = None
+    youtube_url: str
+    horizon_vph: float | None = None
+    measured_at: datetime | None = None
+    actual_age_hours: float | None = None
+    target_horizon_hours: float | None = None
+    vs_previous_median_ratio: float | None = None
+    meets_improvement_threshold: bool | None = None
+    snapshot_row_id: int | None = None
+    measurement_source: str | None = None
+    attention_computed_at: datetime | None = None
+    unavailable_reason: str | None = None
+
+
 class AttentionChannelMomentumResponse(BaseModel):
     channel_id: str
     channel_title: str
@@ -1560,6 +1663,9 @@ class AttentionChannelMomentumResponse(BaseModel):
     first_observed_at: datetime | None = None
     latest_observed_at: datetime | None = None
     representative_video_ids: list[str]
+    representative_videos: list[AttentionChannelRepresentativeVideoResponse] = Field(
+        default_factory=list,
+    )
     reason_codes: list[str]
     human_reasons: list[str]
     recent_window_days: int
@@ -1723,6 +1829,32 @@ class SavedTopicObservationResponse(BaseModel):
     payload: dict[str, Any]
 
 
+class SavedTopicWatchMilestoneResponse(BaseModel):
+    kind: Literal["saved", "detected_again", "not_detected"]
+    occurred_at: datetime
+    attention_run_id: str | None = None
+
+
+class SavedTopicWatchSummaryResponse(BaseModel):
+    headline: str
+    observation_count: int
+    saved_at: datetime
+    last_observation_at: datetime | None = None
+    last_present_at: datetime | None = None
+    last_absent_at: datetime | None = None
+    latest_attention_run_at: datetime | None = None
+    present_in_latest_snapshot: bool | None = None
+    analysis_lifecycle: Literal[
+        "present_in_latest",
+        "absent_in_latest",
+        "no_new_attention_run",
+        "awaiting_first_follow_up",
+        "no_observations",
+    ]
+    stale_message: str | None = None
+    milestones: list[SavedTopicWatchMilestoneResponse] = Field(default_factory=list)
+
+
 class SavedTopicListItemResponse(BaseModel):
     id: int
     family_key: str
@@ -1735,6 +1867,10 @@ class SavedTopicListItemResponse(BaseModel):
     archived_at: datetime | None = None
     latest_observation_at: datetime | None = None
     present_in_latest_snapshot: bool | None = None
+    watch_headline: str | None = None
+    watch_stale_message: str | None = None
+    analysis_lifecycle: str | None = None
+    observation_count: int = 0
 
 
 class SavedTopicListResponse(BaseModel):
@@ -1786,6 +1922,7 @@ class SavedTopicDetailResponse(BaseModel):
     live_observation: SavedTopicObservationResponse | None = None
     count_deltas: dict[str, int] | None = None
     latest_feedback: SavedTopicFeedbackResponse | None = None
+    watch_summary: SavedTopicWatchSummaryResponse | None = None
 
 
 class SavedTopicSaveResponse(BaseModel):
@@ -2003,6 +2140,135 @@ class SavedVideoHistoryResponse(BaseModel):
     offset: int
 
 
+class SavedVideoSimilarWatchResponse(BaseModel):
+    saved_video_id: int
+    status: str
+    display_state: str
+    suggested_queries: list[str] = Field(default_factory=list)
+    confirmed_queries: list[str] = Field(default_factory=list)
+    confirmed_at: datetime | None = None
+    next_scan_at: datetime | None = None
+    last_scan_at: datetime | None = None
+    last_error: str | None = None
+    findings_count: int = 0
+    load_estimate: dict[str, Any] = Field(default_factory=dict)
+
+
+class SavedVideoSimilarWatchConfirmRequest(BaseModel):
+    queries: list[str] = Field(..., min_length=1, max_length=5)
+
+
+class SavedVideoSimilarScanResponse(BaseModel):
+    scan_id: int
+    scan_run_id: str
+    queries_attempted: int
+    queries_failed: int
+    new_findings_count: int
+    display_state: str
+
+
+class SavedVideoSimilarFindingResponse(BaseModel):
+    id: int
+    video_id: str
+    title: str
+    channel_title: str
+    views_count: int | None = None
+    published_text: str | None = None
+    thumbnail_url: str | None = None
+    matched_query: str
+    last_found_at: datetime
+    youtube_url: str
+    relevance_score: int = 0
+    relevance_tier: str = "other"
+    why_found: str | None = None
+    other_reason: str | None = None
+    user_verdict: str | None = None
+    saved_to_research: bool = False
+
+
+class SavedVideoSimilarFindingFeedbackRequest(BaseModel):
+    verdict: Literal["fit", "not_fit"]
+
+
+class SavedVideoSimilarFindingsListResponse(BaseModel):
+    primary_items: list[SavedVideoSimilarFindingResponse]
+    other_items: list[SavedVideoSimilarFindingResponse]
+    primary_total: int
+    other_total: int
+    total: int
+
+
+class SavedFamilyTopicQuerySuggestionItemResponse(BaseModel):
+    query: str
+    source_type: str
+    source_explanation: str
+    supporting_video_count: int | None = None
+
+
+class SavedFamilyTopicDirectionResponse(BaseModel):
+    direction_id: str
+    label: str
+    explanation: str
+    suggestions: list[SavedFamilyTopicQuerySuggestionItemResponse] = Field(default_factory=list)
+
+
+class SavedFamilyTopicWatchResponse(BaseModel):
+    saved_family_id: int
+    status: str
+    display_state: str
+    suggested_queries: list[str] = Field(default_factory=list)
+    suggested_query_items: list[SavedFamilyTopicQuerySuggestionItemResponse] = Field(default_factory=list)
+    suggestion_mode: str = "auto"
+    suggestion_message: str | None = None
+    mixed_keyword_provenance: bool = False
+    search_directions: list[SavedFamilyTopicDirectionResponse] = Field(default_factory=list)
+    confirmed_queries: list[str] = Field(default_factory=list)
+    confirmed_at: datetime | None = None
+    next_scan_at: datetime | None = None
+    last_scan_at: datetime | None = None
+    last_error: str | None = None
+    findings_count: int = 0
+    load_estimate: dict[str, Any] = Field(default_factory=dict)
+    topic_label: str = ""
+    anchor_label: str = ""
+
+
+class SavedFamilyTopicWatchConfirmRequest(BaseModel):
+    queries: list[str] = Field(..., min_length=1, max_length=5)
+
+
+class SavedFamilyTopicScanResponse(BaseModel):
+    scan_id: int
+    scan_run_id: str
+    queries_attempted: int
+    queries_failed: int
+    new_findings_count: int
+    display_state: str
+
+
+class SavedFamilyTopicFindingResponse(BaseModel):
+    id: int
+    video_id: str
+    title: str
+    channel_title: str
+    views_count: int | None = None
+    published_text: str | None = None
+    thumbnail_url: str | None = None
+    matched_query: str
+    last_found_at: datetime
+    youtube_url: str
+    saved_to_research: bool = False
+
+
+class SavedFamilyTopicFindingsListResponse(BaseModel):
+    items: list[SavedFamilyTopicFindingResponse]
+    total: int
+    limit: int
+    offset: int
+    hits_by_query: dict[str, int] = Field(default_factory=dict)
+    confirmed_queries: list[str] = Field(default_factory=list)
+
+
 class SavedFamilyListItemResponse(BaseModel):
     id: int
     family_key: str
@@ -2125,6 +2391,7 @@ class ResearchPortfolioObservations(BaseModel):
     cohort_with_any_observation: int
     cohort_with_multiple_observations: int
     evidence_state_distribution: dict[str, int]
+    cohort_with_new_analytical_observation_in_period: int | None = None
 
 
 class ResearchPortfolioSavedItem(BaseModel):
@@ -2135,6 +2402,8 @@ class ResearchPortfolioSavedItem(BaseModel):
     current_status: str
     has_latest_feedback: bool
     observation_count: int
+    video_id: str | None = None
+    latest_observed_at: str | None = None
 
 
 class ResearchPortfolioHints(BaseModel):
@@ -2209,6 +2478,10 @@ class DailyIntelligenceWinnerListItem(BaseModel):
     youtube_url: str
     is_repeat_in_prior_reports: bool
     discovery_provenance_available: bool | None = None
+    reason_summary: str = Field(
+        default="Причина в отчёте не сохранена",
+        description="One-line reason from frozen payload_json at publish time",
+    )
 
 
 class DailyIntelligenceWinnerDetailResponse(DailyIntelligenceWinnerListItem):

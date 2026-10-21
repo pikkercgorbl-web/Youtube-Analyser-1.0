@@ -4,7 +4,7 @@
 
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -26,9 +26,8 @@ import {
 
 } from "@/lib/attention-format";
 
-import { buttonVariants } from "@/components/ui/button";
-
-import type { AttentionVideoWinner } from "@/lib/attention-types";
+import type { AttentionChannelMomentum, AttentionVideoWinner } from "@/lib/attention-types";
+import { OpportunityVideoSignalBadges } from "@/components/opportunities/opportunity-video-signal-badges";
 
 import type { RelatedFamilyRef } from "@/lib/saved-research-types";
 
@@ -46,7 +45,7 @@ import { cn } from "@/lib/utils";
 
 
 
-import { AttentionSignalBadges } from "./signal-badges";
+import { stashWinnerForDetail } from "@/lib/opportunity-winner-cache";
 
 import { YoutubeThumb } from "./youtube-thumb";
 
@@ -64,6 +63,8 @@ export function WinnersTable({
 
   relatedFamiliesByVideoId = {},
 
+  channelMomentum = [],
+
   focusVideoId = null,
 
   onFocusVideoHandled,
@@ -75,6 +76,8 @@ export function WinnersTable({
   runId?: string | null;
 
   relatedFamiliesByVideoId?: Record<string, RelatedFamilyRef[]>;
+
+  channelMomentum?: AttentionChannelMomentum[];
 
   focusVideoId?: string | null;
 
@@ -338,9 +341,9 @@ export function WinnersTable({
 
               </a>
 
-              <div className="space-y-4 px-5 pb-5 pt-4">
+              <div className="space-y-3 px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4">
 
-                <h3 className="text-lg font-semibold leading-snug">
+                <h3 className="text-base font-semibold leading-snug sm:text-lg">
 
                   <a
 
@@ -372,13 +375,13 @@ export function WinnersTable({
 
                 </p>
 
-                <dl className="grid grid-cols-2 gap-4 border-y border-border/60 py-4">
+                <dl className="grid grid-cols-2 gap-3 border-y border-border/60 py-3">
 
                   <div>
 
                     <dt className="text-xs text-muted-foreground">Просмотры</dt>
 
-                    <dd className="mt-1 text-xl font-semibold tabular-nums">
+                    <dd className="mt-0.5 text-lg font-semibold tabular-nums sm:text-xl">
 
                       {formatOptionalViews(row.views) ?? "—"}
 
@@ -390,7 +393,7 @@ export function WinnersTable({
 
                     <dt className="text-xs text-muted-foreground">В среднем за час</dt>
 
-                    <dd className="mt-1 text-xl font-semibold tabular-nums text-primary">
+                    <dd className="mt-0.5 text-lg font-semibold tabular-nums text-primary sm:text-xl">
 
                       {formatOptionalVph(row.vph) ?? "—"}
 
@@ -400,17 +403,7 @@ export function WinnersTable({
 
                 </dl>
 
-                <AttentionSignalBadges
-
-                  reasonCodes={row.reason_codes}
-
-                  accelerationState={row.acceleration_state}
-
-                  delayedOutcomeState={row.delayed_outcome_state}
-
-                  channelRelativeStatus={row.channel_relative_signal?.status}
-
-                />
+                <OpportunityVideoSignalBadges video={row} channelMomentum={channelMomentum} />
 
                 <div className="flex flex-wrap gap-2">
 
@@ -421,6 +414,8 @@ export function WinnersTable({
                     className={cn(buttonVariants({ variant: "default", size: "sm" }))}
 
                     data-testid="winner-detail-link"
+
+                    onClick={() => stashWinnerForDetail(row)}
 
                   >
 
@@ -440,9 +435,9 @@ export function WinnersTable({
 
                   </Link>
 
-                </div>
+                  <SaveVideoButton videoId={row.video_id} />
 
-                <SaveVideoButton videoId={row.video_id} />
+                </div>
 
                 {(relatedFamiliesByVideoId[row.video_id]?.length ?? 0) > 0 ? (
 

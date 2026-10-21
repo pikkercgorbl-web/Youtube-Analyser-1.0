@@ -26,6 +26,7 @@ from app.services.attention_engine_types import (
     AttentionEngineResult,
     AttentionSummary,
     ChannelMomentum,
+    ChannelRepresentativeVideoEvidence,
     PatternCandidate,
     PatternFamily,
     VideoWinner,
@@ -374,6 +375,28 @@ def _pattern_from_json(payload: dict) -> PatternCandidate:
     )
 
 
+def _representative_evidence_from_json(raw: list) -> tuple[ChannelRepresentativeVideoEvidence, ...]:
+    items: list[ChannelRepresentativeVideoEvidence] = []
+    for row in raw:
+        if not isinstance(row, dict):
+            continue
+        measured = _parse_dt(row.get("measured_at"))
+        if measured is None:
+            continue
+        items.append(
+            ChannelRepresentativeVideoEvidence(
+                video_id=str(row["video_id"]),
+                horizon_vph=float(row["horizon_vph"]),
+                measured_at=measured,
+                actual_age_hours=float(row["actual_age_hours"]),
+                vs_previous_median_ratio=row.get("vs_previous_median_ratio"),
+                meets_improvement_threshold=row.get("meets_improvement_threshold"),
+                snapshot_row_id=row.get("snapshot_row_id"),
+            ),
+        )
+    return tuple(items)
+
+
 def _channel_from_json(payload: dict) -> ChannelMomentum:
     return ChannelMomentum(
         channel_id=payload["channel_id"],
@@ -393,6 +416,9 @@ def _channel_from_json(payload: dict) -> ChannelMomentum:
         first_observed_at=_parse_dt(payload.get("first_observed_at")),
         latest_observed_at=_parse_dt(payload.get("latest_observed_at")),
         representative_video_ids=tuple(payload.get("representative_video_ids") or ()),
+        representative_video_evidence=_representative_evidence_from_json(
+            payload.get("representative_video_evidence") or [],
+        ),
         reason_codes=tuple(payload.get("reason_codes") or ()),
         human_reasons=tuple(payload.get("human_reasons") or ()),
         recent_window_days=int(payload["recent_window_days"]),

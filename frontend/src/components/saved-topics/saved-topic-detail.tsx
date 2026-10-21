@@ -12,6 +12,7 @@ import {
   PageShell,
   SectionPanel,
 } from "@/components/design-system";
+import { LegacyArchivedBanner } from "@/components/layout/legacy-archived-banner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,8 +26,14 @@ import {
 } from "@/lib/api";
 import { canonicalYoutubeUrl, familyDetailHref } from "@/lib/attention-format";
 import {
+  detailLead,
+  formatObservationTimelineLine,
+  historyEmptyMessage,
+  MILESTONE_LABELS,
+  timelineObservationLabel,
+} from "@/lib/saved-topic-watch";
+import {
   EVENT_TYPE_LABELS,
-  FAMILY_ABSENCE_MESSAGE,
   FINDING_RATING_LABELS,
   OWN_TEST_OUTCOME_LABELS,
   SAVED_TOPIC_STATUS_LABELS,
@@ -56,7 +63,9 @@ const TEST_OUTCOMES: OwnTestOutcome[] = [
 
 function formatTimelineItem(item: SavedTopicTimelineItem): string {
   if (item.kind === "observation") {
-    return formatCounts(item.payload);
+    const prefix = timelineObservationLabel(item);
+    const body = formatObservationTimelineLine(item.payload);
+    return prefix ? `${prefix}: ${body}` : body;
   }
   const type = item.event_type ?? "event";
   const label = EVENT_TYPE_LABELS[type] ?? type;
@@ -98,24 +107,6 @@ function videoLinks(
         ? String(row.youtube_url)
         : canonicalYoutubeUrl(String(row.video_id)),
     }));
-}
-
-function formatCounts(payload: Record<string, unknown> | undefined): string {
-  if (!payload) return "—";
-  const counts = payload.counts;
-  if (!counts || typeof counts !== "object") {
-    if (payload.present_in_snapshot === false) {
-      return String(payload.absence_message ?? FAMILY_ABSENCE_MESSAGE);
-    }
-    return "—";
-  }
-  const c = counts as Record<string, number>;
-  return [
-    `видео ${c.video_count ?? "?"}`,
-    `каналы ${c.channel_count ?? "?"}`,
-    `ключи ${c.keyword_count ?? "?"}`,
-    `допущено к анализу ${c.breakout_eligible_count ?? "?"}`,
-  ].join(" · ");
 }
 
 export function SavedTopicDetailView({ topicId }: { topicId: number }) {
@@ -245,6 +236,11 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
 
   return (
     <PageShell>
+      <LegacyArchivedBanner
+        route="saved-topics"
+        primaryHref="/saved"
+        primaryLabel="Новые темы — в «Сохранённое»"
+      />
       <Link
         href="/saved-topics"
         className={cn(
@@ -255,10 +251,23 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
         <ArrowLeft className="mr-1 h-4 w-4" />
         Сохранённые темы
       </Link>
-      <PageHeader
-        title={label}
-        lead="Сравните исходную находку с последними наблюдениями и запишите своё решение."
-      />
+      <PageHeader title={label} lead={detailLead(detail)} />
+      {detail.watch_summary?.milestones?.length ? (
+        <div
+          className="flex flex-wrap gap-2 text-xs"
+          data-testid="watch-milestones"
+        >
+          {detail.watch_summary.milestones.map((m) => (
+            <span
+              key={`${m.kind}-${m.occurred_at}`}
+              className="rounded-full border border-border/70 bg-muted/40 px-3 py-1"
+            >
+              {MILESTONE_LABELS[m.kind]} ·{" "}
+              {new Date(m.occurred_at).toLocaleString()}
+            </span>
+          ))}
+        </div>
+      ) : null}
       {detail.archived_at ? (
         <p className="text-sm text-amber-200">
           В архиве с {new Date(detail.archived_at).toLocaleString()}
@@ -295,17 +304,31 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
         </SectionPanel>
 
         <SectionPanel title="Последнее наблюдение">
+          {detail.watch_summary?.stale_message ? (
+            <p className="text-sm text-muted-foreground">
+              {detail.watch_summary.stale_message}
+            </p>
+          ) : null}
           {detail.live_observation ? (
             <>
               <p className="text-xs text-muted-foreground">
-                {new Date(detail.live_observation.captured_at).toLocaleString()}{" "}
-                · run {detail.live_observation.attention_run_id}
+                {new Date(detail.live_observation.captured_at).toLocaleString()}
               </p>
-              <p className="mt-2 text-sm">{formatCounts(livePayload)}</p>
+              <p className="mt-2 text-sm">
+                {formatObservationTimelineLine(livePayload)}
+              </p>
+              <Disclosure summary="Технические сведения наблюдения">
+                <p className="text-xs text-muted-foreground">
+                  attention_run_id: {detail.live_observation.attention_run_id}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  family_key: {detail.family_key}
+                </p>
+              </Disclosure>
             </>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Новых наблюдений пока нет.
+              {historyEmptyMessage(detail)}
             </p>
           )}
           {detail.count_deltas ? (
@@ -473,7 +496,9 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
 
       <SectionPanel title="История наблюдений и решений">
         {timeline.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Пусто</p>
+          <p className="text-sm text-muted-foreground">
+            {historyEmptyMessage(detail)}
+          </p>
         ) : (
           <ul className="space-y-2 text-sm">
             {timeline.map((row) => (
@@ -483,10 +508,7 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
               >
                 <p className="text-xs text-muted-foreground">
                   {new Date(row.occurred_at).toLocaleString()}
-                  {row.kind === "observation" && row.attention_run_id
-                    ? ` · ${row.attention_run_id}`
-                    : ""}
-                  {row.kind === "event" ? ` · ${row.kind}` : ""}
+                  {row.kind === "event" ? ` · решение` : ""}
                 </p>
                 <p>{formatTimelineItem(row)}</p>
               </li>

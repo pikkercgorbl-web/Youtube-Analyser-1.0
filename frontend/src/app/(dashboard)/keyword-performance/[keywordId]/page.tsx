@@ -5,7 +5,14 @@ import { useParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
-import { HelpText, LoadingState, PageHeader, PageShell, SectionPanel } from "@/components/design-system";
+import {
+  Disclosure,
+  HelpText,
+  LoadingState,
+  PageHeader,
+  PageShell,
+  SectionPanel,
+} from "@/components/design-system";
 import { EvidenceBadge, LifecycleBadge } from "@/components/design-system/status-badges";
 import { Select } from "@/components/ui/select";
 import { StateMessage } from "@/components/ui/state-message";
@@ -28,6 +35,11 @@ import {
   type KeywordPerformanceMetricFamily,
   type KeywordPerformanceMetrics,
 } from "@/lib/keyword-performance-types";
+import {
+  attributionEquivalenceExplanation,
+  formatKeywordPerformancePeriod,
+  keywordDetailLeadSummary,
+} from "@/lib/keyword-performance-context";
 import { formatDateTimeLocal } from "@/lib/monitoring-format";
 
 type DetailFamily = Exclude<KeywordPerformanceMetricFamily, "full">;
@@ -118,7 +130,10 @@ export default function KeywordPerformanceDetailPage() {
 
       {metrics ? (
         <>
-          <PageHeader title={metrics.keyword} lead={`keyword_id ${metrics.keyword_id}`} />
+          <PageHeader
+            title={metrics.keyword}
+            lead={keywordDetailLeadSummary(metrics)}
+          />
           <div className="flex flex-wrap items-center gap-2">
             <LifecycleBadge status={metrics.lifecycle_status} title={LIFECYCLE_NOT_QUALITY} />
             <EvidenceBadge
@@ -128,9 +143,16 @@ export default function KeywordPerformanceDetailPage() {
           </div>
           <HelpText>{EVIDENCE_NOT_QUALITY}</HelpText>
 
-          {metrics.evaluated_at ? (
-            <p className="text-xs text-muted-foreground">
-              Срез оценки: {formatDateTimeLocal(metrics.evaluated_at)}
+          <p className="text-xs text-muted-foreground" data-testid="detail-evaluation-context">
+            {formatKeywordPerformancePeriod(null, null)}
+            {metrics.evaluated_at
+              ? ` · обновлено ${formatDateTimeLocal(metrics.evaluated_at)}`
+              : ""}
+          </p>
+
+          {attributionEquivalenceExplanation(metrics) ? (
+            <p className="text-sm text-muted-foreground" data-testid="attribution-equivalence-note">
+              {attributionEquivalenceExplanation(metrics)}
             </p>
           ) : null}
 
@@ -138,7 +160,15 @@ export default function KeywordPerformanceDetailPage() {
             <SectionPanel title="Discovery">
               <dl className="grid gap-3 text-sm sm:grid-cols-2">
                 <div>
-                  <dt className="text-muted-foreground">Найдено видео</dt>
+                  <dt className="text-muted-foreground">В атрибуции</dt>
+                  <dd data-testid="detail-attributed-count">
+                    {formatOptionalNumber(
+                      metrics.attributed_video_count ?? metrics.unique_video_count,
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Уникальных video_id (все hit&apos;ы)</dt>
                   <dd>{formatOptionalNumber(metrics.unique_video_count)}</dd>
                 </div>
                 <div>
@@ -169,6 +199,27 @@ export default function KeywordPerformanceDetailPage() {
               </p>
             </SectionPanel>
           )}
+
+          <Disclosure summary="Технические сведения">
+            <dl className="grid gap-2 text-xs text-muted-foreground sm:grid-cols-2">
+              <div>
+                <dt>keyword_id</dt>
+                <dd>{metrics.keyword_id}</dd>
+              </div>
+              <div>
+                <dt>attribution_mode</dt>
+                <dd>{metrics.attribution_mode ?? "—"}</dd>
+              </div>
+              <div>
+                <dt>shared_video_count</dt>
+                <dd>{formatOptionalNumber(metrics.shared_video_count)}</dd>
+              </div>
+              <div>
+                <dt>exclusive_first_discovery_count</dt>
+                <dd>{formatOptionalNumber(metrics.exclusive_first_discovery_count)}</dd>
+              </div>
+            </dl>
+          </Disclosure>
 
           {(family === "outcomes" || family === "discovery") && (
             <SectionPanel title="72h исходы">

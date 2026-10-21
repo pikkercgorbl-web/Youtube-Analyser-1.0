@@ -140,6 +140,16 @@ def _result(*, run_id: str, computed_at: datetime, winners: tuple[VideoWinner, .
     )
 
 
+def _capture_publish(session, result: AttentionEngineResult, *, run_id: str) -> None:
+    """Use publish-time clock so finalize does not lock historical UTC days under real wall clock."""
+    capture_daily_intelligence_for_publish(
+        session,
+        result,
+        run_id=run_id,
+        captured_at=result.summary.computed_at,
+    )
+
+
 def _seed_keyword_hit(session, *, video_id: str = "vid-a", keyword_id: int = 1) -> None:
     if session.get(TargetKeyword, keyword_id) is None:
         session.add(
@@ -177,13 +187,16 @@ def test_multiple_publishes_same_utc_day_last_edition_wins() -> None:
         computed_at=datetime(2026, 10, 10, 18, 0, tzinfo=UTC),
         winners=(_winner("vid-b"),),
     )
-    capture_daily_intelligence_for_publish(db, r1, run_id="run_1")
-    capture_daily_intelligence_for_publish(db, r2, run_id="run_2")
+    _capture_publish(db, r1, run_id="run_1")
+    _capture_publish(db, r2, run_id="run_2")
     db.commit()
 
     report = db.get(DailyIntelligenceReport, day)
     assert report is not None
-    assert report.source_run_id == "run_2"
+    assert report.source_run_id == "run_2", (
+        f"expected last intraday publish run_2, got {report.source_run_id!r} "
+        f"(status={report.status!r}, locked_at={report.locked_at!r})"
+    )
     assert report.status == STATUS_PROVISIONAL
     winners = list(db.scalars(select(DailyIntelligenceReportWinnerFinding).where(
         DailyIntelligenceReportWinnerFinding.report_date == day,
@@ -202,16 +215,18 @@ def test_intraday_appearance_absent_from_final_top_n() -> None:
     _seed_keyword_hit(db, video_id="vid-b", keyword_id=2)
     day = date(2026, 10, 10)
 
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_1", computed_at=datetime(2026, 10, 10, 9, 0, tzinfo=UTC), winners=(_winner("vid-a"),)),
+    r1 = _result(
         run_id="run_1",
+        computed_at=datetime(2026, 10, 10, 9, 0, tzinfo=UTC),
+        winners=(_winner("vid-a"),),
     )
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_2", computed_at=datetime(2026, 10, 10, 20, 0, tzinfo=UTC), winners=(_winner("vid-b"),)),
+    r2 = _result(
         run_id="run_2",
+        computed_at=datetime(2026, 10, 10, 20, 0, tzinfo=UTC),
+        winners=(_winner("vid-b"),),
     )
+    _capture_publish(db, r1, run_id="run_1")
+    _capture_publish(db, r2, run_id="run_2")
     db.commit()
 
     final = db.scalar(
@@ -237,11 +252,12 @@ def test_finalize_locks_and_freezes_edition() -> None:
     db = SessionLocal()
     _seed_keyword_hit(db)
     day = date(2026, 10, 9)
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_1", computed_at=datetime(2026, 10, 9, 12, 0, tzinfo=UTC), winners=(_winner("vid-a"),)),
+    r1 = _result(
         run_id="run_1",
+        computed_at=datetime(2026, 10, 9, 12, 0, tzinfo=UTC),
+        winners=(_winner("vid-a"),),
     )
+    _capture_publish(db, r1, run_id="run_1")
     db.commit()
     payload_before = db.get(DailyIntelligenceReportWinnerFinding, db.scalars(
         select(DailyIntelligenceReportWinnerFinding.id).limit(1),
@@ -253,11 +269,12 @@ def test_finalize_locks_and_freezes_edition() -> None:
     assert report.locked_at is not None
     assert report.status in (STATUS_COMPLETE, STATUS_PARTIAL)
 
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_old_day", computed_at=datetime(2026, 10, 9, 23, 0, tzinfo=UTC), winners=(_winner("vid-b"),)),
+    r_old = _result(
         run_id="run_old_day",
+        computed_at=datetime(2026, 10, 9, 23, 0, tzinfo=UTC),
+        winners=(_winner("vid-b"),),
     )
+    _capture_publish(db, r_old, run_id="run_old_day")
     db.commit()
     report2 = db.get(DailyIntelligenceReport, day)
     assert report2.source_run_id == "run_1"
@@ -279,11 +296,12 @@ def test_unavailable_day_without_publish() -> None:
     SessionLocal = sessionmaker(bind=engine)
     db = SessionLocal()
     _seed_keyword_hit(db)
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_1", computed_at=datetime(2026, 10, 8, 12, 0, tzinfo=UTC), winners=(_winner(),)),
+    r1 = _result(
         run_id="run_1",
+        computed_at=datetime(2026, 10, 8, 12, 0, tzinfo=UTC),
+        winners=(_winner(),),
     )
+    _capture_publish(db, r1, run_id="run_1")
     db.commit()
     finalize_eligible_reports(db, now=datetime(2026, 10, 10, 6, 0, tzinfo=UTC))
     db.commit()
@@ -299,8 +317,8 @@ def test_idempotent_run_capture() -> None:
     db = SessionLocal()
     _seed_keyword_hit(db)
     r = _result(run_id="run_1", computed_at=datetime(2026, 10, 10, 12, 0, tzinfo=UTC), winners=(_winner(),))
-    capture_daily_intelligence_for_publish(db, r, run_id="run_1")
-    capture_daily_intelligence_for_publish(db, r, run_id="run_1")
+    _capture_publish(db, r, run_id="run_1")
+    _capture_publish(db, r, run_id="run_1")
     db.commit()
     assert db.scalar(select(func.count()).select_from(DailyIntelligenceRunSnapshot)) == 1
     db.close()
@@ -313,7 +331,7 @@ def test_publish_rollback_no_daily_rows() -> None:
     _seed_keyword_hit(db)
     r = _result(run_id="run_1", computed_at=datetime(2026, 10, 10, 12, 0, tzinfo=UTC), winners=(_winner(),))
     try:
-        capture_daily_intelligence_for_publish(db, r, run_id="run_1")
+        _capture_publish(db, r, run_id="run_1")
         raise RuntimeError("simulated failure")
     except RuntimeError:
         db.rollback()
@@ -339,16 +357,18 @@ def test_cross_midnight_report_dates() -> None:
     SessionLocal = sessionmaker(bind=engine)
     db = SessionLocal()
     _seed_keyword_hit(db)
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_a", computed_at=datetime(2026, 10, 10, 23, 30, tzinfo=UTC), winners=(_winner("vid-a"),)),
+    ra = _result(
         run_id="run_a",
+        computed_at=datetime(2026, 10, 10, 23, 30, tzinfo=UTC),
+        winners=(_winner("vid-a"),),
     )
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_b", computed_at=datetime(2026, 10, 11, 0, 30, tzinfo=UTC), winners=(_winner("vid-b"),)),
+    rb = _result(
         run_id="run_b",
+        computed_at=datetime(2026, 10, 11, 0, 30, tzinfo=UTC),
+        winners=(_winner("vid-b"),),
     )
+    _capture_publish(db, ra, run_id="run_a")
+    _capture_publish(db, rb, run_id="run_b")
     db.commit()
     assert utc_report_date(datetime(2026, 10, 10, 23, 30, tzinfo=UTC)) == date(2026, 10, 10)
     assert db.get(DailyIntelligenceReport, date(2026, 10, 10)).source_run_id == "run_a"
@@ -360,11 +380,12 @@ def test_discovery_provenance_and_missing() -> None:
     engine = _engine()
     SessionLocal = sessionmaker(bind=engine)
     db = SessionLocal()
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_1", computed_at=datetime(2026, 10, 10, 12, 0, tzinfo=UTC), winners=(_winner("vid-x"),)),
+    r1 = _result(
         run_id="run_1",
+        computed_at=datetime(2026, 10, 10, 12, 0, tzinfo=UTC),
+        winners=(_winner("vid-x"),),
     )
+    _capture_publish(db, r1, run_id="run_1")
     db.commit()
     row = db.scalar(
         select(DailyIntelligenceRunWinnerAppearance).where(
@@ -382,15 +403,12 @@ def test_api_pagination() -> None:
     db = SessionLocal()
     _seed_keyword_hit(db)
     for i in range(3):
-        capture_daily_intelligence_for_publish(
-            db,
-            _result(
-                run_id=f"run_{i}",
-                computed_at=datetime(2026, 10, 10, 10 + i, 0, tzinfo=UTC),
-                winners=(_winner(f"vid-{i}"),),
-            ),
+        ri = _result(
             run_id=f"run_{i}",
+            computed_at=datetime(2026, 10, 10, 10 + i, 0, tzinfo=UTC),
+            winners=(_winner(f"vid-{i}"),),
         )
+        _capture_publish(db, ri, run_id=f"run_{i}")
     db.commit()
     db.close()
 
@@ -411,6 +429,8 @@ def test_api_pagination() -> None:
     day = "2026-10-10"
     winners = client.get(f"/api/daily-intelligence/reports/{day}/winners", params={"limit": 1, "offset": 0}).json()
     assert winners["total"] == 1
+    assert winners["items"][0]["reason_summary"]
+    assert "breakout" not in winners["items"][0]["reason_summary"].lower()
     apps = client.get("/api/daily-intelligence/videos/vid-0/appearances").json()
     assert apps["total"] >= 1
 
@@ -420,11 +440,12 @@ def test_partial_coverage_early_last_publish() -> None:
     SessionLocal = sessionmaker(bind=engine)
     db = SessionLocal()
     _seed_keyword_hit(db)
-    capture_daily_intelligence_for_publish(
-        db,
-        _result(run_id="run_1", computed_at=datetime(2026, 10, 9, 2, 0, tzinfo=UTC), winners=(_winner(),)),
+    r1 = _result(
         run_id="run_1",
+        computed_at=datetime(2026, 10, 9, 2, 0, tzinfo=UTC),
+        winners=(_winner(),),
     )
+    _capture_publish(db, r1, run_id="run_1")
     db.commit()
     finalize_eligible_reports(db, now=datetime(2026, 10, 10, 1, 0, tzinfo=UTC))
     db.commit()

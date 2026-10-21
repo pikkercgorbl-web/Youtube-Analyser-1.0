@@ -78,6 +78,7 @@ describe("DailyIntelligenceDashboard", () => {
           youtube_url: "https://www.youtube.com/watch?v=abcdefghij1",
           is_repeat_in_prior_reports: false,
           discovery_provenance_available: true,
+          reason_summary: "Сильный результат среди видео окна анализа",
         },
       ],
       total: 50,
@@ -129,14 +130,19 @@ describe("DailyIntelligenceDashboard", () => {
     getDailyIntelligenceReport.mockResolvedValue(reportSummary);
     render(<DailyIntelligenceDashboard />);
     expect(await screen.findByText("Предварительный")).toBeTruthy();
-    expect(await screen.findByText(/Всего в архиве за день: 50/)).toBeTruthy();
-    expect(await screen.findByText(/Всего: 20/)).toBeTruthy();
+    expect(await screen.findByTestId("di-report-header")).toBeTruthy();
+    expect(await screen.findByTestId("di-report-header")).toHaveTextContent(/50 видео/);
+    expect(await screen.findByText(/В выпуске: 20 тем/)).toBeTruthy();
     expect(listDailyIntelligenceWinners).toHaveBeenCalledWith("2026-10-10", { limit: 25, offset: 0 });
     expect(getDailyIntelligenceOutcomeCoverage).toHaveBeenCalledWith("2026-10-10");
+    fireEvent.click(screen.getByRole("button", { name: "Данные и расчёт" }));
     expect(await screen.findByTestId("di-outcome-coverage-summary")).toBeTruthy();
-    expect(await screen.findByTestId("di-outcome-coverage-badge")).toBeTruthy();
     const thumb = document.querySelector('img[src*="i.ytimg.com/vi/abcdefghij1/mqdefault"]');
     expect(thumb).toBeTruthy();
+    expect(await screen.findByTestId("di-winner-reason-summary")).toHaveTextContent(
+      "Сильный результат среди видео",
+    );
+    expect(screen.getByText("№1 в выпуске")).toBeTruthy();
   });
 
   it("gracefully handles outcome coverage API failure", async () => {
@@ -149,8 +155,9 @@ describe("DailyIntelligenceDashboard", () => {
     getDailyIntelligenceReport.mockResolvedValue(reportSummary);
     getDailyIntelligenceOutcomeCoverage.mockRejectedValue(new Error("coverage fail"));
     render(<DailyIntelligenceDashboard />);
+    await screen.findByTestId("di-report-header");
+    fireEvent.click(await screen.findByRole("button", { name: "Данные и расчёт" }));
     expect(await screen.findByTestId("di-outcome-coverage-error")).toBeTruthy();
-    expect(await screen.findByText("Daily Winners")).toBeTruthy();
   });
 
   it("shows run history entries", async () => {
@@ -162,6 +169,7 @@ describe("DailyIntelligenceDashboard", () => {
     });
     getDailyIntelligenceReport.mockResolvedValue(reportSummary);
     render(<DailyIntelligenceDashboard />);
+    fireEvent.click(await screen.findByRole("button", { name: "Данные и расчёт" }));
     expect(await screen.findByText("attention_20261010T125919Z")).toBeTruthy();
     expect(screen.getAllByText("attention_20261010T140809Z").length).toBeGreaterThan(0);
   });
@@ -194,7 +202,7 @@ describe("DailyIntelligenceDashboard", () => {
         offset: 25,
       });
     render(<DailyIntelligenceDashboard />);
-    await screen.findByText("Daily Winners");
+    await screen.findByText("Видео, на которые стоит посмотреть");
     await waitFor(() => expect(screen.getAllByRole("button", { name: "Вперёд" }).length).toBeGreaterThan(0));
     fireEvent.click(screen.getAllByRole("button", { name: "Вперёд" })[0]!);
     await waitFor(() =>

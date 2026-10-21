@@ -40,6 +40,7 @@ export type DailyIntelligenceWinnerListItem = {
   youtube_url: string;
   is_repeat_in_prior_reports: boolean;
   discovery_provenance_available: boolean | null;
+  reason_summary?: string;
 };
 
 export type DailyIntelligenceWinnerListResponse = {

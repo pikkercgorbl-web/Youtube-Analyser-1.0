@@ -1,0 +1,1515 @@
+{
+  "run_id": "attention_20261013T061802Z",
+  "classification_spec": {
+    "tiers": [
+      "supported_opportunity",
+      "needs_review",
+      "search_collection"
+    ],
+    "precedence": [
+      "R1: winner_in_feed_count==0 → search_collection",
+      "R2: cross_source AND winners>=2 AND NOT(keyword_only AND broad) AND views_share<0.35 → supported",
+      "R3: (phrase_supported OR repeated_title_template) AND NOT broad AND winners>=1 AND views_share<0.35 → supported",
+      "R4: keyword_only AND broad_keyword_group AND winners>=1 → needs_review",
+      "R5: cross_source AND winners==1 → needs_review",
+      "R6: keyword_only AND NOT broad AND winners>=2 → needs_review",
+      "R7: video_topic AND NOT cross_source AND winners>=1 → needs_review",
+      "R8: winners>=1 → needs_review",
+      "R9: fallback → search_collection"
+    ],
+    "missing_field_defaults": {
+      "quality_flags": [],
+      "winner_in_feed_count": 0,
+      "zero_or_null_views_share": 0.0
+    },
+    "views_metric": "zero_null_missing_share = (views_0 + views_null + missing_latest_snapshot) / members"
+  },
+  "tier_counts_exact": {
+    "needs_review": 11,
+    "search_collection": 5,
+    "supported_opportunity": 4
+  },
+  "families": [
+    {
+      "rank": 1,
+      "family_key": "family:kw:1497",
+      "label": "minecraft challenge videos",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 25,
+      "winner_in_feed_count": 4,
+      "winner_video_ids": [
+        "8jW-kBlBEQw",
+        "Qay6w8GDBL4",
+        "UPO-7CkcNwY",
+        "pQbkiEJFpVM"
+      ],
+      "zero_or_null_views_share": 0.08,
+      "views_breakdown": {
+        "views_eq_0": 2,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 25,
+        "zero_null_missing_share": 0.08
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 4,
+        "shared_single_keyword_all_winners": true,
+        "keyword_id_sets": {
+          "8jW-kBlBEQw": [
+            1497,
+            1498
+          ],
+          "Qay6w8GDBL4": [
+            1355,
+            1357,
+            1378,
+            1497,
+            1498,
+            1538
+          ],
+          "UPO-7CkcNwY": [
+            1495,
+            1497,
+            1498
+          ],
+          "pQbkiEJFpVM": [
+            1497
+          ]
+        },
+        "overlapping_provenance": true
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R4",
+      "tier_reasons": [
+        "keyword_only",
+        "broad_keyword_group",
+        "feed_winners_gte_1"
+      ]
+    },
+    {
+      "rank": 2,
+      "family_key": "family:kw:181",
+      "label": "free ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 29,
+      "winner_in_feed_count": 0,
+      "winner_video_ids": [],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 29,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 0,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {},
+        "overlapping_provenance": false
+      },
+      "tier": "search_collection",
+      "tier_rule_id": "R1",
+      "tier_reasons": [
+        "no_top50_feed_winners"
+      ]
+    },
+    {
+      "rank": 3,
+      "family_key": "family:kw:1505",
+      "label": "обучение нейросети видео",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_video_count": 22,
+      "winner_in_feed_count": 2,
+      "winner_video_ids": [
+        "JF2A0GZzezQ",
+        "PVclFAkeZog"
+      ],
+      "zero_or_null_views_share": 0.0909,
+      "views_breakdown": {
+        "views_eq_0": 2,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 22,
+        "zero_null_missing_share": 0.0909
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 2,
+        "shared_single_keyword_all_winners": true,
+        "keyword_id_sets": {
+          "JF2A0GZzezQ": [
+            1505,
+            1562
+          ],
+          "PVclFAkeZog": [
+            111,
+            1488,
+            1489,
+            1505,
+            1557,
+            1636
+          ]
+        },
+        "overlapping_provenance": true
+      },
+      "tier": "supported_opportunity",
+      "tier_rule_id": "R2",
+      "tier_reasons": [
+        "cross_source_supported",
+        "feed_winners_gte_2",
+        "not_broad_keyword_only",
+        "views_below_exclusion"
+      ]
+    },
+    {
+      "rank": 4,
+      "family_key": "family:kw:1561",
+      "label": "видео с помощью нейросети",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_video_count": 22,
+      "winner_in_feed_count": 2,
+      "winner_video_ids": [
+        "29GOK7-NJ2U",
+        "omuA7jVGPzw"
+      ],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 22,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 2,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "29GOK7-NJ2U": [
+            111,
+            1489,
+            1506,
+            1507,
+            1556,
+            1557,
+            1561,
+            1562
+          ],
+          "omuA7jVGPzw": [
+            112,
+            1489,
+            1511,
+            1555,
+            1556,
+            1557,
+            1561,
+            1562,
+            1575,
+            1616,
+            1618,
+            1628,
+            1630
+          ]
+        },
+        "overlapping_provenance": true
+      },
+      "tier": "supported_opportunity",
+      "tier_rule_id": "R2",
+      "tier_reasons": [
+        "cross_source_supported",
+        "feed_winners_gte_2",
+        "not_broad_keyword_only",
+        "views_below_exclusion"
+      ]
+    },
+    {
+      "rank": 5,
+      "family_key": "family:kw:186",
+      "label": "education ai tools for students",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 24,
+      "winner_in_feed_count": 0,
+      "winner_video_ids": [],
+      "zero_or_null_views_share": 0.0417,
+      "views_breakdown": {
+        "views_eq_0": 1,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 24,
+        "zero_null_missing_share": 0.0417
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 0,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {},
+        "overlapping_provenance": false
+      },
+      "tier": "search_collection",
+      "tier_rule_id": "R1",
+      "tier_reasons": [
+        "no_top50_feed_winners"
+      ]
+    },
+    {
+      "rank": 6,
+      "family_key": "family:kw:1478",
+      "label": "how does it work animation",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 21,
+      "winner_in_feed_count": 1,
+      "winner_video_ids": [
+        "sX9YtK8Dpps"
+      ],
+      "zero_or_null_views_share": 0.0476,
+      "views_breakdown": {
+        "views_eq_0": 1,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 21,
+        "zero_null_missing_share": 0.0476
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 1,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "sX9YtK8Dpps": [
+            216,
+            1168,
+            1183,
+            1291,
+            1297,
+            1299,
+            1300,
+            1303,
+            1350,
+            1430,
+            1461,
+            1476,
+            1478,
+            1493,
+            1494,
+            1496,
+            1542
+          ]
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R4",
+      "tier_reasons": [
+        "keyword_only",
+        "broad_keyword_group",
+        "feed_winners_gte_1"
+      ]
+    },
+    {
+      "rank": 7,
+      "family_key": "family:topic:86b8434548938bdc",
+      "label": "искусственный интеллект",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_video_count": 20,
+      "winner_in_feed_count": 1,
+      "winner_video_ids": [
+        "0o08ZDSJy8A"
+      ],
+      "zero_or_null_views_share": 0.1,
+      "views_breakdown": {
+        "views_eq_0": 2,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 20,
+        "zero_null_missing_share": 0.1
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 1,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "0o08ZDSJy8A": [
+            112,
+            1594,
+            1597,
+            1618,
+            1643
+          ]
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R5",
+      "tier_reasons": [
+        "cross_source_supported",
+        "feed_winners_eq_1"
+      ]
+    },
+    {
+      "rank": 8,
+      "family_key": "family:kw:1930",
+      "label": "how does it work song",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 25,
+      "winner_in_feed_count": 1,
+      "winner_video_ids": [
+        "67H54IqgJBI"
+      ],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 25,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 1,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "67H54IqgJBI": [
+            110,
+            235,
+            280,
+            1245,
+            1288,
+            1290,
+            1291,
+            1293,
+            1310,
+            1312,
+            1317,
+            1358,
+            1371,
+            1373,
+            1374,
+            1375,
+            1376,
+            1423,
+            1426,
+            1437,
+            1467,
+            1470,
+            1482,
+            1930,
+            1931
+          ]
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R4",
+      "tier_reasons": [
+        "keyword_only",
+        "broad_keyword_group",
+        "feed_winners_gte_1"
+      ]
+    },
+    {
+      "rank": 9,
+      "family_key": "family:kw:1506",
+      "label": "как работает обучение нейросети",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_video_count": 19,
+      "winner_in_feed_count": 3,
+      "winner_video_ids": [
+        "-lSdkIhFmBw",
+        "29GOK7-NJ2U",
+        "zUN31YNxGUM"
+      ],
+      "zero_or_null_views_share": 0.1053,
+      "views_breakdown": {
+        "views_eq_0": 2,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 19,
+        "zero_null_missing_share": 0.1053
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 3,
+        "shared_single_keyword_all_winners": true,
+        "keyword_id_sets": {
+          "-lSdkIhFmBw": [
+            1489,
+            1506,
+            1556
+          ],
+          "29GOK7-NJ2U": [
+            111,
+            1489,
+            1506,
+            1507,
+            1556,
+            1557,
+            1561,
+            1562
+          ],
+          "zUN31YNxGUM": [
+            1506
+          ]
+        },
+        "overlapping_provenance": true
+      },
+      "tier": "supported_opportunity",
+      "tier_rule_id": "R2",
+      "tier_reasons": [
+        "cross_source_supported",
+        "feed_winners_gte_2",
+        "not_broad_keyword_only",
+        "views_below_exclusion"
+      ]
+    },
+    {
+      "rank": 10,
+      "family_key": "family:kw:154",
+      "label": "ai tools for video editing",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 20,
+      "winner_in_feed_count": 0,
+      "winner_video_ids": [],
+      "zero_or_null_views_share": 0.05,
+      "views_breakdown": {
+        "views_eq_0": 1,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 20,
+        "zero_null_missing_share": 0.05
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 0,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {},
+        "overlapping_provenance": false
+      },
+      "tier": "search_collection",
+      "tier_rule_id": "R1",
+      "tier_reasons": [
+        "no_top50_feed_winners"
+      ]
+    },
+    {
+      "rank": 11,
+      "family_key": "family:kw:1541",
+      "label": "unexplained video game mysteries",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 19,
+      "winner_in_feed_count": 0,
+      "winner_video_ids": [],
+      "zero_or_null_views_share": 0.1579,
+      "views_breakdown": {
+        "views_eq_0": 3,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 19,
+        "zero_null_missing_share": 0.1579
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 0,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {},
+        "overlapping_provenance": false
+      },
+      "tier": "search_collection",
+      "tier_rule_id": "R1",
+      "tier_reasons": [
+        "no_top50_feed_winners"
+      ]
+    },
+    {
+      "rank": 12,
+      "family_key": "family:kw:179",
+      "label": "ai tools for educational videos",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 19,
+      "winner_in_feed_count": 0,
+      "winner_video_ids": [],
+      "zero_or_null_views_share": 0.1579,
+      "views_breakdown": {
+        "views_eq_0": 3,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 19,
+        "zero_null_missing_share": 0.1579
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 0,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {},
+        "overlapping_provenance": false
+      },
+      "tier": "search_collection",
+      "tier_rule_id": "R1",
+      "tier_reasons": [
+        "no_top50_feed_winners"
+      ]
+    },
+    {
+      "rank": 13,
+      "family_key": "family:topic:298b5d20078b4f3f",
+      "label": "miniature painting tutorial beginners tabletop",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported"
+      ],
+      "support_sources": [
+        "topic"
+      ],
+      "member_video_count": 19,
+      "winner_in_feed_count": 3,
+      "winner_video_ids": [
+        "fs7uUUoFUwA",
+        "iv_zuQswIw8",
+        "llpd3E_GiEU"
+      ],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 19,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 3,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "fs7uUUoFUwA": [
+            207,
+            208,
+            219,
+            460,
+            461,
+            1245,
+            1299,
+            1302,
+            1303,
+            1317,
+            1375
+          ],
+          "iv_zuQswIw8": [],
+          "llpd3E_GiEU": []
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R7",
+      "tier_reasons": [
+        "video_topic_kind",
+        "no_cross_source",
+        "feed_winners_gte_1"
+      ]
+    },
+    {
+      "rank": 14,
+      "family_key": "family:kw:1594",
+      "label": "искусственный интеллект клип",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_video_count": 24,
+      "winner_in_feed_count": 1,
+      "winner_video_ids": [
+        "0o08ZDSJy8A"
+      ],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 24,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 1,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "0o08ZDSJy8A": [
+            112,
+            1594,
+            1597,
+            1618,
+            1643
+          ]
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R5",
+      "tier_reasons": [
+        "cross_source_supported",
+        "feed_winners_eq_1"
+      ]
+    },
+    {
+      "rank": 15,
+      "family_key": "family:kw:1488",
+      "label": "нейросети музыка",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 24,
+      "winner_in_feed_count": 1,
+      "winner_video_ids": [
+        "PVclFAkeZog"
+      ],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 24,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 1,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "PVclFAkeZog": [
+            111,
+            1488,
+            1489,
+            1505,
+            1557,
+            1636
+          ]
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R4",
+      "tier_reasons": [
+        "keyword_only",
+        "broad_keyword_group",
+        "feed_winners_gte_1"
+      ]
+    },
+    {
+      "rank": 16,
+      "family_key": "family:kw:180",
+      "label": "best ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 17,
+      "winner_in_feed_count": 1,
+      "winner_video_ids": [
+        "n0ryH4Banqs"
+      ],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 17,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 1,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "n0ryH4Banqs": [
+            180,
+            451,
+            452,
+            455
+          ]
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R4",
+      "tier_reasons": [
+        "keyword_only",
+        "broad_keyword_group",
+        "feed_winners_gte_1"
+      ]
+    },
+    {
+      "rank": 17,
+      "family_key": "family:topic:4ac6a6a26765f407",
+      "label": "нейросети клипы",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_video_count": 16,
+      "winner_in_feed_count": 2,
+      "winner_video_ids": [
+        "-lSdkIhFmBw",
+        "omuA7jVGPzw"
+      ],
+      "zero_or_null_views_share": 0.0625,
+      "views_breakdown": {
+        "views_eq_0": 1,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 16,
+        "zero_null_missing_share": 0.0625
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 2,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "-lSdkIhFmBw": [
+            1489,
+            1506,
+            1556
+          ],
+          "omuA7jVGPzw": [
+            112,
+            1489,
+            1511,
+            1555,
+            1556,
+            1557,
+            1561,
+            1562,
+            1575,
+            1616,
+            1618,
+            1628,
+            1630
+          ]
+        },
+        "overlapping_provenance": true
+      },
+      "tier": "supported_opportunity",
+      "tier_rule_id": "R2",
+      "tier_reasons": [
+        "cross_source_supported",
+        "feed_winners_gte_2",
+        "not_broad_keyword_only",
+        "views_below_exclusion"
+      ]
+    },
+    {
+      "rank": 18,
+      "family_key": "family:kw:182",
+      "label": "top free ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 18,
+      "winner_in_feed_count": 1,
+      "winner_video_ids": [
+        "moOgK6cpi9Q"
+      ],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 18,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 1,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "moOgK6cpi9Q": [
+            182,
+            1426
+          ]
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R4",
+      "tier_reasons": [
+        "keyword_only",
+        "broad_keyword_group",
+        "feed_winners_gte_1"
+      ]
+    },
+    {
+      "rank": 19,
+      "family_key": "family:kw:1540",
+      "label": "obscure video game mysteries",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 16,
+      "winner_in_feed_count": 2,
+      "winner_video_ids": [
+        "_n2USlDO_mo",
+        "j1tTDmEPzAE"
+      ],
+      "zero_or_null_views_share": 0.0625,
+      "views_breakdown": {
+        "views_eq_0": 1,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 16,
+        "zero_null_missing_share": 0.0625
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 2,
+        "shared_single_keyword_all_winners": true,
+        "keyword_id_sets": {
+          "_n2USlDO_mo": [
+            1540
+          ],
+          "j1tTDmEPzAE": [
+            1540
+          ]
+        },
+        "overlapping_provenance": true
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R4",
+      "tier_reasons": [
+        "keyword_only",
+        "broad_keyword_group",
+        "feed_winners_gte_1"
+      ]
+    },
+    {
+      "rank": 20,
+      "family_key": "family:kw:1482",
+      "label": "science class 4 question answer",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "member_video_count": 17,
+      "winner_in_feed_count": 1,
+      "winner_video_ids": [
+        "67H54IqgJBI"
+      ],
+      "zero_or_null_views_share": 0.0,
+      "views_breakdown": {
+        "views_eq_0": 0,
+        "views_null_with_snapshot": 0,
+        "missing_latest_snapshot": 0,
+        "no_monitoring_history": 0,
+        "member_count": 17,
+        "zero_null_missing_share": 0.0
+      },
+      "winner_independence": {
+        "distinct_winner_channels": 1,
+        "shared_single_keyword_all_winners": false,
+        "keyword_id_sets": {
+          "67H54IqgJBI": [
+            110,
+            235,
+            280,
+            1245,
+            1288,
+            1290,
+            1291,
+            1293,
+            1310,
+            1312,
+            1317,
+            1358,
+            1371,
+            1373,
+            1374,
+            1375,
+            1376,
+            1423,
+            1426,
+            1437,
+            1467,
+            1470,
+            1482,
+            1930,
+            1931
+          ]
+        },
+        "overlapping_provenance": false
+      },
+      "tier": "needs_review",
+      "tier_rule_id": "R4",
+      "tier_reasons": [
+        "keyword_only",
+        "broad_keyword_group",
+        "feed_winners_gte_1"
+      ]
+    }
+  ],
+  "views_threshold_analysis": {
+    "threshold": 0.35,
+    "families_at_or_above": 0,
+    "families_below": 20,
+    "max_share": 0.1579,
+    "would_block_supported_only": 0
+  },
+  "pattern_cap_simulation": {
+    "persisted_pattern_limit": 20,
+    "patterns_generated_uncapped": 1360,
+    "patterns_after_limit_20": 20,
+    "uncapped_by_kind": {
+      "keyword_provenance": 720,
+      "video_topic": 20,
+      "title_phrase": 620
+    },
+    "top20_by_kind": {
+      "keyword_provenance": 16,
+      "video_topic": 4
+    },
+    "dropped_count": 1340,
+    "dropped_by_kind": {
+      "keyword_provenance": 704,
+      "video_topic": 16,
+      "title_phrase": 620
+    },
+    "title_phrase_in_uncapped": 620,
+    "title_phrase_in_top20": 0,
+    "dropped_with_feed_winners": [
+      {
+        "pattern_key": "kw:215",
+        "kind": "keyword_provenance",
+        "label": "hidden places in vice city",
+        "video_count": 21,
+        "channel_count": 19,
+        "feed_winner_intersection": 5
+      },
+      {
+        "pattern_key": "kw:1303",
+        "kind": "keyword_provenance",
+        "label": "anime side characters now vs then",
+        "video_count": 21,
+        "channel_count": 18,
+        "feed_winner_intersection": 5
+      },
+      {
+        "pattern_key": "kw:1317",
+        "kind": "keyword_provenance",
+        "label": "then vs now actors henry danger",
+        "video_count": 16,
+        "channel_count": 16,
+        "feed_winner_intersection": 4
+      },
+      {
+        "pattern_key": "kw:219",
+        "kind": "keyword_provenance",
+        "label": "hidden places in free fire",
+        "video_count": 16,
+        "channel_count": 16,
+        "feed_winner_intersection": 3
+      },
+      {
+        "pattern_key": "kw:1537",
+        "kind": "keyword_provenance",
+        "label": "video game mysteries solved",
+        "video_count": 22,
+        "channel_count": 21,
+        "feed_winner_intersection": 2
+      },
+      {
+        "pattern_key": "kw:161",
+        "kind": "keyword_provenance",
+        "label": "а что если да",
+        "video_count": 21,
+        "channel_count": 21,
+        "feed_winner_intersection": 2
+      },
+      {
+        "pattern_key": "kw:428",
+        "kind": "keyword_provenance",
+        "label": "забытые эпохи",
+        "video_count": 23,
+        "channel_count": 20,
+        "feed_winner_intersection": 2
+      },
+      {
+        "pattern_key": "kw:164",
+        "kind": "keyword_provenance",
+        "label": "если бы я знал то что ты девятый класс",
+        "video_count": 23,
+        "channel_count": 19,
+        "feed_winner_intersection": 2
+      },
+      {
+        "pattern_key": "kw:1482",
+        "kind": "keyword_provenance",
+        "label": "science class 4 question answer",
+        "video_count": 21,
+        "channel_count": 18,
+        "feed_winner_intersection": 2
+      },
+      {
+        "pattern_key": "kw:1477",
+        "kind": "keyword_provenance",
+        "label": "how things actually work animation",
+        "video_count": 16,
+        "channel_count": 16,
+        "feed_winner_intersection": 2
+      },
+      {
+        "pattern_key": "kw:160",
+        "kind": "keyword_provenance",
+        "label": "что если бросить тебя",
+        "video_count": 18,
+        "channel_count": 15,
+        "feed_winner_intersection": 2
+      },
+      {
+        "pattern_key": "kw:101",
+        "kind": "keyword_provenance",
+        "label": "home improvement",
+        "video_count": 22,
+        "channel_count": 21,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:183",
+        "kind": "keyword_provenance",
+        "label": "top ai tools for education",
+        "video_count": 29,
+        "channel_count": 18,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:1542",
+        "kind": "keyword_provenance",
+        "label": "top 10 video game mysteries",
+        "video_count": 21,
+        "channel_count": 18,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:165",
+        "kind": "keyword_provenance",
+        "label": "что в душе моей темно если рядом нет тебя",
+        "video_count": 20,
+        "channel_count": 18,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:425",
+        "kind": "keyword_provenance",
+        "label": "странная история бумаги",
+        "video_count": 18,
+        "channel_count": 18,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:1931",
+        "kind": "keyword_provenance",
+        "label": "how does it work thomas song",
+        "video_count": 18,
+        "channel_count": 18,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:459",
+        "kind": "keyword_provenance",
+        "label": "best ai tools for research paper writing 2026",
+        "video_count": 18,
+        "channel_count": 17,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:184",
+        "kind": "keyword_provenance",
+        "label": "ai tools for higher education",
+        "video_count": 28,
+        "channel_count": 15,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:1277",
+        "kind": "keyword_provenance",
+        "label": "interesting facts about the world",
+        "video_count": 18,
+        "channel_count": 15,
+        "feed_winner_intersection": 1
+      },
+      {
+        "pattern_key": "kw:466",
+        "kind": "keyword_provenance",
+        "label": "ai tools for coding",
+        "video_count": 26,
+        "channel_count": 21,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:102",
+        "kind": "keyword_provenance",
+        "label": "life hacks",
+        "video_count": 22,
+        "channel_count": 20,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1506",
+        "kind": "keyword_provenance",
+        "label": "как работает обучение нейросети",
+        "video_count": 20,
+        "channel_count": 20,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "topic:4ac6a6a26765f407",
+        "kind": "video_topic",
+        "label": "нейросети клипы",
+        "video_count": 25,
+        "channel_count": 19,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1631",
+        "kind": "keyword_provenance",
+        "label": "ии для бизнеса",
+        "video_count": 23,
+        "channel_count": 19,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:441",
+        "kind": "keyword_provenance",
+        "label": "исторические загадки человечества",
+        "video_count": 25,
+        "channel_count": 19,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1669",
+        "kind": "keyword_provenance",
+        "label": "автоматизация ютуб",
+        "video_count": 22,
+        "channel_count": 19,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:463",
+        "kind": "keyword_provenance",
+        "label": "ai tools for research work",
+        "video_count": 25,
+        "channel_count": 18,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:117",
+        "kind": "keyword_provenance",
+        "label": "дисциплина",
+        "video_count": 19,
+        "channel_count": 18,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1663",
+        "kind": "keyword_provenance",
+        "label": "автоматизация",
+        "video_count": 21,
+        "channel_count": 18,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:439",
+        "kind": "keyword_provenance",
+        "label": "исторические тайны и загадки",
+        "video_count": 25,
+        "channel_count": 18,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:248",
+        "kind": "keyword_provenance",
+        "label": "ai tools for video editing in mobile",
+        "video_count": 18,
+        "channel_count": 18,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1634",
+        "kind": "keyword_provenance",
+        "label": "как использовать ии для бизнеса",
+        "video_count": 25,
+        "channel_count": 18,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "topic:94f87e43767a8270",
+        "kind": "video_topic",
+        "label": "how does it work song",
+        "video_count": 20,
+        "channel_count": 17,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:467",
+        "kind": "keyword_provenance",
+        "label": "ai tools for coders",
+        "video_count": 19,
+        "channel_count": 17,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1652",
+        "kind": "keyword_provenance",
+        "label": "искусственный интеллект для программирование",
+        "video_count": 17,
+        "channel_count": 17,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:440",
+        "kind": "keyword_provenance",
+        "label": "исторические тайны",
+        "video_count": 20,
+        "channel_count": 17,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1686",
+        "kind": "keyword_provenance",
+        "label": "саморазвитие женщины аудиокнига",
+        "video_count": 18,
+        "channel_count": 17,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1642",
+        "kind": "keyword_provenance",
+        "label": "ии уничтожил искусство",
+        "video_count": 17,
+        "channel_count": 17,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1636",
+        "kind": "keyword_provenance",
+        "label": "ии музыка",
+        "video_count": 28,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:455",
+        "kind": "keyword_provenance",
+        "label": "5 ai tools for project management",
+        "video_count": 20,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1560",
+        "kind": "keyword_provenance",
+        "label": "как сделать нейросети видео",
+        "video_count": 17,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1214",
+        "kind": "keyword_provenance",
+        "label": "ai agents tutorial",
+        "video_count": 18,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:212",
+        "kind": "keyword_provenance",
+        "label": "ai tools for research writing",
+        "video_count": 17,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1511",
+        "kind": "keyword_provenance",
+        "label": "нейросети для создания видео по тексту",
+        "video_count": 16,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1633",
+        "kind": "keyword_provenance",
+        "label": "искусственный интеллект для бизнеса",
+        "video_count": 16,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1682",
+        "kind": "keyword_provenance",
+        "label": "саморазвитие женщины с чего начать",
+        "video_count": 16,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:1683",
+        "kind": "keyword_provenance",
+        "label": "с чего начать саморазвитие девушке",
+        "video_count": 16,
+        "channel_count": 16,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "phrase:14328be5005d69fd",
+        "kind": "title_phrase",
+        "label": "slowed reverb songs",
+        "video_count": 30,
+        "channel_count": 15,
+        "feed_winner_intersection": 0
+      },
+      {
+        "pattern_key": "kw:152",
+        "kind": "keyword_provenance",
+        "label": "ai tools for education",
+        "video_count": 24,
+        "channel_count": 15,
+        "feed_winner_intersection": 0
+      }
+    ],
+    "uncapped_families_summary": {
+      "family_count": 1321,
+      "flag_counts": {
+        "phrase_supported": 1199,
+        "cross_source_supported": 1202,
+        "topic_supported": 293,
+        "keyword_only": 104,
+        "broad_keyword_group": 3,
+        "repeated_title_template": 1
+      },
+      "kind_counts": {
+        "keyword_provenance": 720,
+        "video_topic": 20,
+        "title_phrase": 620
+      }
+    }
+  }
+}

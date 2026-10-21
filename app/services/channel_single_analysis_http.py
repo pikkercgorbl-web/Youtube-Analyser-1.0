@@ -363,6 +363,29 @@ async def run_channel_single_shelf(
     )
 
 
+async def enrich_publications_for_channel(
+    client: YouTubeApiClient,
+    *,
+    channel_id: str,
+    publications: list[ChannelSingleAnalysisPublication],
+) -> tuple[list[ChannelSingleAnalysisPublication], int, str | None]:
+    """Batch videos.list merge without focus or peer comparison."""
+    cid = channel_id.strip()
+    by_id: dict[str, ChannelSingleAnalysisPublication] = {
+        p.video_id: p.model_copy(update={"channel_id": cid}) for p in publications
+    }
+    feed_ids = list(by_id.keys())
+    ids_to_fetch: list[str] = [
+        vid for vid in dict.fromkeys(feed_ids) if _publication_needs_api_fetch(by_id[vid])
+    ]
+    details_by_id, enrichment_error = await _fetch_video_details(client, ids_to_fetch)
+    enriched_publications: list[ChannelSingleAnalysisPublication] = []
+    for vid in feed_ids:
+        enriched_publications.append(_merge_publication(by_id[vid], details_by_id.get(vid)))
+    regular_confirmed = sum(1 for p in enriched_publications if p.kind == "regular" and p.published_at)
+    return enriched_publications, regular_confirmed, enrichment_error
+
+
 async def run_channel_single_enrich(
     client: YouTubeApiClient,
     request: ChannelSingleAnalysisEnrichRequest,
@@ -428,8 +451,8 @@ async def run_channel_single_enrich(
 
 async def run_channel_single_shelf_more(
     client: YouTubeApiClient,
-    request: ChannelSingleShelfMoreRequest,
-) -> ChannelSingleShelfMoreResponse:
+    request: ChannelSingleAnalysisShelfMoreRequest,
+) -> ChannelSingleAnalysisShelfMoreResponse:
     channel_id = request.channel_id.strip()
     if not channel_id:
         raise HTTPException(
@@ -443,7 +466,7 @@ async def run_channel_single_shelf_more(
     existing_set = set(existing_ids)
 
     if current_count >= max_total:
-        return ChannelSingleShelfMoreResponse(
+        return ChannelSingleAnalysisShelfMoreResponse(
             channel_id=channel_id,
             new_publications=[],
             feed_loaded_count=current_count,
@@ -468,7 +491,7 @@ async def run_channel_single_shelf_more(
     total_unique = len({v.video_id for v in browse_videos} | existing_set)
     has_more = len(browse_videos) >= target and target < max_total
 
-    return ChannelSingleShelfMoreResponse(
+    return ChannelSingleAnalysisShelfMoreResponse(
         channel_id=channel_id,
         new_publications=new_publications,
         feed_loaded_count=total_unique,

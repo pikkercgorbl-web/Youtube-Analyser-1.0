@@ -1,6 +1,30 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
+  async redirects() {
+    return [
+      {
+        source: "/explosive-channels",
+        destination: "/opportunities#section=channels",
+        permanent: false,
+      },
+      {
+        source: "/leaders",
+        destination: "/opportunities#section=channels",
+        permanent: false,
+      },
+      {
+        source: "/anomalies",
+        destination: "/",
+        permanent: false,
+      },
+      {
+        source: "/keyword-analyze",
+        destination: "/keyword-performance",
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/$/, "");
     return [

@@ -1,0 +1,1172 @@
+﻿2026-10-20 18:51:39,376 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2026-10-20 18:51:39,376 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-10-20 18:51:39,380 INFO sqlalchemy.engine.Engine select current_schema()
+2026-10-20 18:51:39,380 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-10-20 18:51:39,383 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+2026-10-20 18:51:39,383 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-10-20 18:51:39,393 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,394 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,394 INFO sqlalchemy.engine.Engine [generated in 0.00039s] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,399 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,408 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,408 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,408 INFO sqlalchemy.engine.Engine [generated in 0.00062s] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'target_keywords'}
+2026-10-20 18:51:39,418 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,418 INFO sqlalchemy.engine.Engine [generated in 0.00024s] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,425 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,425 INFO sqlalchemy.engine.Engine [generated in 0.00035s] {'typtype_1': 'e'}
+2026-10-20 18:51:39,429 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,433 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,433 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,434 INFO sqlalchemy.engine.Engine [cached since 0.04039s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,437 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,440 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,440 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,440 INFO sqlalchemy.engine.Engine [cached since 0.03271s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'explosive_channel_settings'}
+2026-10-20 18:51:39,443 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,444 INFO sqlalchemy.engine.Engine [cached since 0.02614s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,446 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,447 INFO sqlalchemy.engine.Engine [cached since 0.02142s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,448 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,453 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,453 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,453 INFO sqlalchemy.engine.Engine [cached since 0.05939s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,456 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,459 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,459 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,459 INFO sqlalchemy.engine.Engine [cached since 0.0513s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'explosive_channels'}
+2026-10-20 18:51:39,462 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,462 INFO sqlalchemy.engine.Engine [cached since 0.04485s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,465 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,465 INFO sqlalchemy.engine.Engine [cached since 0.04003s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,467 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,472 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,472 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,473 INFO sqlalchemy.engine.Engine [cached since 0.0789s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,476 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,479 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,479 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,479 INFO sqlalchemy.engine.Engine [cached since 0.07165s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'explosive_channels'}
+2026-10-20 18:51:39,483 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,484 INFO sqlalchemy.engine.Engine [cached since 0.06596s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,486 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,487 INFO sqlalchemy.engine.Engine [cached since 0.06164s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,489 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,493 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,494 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,494 INFO sqlalchemy.engine.Engine [cached since 0.1001s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,497 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,500 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,500 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,500 INFO sqlalchemy.engine.Engine [cached since 0.09266s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'radar_worker_state'}
+2026-10-20 18:51:39,503 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,503 INFO sqlalchemy.engine.Engine [cached since 0.08596s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,507 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,507 INFO sqlalchemy.engine.Engine [cached since 0.08143s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,509 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,514 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,514 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,514 INFO sqlalchemy.engine.Engine [cached since 0.1206s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,518 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,522 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,522 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,522 INFO sqlalchemy.engine.Engine [cached since 0.1282s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,526 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,530 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,530 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,530 INFO sqlalchemy.engine.Engine [cached since 0.137s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,533 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,538 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,538 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,538 INFO sqlalchemy.engine.Engine [cached since 0.1443s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,540 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,545 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,545 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,545 INFO sqlalchemy.engine.Engine [cached since 0.1516s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,548 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,552 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,552 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,552 INFO sqlalchemy.engine.Engine [cached since 0.1583s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,555 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,558 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,558 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,558 INFO sqlalchemy.engine.Engine [cached since 0.1645s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,561 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,564 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,564 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,565 INFO sqlalchemy.engine.Engine [cached since 0.171s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,567 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,571 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,571 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,571 INFO sqlalchemy.engine.Engine [cached since 0.1774s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,574 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,576 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,576 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,576 INFO sqlalchemy.engine.Engine [cached since 0.1689s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'target_keywords'}
+2026-10-20 18:51:39,580 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,580 INFO sqlalchemy.engine.Engine [cached since 0.1626s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,582 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,582 INFO sqlalchemy.engine.Engine [cached since 0.1572s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,585 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,587 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,637 INFO sqlalchemy.engine.Engine SELECT target_keywords.id, target_keywords.keyword, target_keywords.created_at, target_keywords.last_checked, target_keywords.lifecycle_status, target_keywords.scan_interval_seconds, target_keywords.next_scan_at, target_keywords.status_changed_at, target_keywords.status_reason, target_keywords.source_type, target_keywords.parent_keyword_id 
+FROM target_keywords
+2026-10-20 18:51:39,637 INFO sqlalchemy.engine.Engine [generated in 0.00025s] {}
+2026-10-20 18:51:39,697 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,707 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,707 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,707 INFO sqlalchemy.engine.Engine [cached since 0.3139s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,711 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,716 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,716 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,716 INFO sqlalchemy.engine.Engine [cached since 0.3225s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,720 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,725 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,726 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,726 INFO sqlalchemy.engine.Engine [cached since 0.3321s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,730 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,735 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,735 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,735 INFO sqlalchemy.engine.Engine [cached since 0.3415s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,739 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,744 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,745 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,745 INFO sqlalchemy.engine.Engine [cached since 0.3512s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,749 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,753 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,753 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,753 INFO sqlalchemy.engine.Engine [cached since 0.3598s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,757 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,759 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,759 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,760 INFO sqlalchemy.engine.Engine [cached since 0.3527s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'channels'}
+2026-10-20 18:51:39,764 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,764 INFO sqlalchemy.engine.Engine [cached since 0.3468s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,767 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,767 INFO sqlalchemy.engine.Engine [cached since 0.3427s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,770 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,773 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,774 INFO sqlalchemy.engine.Engine COMMIT
+2026-10-20 18:51:39,777 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,777 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,777 INFO sqlalchemy.engine.Engine [cached since 0.3839s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,781 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,786 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,786 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,786 INFO sqlalchemy.engine.Engine [cached since 0.393s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,789 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,794 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,794 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,794 INFO sqlalchemy.engine.Engine [cached since 0.401s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,797 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,800 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,800 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,800 INFO sqlalchemy.engine.Engine [cached since 0.3932s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'videos'}
+2026-10-20 18:51:39,804 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,804 INFO sqlalchemy.engine.Engine [cached since 0.3873s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,807 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,807 INFO sqlalchemy.engine.Engine [cached since 0.3823s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,810 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,813 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,814 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,814 INFO sqlalchemy.engine.Engine [cached since 0.4205s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,817 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,821 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,821 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,821 INFO sqlalchemy.engine.Engine [cached since 0.4282s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,824 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,829 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,829 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,829 INFO sqlalchemy.engine.Engine [cached since 0.4357s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,832 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,836 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,836 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,837 INFO sqlalchemy.engine.Engine [cached since 0.4435s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,841 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,844 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,844 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,845 INFO sqlalchemy.engine.Engine [cached since 0.4515s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,848 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,852 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,852 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,852 INFO sqlalchemy.engine.Engine [cached since 0.4593s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,855 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,858 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,858 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,858 INFO sqlalchemy.engine.Engine [cached since 0.4511s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'saved_videos'}
+2026-10-20 18:51:39,861 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,861 INFO sqlalchemy.engine.Engine [cached since 0.4444s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,864 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,864 INFO sqlalchemy.engine.Engine [cached since 0.4395s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,866 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,870 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,870 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,870 INFO sqlalchemy.engine.Engine [cached since 0.4771s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,873 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,877 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,877 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,877 INFO sqlalchemy.engine.Engine [cached since 0.4837s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,880 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,883 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,883 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,884 INFO sqlalchemy.engine.Engine [cached since 0.4767s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'read_model_publish_locks'}
+2026-10-20 18:51:39,888 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,888 INFO sqlalchemy.engine.Engine [cached since 0.471s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,892 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,892 INFO sqlalchemy.engine.Engine [cached since 0.4669s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,895 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,900 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,900 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,900 INFO sqlalchemy.engine.Engine [cached since 0.5061s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,902 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,906 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,907 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,907 INFO sqlalchemy.engine.Engine [cached since 0.513s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,909 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,913 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,914 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,914 INFO sqlalchemy.engine.Engine [cached since 0.5201s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,916 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,919 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,919 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,919 INFO sqlalchemy.engine.Engine [cached since 0.5115s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'videos'}
+2026-10-20 18:51:39,922 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,922 INFO sqlalchemy.engine.Engine [cached since 0.5047s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,925 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,925 INFO sqlalchemy.engine.Engine [cached since 0.5s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,927 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,931 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,932 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,932 INFO sqlalchemy.engine.Engine [cached since 0.538s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,935 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,939 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,939 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s]) AND pg_catalog.pg_class.relpersistence != %(relpersistence_1)s AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-10-20 18:51:39,939 INFO sqlalchemy.engine.Engine [cached since 0.5456s ago] {'param_1': 'r', 'param_2': 'p', 'relpersistence_1': 't', 'nspname_1': 'pg_catalog'}
+2026-10-20 18:51:39,942 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,945 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,945 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_attribute.attname AS name, pg_catalog.format_type(pg_catalog.pg_attribute.atttypid, pg_catalog.pg_attribute.atttypmod) AS format_type, (SELECT pg_catalog.pg_get_expr(pg_catalog.pg_attrdef.adbin, pg_catalog.pg_attrdef.adrelid) AS pg_get_expr_1 
+FROM pg_catalog.pg_attrdef 
+WHERE pg_catalog.pg_attrdef.adrelid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attrdef.adnum = pg_catalog.pg_attribute.attnum AND pg_catalog.pg_attribute.atthasdef) AS "default", pg_catalog.pg_attribute.attnotnull AS not_null, pg_catalog.pg_class.relname AS table_name, pg_catalog.pg_description.description AS comment, pg_catalog.pg_attribute.attgenerated AS generated, (SELECT json_build_object(%(json_build_object_2)s, pg_catalog.pg_attribute.attidentity = %(attidentity_1)s, %(json_build_object_3)s, pg_catalog.pg_sequence.seqstart, %(json_build_object_4)s, pg_catalog.pg_sequence.seqincrement, %(json_build_object_5)s, pg_catalog.pg_sequence.seqmin, %(json_build_object_6)s, pg_catalog.pg_sequence.seqmax, %(json_build_object_7)s, pg_catalog.pg_sequence.seqcache, %(json_build_object_8)s, pg_catalog.pg_sequence.seqcycle) AS json_build_object_1 
+FROM pg_catalog.pg_sequence 
+WHERE pg_catalog.pg_attribute.attidentity != %(attidentity_2)s AND pg_catalog.pg_sequence.seqrelid = CAST(CAST(pg_catalog.pg_get_serial_sequence(CAST(CAST(pg_catalog.pg_attribute.attrelid AS REGCLASS) AS TEXT), pg_catalog.pg_attribute.attname) AS REGCLASS) AS OID)) AS identity_options, CASE WHEN (pg_catalog.pg_attribute.attcollation != %(attcollation_1)s AND (SELECT pg_catalog.pg_type.typcollation 
+FROM pg_catalog.pg_type 
+WHERE pg_catalog.pg_type.oid = pg_catalog.pg_attribute.atttypid) != pg_catalog.pg_attribute.attcollation) THEN (SELECT pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_collation 
+WHERE pg_catalog.pg_collation.oid = pg_catalog.pg_attribute.attcollation) ELSE NULL END AS collation 
+FROM pg_catalog.pg_class LEFT OUTER JOIN pg_catalog.pg_attribute ON pg_catalog.pg_class.oid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_attribute.attnum > %(attnum_1)s AND NOT pg_catalog.pg_attribute.attisdropped LEFT OUTER JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_attribute.attrelid AND pg_catalog.pg_description.objsubid = pg_catalog.pg_attribute.attnum JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s AND pg_catalog.pg_class.relname IN (%(filter_names_1)s) ORDER BY pg_catalog.pg_class.relname, pg_catalog.pg_attribute.attnum
+2026-10-20 18:51:39,945 INFO sqlalchemy.engine.Engine [cached since 0.538s ago] {'json_build_object_2': 'always', 'attidentity_1': 'a', 'json_build_object_3': 'start', 'json_build_object_4': 'increment', 'json_build_object_5': 'minvalue', 'json_build_object_6': 'maxvalue', 'json_build_object_7': 'cache', 'json_build_object_8': 'cycle', 'attidentity_2': '', 'attcollation_1': 0, 'attnum_1': 0, 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog', 'filter_names_1': 'saved_video_similar_watches'}
+2026-10-20 18:51:39,949 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.format_type(pg_catalog.pg_type.typbasetype, pg_catalog.pg_type.typtypmod) AS attype, NOT pg_catalog.pg_type.typnotnull AS nullable, pg_catalog.pg_type.typdefault AS "default", pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, domain_constraints.condefs, domain_constraints.connames, pg_catalog.pg_collation.collname 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN pg_catalog.pg_collation ON pg_catalog.pg_type.typcollation = pg_catalog.pg_collation.oid LEFT OUTER JOIN (SELECT pg_catalog.pg_constraint.contypid AS contypid, array_agg(pg_catalog.pg_get_constraintdef(pg_catalog.pg_constraint.oid, %(pg_get_constraintdef_1)s)) AS condefs, array_agg(CAST(pg_catalog.pg_constraint.conname AS TEXT)) AS connames 
+FROM pg_catalog.pg_constraint 
+WHERE pg_catalog.pg_constraint.contypid != %(contypid_1)s GROUP BY pg_catalog.pg_constraint.contypid) AS domain_constraints ON pg_catalog.pg_type.oid = domain_constraints.contypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,949 INFO sqlalchemy.engine.Engine [cached since 0.5321s ago] {'pg_get_constraintdef_1': True, 'contypid_1': 0, 'typtype_1': 'd'}
+2026-10-20 18:51:39,952 INFO sqlalchemy.engine.Engine SELECT pg_catalog.pg_type.typname AS name, pg_catalog.pg_type_is_visible(pg_catalog.pg_type.oid) AS visible, pg_catalog.pg_namespace.nspname AS schema, lbl_agg.labels AS labels 
+FROM pg_catalog.pg_type JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_type.typnamespace LEFT OUTER JOIN (SELECT pg_catalog.pg_enum.enumtypid AS enumtypid, array_agg(CAST(pg_catalog.pg_enum.enumlabel AS TEXT) ORDER BY pg_catalog.pg_enum.enumsortorder) AS labels 
+FROM pg_catalog.pg_enum GROUP BY pg_catalog.pg_enum.enumtypid) AS lbl_agg ON pg_catalog.pg_type.oid = lbl_agg.enumtypid 
+WHERE pg_catalog.pg_type.typtype = %(typtype_1)s ORDER BY pg_catalog.pg_namespace.nspname, pg_catalog.pg_type.typname
+2026-10-20 18:51:39,953 INFO sqlalchemy.engine.Engine [cached since 0.5275s ago] {'typtype_1': 'e'}
+2026-10-20 18:51:39,955 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-10-20 18:51:39,959 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,961 INFO sqlalchemy.engine.Engine SELECT saved_videos.id AS saved_videos_id, saved_videos.video_id AS saved_videos_video_id, saved_videos.saved_at AS saved_videos_saved_at, saved_videos.status AS saved_videos_status, saved_videos.notes AS saved_videos_notes, saved_videos.tags_json AS saved_videos_tags_json, saved_videos.archived_at AS saved_videos_archived_at, saved_videos.created_from_attention_run_id AS saved_videos_created_from_attention_run_id, saved_videos.frozen_title AS saved_videos_frozen_title, saved_videos.frozen_channel_id AS saved_videos_frozen_channel_id, saved_videos.frozen_channel_title AS saved_videos_frozen_channel_title, saved_videos.frozen_payload_json AS saved_videos_frozen_payload_json, saved_videos.latest_observed_at AS saved_videos_latest_observed_at, saved_videos.manual_refresh_lease_until AS saved_videos_manual_refresh_lease_until, saved_videos.created_at AS saved_videos_created_at, saved_videos.updated_at AS saved_videos_updated_at 
+FROM saved_videos 
+WHERE saved_videos.id = %(pk_1)s
+2026-10-20 18:51:39,962 INFO sqlalchemy.engine.Engine [generated in 0.00026s] {'pk_1': 1}
+suggested_queries ['biggest grain carts ever built', 'grain carts', 'biggest grain carts', 'grain carts ever', 'biggest grain carts ever']
+2026-10-20 18:51:39,970 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_watches.saved_video_id AS saved_video_similar_watches_saved_video_id, saved_video_similar_watches.status AS saved_video_similar_watches_status, saved_video_similar_watches.queries_json AS saved_video_similar_watches_queries_json, saved_video_similar_watches.suggested_queries_json AS saved_video_similar_watches_suggested_queries_json, saved_video_similar_watches.confirmed_at AS saved_video_similar_watches_confirmed_at, saved_video_similar_watches.next_scan_at AS saved_video_similar_watches_next_scan_at, saved_video_similar_watches.last_scan_at AS saved_video_similar_watches_last_scan_at, saved_video_similar_watches.last_scan_id AS saved_video_similar_watches_last_scan_id, saved_video_similar_watches.last_display_state AS saved_video_similar_watches_last_display_state, saved_video_similar_watches.scan_lease_until AS saved_video_similar_watches_scan_lease_until, saved_video_similar_watches.last_error AS saved_video_similar_watches_last_error, saved_video_similar_watches.batch_query_offset AS saved_video_similar_watches_batch_query_offset, saved_video_similar_watches.created_at AS saved_video_similar_watches_created_at, saved_video_similar_watches.updated_at AS saved_video_similar_watches_updated_at 
+FROM saved_video_similar_watches 
+WHERE saved_video_similar_watches.saved_video_id = %(pk_1)s
+2026-10-20 18:51:39,970 INFO sqlalchemy.engine.Engine [generated in 0.00029s] {'pk_1': 1}
+2026-10-20 18:51:39,976 INFO sqlalchemy.engine.Engine UPDATE saved_video_similar_watches SET suggested_queries_json=%(suggested_queries_json)s, updated_at=%(updated_at)s WHERE saved_video_similar_watches.saved_video_id = %(saved_video_similar_watches_saved_video_id)s
+2026-10-20 18:51:39,976 INFO sqlalchemy.engine.Engine [generated in 0.00020s] {'suggested_queries_json': '["biggest grain carts ever built", "grain carts", "biggest grain carts", "grain carts ever", "biggest grain carts ever"]', 'updated_at': datetime.datetime(2026, 10, 20, 12, 51, 39, 975183, tzinfo=datetime.timezone.utc), 'saved_video_similar_watches_saved_video_id': 1}
+2026-10-20 18:51:39,980 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_watches.saved_video_id AS saved_video_similar_watches_saved_video_id, saved_video_similar_watches.status AS saved_video_similar_watches_status, saved_video_similar_watches.queries_json AS saved_video_similar_watches_queries_json, saved_video_similar_watches.suggested_queries_json AS saved_video_similar_watches_suggested_queries_json, saved_video_similar_watches.confirmed_at AS saved_video_similar_watches_confirmed_at, saved_video_similar_watches.next_scan_at AS saved_video_similar_watches_next_scan_at, saved_video_similar_watches.last_scan_at AS saved_video_similar_watches_last_scan_at, saved_video_similar_watches.last_scan_id AS saved_video_similar_watches_last_scan_id, saved_video_similar_watches.last_display_state AS saved_video_similar_watches_last_display_state, saved_video_similar_watches.scan_lease_until AS saved_video_similar_watches_scan_lease_until, saved_video_similar_watches.last_error AS saved_video_similar_watches_last_error, saved_video_similar_watches.batch_query_offset AS saved_video_similar_watches_batch_query_offset, saved_video_similar_watches.created_at AS saved_video_similar_watches_created_at, saved_video_similar_watches.updated_at AS saved_video_similar_watches_updated_at 
+FROM saved_video_similar_watches 
+WHERE saved_video_similar_watches.saved_video_id = %(pk_1)s
+2026-10-20 18:51:39,980 INFO sqlalchemy.engine.Engine [cached since 0.009822s ago] {'pk_1': 1}
+2026-10-20 18:51:39,983 INFO sqlalchemy.engine.Engine UPDATE saved_video_similar_watches SET updated_at=%(updated_at)s WHERE saved_video_similar_watches.saved_video_id = %(saved_video_similar_watches_saved_video_id)s
+2026-10-20 18:51:39,983 INFO sqlalchemy.engine.Engine [generated in 0.00019s] {'updated_at': datetime.datetime(2026, 10, 20, 12, 51, 39, 982484, tzinfo=datetime.timezone.utc), 'saved_video_similar_watches_saved_video_id': 1}
+2026-10-20 18:51:39,985 INFO sqlalchemy.engine.Engine UPDATE saved_video_similar_watches SET queries_json=%(queries_json)s, next_scan_at=%(next_scan_at)s, last_display_state=%(last_display_state)s, updated_at=%(updated_at)s WHERE saved_video_similar_watches.saved_video_id = %(saved_video_similar_watches_saved_video_id)s
+2026-10-20 18:51:39,986 INFO sqlalchemy.engine.Engine [generated in 0.00025s] {'queries_json': '["biggest grain carts ever built", "grain carts", "biggest grain carts"]', 'next_scan_at': None, 'last_display_state': 'never_checked', 'updated_at': datetime.datetime(2026, 10, 20, 12, 51, 39, 985356, tzinfo=datetime.timezone.utc), 'saved_video_similar_watches_saved_video_id': 1}
+2026-10-20 18:51:39,988 INFO sqlalchemy.engine.Engine COMMIT
+2026-10-20 18:51:39,994 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:39,996 INFO sqlalchemy.engine.Engine SELECT saved_videos.id AS saved_videos_id, saved_videos.video_id AS saved_videos_video_id, saved_videos.saved_at AS saved_videos_saved_at, saved_videos.status AS saved_videos_status, saved_videos.notes AS saved_videos_notes, saved_videos.tags_json AS saved_videos_tags_json, saved_videos.archived_at AS saved_videos_archived_at, saved_videos.created_from_attention_run_id AS saved_videos_created_from_attention_run_id, saved_videos.frozen_title AS saved_videos_frozen_title, saved_videos.frozen_channel_id AS saved_videos_frozen_channel_id, saved_videos.frozen_channel_title AS saved_videos_frozen_channel_title, saved_videos.frozen_payload_json AS saved_videos_frozen_payload_json, saved_videos.latest_observed_at AS saved_videos_latest_observed_at, saved_videos.manual_refresh_lease_until AS saved_videos_manual_refresh_lease_until, saved_videos.created_at AS saved_videos_created_at, saved_videos.updated_at AS saved_videos_updated_at 
+FROM saved_videos 
+WHERE saved_videos.id = %(pk_1)s
+2026-10-20 18:51:39,996 INFO sqlalchemy.engine.Engine [generated in 0.00032s] {'pk_1': 1}
+2026-10-20 18:51:40,000 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_watches.saved_video_id AS saved_video_similar_watches_saved_video_id, saved_video_similar_watches.status AS saved_video_similar_watches_status, saved_video_similar_watches.queries_json AS saved_video_similar_watches_queries_json, saved_video_similar_watches.suggested_queries_json AS saved_video_similar_watches_suggested_queries_json, saved_video_similar_watches.confirmed_at AS saved_video_similar_watches_confirmed_at, saved_video_similar_watches.next_scan_at AS saved_video_similar_watches_next_scan_at, saved_video_similar_watches.last_scan_at AS saved_video_similar_watches_last_scan_at, saved_video_similar_watches.last_scan_id AS saved_video_similar_watches_last_scan_id, saved_video_similar_watches.last_display_state AS saved_video_similar_watches_last_display_state, saved_video_similar_watches.scan_lease_until AS saved_video_similar_watches_scan_lease_until, saved_video_similar_watches.last_error AS saved_video_similar_watches_last_error, saved_video_similar_watches.batch_query_offset AS saved_video_similar_watches_batch_query_offset, saved_video_similar_watches.created_at AS saved_video_similar_watches_created_at, saved_video_similar_watches.updated_at AS saved_video_similar_watches_updated_at 
+FROM saved_video_similar_watches 
+WHERE saved_video_similar_watches.saved_video_id = %(pk_1)s
+2026-10-20 18:51:40,000 INFO sqlalchemy.engine.Engine [cached since 0.02997s ago] {'pk_1': 1}
+2026-10-20 18:51:40,003 INFO sqlalchemy.engine.Engine UPDATE saved_video_similar_watches SET last_display_state=%(last_display_state)s, scan_lease_until=%(scan_lease_until)s, updated_at=%(updated_at)s WHERE saved_video_similar_watches.saved_video_id = %(saved_video_similar_watches_saved_video_id)s
+2026-10-20 18:51:40,003 INFO sqlalchemy.engine.Engine [generated in 0.00027s] {'last_display_state': 'scanning', 'scan_lease_until': datetime.datetime(2026, 10, 20, 13, 1, 40, 2743, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2026, 10, 20, 12, 51, 40, 2743, tzinfo=datetime.timezone.utc), 'saved_video_similar_watches_saved_video_id': 1}
+2026-10-20 18:51:40,008 INFO sqlalchemy.engine.Engine INSERT INTO saved_video_similar_scans (saved_video_id, scan_run_id, trigger, started_at, finished_at, status, queries_attempted, queries_failed, new_findings_count, payload_json) VALUES (%(saved_video_id)s, %(scan_run_id)s, %(trigger)s, %(started_at)s, %(finished_at)s, %(status)s, %(queries_attempted)s, %(queries_failed)s, %(new_findings_count)s, %(payload_json)s) RETURNING saved_video_similar_scans.id
+2026-10-20 18:51:40,008 INFO sqlalchemy.engine.Engine [generated in 0.00030s] {'saved_video_id': 1, 'scan_run_id': 'saved_similar_20261020T125140Z_9317fd8d', 'trigger': 'manual', 'started_at': datetime.datetime(2026, 10, 20, 12, 51, 40, 2743, tzinfo=datetime.timezone.utc), 'finished_at': None, 'status': 'running', 'queries_attempted': 0, 'queries_failed': 0, 'new_findings_count': 0, 'payload_json': '{}'}
+2026-10-20 18:51:42,759 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,760 INFO sqlalchemy.engine.Engine [generated in 0.00031s] {'saved_video_id_1': 1, 'video_id_1': 'OHvzl9iQ5jo'}
+2026-10-20 18:51:42,764 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,765 INFO sqlalchemy.engine.Engine [cached since 0.005154s ago] {'saved_video_id_1': 1, 'video_id_1': 'mVHM3KuBUQM'}
+2026-10-20 18:51:42,768 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,768 INFO sqlalchemy.engine.Engine [cached since 0.00812s ago] {'saved_video_id_1': 1, 'video_id_1': 'OGgwEb4Qj50'}
+2026-10-20 18:51:42,770 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,770 INFO sqlalchemy.engine.Engine [cached since 0.01064s ago] {'saved_video_id_1': 1, 'video_id_1': 'mWXF-kDJnOA'}
+2026-10-20 18:51:42,773 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,773 INFO sqlalchemy.engine.Engine [cached since 0.01348s ago] {'saved_video_id_1': 1, 'video_id_1': '2-3JBEyUZ9Q'}
+2026-10-20 18:51:42,776 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,776 INFO sqlalchemy.engine.Engine [cached since 0.01623s ago] {'saved_video_id_1': 1, 'video_id_1': 'VAC-rBb69PE'}
+2026-10-20 18:51:42,778 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,778 INFO sqlalchemy.engine.Engine [cached since 0.01885s ago] {'saved_video_id_1': 1, 'video_id_1': 'yGhJPmc5wWY'}
+2026-10-20 18:51:42,781 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,781 INFO sqlalchemy.engine.Engine [cached since 0.02168s ago] {'saved_video_id_1': 1, 'video_id_1': 'lBvqsWbR_wE'}
+2026-10-20 18:51:42,784 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,784 INFO sqlalchemy.engine.Engine [cached since 0.02478s ago] {'saved_video_id_1': 1, 'video_id_1': 'hn_azhApJ5s'}
+2026-10-20 18:51:42,788 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,788 INFO sqlalchemy.engine.Engine [cached since 0.02833s ago] {'saved_video_id_1': 1, 'video_id_1': 'pwCk-dMp4wA'}
+2026-10-20 18:51:42,791 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,791 INFO sqlalchemy.engine.Engine [cached since 0.03178s ago] {'saved_video_id_1': 1, 'video_id_1': 'LOo2IidUL48'}
+2026-10-20 18:51:42,794 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,794 INFO sqlalchemy.engine.Engine [cached since 0.03474s ago] {'saved_video_id_1': 1, 'video_id_1': 'tItyZ3beGlg'}
+2026-10-20 18:51:42,797 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,797 INFO sqlalchemy.engine.Engine [cached since 0.0377s ago] {'saved_video_id_1': 1, 'video_id_1': 'ROnt6kktdOc'}
+2026-10-20 18:51:42,800 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,801 INFO sqlalchemy.engine.Engine [cached since 0.04079s ago] {'saved_video_id_1': 1, 'video_id_1': 'nfLiZyJ0rKY'}
+2026-10-20 18:51:42,803 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,803 INFO sqlalchemy.engine.Engine [cached since 0.04383s ago] {'saved_video_id_1': 1, 'video_id_1': '-ZnR28YyK1M'}
+2026-10-20 18:51:42,806 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,806 INFO sqlalchemy.engine.Engine [cached since 0.0466s ago] {'saved_video_id_1': 1, 'video_id_1': 'B5TMuFegXkE'}
+2026-10-20 18:51:42,809 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,809 INFO sqlalchemy.engine.Engine [cached since 0.04953s ago] {'saved_video_id_1': 1, 'video_id_1': 'drrJLLVpIS4'}
+2026-10-20 18:51:42,812 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,812 INFO sqlalchemy.engine.Engine [cached since 0.05252s ago] {'saved_video_id_1': 1, 'video_id_1': 'FgLEsySt9nY'}
+2026-10-20 18:51:42,815 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,815 INFO sqlalchemy.engine.Engine [cached since 0.05535s ago] {'saved_video_id_1': 1, 'video_id_1': 'vxLjbTCHN4A'}
+2026-10-20 18:51:42,818 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,818 INFO sqlalchemy.engine.Engine [cached since 0.05797s ago] {'saved_video_id_1': 1, 'video_id_1': 'gm3Wgy8J0n0'}
+2026-10-20 18:51:42,820 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,820 INFO sqlalchemy.engine.Engine [cached since 0.0609s ago] {'saved_video_id_1': 1, 'video_id_1': 'qP3XYjbNvtY'}
+2026-10-20 18:51:42,824 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,824 INFO sqlalchemy.engine.Engine [cached since 0.06441s ago] {'saved_video_id_1': 1, 'video_id_1': 'abHQIxYHY7U'}
+2026-10-20 18:51:42,827 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,828 INFO sqlalchemy.engine.Engine [cached since 0.06814s ago] {'saved_video_id_1': 1, 'video_id_1': '8iWlVXdG1v4'}
+2026-10-20 18:51:42,831 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,831 INFO sqlalchemy.engine.Engine [cached since 0.07185s ago] {'saved_video_id_1': 1, 'video_id_1': '1qDLEthFbmg'}
+2026-10-20 18:51:42,835 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,835 INFO sqlalchemy.engine.Engine [cached since 0.07529s ago] {'saved_video_id_1': 1, 'video_id_1': 'C2xKZrka2ec'}
+2026-10-20 18:51:42,838 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,838 INFO sqlalchemy.engine.Engine [cached since 0.07847s ago] {'saved_video_id_1': 1, 'video_id_1': 'B9iXJ6M2OTE'}
+2026-10-20 18:51:42,841 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,841 INFO sqlalchemy.engine.Engine [cached since 0.08171s ago] {'saved_video_id_1': 1, 'video_id_1': '2P6mqpVleGk'}
+2026-10-20 18:51:42,844 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,844 INFO sqlalchemy.engine.Engine [cached since 0.08464s ago] {'saved_video_id_1': 1, 'video_id_1': '8jFNRiteoLU'}
+2026-10-20 18:51:42,847 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,847 INFO sqlalchemy.engine.Engine [cached since 0.08743s ago] {'saved_video_id_1': 1, 'video_id_1': 'v5aaXLHkDPg'}
+2026-10-20 18:51:42,850 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,850 INFO sqlalchemy.engine.Engine [cached since 0.09072s ago] {'saved_video_id_1': 1, 'video_id_1': 'qD0S-YUfFw4'}
+2026-10-20 18:51:42,853 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,854 INFO sqlalchemy.engine.Engine [cached since 0.09394s ago] {'saved_video_id_1': 1, 'video_id_1': 'wlg87jKQM80'}
+2026-10-20 18:51:42,857 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,857 INFO sqlalchemy.engine.Engine [cached since 0.09714s ago] {'saved_video_id_1': 1, 'video_id_1': 'phpW_rLIscc'}
+2026-10-20 18:51:42,859 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,859 INFO sqlalchemy.engine.Engine [cached since 0.1s ago] {'saved_video_id_1': 1, 'video_id_1': '2dT-NddtLBs'}
+2026-10-20 18:51:42,862 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,862 INFO sqlalchemy.engine.Engine [cached since 0.1024s ago] {'saved_video_id_1': 1, 'video_id_1': 'IPpodFJjTKo'}
+2026-10-20 18:51:42,865 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,865 INFO sqlalchemy.engine.Engine [cached since 0.1053s ago] {'saved_video_id_1': 1, 'video_id_1': 'gf_f910LdSU'}
+2026-10-20 18:51:42,867 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,867 INFO sqlalchemy.engine.Engine [cached since 0.1077s ago] {'saved_video_id_1': 1, 'video_id_1': 'Dq62D1B53j4'}
+2026-10-20 18:51:42,870 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,870 INFO sqlalchemy.engine.Engine [cached since 0.1106s ago] {'saved_video_id_1': 1, 'video_id_1': 'SIKFXV4HuDs'}
+2026-10-20 18:51:42,874 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,874 INFO sqlalchemy.engine.Engine [cached since 0.1142s ago] {'saved_video_id_1': 1, 'video_id_1': 'gUxYJb7jTic'}
+2026-10-20 18:51:42,877 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,877 INFO sqlalchemy.engine.Engine [cached since 0.1174s ago] {'saved_video_id_1': 1, 'video_id_1': '13znDlC46-o'}
+2026-10-20 18:51:42,880 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:42,880 INFO sqlalchemy.engine.Engine [cached since 0.1204s ago] {'saved_video_id_1': 1, 'video_id_1': '1j48Unt-sQU'}
+2026-10-20 18:51:44,826 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,826 INFO sqlalchemy.engine.Engine [cached since 2.067s ago] {'saved_video_id_1': 1, 'video_id_1': 'lJ9QTqbNxvQ'}
+2026-10-20 18:51:44,829 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,829 INFO sqlalchemy.engine.Engine [cached since 2.07s ago] {'saved_video_id_1': 1, 'video_id_1': 'iur7gFTCMX0'}
+2026-10-20 18:51:44,832 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,832 INFO sqlalchemy.engine.Engine [cached since 2.072s ago] {'saved_video_id_1': 1, 'video_id_1': 'MuCresMKQRY'}
+2026-10-20 18:51:44,835 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,835 INFO sqlalchemy.engine.Engine [cached since 2.075s ago] {'saved_video_id_1': 1, 'video_id_1': 'A2f4UsHHiR8'}
+2026-10-20 18:51:44,838 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,838 INFO sqlalchemy.engine.Engine [cached since 2.078s ago] {'saved_video_id_1': 1, 'video_id_1': 'tWnSDNpPAgg'}
+2026-10-20 18:51:44,841 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,841 INFO sqlalchemy.engine.Engine [cached since 2.081s ago] {'saved_video_id_1': 1, 'video_id_1': 'lUwg53KH5lQ'}
+2026-10-20 18:51:44,843 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,844 INFO sqlalchemy.engine.Engine [cached since 2.084s ago] {'saved_video_id_1': 1, 'video_id_1': 'aH6QkIUiyPo'}
+2026-10-20 18:51:44,846 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,846 INFO sqlalchemy.engine.Engine [cached since 2.086s ago] {'saved_video_id_1': 1, 'video_id_1': 'Pg82cwwnN90'}
+2026-10-20 18:51:44,849 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,849 INFO sqlalchemy.engine.Engine [cached since 2.089s ago] {'saved_video_id_1': 1, 'video_id_1': 'cOy9olvS1t4'}
+2026-10-20 18:51:44,853 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,853 INFO sqlalchemy.engine.Engine [cached since 2.093s ago] {'saved_video_id_1': 1, 'video_id_1': 'G6rz2MNtxws'}
+2026-10-20 18:51:44,856 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,857 INFO sqlalchemy.engine.Engine [cached since 2.097s ago] {'saved_video_id_1': 1, 'video_id_1': 'QJZzwipHtFw'}
+2026-10-20 18:51:44,859 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,859 INFO sqlalchemy.engine.Engine [cached since 2.1s ago] {'saved_video_id_1': 1, 'video_id_1': 'mmPdec5HmPE'}
+2026-10-20 18:51:44,862 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,862 INFO sqlalchemy.engine.Engine [cached since 2.103s ago] {'saved_video_id_1': 1, 'video_id_1': 'bFuw7S1AOE0'}
+2026-10-20 18:51:44,865 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,865 INFO sqlalchemy.engine.Engine [cached since 2.106s ago] {'saved_video_id_1': 1, 'video_id_1': 'zNSAZreXoWc'}
+2026-10-20 18:51:44,867 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,867 INFO sqlalchemy.engine.Engine [cached since 2.108s ago] {'saved_video_id_1': 1, 'video_id_1': 'IsaJH0W9jog'}
+2026-10-20 18:51:44,870 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,870 INFO sqlalchemy.engine.Engine [cached since 2.111s ago] {'saved_video_id_1': 1, 'video_id_1': 'oVfWmG5anf8'}
+2026-10-20 18:51:44,872 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,873 INFO sqlalchemy.engine.Engine [cached since 2.114s ago] {'saved_video_id_1': 1, 'video_id_1': 'RtbhDr8oDdU'}
+2026-10-20 18:51:44,876 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,876 INFO sqlalchemy.engine.Engine [cached since 2.117s ago] {'saved_video_id_1': 1, 'video_id_1': 'Ipln9iCclrc'}
+2026-10-20 18:51:44,879 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,879 INFO sqlalchemy.engine.Engine [cached since 2.12s ago] {'saved_video_id_1': 1, 'video_id_1': 'eKD8a0JnaJM'}
+2026-10-20 18:51:44,882 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,882 INFO sqlalchemy.engine.Engine [cached since 2.123s ago] {'saved_video_id_1': 1, 'video_id_1': 'M9M3J-PogqI'}
+2026-10-20 18:51:44,884 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,885 INFO sqlalchemy.engine.Engine [cached since 2.125s ago] {'saved_video_id_1': 1, 'video_id_1': 'CBv6QNE1fHY'}
+2026-10-20 18:51:44,888 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,888 INFO sqlalchemy.engine.Engine [cached since 2.129s ago] {'saved_video_id_1': 1, 'video_id_1': 'GmteIdD1eZc'}
+2026-10-20 18:51:44,890 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:44,891 INFO sqlalchemy.engine.Engine [cached since 2.132s ago] {'saved_video_id_1': 1, 'video_id_1': 'HVdnN_SDd-o'}
+2026-10-20 18:51:47,288 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,288 INFO sqlalchemy.engine.Engine [cached since 4.529s ago] {'saved_video_id_1': 1, 'video_id_1': 'F5SAbw2M-3Q'}
+2026-10-20 18:51:47,291 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,292 INFO sqlalchemy.engine.Engine [cached since 4.532s ago] {'saved_video_id_1': 1, 'video_id_1': 'X-TS98P3bZc'}
+2026-10-20 18:51:47,295 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,296 INFO sqlalchemy.engine.Engine [cached since 4.536s ago] {'saved_video_id_1': 1, 'video_id_1': '36NGE1tEsks'}
+2026-10-20 18:51:47,299 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,299 INFO sqlalchemy.engine.Engine [cached since 4.539s ago] {'saved_video_id_1': 1, 'video_id_1': '9HxrD8jCo-g'}
+2026-10-20 18:51:47,302 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,302 INFO sqlalchemy.engine.Engine [cached since 4.543s ago] {'saved_video_id_1': 1, 'video_id_1': 'TJm0fFXQS6I'}
+2026-10-20 18:51:47,306 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,307 INFO sqlalchemy.engine.Engine [cached since 4.547s ago] {'saved_video_id_1': 1, 'video_id_1': 'D7Zf2CR5AlI'}
+2026-10-20 18:51:47,311 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,311 INFO sqlalchemy.engine.Engine [cached since 4.551s ago] {'saved_video_id_1': 1, 'video_id_1': 'tMpKW-Xpiis'}
+2026-10-20 18:51:47,313 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,313 INFO sqlalchemy.engine.Engine [cached since 4.554s ago] {'saved_video_id_1': 1, 'video_id_1': 'kytJ1RRZkzc'}
+2026-10-20 18:51:47,316 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,316 INFO sqlalchemy.engine.Engine [cached since 4.557s ago] {'saved_video_id_1': 1, 'video_id_1': 'MzQHBYOxt_w'}
+2026-10-20 18:51:47,319 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s AND saved_video_similar_findings.video_id = %(video_id_1)s
+2026-10-20 18:51:47,319 INFO sqlalchemy.engine.Engine [cached since 4.56s ago] {'saved_video_id_1': 1, 'video_id_1': 'XLNLt-PPFZQ'}
+2026-10-20 18:51:47,324 INFO sqlalchemy.engine.Engine UPDATE saved_video_similar_findings SET last_scan_id=%(last_scan_id)s, last_found_at=%(last_found_at)s, payload_json=%(payload_json)s WHERE saved_video_similar_findings.id = %(saved_video_similar_findings_id)s
+python : --- Logging error ---
+C:\Users\dayta\AppData\Local\Temp\ps-script-93448f89-f4fc-4499-93ca-a8f690930c92.ps1:107 знак:46
++ ... ализ ниш1"; python scripts/rescan_similar_watch_report.py 2>&1 | Out- ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (--- Logging error ---:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Traceback (most recent call last):
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1113, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1251.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f69c' in position 792: character maps to <undefined>
+Call stack:
+  File "C:\Projects\╤рщЄ рэрышч эш°1\scripts\rescan_similar_watch_report.py", line 69, in <module>
+    main()
+  File "C:\Projects\╤рщЄ рэрышч эш°1\scripts\rescan_similar_watch_report.py", line 44, in main
+    execute_similar_watch_scan(session, saved_video_id=saved_video_id, trigger="manual")
+  File "C:\Projects\╤рщЄ рэрышч эш°1\app\services\saved_video_similar_watch.py", line 411, in execute_similar_watch_sca
+n
+    return asyncio.run(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 640, in run_until_comp
+lete
+    self.run_forever()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\windows_events.py", line 321, in run_forever
+    super().run_forever()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 607, in run_forever
+    self._run_once()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 1922, in _run_once
+    handle._run()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Projects\╤рщЄ рэрышч эш°1\app\services\saved_video_similar_watch.py", line 388, in execute_similar_watch_sca
+n_async
+    session.flush()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\session.py", line 4353,
+ in flush
+    self._flush(objects)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\session.py", line 4449,
+ in _flush
+    flush_context.execute()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 46
+5, in execute
+    rec.execute(self)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 64
+1, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\persistence.py", line 8
+6, in save_obj
+    _emit_update_statements(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\persistence.py", line 9
+13, in _emit_update_statements
+    c = connection.execute(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1421,
+ in execute
+    return meth(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\sql\elements.py", line 526,
+ in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1643,
+ in _execute_clauseelement
+    ret = self._execute_context(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1848,
+ in _execute_context
+    return self._exec_single_context(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1906,
+ in _exec_single_context
+    self._log_info(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 188, 
+in _log_info
+    self.engine.logger.info(message, *arg, **kw)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\log.py", line 159, in info
+    self.log(logging.INFO, msg, *args, **kwargs)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\log.py", line 210, in log
+    self.logger._log(level, msg, args, **kwargs)
+Message: '[%s] %r'
+Arguments: ('generated in 0.00052s', [{'last_scan_id': 3, 'last_found_at': datetime.datetime(2026, 10, 20, 12, 51, 44, 
+840847, tzinfo=datetime.timezone.utc), 'payload_json': '{"video_id": "tWnSDNpPAgg", "title": "This Giant John Deere Com
+bine Swallows an Entire Cornfield!", "channel_id": "UCVzrLQXeXdpDskPaeFPuhdg", "channe ... (339 characters truncated) .
+.. relevance_score": 0, "relevance_tier": "other", "why_found": null, "other_reason": "ёхы№їючЄхїэшър схч чхЁэютющ Єхых
+цъш Ч эх ёўшЄрхь ¤Єю grain cart"}', 'saved_video_similar_findings_id': 48}, {'last_scan_id': 3, 'last_found_at': dateti
+me.datetime(2026, 10, 20, 12, 51, 44, 845747, tzinfo=datetime.timezone.utc), 'payload_json': '{"video_id": "aH6QkIUiyPo
+", "title": "Here Comes the Combine! \U0001f69c | Harvest Song for Kids | Farm Machines & Science", "channel_id": "UCt0
+d4ymeLlCBnueDo ... (350 characters truncated) ... relevance_score": 0, "relevance_tier": "other", "why_found": null, "o
+ther_reason": "ёхы№їючЄхїэшър схч чхЁэютющ Єхыхцъш Ч эх ёўшЄрхь ¤Єю grain cart"}', 'saved_video_similar_findings_id': 4
+9}, {'last_scan_id': 3, 'last_found_at': datetime.datetime(2026, 10, 20, 12, 51, 42, 770308, tzinfo=datetime.timezone.u
+tc), 'payload_json': '{"video_id": "OGgwEb4Qj50", "title": "TOURISTS ARE RARE HERE! Real Life in RURAL CHINA!", "channe
+l_id": "UCmISs8bSwx8o_seHu99mFUw", "channel_title":  ... (319 characters truncated) ... er built", "is_short": false, "
+is_live": false, "relevance_score": 0, "relevance_tier": "other", "why_found": null, "other_reason": "travel-ъюэЄхэЄ"}'
+, 'saved_video_similar_findings_id': 50}, {'last_scan_id': 3, 'last_found_at': datetime.datetime(2026, 10, 20, 12, 51, 
+42, 767628, tzinfo=datetime.timezone.utc), 'payload_json': '{"video_id": "mVHM3KuBUQM", "title": "THE USSR\'S BIGGEST C
+ON ARTIST: How He Stole Millions from the Soviet Government", "channel_id": "UCUv4bGwDVj2U ... (452 characters truncate
+d) ... ": false, "is_live": false, "relevance_score": 0, "relevance_tier": "other", "why_found": null, "other_reason": 
+"эхЄ ёт чш ё Єхьющ шёїюфэюую Ёюышър"}', 'saved_video_similar_findings_id': 51}, {'last_scan_id': 3, 'last_found_at': da
+tetime.datetime(2026, 10, 20, 12, 51, 42, 772976, tzinfo=datetime.timezone.utc), 'payload_json': '{"video_id": "mWXF-kD
+JnOA", "title": "Top 10 BEST Satisfactory Mods in 2026", "channel_id": "UCfrpvSgr_Wu-3zh8KWsdXEg", "channel_title": "Mo
+d Test Fa ... (280 characters truncated) ... ever built", "is_short": false, "is_live": false, "relevance_score": 0, "r
+elevance_tier": "other", "why_found": null, "other_reason": "шуЁют√х ьюф√"}', 'saved_video_similar_findings_id': 52}, {
+'last_scan_id': 3, 'last_found_at': datetime.datetime(2026, 10, 20, 12, 51, 42, 781158, tzinfo=datetime.timezone.utc), 
+'payload_json': '{"video_id": "yGhJPmc5wWY", "title": "Behind the success of the Karolinka store in Lemierzyce - Polski
+e eP\u0142atno\u015bci x Przelewy24 [PODCAST]", "channel_ ... (470 characters truncated) ...  false, "is_live": false, 
+"relevance_score": 0, "relevance_tier": "other", "why_found": null, "other_reason": "яюфърёЄ, эх ЄхьрЄшър шёїюфэюую тшф
+хю"}', 'saved_video_similar_findings_id': 53}, {'last_scan_id': 3, 'last_found_at': datetime.datetime(2026, 10, 20, 12,
+ 51, 42, 794109, tzinfo=datetime.timezone.utc), 'payload_json': '{"video_id": "LOo2IidUL48", "title": "LONDON in 1320: 
+What Kept the City ALIVE?", "channel_id": "UCHibdzYRYozjbT_m6cRfUAA", "channel_title": "History ... (328 characters tru
+ncated) ... e, "is_live": false, "relevance_score": 0, "relevance_tier": "other", "why_found": null, "other_reason": "э
+хЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}', 'saved_video_similar_findings_id': 54}, {'last_scan_id': 3, 'last_found_at
+': datetime.datetime(2026, 10, 20, 12, 51, 42, 790877, tzinfo=datetime.timezone.utc), 'payload_json': '{"video_id": "pw
+Ck-dMp4wA", "title": "They Built a City on a Lake Ч Your Night in Aztec Tenochtitlan | History for Sleep", "channel_id"
+: "UCUTx2_6-ol ... (373 characters truncated) ... alse, "relevance_score": 0, "relevance_tier": "other", "why_found": n
+ull, "other_reason": "ёютярыш Єюы№ъю юс∙шх ёыютр (biggest, ever, built ш Є.я.)"}', 'saved_video_similar_findings_id': 5
+5}  ... displaying 10 of 56 total bound parameter sets ...  {'last_scan_id': 3, 'last_found_at': datetime.datetime(2026
+, 10, 20, 12, 51, 44, 881844, tzinfo=datetime.timezone.utc), 'payload_json': '{"video_id": "eKD8a0JnaJM", "title": "8 S
+uperpowers Burned in 50 Years | The Bronze Age Mystery", "channel_id": "UCZjDtyA2MF4W8FE0_MaySFw", "channel_ ... (313 c
+haracters truncated) ... e, "is_live": false, "relevance_score": 0, "relevance_tier": "other", "why_found": null, "othe
+r_reason": "эхЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}', 'saved_video_similar_findings_id': 117}, {'last_scan_id': 3, 
+'last_found_at': datetime.datetime(2026, 10, 20, 12, 51, 44, 831603, tzinfo=datetime.timezone.utc), 'payload_json': '{"
+video_id": "iur7gFTCMX0", "title": "21 NEXT-LEVEL Farming Machines That Look Like TheyТre From the FUTURE! \U0001f69c\U
+0001f92f #Farming #GGC AUTO #Argo", "channel_i ... (341 characters truncated) ... e, "is_live": false, "relevance_score
+": 0, "relevance_tier": "other", "why_found": null, "other_reason": "эхЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}', 'sav
+ed_video_similar_findings_id': 122}])
+2026-10-20 18:51:47,519 INFO sqlalchemy.engine.Engine INSERT INTO saved_video_similar_findings (saved_video_id, video_id, matched_query, first_scan_id, last_scan_id, first_found_at, last_found_at, payload_json) SELECT p0::INTEGER, p1::VARCHAR, p2::VARCHAR, p3::INTEGER, p4::INTEGER, p5::TIMESTAMP WITH TI ... 3176 characters truncated ... R BY sen_counter RETURNING saved_video_similar_findings.id, saved_video_similar_findings.id AS id__1
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1113, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1251.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f383' in position 6082: character maps to <undefined>
+Call stack:
+  File "C:\Projects\╤рщЄ рэрышч эш°1\scripts\rescan_similar_watch_report.py", line 69, in <module>
+    main()
+  File "C:\Projects\╤рщЄ рэрышч эш°1\scripts\rescan_similar_watch_report.py", line 44, in main
+    execute_similar_watch_scan(session, saved_video_id=saved_video_id, trigger="manual")
+  File "C:\Projects\╤рщЄ рэрышч эш°1\app\services\saved_video_similar_watch.py", line 411, in execute_similar_watch_sca
+n
+    return asyncio.run(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 640, in run_until_comp
+lete
+    self.run_forever()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\windows_events.py", line 321, in run_forever
+    super().run_forever()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 607, in run_forever
+    self._run_once()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 1922, in _run_once
+    handle._run()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Projects\╤рщЄ рэрышч эш°1\app\services\saved_video_similar_watch.py", line 388, in execute_similar_watch_sca
+n_async
+    session.flush()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\session.py", line 4353,
+ in flush
+    self._flush(objects)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\session.py", line 4449,
+ in _flush
+    flush_context.execute()
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 46
+5, in execute
+    rec.execute(self)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 64
+1, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\persistence.py", line 9
+4, in save_obj
+    _emit_insert_statements(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\orm\persistence.py", line 1
+144, in _emit_insert_statements
+    result = connection.execute(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1421,
+ in execute
+    return meth(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\sql\elements.py", line 526,
+ in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1643,
+ in _execute_clauseelement
+    ret = self._execute_context(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 1846,
+ in _execute_context
+    return self._exec_insertmany_context(dialect, context)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 2101,
+ in _exec_insertmany_context
+    self._log_info(
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\engine\base.py", line 188, 
+in _log_info
+    self.engine.logger.info(message, *arg, **kw)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\log.py", line 159, in info
+    self.log(logging.INFO, msg, *args, **kwargs)
+  File "C:\Users\dayta\AppData\Local\Programs\Python\Python311\Lib\site-packages\sqlalchemy\log.py", line 210, in log
+    self.logger._log(level, msg, args, **kwargs)
+Message: '[%s] %r'
+Arguments: ('generated in 0.00024s (insertmanyvalues) 1/1 (ordered)', {'video_id__0': 'OHvzl9iQ5jo', 'first_scan_id__0'
+: 3, 'last_found_at__0': datetime.datetime(2026, 10, 20, 12, 51, 42, 764428, tzinfo=datetime.timezone.utc), 'last_scan_
+id__0': 3, 'matched_query__0': 'biggest grain carts ever built', 'saved_video_id__0': 1, 'first_found_at__0': datetime.
+datetime(2026, 10, 20, 12, 51, 42, 764428, tzinfo=datetime.timezone.utc), 'payload_json__0': '{"video_id": "OHvzl9iQ5jo
+", "title": "Finishing Up the Coolest Table Base I Have Ever Built", "channel_id": "UCoBcgO5NA-H5PBtGC7tP_8A", "channel
+_titl ... (337 characters truncated) ... alse, "relevance_score": 0, "relevance_tier": "other", "why_found": null, "oth
+er_reason": "ёютярыш Єюы№ъю юс∙шх ёыютр (biggest, ever, built ш Є.я.)"}', 'video_id__1': '2-3JBEyUZ9Q', 'first_scan_id_
+_1': 3, 'last_found_at__1': datetime.datetime(2026, 10, 20, 12, 51, 42, 775660, tzinfo=datetime.timezone.utc), 'last_sc
+an_id__1': 3, 'matched_query__1': 'biggest grain carts ever built', 'saved_video_id__1': 1, 'first_found_at__1': dateti
+me.datetime(2026, 10, 20, 12, 51, 42, 775660, tzinfo=datetime.timezone.utc), 'payload_json__1': '{"video_id": "2-3JBEyU
+Z9Q", "title": "Zenkai Arcade: the Manager built for arcade cabinets and RetroBat (beta)", "channel_id": "UCTbUmTjyu65O
+K1Js5RY9 ... (381 characters truncated) ... alse, "relevance_score": 0, "relevance_tier": "other", "why_found": null, "
+other_reason": "ёютярыш Єюы№ъю юс∙шх ёыютр (biggest, ever, built ш Є.я.)"}', 'video_id__2': 'VAC-rBb69PE', 'first_scan_
+id__2': 3, 'last_found_at__2': datetime.datetime(2026, 10, 20, 12, 51, 42, 778339, tzinfo=datetime.timezone.utc), 'last
+_scan_id__2': 3, 'matched_query__2': 'biggest grain carts ever built', 'saved_video_id__2': 1, 'first_found_at__2': dat
+etime.datetime(2026, 10, 20, 12, 51, 42, 778339, tzinfo=datetime.timezone.utc), 'payload_json__2': '{"video_id": "VAC-r
+Bb69PE", "title": "Can We Shoot PERFECT at the USDGC (spectator course)?!", "channel_id": "UCYG3UliyY73poU81Mw8Pr8Q", "
+channel_tit ... (351 characters truncated) ... e, "is_live": false, "relevance_score": 0, "relevance_tier": "other", "w
+hy_found": null, "other_reason": "эхЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}', 'video_id__3': 'lBvqsWbR_wE', 'first_sc
+an_id__3': 3, 'last_found_at__3': datetime.datetime(2026, 10, 20, 12, 51, 42, 783854, tzinfo=datetime.timezone.utc), 'l
+ast_scan_id__3': 3, 'matched_query__3': 'biggest grain carts ever built', 'saved_video_id__3': 1, 'first_found_at__3': 
+datetime.datetime(2026, 10, 20, 12, 51, 42, 783854, tzinfo=datetime.timezone.utc), 'payload_json__3': '{"video_id": "lB
+vqsWbR_wE", "title": "How I Built These Cherry Coffee Mug Trees | Easy Woodworking Project", "channel_id": "UCxl436wWD1
+rGW6iMTDSvCzg" ... (359 characters truncated) ... alse, "relevance_score": 0, "relevance_tier": "other", "why_found": n
+ull, "other_reason": "ёютярыш Єюы№ъю юс∙шх ёыютр (biggest, ever, built ш Є.я.)"}', 'video_id__4': 'Pg82cwwnN90', 'first
+_scan_id__4': 3, 'last_found_at__4': datetime.datetime(2026, 10, 20, 12, 51, 44, 848431, tzinfo=datetime.timezone.utc),
+ 'last_scan_id__4': 3, 'matched_query__4': 'grain carts', 'saved_video_id__4': 1, 'first_found_at__4': datetime.datetim
+e(2026, 10, 20, 12, 51, 44, 848431, tzinfo=datetime.timezone.utc), 'payload_json__4': '{"video_id": "Pg82cwwnN90", "tit
+le": "A late start, pricey diesel impacting harvest", "channel_id": "UCznk5ru166gqEznWjcnJB0g", "channel_title": "KEL .
+.. (316 characters truncated) ... relevance_score": 0, "relevance_tier": "other", "why_found": null, "other_reason": "ё
+хы№їючЄхїэшър схч чхЁэютющ Єхыхцъш Ч эх ёўшЄрхь ¤Єю grain cart"}', 'video_id__5': 'cOy9olvS1t4', 'first_scan_id__5': 3,
+ 'last_found_at__5': datetime.datetime(2026, 10, 20, 12, 51, 44, 852222, tzinfo=datetime.timezone.utc), 'last_scan_id__
+5': 3, 'matched_query__5': 'grain carts', 'saved_video_id__5': 1, 'first_found_at__5': datetime.datetime(2026, 10, 20, 
+12, 51, 44, 852222, tzinfo=datetime.timezone.utc), 'payload_json__5': '{"video_id": "cOy9olvS1t4", "title": "2026 Corn 
+Harvest POV 1", "channel_id": "UCRao6LrUhnEbw5mg3TkAFvg", "channel_title": "Dirt Nation Ag", "views_c ... (331 characte
+rs truncated) ... relevance_score": 0, "relevance_tier": "other", "why_found": null, "other_reason": "ёхы№їючЄхїэшър сх
+ч чхЁэютющ Єхыхцъш Ч эх ёўшЄрхь ¤Єю grain cart"}', 'video_id__6': 'G6rz2MNtxws', 'first_scan_id__6': 3 ... 36 parameter
+s truncated ... 'first_found_at__10': datetime.datetime(2026, 10, 20, 12, 51, 44, 872842, tzinfo=datetime.timezone.utc)
+, 'payload_json__10': '{"video_id": "oVfWmG5anf8", "title": "PARKER 250 For Sale", "channel_id": "UCt9SlXzCy0t0aGOS2VpG
+Xdw", "channel_title": "MarketBook Canada", "views_co ... (308 characters truncated) ... e, "is_live": false, "relevanc
+e_score": 0, "relevance_tier": "other", "why_found": null, "other_reason": "эхЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}
+', 'video_id__11': 'RtbhDr8oDdU', 'first_scan_id__11': 3, 'last_found_at__11': datetime.datetime(2026, 10, 20, 12, 51, 
+44, 875840, tzinfo=datetime.timezone.utc), 'last_scan_id__11': 3, 'matched_query__11': 'grain carts', 'saved_video_id__
+11': 1, 'first_found_at__11': datetime.datetime(2026, 10, 20, 12, 51, 44, 875840, tzinfo=datetime.timezone.utc), 'paylo
+ad_json__11': '{"video_id": "RtbhDr8oDdU", "title": "VietnamТs Darkest History", "channel_id": "UCm9SF_FxjgXpHI6CnwjGZM
+w", "channel_title": "Dan Vo: Viet Hot Takes" ... (285 characters truncated) ... e, "is_live": false, "relevance_score"
+: 0, "relevance_tier": "other", "why_found": null, "other_reason": "эхЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}', 'vide
+o_id__12': 'Ipln9iCclrc', 'first_scan_id__12': 3, 'last_found_at__12': datetime.datetime(2026, 10, 20, 12, 51, 44, 8788
+41, tzinfo=datetime.timezone.utc), 'last_scan_id__12': 3, 'matched_query__12': 'grain carts', 'saved_video_id__12': 1, 
+'first_found_at__12': datetime.datetime(2026, 10, 20, 12, 51, 44, 878841, tzinfo=datetime.timezone.utc), 'payload_json_
+_12': '{"video_id": "Ipln9iCclrc", "title": "Candlelit Pumpkins on a Starlit Harvest Field \U0001f383 2 Hours of Ambien
+ce for Reading, Focus & Sleep", "channel_id":  ... (368 characters truncated) ... relevance_score": 0, "relevance_tier"
+: "other", "why_found": null, "other_reason": "ёхы№їючЄхїэшър схч чхЁэютющ Єхыхцъш Ч эх ёўшЄрхь ¤Єю grain cart"}', 'vid
+eo_id__13': 'M9M3J-PogqI', 'first_scan_id__13': 3, 'last_found_at__13': datetime.datetime(2026, 10, 20, 12, 51, 44, 884
+839, tzinfo=datetime.timezone.utc), 'last_scan_id__13': 3, 'matched_query__13': 'grain carts', 'saved_video_id__13': 1,
+ 'first_found_at__13': datetime.datetime(2026, 10, 20, 12, 51, 44, 884839, tzinfo=datetime.timezone.utc), 'payload_json
+__13': '{"video_id": "M9M3J-PogqI", "title": "Running grain cart with 2009 8000 series and 2015 760 harvester 50 foot h
+eader", "channel_id": "UC-uJ6XCG238_s4 ... (361 characters truncated) ...  false, "is_live": false, "relevance_score": 
+51, "relevance_tier": "primary", "why_found": "ёютярфхэшх яЁхфьхЄэ√ї ёыют: grain", "other_reason": null}', 'video_id__1
+4': 'CBv6QNE1fHY', 'first_scan_id__14': 3, 'last_found_at__14': datetime.datetime(2026, 10, 20, 12, 51, 44, 887841, tzi
+nfo=datetime.timezone.utc), 'last_scan_id__14': 3, 'matched_query__14': 'grain carts', 'saved_video_id__14': 1, 'first_
+found_at__14': datetime.datetime(2026, 10, 20, 12, 51, 44, 887841, tzinfo=datetime.timezone.utc), 'payload_json__14': '
+{"video_id": "CBv6QNE1fHY", "title": "\u0631\u0628\u062a \u062a\u0648\u0623\u0645\u064a\u0647\u0627 \u0648\u062d\u062f\
+u0647\u0627 \u062e\u0645\u0633 \u0633\u0646\u0648\u0627\u062a\u060c \u062d\u062a\u0649 \u0627\u0643\u062a\u0634\u0641 \
+u0623\u0645\u064a\u0631 \u0627\u0644\u062d\u0631\u0628 \u0627\u0644\u0630\u064a \u0642\u064a\u0644 \u0625\u0646\u0647 \
+u0639\u0642\u064a\u0645 \u0623\u0637\u0641\u0627\u0644\u0647 \u0648\u0628\u062f\u0623 \u064a\u0637\u0627\u0631\u062f\u0
+647\u0627", "channel_id": "UC-MMn ... (336 characters truncated) ... e, "is_live": false, "relevance_score": 0, "releva
+nce_tier": "other", "why_found": null, "other_reason": "эхЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}', 'video_id__15': '
+GmteIdD1eZc', 'first_scan_id__15': 3, 'last_found_at__15': datetime.datetime(2026, 10, 20, 12, 51, 44, 890839, tzinfo=d
+atetime.timezone.utc), 'last_scan_id__15': 3, 'matched_query__15': 'grain carts', 'saved_video_id__15': 1, 'first_found
+_at__15': datetime.datetime(2026, 10, 20, 12, 51, 44, 890839, tzinfo=datetime.timezone.utc), 'payload_json__15': '{"vid
+eo_id": "GmteIdD1eZc", "title": "Life in the Indus Valley 4,500 Years Ago | A Day in Harappa & Mohenjo-daro", "channel_
+id": "UC-1uUfJY6tZkB8obqL ... (327 characters truncated) ... e, "is_live": false, "relevance_score": 0, "relevance_tier
+": "other", "why_found": null, "other_reason": "эхЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}', 'video_id__16': 'F5SAbw2M
+-3Q', 'first_scan_id__16': 3, 'last_found_at__16': datetime.datetime(2026, 10, 20, 12, 51, 47, 291240, tzinfo=datetime.
+timezone.utc), 'last_scan_id__16': 3, 'matched_query__16': 'biggest grain carts', 'saved_video_id__16': 1, 'first_found
+_at__16': datetime.datetime(2026, 10, 20, 12, 51, 47, 291240, tzinfo=datetime.timezone.utc), 'payload_json__16': '{"vid
+eo_id": "F5SAbw2M-3Q", "title": "Global Food Prices Could Stay High Into 2027. HereТs Why | The Palki Sharma Show | IGR
+", "channel_id": "UC83iGb ... (354 characters truncated) ... e, "is_live": false, "relevance_score": 0, "relevance_tier
+": "other", "why_found": null, "other_reason": "эхЄ яЁхфьхЄэ√ї ёыют шч шёїюфэюую эрчтрэш "}'})
+2026-10-20 18:51:47,540 INFO sqlalchemy.engine.Engine UPDATE saved_video_similar_scans SET finished_at=%(finished_at)s, status=%(status)s, queries_attempted=%(queries_attempted)s, new_findings_count=%(new_findings_count)s, payload_json=%(payload_json)s WHERE saved_video_similar_scans.id = %(saved_video_similar_scans_id)s
+2026-10-20 18:51:47,541 INFO sqlalchemy.engine.Engine [generated in 0.00041s] {'finished_at': datetime.datetime(2026, 10, 20, 12, 51, 47, 322184, tzinfo=datetime.timezone.utc), 'status': 'completed', 'queries_attempted': 3, 'new_findings_count': 17, 'payload_json': '{"errors": []}', 'saved_video_similar_scans_id': 3}
+2026-10-20 18:51:47,547 INFO sqlalchemy.engine.Engine UPDATE saved_video_similar_watches SET next_scan_at=%(next_scan_at)s, last_scan_at=%(last_scan_at)s, last_scan_id=%(last_scan_id)s, scan_lease_until=%(scan_lease_until)s, updated_at=now() WHERE saved_video_similar_watches.saved_video_id = %(saved_video_similar_watches_saved_video_id)s
+2026-10-20 18:51:47,547 INFO sqlalchemy.engine.Engine [generated in 0.00043s] {'next_scan_at': datetime.datetime(2026, 10, 21, 12, 51, 47, 322184, tzinfo=datetime.timezone.utc), 'last_scan_at': datetime.datetime(2026, 10, 20, 12, 51, 47, 322184, tzinfo=datetime.timezone.utc), 'last_scan_id': 3, 'scan_lease_until': None, 'saved_video_similar_watches_saved_video_id': 1}
+2026-10-20 18:51:47,556 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s
+2026-10-20 18:51:47,556 INFO sqlalchemy.engine.Engine [generated in 0.00033s] {'saved_video_id_1': 1}
+2026-10-20 18:51:47,560 INFO sqlalchemy.engine.Engine UPDATE saved_video_similar_watches SET last_display_state=%(last_display_state)s, updated_at=%(updated_at)s WHERE saved_video_similar_watches.saved_video_id = %(saved_video_similar_watches_saved_video_id)s
+2026-10-20 18:51:47,560 INFO sqlalchemy.engine.Engine [generated in 0.00030s] {'last_display_state': 'has_results', 'updated_at': datetime.datetime(2026, 10, 20, 12, 51, 47, 322184, tzinfo=datetime.timezone.utc), 'saved_video_similar_watches_saved_video_id': 1}
+2026-10-20 18:51:47,565 INFO sqlalchemy.engine.Engine COMMIT
+2026-10-20 18:51:47,573 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 18:51:47,574 INFO sqlalchemy.engine.Engine SELECT saved_videos.id AS saved_videos_id, saved_videos.video_id AS saved_videos_video_id, saved_videos.saved_at AS saved_videos_saved_at, saved_videos.status AS saved_videos_status, saved_videos.notes AS saved_videos_notes, saved_videos.tags_json AS saved_videos_tags_json, saved_videos.archived_at AS saved_videos_archived_at, saved_videos.created_from_attention_run_id AS saved_videos_created_from_attention_run_id, saved_videos.frozen_title AS saved_videos_frozen_title, saved_videos.frozen_channel_id AS saved_videos_frozen_channel_id, saved_videos.frozen_channel_title AS saved_videos_frozen_channel_title, saved_videos.frozen_payload_json AS saved_videos_frozen_payload_json, saved_videos.latest_observed_at AS saved_videos_latest_observed_at, saved_videos.manual_refresh_lease_until AS saved_videos_manual_refresh_lease_until, saved_videos.created_at AS saved_videos_created_at, saved_videos.updated_at AS saved_videos_updated_at 
+FROM saved_videos 
+WHERE saved_videos.id = %(pk_1)s
+2026-10-20 18:51:47,574 INFO sqlalchemy.engine.Engine [cached since 7.578s ago] {'pk_1': 1}
+2026-10-20 18:51:47,582 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s
+2026-10-20 18:51:47,583 INFO sqlalchemy.engine.Engine [cached since 0.02728s ago] {'saved_video_id_1': 1}
+2026-10-20 18:51:47,590 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.saved_video_id = %(saved_video_id_1)s
+2026-10-20 18:51:47,590 INFO sqlalchemy.engine.Engine [generated in 0.00036s] {'saved_video_id_1': 1}
+primary_total 2 other_total 107 all 109
+
+=== first 10 primary ===
+- Running grain cart with 2009 8000 series and 2015 760 harvester 50 foot header
+  query: grain carts
+  why: ёютярфхэшх яЁхфьхЄэ√ї ёыют: grain
+- Brian gets to be the У grain cart driver У
+  query: biggest grain carts
+  why: ёютярфхэшх яЁхфьхЄэ√ї ёыют: grain
+2026-10-20 18:51:47,603 INFO sqlalchemy.engine.Engine ROLLBACK

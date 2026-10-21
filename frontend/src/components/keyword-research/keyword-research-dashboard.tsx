@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 
+import { LegacyArchivedBanner } from "@/components/layout/legacy-archived-banner";
 import { buildYouTubeSearchQuery } from "@/lib/build-search-query";
 import { fetchKeywordResearch, fetchSavedKeywords, saveSavedKeyword } from "@/lib/api";
 import type { KeywordResearchItem, KeywordResearchResponse, SavedKeywordItem } from "@/lib/types";
@@ -218,7 +219,15 @@ export function KeywordResearchDashboard() {
   };
 
   return (
-    <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden text-foreground lg:flex-row">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+      <div className="shrink-0 border-b border-border/60 px-3 py-2 sm:px-4">
+        <LegacyArchivedBanner
+          route="keyword-research"
+          primaryHref="/keywords"
+          primaryLabel="Перейти к поисковым запросам"
+        />
+      </div>
+      <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden text-foreground lg:flex-row">
       {historyOpen ? (
         <div
           className="fixed inset-0 z-30 bg-black/60 lg:hidden"
@@ -590,6 +599,7 @@ export function KeywordResearchDashboard() {
           }}
         />
       ) : null}
+      </div>
     </div>
   );
 }

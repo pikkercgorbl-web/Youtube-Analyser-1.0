@@ -128,6 +128,20 @@ export interface ChannelSingleCompareResponse {
   enrichment_error: string | null;
 }
 
+export interface CompetitorChannelPreviewResponse {
+  input_ref: string;
+  channel_id: string;
+  channel_title: string;
+  subscribers_count: number | null;
+  channel_avatar_url: string;
+  feed_loaded_count: number;
+  regular_confirmed_count: number;
+  publications: ChannelSingleAnalysisPublication[];
+  load_status: "ready" | "partial";
+  enrichment_error: string | null;
+  fetched_at: string;
+}
+
 export type CompetitionLevel = "low" | "medium" | "high";
 
 export interface KeywordAnalyzeResponse {

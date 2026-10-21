@@ -1,0 +1,16 @@
+{
+  "base": "http://127.0.0.1:3100",
+  "winnerId": "JF2A0GZzezQ",
+  "checks": [
+    {
+      "viewport": "desktop",
+      "detailUrl": "http://127.0.0.1:3100/opportunities/videos/JF2A0GZzezQ",
+      "baseline": 1
+    },
+    {
+      "viewport": "390px",
+      "detailUrl": "http://127.0.0.1:3100/opportunities/videos/JF2A0GZzezQ",
+      "baseline": 1
+    }
+  ]
+}

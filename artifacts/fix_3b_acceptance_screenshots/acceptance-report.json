@@ -1,0 +1,39 @@
+{
+  "base": "http://127.0.0.1:3100",
+  "checks": [
+    {
+      "step": "keywords_queue_context",
+      "ok": true,
+      "snippet": "За последние 24 ч Discovery обработал 720 уникальных ключей (720 scan-run).\n\n«Пора просканировать» значит, что ключ ждёт планового прохода по расписанию (next_scan_at), а не то, что worker остановился"
+    },
+    {
+      "step": "monitoring_cycle_columns",
+      "ok": true,
+      "cyclesApiStatus": 200
+    },
+    {
+      "step": "no_console_errors",
+      "ok": true,
+      "consoleErrors": []
+    }
+  ],
+  "badResponses": [],
+  "consoleErrors": [],
+  "httpSamples": [
+    {
+      "status": 200,
+      "url": "/api/keywords/pool-summary",
+      "bodyPreview": "{\"snapshot_at\":\"2026-10-13T10:56:59.284068Z\",\"due_now\":1663,\"due_next_1h\":36,\"due_next_24h\":203,\"not_archived_count\":1866,\"unique_keywords_scanned_last_24h\":720,\"keyword_scan_runs_last_24h\":720,\"probation_interval_hours\":6,\"active_interval_hours\":24,\"weak_interval_hours\":72,\"failed_scan_retry_hours\":2}"
+    },
+    {
+      "status": 200,
+      "url": "/api/monitoring/cycles?limit=10",
+      "bodyPreview": "{\"items\":[{\"run_id\":\"monitoring_20261013T105529Z_6463a1f1\",\"started_at\":\"2026-10-13T10:55:29.274848Z\",\"finished_at\":\"2026-10-13T10:55:39.086844Z\",\"runtime_seconds\":9.812,\"cycle_status\":\"partial\",\"loaded\":6570,\"tier_a\":48,\"tier_b\":378,\"tier_c\":1181,\"due\":11,\"overdue\":1,\"selected\":12,\"deferred\":0,\"inserted\":11,\"missing\":1,\"fetch_failed\":0,\"validation_failed\":0,\"persistence_failed\":0,\"duplicate_snaps"
+    }
+  ],
+  "screenshots": [
+    "01-keywords-queue-context.png",
+    "02-monitoring-cycles-partial-columns.png"
+  ],
+  "ok": true
+}

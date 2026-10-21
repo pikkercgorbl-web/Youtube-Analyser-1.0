@@ -52,6 +52,22 @@ export type AttentionPattern = {
   human_reasons: string[];
 };
 
+export type AttentionChannelRepresentativeVideo = {
+  video_id: string;
+  title: string | null;
+  youtube_url: string;
+  horizon_vph: number | null;
+  measured_at: string | null;
+  actual_age_hours: number | null;
+  target_horizon_hours: number | null;
+  vs_previous_median_ratio: number | null;
+  meets_improvement_threshold: boolean | null;
+  snapshot_row_id: number | null;
+  measurement_source: string | null;
+  attention_computed_at: string | null;
+  unavailable_reason: string | null;
+};
+
 export type AttentionChannelMomentum = {
   channel_id: string;
   channel_title: string;
@@ -70,6 +86,7 @@ export type AttentionChannelMomentum = {
   first_observed_at: string | null;
   latest_observed_at: string | null;
   representative_video_ids: string[];
+  representative_videos?: AttentionChannelRepresentativeVideo[];
   reason_codes: string[];
   human_reasons: string[];
   recent_window_days: number;

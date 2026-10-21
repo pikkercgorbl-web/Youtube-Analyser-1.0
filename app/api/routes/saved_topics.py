@@ -13,6 +13,8 @@ from app.models.orm import SavedTopic, SavedTopicObservation
 from app.models.schemas import (
     SavedTopicCreateRequest,
     SavedTopicDetailResponse,
+    SavedTopicWatchMilestoneResponse,
+    SavedTopicWatchSummaryResponse,
     SavedTopicFeedbackCreateRequest,
     SavedTopicFeedbackResponse,
     SavedTopicHistoryResponse,
@@ -25,6 +27,7 @@ from app.models.schemas import (
     SavedTopicTimelineResponse,
 )
 from app.services.saved_topic_decisions import append_feedback, feedback_to_dict, latest_feedback_by_topic_ids
+from app.services.saved_topic_watch import build_watch_summary
 from app.services.saved_topics import (
     SavedTopicArchivedError,
     SavedTopicFamilyNotInSnapshotError,
@@ -70,7 +73,32 @@ def _feedback_response(row) -> SavedTopicFeedbackResponse:
     )
 
 
+def _watch_summary_response(db: Session, topic: SavedTopic, *, live: SavedTopicObservation | None) -> SavedTopicWatchSummaryResponse:
+    summary = build_watch_summary(db, topic, live=live)
+    return SavedTopicWatchSummaryResponse(
+        headline=summary.headline,
+        observation_count=summary.observation_count,
+        saved_at=summary.saved_at,
+        last_observation_at=summary.last_observation_at,
+        last_present_at=summary.last_present_at,
+        last_absent_at=summary.last_absent_at,
+        latest_attention_run_at=summary.latest_attention_run_at,
+        present_in_latest_snapshot=summary.present_in_latest_snapshot,
+        analysis_lifecycle=summary.analysis_lifecycle,
+        stale_message=summary.stale_message,
+        milestones=[
+            SavedTopicWatchMilestoneResponse(
+                kind=m.kind,
+                occurred_at=m.occurred_at,
+                attention_run_id=m.attention_run_id,
+            )
+            for m in summary.milestones
+        ],
+    )
+
+
 def _detail_response(
+    db: Session,
     topic: SavedTopic,
     *,
     live: SavedTopicObservation | None,
@@ -92,6 +120,7 @@ def _detail_response(
         live_observation=_observation_response(live) if live is not None else None,
         count_deltas=deltas,
         latest_feedback=_feedback_response(latest_feedback_row) if latest_feedback_row is not None else None,
+        watch_summary=_watch_summary_response(db, topic, live=live),
     )
 
 
@@ -99,6 +128,7 @@ def _topic_detail(db: Session, topic: SavedTopic) -> SavedTopicDetailResponse:
     live_map = latest_observations_by_topic_ids(db, [topic.id])
     feedback_map = latest_feedback_by_topic_ids(db, [topic.id])
     return _detail_response(
+        db,
         topic,
         live=live_map.get(topic.id),
         latest_feedback_row=feedback_map.get(topic.id),
@@ -106,6 +136,7 @@ def _topic_detail(db: Session, topic: SavedTopic) -> SavedTopicDetailResponse:
 
 
 def _list_item(
+    db: Session,
     topic: SavedTopic,
     *,
     live: SavedTopicObservation | None,
@@ -114,6 +145,7 @@ def _list_item(
     if live is not None:
         payload = json.loads(live.payload_json or "{}")
         present = bool(payload.get("present_in_snapshot"))
+    watch = build_watch_summary(db, topic, live=live)
     return SavedTopicListItemResponse(
         id=topic.id,
         family_key=topic.family_key,
@@ -126,6 +158,10 @@ def _list_item(
         archived_at=topic.archived_at,
         latest_observation_at=live.captured_at if live is not None else None,
         present_in_latest_snapshot=present,
+        watch_headline=watch.headline,
+        watch_stale_message=watch.stale_message,
+        analysis_lifecycle=watch.analysis_lifecycle,
+        observation_count=watch.observation_count,
     )
 
 
@@ -179,7 +215,7 @@ def list_saved_topics(
         topics = list_topics(db, archived=archived, query=q)
     topic_ids = [row.id for row in topics]
     live_map = latest_observations_by_topic_ids(db, topic_ids)
-    items = [_list_item(row, live=live_map.get(row.id)) for row in topics]
+    items = [_list_item(db, row, live=live_map.get(row.id)) for row in topics]
     return SavedTopicListResponse(items=items, total=len(items))
 
 

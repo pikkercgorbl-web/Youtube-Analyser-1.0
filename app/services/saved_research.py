@@ -565,6 +565,9 @@ def archive_video(session: Session, item_id: int) -> SavedVideo | None:
         row.archived_at = utc_now()
         row.updated_at = utc_now()
         record_archived(session, entity_kind="video", entity_id=row.id)
+        from app.services.saved_video_similar_watch import pause_similar_watch_for_archived_video
+
+        pause_similar_watch_for_archived_video(session, saved_video_id=row.id)
         session.flush()
     return row
 
@@ -615,6 +618,9 @@ def archive_family(session: Session, item_id: int) -> SavedFamily | None:
         row.archived_at = utc_now()
         row.updated_at = utc_now()
         record_archived(session, entity_kind="family", entity_id=row.id)
+        from app.services.saved_family_topic_watch import pause_family_topic_watch_for_archived_family
+
+        pause_family_topic_watch_for_archived_family(session, saved_family_id=row.id)
         session.flush()
     return row
 

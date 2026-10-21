@@ -109,6 +109,7 @@ function listResponse(
   return {
     items: [baseItem],
     limit: 100,
+    data_source: "snapshot",
     evaluated_at: "2026-09-20T12:00:00Z",
     attribution_mode: "all_hits",
     window_from: null,
@@ -147,7 +148,7 @@ describe("KeywordPerformanceDashboard", () => {
   it("renders slim Discovery table with Russian columns", async () => {
     render(<KeywordPerformanceDashboard />);
     const table = await screen.findByTestId("discovery-table");
-    expect(within(table).getByText("Найдено видео")).toBeInTheDocument();
+    expect(within(table).getByText("В атрибуции")).toBeInTheDocument();
     expect(within(table).getByText("Новых для базы")).toBeInTheDocument();
     expect(within(table).getByText("VPH при находке")).toBeInTheDocument();
     expect(
@@ -260,6 +261,48 @@ describe("KeywordPerformanceDashboard", () => {
     expect(screen.getByTestId("observed-72h-1")).toHaveTextContent(
       "Исходов пока нет",
     );
+  });
+
+  it("shows snapshot unavailable state", async () => {
+    vi.mocked(api.fetchKeywordPerformanceList).mockResolvedValue(
+      listResponse({ data_source: "unavailable", items: [], evaluated_at: null }),
+    );
+    render(<KeywordPerformanceDashboard />);
+    expect(await screen.findByTestId("snapshot-unavailable")).toBeInTheDocument();
+    expect(screen.queryByTestId("empty-keywords")).not.toBeInTheDocument();
+  });
+
+  it("shows evaluation context for cumulative snapshot", async () => {
+    render(<KeywordPerformanceDashboard />);
+    const ctx = await screen.findByTestId("evaluation-context");
+    expect(ctx).toHaveTextContent(/накопительно за всё время/i);
+    expect(ctx).toHaveTextContent(/обновлено/i);
+  });
+
+  it("attribution switch changes attributed column values", async () => {
+    vi.mocked(api.fetchKeywordPerformanceList).mockImplementation(async (params) =>
+      listResponse({
+        attribution_mode: params?.attribution_mode ?? "all_hits",
+        items: [
+          {
+            ...baseItem,
+            keyword_id: 42,
+            attributed_video_count:
+              params?.attribution_mode === "first_discovery" ? 3 : 8,
+            unique_video_count: 8,
+          },
+        ],
+      }),
+    );
+    render(<KeywordPerformanceDashboard />);
+    await screen.findByTestId("discovery-table");
+    expect(screen.getByTestId("attributed-videos-42")).toHaveTextContent("8");
+    fireEvent.change(screen.getByTestId("attribution-mode"), {
+      target: { value: "first_discovery" },
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId("attributed-videos-42")).toHaveTextContent("3");
+    });
   });
 
   it("attribution switch refetches", async () => {

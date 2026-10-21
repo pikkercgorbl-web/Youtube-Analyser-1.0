@@ -14,6 +14,8 @@ export type ResearchPortfolioSavedItem = {
   current_status: string;
   has_latest_feedback: boolean;
   observation_count: number;
+  video_id?: string | null;
+  latest_observed_at?: string | null;
 };
 
 export type ResearchPortfolioReport = {
@@ -35,6 +37,7 @@ export type ResearchPortfolioReport = {
     cohort_with_any_observation: number;
     cohort_with_multiple_observations: number;
     evidence_state_distribution: Record<string, number>;
+    cohort_with_new_analytical_observation_in_period?: number | null;
   };
   pending_signals: Record<string, number>;
   saved_in_period_items: ResearchPortfolioSavedItem[];

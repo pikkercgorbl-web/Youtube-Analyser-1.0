@@ -1,0 +1,22 @@
+{
+  "familyId": "1",
+  "steps": [
+    {
+      "step": "open_family_detail",
+      "url": "http://127.0.0.1:3000/saved/families/1"
+    },
+    {
+      "step": "run_now_skipped_or_clicked",
+      "enabled": true
+    },
+    {
+      "step": "findings_visible",
+      "count": 50
+    },
+    {
+      "step": "save_finding_clicked"
+    }
+  ],
+  "ok": true,
+  "api_findings_total": 147
+}

@@ -173,6 +173,7 @@ def build_observation_payload(
     computed_at = ensure_utc(result.summary.computed_at).isoformat()
     if family is None:
         return {
+            "observation_status": "absent",
             "present_in_snapshot": False,
             "absence_message": FAMILY_ABSENCE_MESSAGE,
             "attention_run_id": run_id,
@@ -182,6 +183,7 @@ def build_observation_payload(
     winners_by_id = _winner_map(result)
     family_dict = pattern_family_to_dict(family)
     return {
+        "observation_status": "present",
         "present_in_snapshot": True,
         "attention_run_id": run_id,
         "attention_computed_at": computed_at,

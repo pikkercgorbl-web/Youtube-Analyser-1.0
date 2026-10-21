@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-10-10T06:32:11.880891+00:00",
+  "checked_at_utc": "2026-10-20T12:17:13.603496+00:00",
   "database": {
     "host": "127.0.0.1",
     "port": 5433,
@@ -19,10 +19,10 @@
   },
   "youtube_api_keys_count": 3,
   "read_models": {
-    "attention_latest_computed_at": "2026-10-10T05:11:08.117577+00:00",
-    "attention_run_id": "attention_20261010T051108Z",
-    "keyword_performance_evaluated_at": "2026-10-09T11:56:04.309944+00:00",
-    "keyword_performance_run_id": "keyword_performance_20261009T115604Z"
+    "attention_latest_computed_at": "2026-10-20T10:26:39.007195+00:00",
+    "attention_run_id": "attention_20261020T102639Z",
+    "keyword_performance_evaluated_at": "2026-10-19T18:54:06.040794+00:00",
+    "keyword_performance_run_id": "keyword_performance_20261019T185406Z"
   },
   "launch_paths": {
     "start_backend": true,

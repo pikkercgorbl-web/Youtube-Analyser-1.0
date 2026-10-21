@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Flame } from "lucide-react";
 
@@ -17,6 +18,7 @@ import {
   isRepeatingIdeaFamily,
   isSearchCollectionFamily,
 } from "@/lib/opportunity-family-presentation";
+import { parseOpportunitiesSectionFromHash } from "@/lib/opportunities-section-hash";
 import { RisingChannelsSection } from "@/components/opportunities/rising-channels";
 import { WinnersTable } from "@/components/opportunities/winners-table";
 import {
@@ -41,6 +43,7 @@ import type { RelatedFamilyRef } from "@/lib/saved-research-types";
 import { formatDateTimeLocal } from "@/lib/monitoring-format";
 import { cn } from "@/lib/utils";
 import { parseWinnerVideoIdFromHash } from "@/lib/opportunity-family-presentation";
+import { stashAttentionMeta } from "@/lib/opportunity-winner-cache";
 
 type FeedState =
   | { status: "loading" }
@@ -92,6 +95,7 @@ export function OpportunitiesDashboard() {
         setState({ status: "unavailable" });
         return;
       }
+      stashAttentionMeta(summaryRes.summary);
       setState({
         status: "ready",
         summary: summaryRes.summary,
@@ -122,9 +126,20 @@ export function OpportunitiesDashboard() {
       return;
     }
     const syncHash = () => setLocationHash(window.location.hash);
+    const applySectionFromHash = () => {
+      const sectionFromHash = parseOpportunitiesSectionFromHash(window.location.hash);
+      if (sectionFromHash) {
+        setSection(sectionFromHash);
+      }
+    };
     syncHash();
-    window.addEventListener("hashchange", syncHash);
-    return () => window.removeEventListener("hashchange", syncHash);
+    applySectionFromHash();
+    const onHashChange = () => {
+      syncHash();
+      applySectionFromHash();
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
   useEffect(() => {
@@ -192,18 +207,28 @@ export function OpportunitiesDashboard() {
           title="Возможности"
           lead="Видео, каналы и темы, которые стоит изучить."
         />
-        <UnavailableState
-          title="Подборка ещё не готова."
-          description="После первого расчёта Radar здесь появятся находки. Состояние сбора можно проверить в разделе «Состояние системы»."
-        />
-        <p className="text-xs text-muted-foreground" data-testid="refresh-hint">
-          python scripts/refresh_attention_engine.py
+        <div data-testid="opp-unavailable-no-snapshot">
+          <UnavailableState
+            title="Снимок Attention ещё не создан."
+            description="Раздел читает сохранённый снимок read model Attention, а не YouTube напрямую. После первого расчёта (refresh Attention) здесь появятся находки. Свежесть сбора и read models — в «Состоянии системы»."
+          />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          <Link href="/operations" className="text-primary underline-offset-2 hover:underline">
+            Состояние системы
+          </Link>
+          {" · "}
+          <span className="text-xs" data-testid="refresh-hint">
+            разовый расчёт: python scripts/refresh_attention_engine.py
+          </span>
         </p>
       </PageShell>
     );
   }
 
   const { summary, videos, families, channels, dataSource } = state;
+  const emptyFindings =
+    videos.length === 0 && channels.length === 0 && families.length === 0;
   const confirmed = confirmed72hCount(videos);
 
   const repeatingIdeas = families.filter(isRepeatingIdeaFamily);
@@ -226,6 +251,22 @@ export function OpportunitiesDashboard() {
           />
         </div>
       </section>
+      {emptyFindings ? (
+        <div
+          className="rounded-2xl border border-dashed border-border bg-muted/20 px-5 py-4 text-sm text-muted-foreground"
+          data-testid="opp-empty-snapshot"
+        >
+          <p className="font-medium text-foreground">Снимок Attention есть, находок в этом окне нет.</p>
+          <p className="mt-2">
+            Это не ошибка загрузки: расчёт выполнен ({formatDateTimeLocal(summary.computed_at)}), но
+            критерии победителей, каналов и семейств ничего не отобрали. Проверьте окно сбора и пул ключей в{" "}
+            <Link href="/operations" className="text-primary underline-offset-2 hover:underline">
+              Состоянии системы
+            </Link>
+            .
+          </p>
+        </div>
+      ) : null}
       <div
         className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4"
         data-testid="snapshot-meta"
@@ -280,9 +321,9 @@ export function OpportunitiesDashboard() {
             ],
             [
               "channels",
-              "Растущие каналы",
-              summary.channel_momentum_count,
-              "Повторяемый результат",
+              "Сигналы по каналам",
+              channels.length,
+              "Рост или отдельные сильные ролики",
               "metric-channels",
             ],
             [
@@ -331,6 +372,7 @@ export function OpportunitiesDashboard() {
               videos={videos}
               runId={summary.run_id}
               relatedFamiliesByVideoId={relatedFamiliesByVideoId}
+              channelMomentum={channels}
               focusVideoId={focusWinnerVideoId}
               onFocusVideoHandled={() => setFocusWinnerVideoId(null)}
             />
@@ -339,11 +381,11 @@ export function OpportunitiesDashboard() {
       </div>
       <div hidden={section !== "channels"}>
         <SectionPanel
-          title="Растущие каналы"
-          description="Несколько недавних видео показывают улучшение относительно предыдущих роликов канала на одинаковом возрасте."
+          title="Сигналы по каналам"
+          description="Канал попадает сюда, если минимум два недавних ролика на ~24 ч после публикации сильнее типичного прошлого темпа. Медиана канала при этом может не расти."
         >
           <div id="channel-momentum">
-            <RisingChannelsSection channels={channels} winnerLookup={videos} />
+            <RisingChannelsSection channels={channels} />
           </div>
         </SectionPanel>
       </div>

@@ -274,6 +274,31 @@ def run_discovery_worker(
                 finally:
                     exploration_session.close()
 
+            if summary is not None:
+                similar_session = session_factory()
+                try:
+                    from app.services.saved_video_similar_watch import run_similar_watch_batch_for_discovery_cycle
+
+                    similar_scanned = run_similar_watch_batch_for_discovery_cycle(similar_session)
+                    if similar_scanned:
+                        similar_session.commit()
+                    else:
+                        similar_session.rollback()
+                    if similar_scanned:
+                        logger.info(
+                            "[SAVED_VIDEO_SIMILAR_WATCH] discovery_run_id=%s watches_scanned=%s",
+                            summary.run_id,
+                            similar_scanned,
+                        )
+                except Exception:
+                    similar_session.rollback()
+                    logger.exception(
+                        "[SAVED_VIDEO_SIMILAR_WATCH_ERROR] discovery_run_id=%s",
+                        summary.run_id,
+                    )
+                finally:
+                    similar_session.close()
+
             if stop_requested or (stop_check and stop_check()):
                 break
 

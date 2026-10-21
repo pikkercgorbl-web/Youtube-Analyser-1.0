@@ -148,6 +148,21 @@ def test_batch_does_not_load_entire_discovery_hit_table() -> None:
     assert list_keyword_performance(session, limit=10).data_source == "snapshot"
 
 
+def test_snapshot_list_orders_by_last_checked_desc() -> None:
+    session = sessionmaker(bind=_engine())()
+    kw_old = _seed_keyword_with_hit(session, "old", "v-old")
+    kw_new = _seed_keyword_with_hit(session, "new", "v-new")
+    kw_old.last_checked = NOW - timedelta(days=10)
+    kw_new.last_checked = NOW - timedelta(hours=1)
+    session.commit()
+    refresh_keyword_performance_read_model(session)
+    session.commit()
+    items = list_keyword_performance(session, limit=10).items
+    assert len(items) >= 2
+    ids = [i.keyword_id for i in items]
+    assert ids.index(kw_new.id) < ids.index(kw_old.id)
+
+
 def test_missing_72h_not_zeroed_in_snapshot() -> None:
     session = sessionmaker(bind=_engine())()
     _seed_keyword_with_hit(session, "outcome", "v-out")
@@ -169,6 +184,7 @@ def main() -> None:
         test_unavailable_without_snapshot,
         test_live_page_bounds_keywords_processed,
         test_batch_does_not_load_entire_discovery_hit_table,
+        test_snapshot_list_orders_by_last_checked_desc,
         test_missing_72h_not_zeroed_in_snapshot,
     ]
     for test in tests:

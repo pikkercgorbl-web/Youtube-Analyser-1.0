@@ -1,0 +1,194 @@
+[
+  {
+    "saved_video_id": 1,
+    "title": "10 Biggest Grain Carts Ever Built",
+    "suggested_queries": [
+      "biggest grain carts ever built",
+      "grain carts",
+      "biggest grain carts",
+      "grain carts true machines"
+    ],
+    "confirmed_queries": [
+      "biggest grain carts ever built",
+      "grain carts",
+      "biggest grain carts"
+    ],
+    "scan_id": 4,
+    "queries_attempted": 3,
+    "queries_failed": 0,
+    "unique_videos_this_scan": 70,
+    "primary_this_scan": 2,
+    "other_this_scan": 68,
+    "first_10_primary": [
+      {
+        "finding_id": 91,
+        "video_id": "lUwg53KH5lQ",
+        "title": "Brian gets to be the “ grain cart driver “",
+        "matched_query": "biggest grain carts",
+        "why_found": "совпадение предметных слов: grain, carts",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 44
+      },
+      {
+        "finding_id": 153,
+        "video_id": "M9M3J-PogqI",
+        "title": "Running grain cart with 2009 8000 series and 2015 760 harvester 50 foot header",
+        "matched_query": "grain carts",
+        "why_found": "совпадение предметных слов: grain, carts",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 44
+      }
+    ],
+    "classification_errors_sample": []
+  },
+  {
+    "saved_video_id": 4,
+    "title": "The NEW Tesla Roadster: My Honest Reaction",
+    "suggested_queries": [
+      "the new tesla roadster my honest reaction",
+      "tesla roadster",
+      "tesla roadster honest",
+      "tesla roadster ucbjycsmduvyel83r_u4jriq"
+    ],
+    "confirmed_queries": [
+      "the new tesla roadster my honest reaction",
+      "tesla roadster",
+      "tesla roadster honest"
+    ],
+    "scan_id": 5,
+    "queries_attempted": 3,
+    "queries_failed": 0,
+    "unique_videos_this_scan": 88,
+    "primary_this_scan": 61,
+    "other_this_scan": 27,
+    "first_10_primary": [
+      {
+        "finding_id": 171,
+        "video_id": "3YAsN_aiinw",
+        "title": "The New Tesla Roadster: Is It Really That Good?",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 172,
+        "video_id": "FtAI1Aapf38",
+        "title": "My thoughts on the Tesla Roadster & what is Homechat?",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 174,
+        "video_id": "2QH5lpsNTDQ",
+        "title": "A Flying Tesla Roadster...But Tesla FSD Still Gets THIS Wrong… | 14.3.12",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 176,
+        "video_id": "Xwen4G41kms",
+        "title": "Half the Internet Thought This Was AI – German Engineer Reacts to the Tesla Roadster 🇩🇪 🇺🇸",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 177,
+        "video_id": "dDljwsy6IWw",
+        "title": "The NEW Tesla Roadster My Honest Reaction   Marques Brownlee",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 178,
+        "video_id": "kTcjNUrv1ew",
+        "title": "Tesla Flying Car Demo, My Honest Reaction 😱 | Tesla Roadster 2026 Reveal",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 179,
+        "video_id": "hvVNhkORTzQ",
+        "title": "Tesla Roadster: CAN IT REALLY FLY?!",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 180,
+        "video_id": "F_xCwVh9CpM",
+        "title": "Tesla Roadster 2028 Can FLY?! How It Actually Works? The Engineering Explained",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 183,
+        "video_id": "gl7o33eXhXw",
+        "title": "The NEW Tesla Roadster: My honest reaction",
+        "matched_query": "the new tesla roadster my honest reaction",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      },
+      {
+        "finding_id": 189,
+        "video_id": "40fyv1GQRiI",
+        "title": "When You Rob a Bank But Have The New Tesla Roadster",
+        "matched_query": "tesla roadster",
+        "why_found": "совпадение предметных слов: tesla, roadster; фраза из исходного названия «tesla roadster»",
+        "other_reason": null,
+        "tier": "primary",
+        "score": 72
+      }
+    ],
+    "classification_errors_sample": []
+  },
+  {
+    "saved_video_id": 9,
+    "title": "10 Old Moldboard Plows That Farmers Loved for Decades",
+    "suggested_queries": [
+      "old moldboard plows that farmers loved for decades",
+      "old moldboard plows farmers",
+      "old moldboard",
+      "moldboard plows",
+      "plows farmers"
+    ],
+    "confirmed_queries": [
+      "old moldboard plows that farmers loved for decades",
+      "old moldboard plows farmers",
+      "old moldboard"
+    ],
+    "scan_id": 6,
+    "queries_attempted": 3,
+    "queries_failed": 0,
+    "unique_videos_this_scan": 2,
+    "primary_this_scan": 0,
+    "other_this_scan": 2,
+    "first_10_primary": [],
+    "classification_errors_sample": []
+  }
+]

@@ -32,6 +32,11 @@ import {
   sortRegularPublications,
   type RegularSortMode,
 } from "@/lib/channel-single-analysis-overview";
+import {
+  CHANNEL_SINGLE_COMPARE_BUTTON_LABEL,
+  CHANNEL_SINGLE_COMPARE_HINT,
+  CHANNEL_SINGLE_COMPARE_SELECTED_LABEL,
+} from "@/lib/channel-single-analysis-copy";
 import { formatViewsAndAgeLine } from "@/lib/manual-search-published-format";
 import type {
   ChannelSingleAnalysisEnrichResponse,
@@ -104,10 +109,24 @@ function PublicationCard({
           {pub.title || pub.video_id}
         </a>
         {stats ? <p className="text-xs text-muted-foreground">{stats}</p> : null}
+        {isFocus ? (
+          <p
+            className="text-xs font-medium text-primary"
+            data-testid="publication-compare-selected"
+          >
+            {CHANNEL_SINGLE_COMPARE_SELECTED_LABEL}
+          </p>
+        ) : null}
         <div className="flex flex-col gap-2 pt-1 sm:flex-row">
-          {showCompare ? (
-            <Button type="button" variant="outline" size="sm" className="flex-1" onClick={onCompare}>
-              Сравнить с каналом
+          {showCompare && !isFocus ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={onCompare}
+            >
+              {CHANNEL_SINGLE_COMPARE_BUTTON_LABEL}
             </Button>
           ) : null}
           <SaveVideoButton videoId={pub.video_id} fromManualSearch skipInitialCheck />
@@ -526,8 +545,8 @@ export function ChannelSingleAnalysisHome() {
             </CardContent>
           </Card>
 
-          {focusVideoId && focusPublication ? (
-            <div className="space-y-4 lg:flex lg:items-start lg:gap-4">
+          <div className="space-y-4 lg:flex lg:items-start lg:gap-4">
+            {focusVideoId && focusPublication ? (
               <div className="min-w-0 flex-1">
                 <ChannelSingleFocusCompact
                   pub={focusPublication}
@@ -535,25 +554,25 @@ export function ChannelSingleAnalysisHome() {
                   viewsRankCaption={viewsRankCaption}
                 />
               </div>
-              <div className="min-w-0 flex-1 lg:max-w-md">
-                <ChannelSingleAgeComparison
-                  comparison={comparison}
-                  busy={comparisonBusy}
-                  enrichError={enrichError}
-                />
-              </div>
+            ) : null}
+            <div className="min-w-0 flex-1 lg:max-w-md">
+              <ChannelSingleAgeComparison
+                comparison={comparison}
+                busy={comparisonBusy}
+                enrichError={enrichError}
+                hasFocus={Boolean(focusVideoId && focusPublication)}
+              />
             </div>
-          ) : (
-            <ChannelSingleAgeComparison
-              comparison={comparison}
-              busy={comparisonBusy}
-              enrichError={enrichError}
-            />
-          )}
+          </div>
 
           <section className="space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="text-base font-semibold">Обычные видео в выборке</h3>
+              <div className="space-y-1">
+                <h3 className="text-base font-semibold">Обычные видео в выборке</h3>
+                {!focusVideoId ? (
+                  <p className="text-sm text-muted-foreground">{CHANNEL_SINGLE_COMPARE_HINT}</p>
+                ) : null}
+              </div>
               <div className="flex rounded-md border border-border/60 p-0.5 text-sm">
                 <button
                   type="button"

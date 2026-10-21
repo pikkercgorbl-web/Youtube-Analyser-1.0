@@ -81,6 +81,25 @@ export function formatDateTimeLocal(iso: string | null | undefined): string {
   });
 }
 
+/** Explicit UTC for Attention / Daily Intelligence windows (not browser local). */
+export function formatDateTimeUtc(iso: string | null | undefined): string {
+  if (!iso) {
+    return "—";
+  }
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+  const formatted = date.toLocaleString("ru-RU", {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "UTC",
+  });
+  return `${formatted} UTC`;
+}
+
 export function shortenRunId(runId: string): string {
   if (runId.length <= 28) {
     return runId;

@@ -1,0 +1,54 @@
+{
+  "ok": false,
+  "checks": [
+    {
+      "name": "two channel headers appear",
+      "passed": false,
+      "detail": "count=0"
+    },
+    {
+      "name": "no duplicate channel blocks",
+      "passed": false,
+      "detail": "count=0"
+    },
+    {
+      "name": "channel filter reduces feed",
+      "passed": true,
+      "detail": "visible=30"
+    },
+    {
+      "name": "sort toggles clickable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "analyze link has channel_id and focus",
+      "passed": true,
+      "detail": "/mass-analysis/channel?channel_id=UCXuqSBlHAE6Xw-yeJA0Tunw&focus_video_id=U-QiUAMda7Y"
+    },
+    {
+      "name": "save video (POST or already saved UI)",
+      "passed": true,
+      "detail": "already-saved"
+    },
+    {
+      "name": "successful channel remains after peer failure",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "retry button visible for failed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "loading finished after partial run",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "errors": [
+    "two channel headers appear: count=0",
+    "no duplicate channel blocks: count=0"
+  ]
+}

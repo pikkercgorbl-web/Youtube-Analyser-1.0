@@ -80,6 +80,9 @@ export interface KeywordPerformanceMetrics {
 export interface KeywordPerformanceListResponse {
   items: KeywordPerformanceMetrics[];
   limit: number;
+  offset?: number;
+  total?: number;
+  data_source?: string;
   evaluated_at: string | null;
   attribution_mode: string | null;
   window_from: string | null;

@@ -1,0 +1,186 @@
+﻿2026-10-20 21:50:30,739 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2026-10-20 21:50:30,739 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-10-20 21:50:30,741 INFO sqlalchemy.engine.Engine select current_schema()
+2026-10-20 21:50:30,741 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-10-20 21:50:30,743 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+2026-10-20 21:50:30,744 INFO sqlalchemy.engine.Engine [raw sql] {}
+2026-10-20 21:50:30,746 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-10-20 21:50:30,813 INFO sqlalchemy.engine.Engine SELECT saved_videos.id, saved_videos.video_id, saved_videos.saved_at, saved_videos.status, saved_videos.notes, saved_videos.tags_json, saved_videos.archived_at, saved_videos.created_from_attention_run_id, saved_videos.frozen_title, saved_videos.frozen_channel_id, saved_videos.frozen_channel_title, saved_videos.frozen_payload_json, saved_videos.latest_observed_at, saved_videos.manual_refresh_lease_until, saved_videos.created_at, saved_videos.updated_at 
+FROM saved_videos 
+WHERE saved_videos.frozen_title = %(frozen_title_1)s
+2026-10-20 21:50:30,813 INFO sqlalchemy.engine.Engine [generated in 0.00038s] {'frozen_title_1': 'POV: The Salesman Had You Arrested тАФ Then the GM Confirmed You Own the Dealership'}
+2026-10-20 21:50:30,821 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_finding_feedback.id, saved_video_similar_finding_feedback.saved_video_id, saved_video_similar_finding_feedback.finding_id, saved_video_similar_finding_feedback.verdict, saved_video_similar_finding_feedback.created_at, saved_video_similar_finding_feedback.updated_at 
+FROM saved_video_similar_finding_feedback 
+WHERE saved_video_similar_finding_feedback.saved_video_id = %(saved_video_id_1)s
+2026-10-20 21:50:30,821 INFO sqlalchemy.engine.Engine [generated in 0.00043s] {'saved_video_id_1': 7}
+2026-10-20 21:50:30,827 INFO sqlalchemy.engine.Engine SELECT saved_video_similar_findings.id, saved_video_similar_findings.saved_video_id, saved_video_similar_findings.video_id, saved_video_similar_findings.matched_query, saved_video_similar_findings.first_scan_id, saved_video_similar_findings.last_scan_id, saved_video_similar_findings.first_found_at, saved_video_similar_findings.last_found_at, saved_video_similar_findings.payload_json 
+FROM saved_video_similar_findings 
+WHERE saved_video_similar_findings.id IN (%(id_1_1)s, %(id_1_2)s, %(id_1_3)s, %(id_1_4)s, %(id_1_5)s, %(id_1_6)s)
+2026-10-20 21:50:30,827 INFO sqlalchemy.engine.Engine [generated in 0.00044s] {'id_1_1': 583, 'id_1_2': 568, 'id_1_3': 660, 'id_1_4': 597, 'id_1_5': 587, 'id_1_6': 604}
+{
+  "saved_video_id": 7,
+  "anchor_video_id": "SajecVKl3nc",
+  "anchor_title": "POV: The Salesman Had You Arrested тАФ Then the GM Confirmed You Own the Dealership",
+  "subject_tokens": [
+    "pov",
+    "salesman",
+    "had",
+    "arrested",
+    "gm",
+    "confirmed",
+    "own",
+    "dealership"
+  ],
+  "subject_phrases": [
+    "pov salesman",
+    "salesman had",
+    "had arrested",
+    "arrested then",
+    "then gm",
+    "gm confirmed",
+    "confirmed own",
+    "own dealership",
+    "pov salesman had",
+    "salesman had arrested",
+    "had arrested then",
+    "arrested then gm",
+    "then gm confirmed",
+    "gm confirmed own",
+    "confirmed own dealership",
+    "pov salesman had arrested",
+    "salesman had arrested then",
+    "had arrested then gm",
+    "arrested then gm confirmed",
+    "then gm confirmed own",
+    "gm confirmed own dealership"
+  ],
+  "rated_count": 6,
+  "all_rated": [
+    {
+      "finding_id": 583,
+      "video_id": "zVyPIyrNjmk",
+      "title": "POV:The Salesman Had You Removed for Driving an Old TruckтАФThen Lost Your $3M Fleet Order",
+      "matched_query": "pov salesman",
+      "group": "primary",
+      "user_verdict": "╨Я╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 90,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: pov, salesman, had; ╤Д╤А╨░╨╖╨░ ╨╕╨╖ ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨│╨╛ ╨╜╨░╨╖╨▓╨░╨╜╨╕╤П ┬лsalesman had┬╗"
+    },
+    {
+      "finding_id": 568,
+      "video_id": "puHiKdruofY",
+      "title": "POV:The Salesman Had You Removed for Driving an Old TruckтАФThen Lost Your $3M Fleet Order",
+      "matched_query": "pov salesman",
+      "group": "primary",
+      "user_verdict": "╨Я╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 90,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: pov, salesman, had; ╤Д╤А╨░╨╖╨░ ╨╕╨╖ ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨│╨╛ ╨╜╨░╨╖╨▓╨░╨╜╨╕╤П ┬лsalesman had┬╗"
+    },
+    {
+      "finding_id": 660,
+      "video_id": "OROrxADQuKw",
+      "title": "HOA Had Me Arrested Over My Own TruckтАФTheir Lawyer Went Pale When He Saw My Federal Commission",
+      "matched_query": "had arrested",
+      "group": "primary",
+      "user_verdict": "╨Э╨╡ ╨┐╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 62,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: had, arrested, own"
+    },
+    {
+      "finding_id": 597,
+      "video_id": "6l6ro_mJXs8",
+      "title": "POV: You Started Washing Cars for $15 тАФ Now You Own 9 Car Washes",
+      "matched_query": "pov salesman",
+      "group": "primary",
+      "user_verdict": "╨Я╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 44,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: pov, own"
+    },
+    {
+      "finding_id": 587,
+      "video_id": "3UAspqdNxWM",
+      "title": "POV: The Car Dealer Sends You Behind the Dumpsters - Not Knowing You Own the Land He Sells On",
+      "matched_query": "pov salesman",
+      "group": "primary",
+      "user_verdict": "╨Я╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 44,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: pov, own"
+    },
+    {
+      "finding_id": 604,
+      "video_id": "tj6unrdZfHk",
+      "title": "The Best Salesman in the Building Taught Me Everything. He Had the Most to Lose. (Day 65 of 90)",
+      "matched_query": "salesman had",
+      "group": "primary",
+      "user_verdict": "╨Э╨╡ ╨┐╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 44,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: salesman, had"
+    }
+  ],
+  "fit_in_other": [],
+  "not_fit_in_primary": [
+    {
+      "finding_id": 660,
+      "video_id": "OROrxADQuKw",
+      "title": "HOA Had Me Arrested Over My Own TruckтАФTheir Lawyer Went Pale When He Saw My Federal Commission",
+      "matched_query": "had arrested",
+      "group": "primary",
+      "user_verdict": "╨Э╨╡ ╨┐╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 62,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: had, arrested, own"
+    },
+    {
+      "finding_id": 604,
+      "video_id": "tj6unrdZfHk",
+      "title": "The Best Salesman in the Building Taught Me Everything. He Had the Most to Lose. (Day 65 of 90)",
+      "matched_query": "salesman had",
+      "group": "primary",
+      "user_verdict": "╨Э╨╡ ╨┐╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 44,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: salesman, had"
+    }
+  ],
+  "aligned": [
+    {
+      "finding_id": 583,
+      "video_id": "zVyPIyrNjmk",
+      "title": "POV:The Salesman Had You Removed for Driving an Old TruckтАФThen Lost Your $3M Fleet Order",
+      "matched_query": "pov salesman",
+      "group": "primary",
+      "user_verdict": "╨Я╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 90,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: pov, salesman, had; ╤Д╤А╨░╨╖╨░ ╨╕╨╖ ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨│╨╛ ╨╜╨░╨╖╨▓╨░╨╜╨╕╤П ┬лsalesman had┬╗"
+    },
+    {
+      "finding_id": 568,
+      "video_id": "puHiKdruofY",
+      "title": "POV:The Salesman Had You Removed for Driving an Old TruckтАФThen Lost Your $3M Fleet Order",
+      "matched_query": "pov salesman",
+      "group": "primary",
+      "user_verdict": "╨Я╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 90,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: pov, salesman, had; ╤Д╤А╨░╨╖╨░ ╨╕╨╖ ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨│╨╛ ╨╜╨░╨╖╨▓╨░╨╜╨╕╤П ┬лsalesman had┬╗"
+    },
+    {
+      "finding_id": 597,
+      "video_id": "6l6ro_mJXs8",
+      "title": "POV: You Started Washing Cars for $15 тАФ Now You Own 9 Car Washes",
+      "matched_query": "pov salesman",
+      "group": "primary",
+      "user_verdict": "╨Я╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 44,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: pov, own"
+    },
+    {
+      "finding_id": 587,
+      "video_id": "3UAspqdNxWM",
+      "title": "POV: The Car Dealer Sends You Behind the Dumpsters - Not Knowing You Own the Land He Sells On",
+      "matched_query": "pov salesman",
+      "group": "primary",
+      "user_verdict": "╨Я╨╛╨┤╤Е╨╛╨┤╨╕╤В",
+      "relevance_score": 44,
+      "classification_reason": "╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╨╝╨╡╤В╨╜╤Л╤Е ╤Б╨╗╨╛╨▓: pov, own"
+    }
+  ]
+}
+2026-10-20 21:50:30,831 INFO sqlalchemy.engine.Engine ROLLBACK

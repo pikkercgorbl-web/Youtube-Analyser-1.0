@@ -121,8 +121,10 @@ describe("DailyIntelligenceWinnerDetailView", () => {
   it("shows Нет данных for missing metric fields", async () => {
     render(<DailyIntelligenceWinnerDetailView reportDate="2026-10-10" videoId="abcdefghij1" />);
     await waitFor(() => {
-      expect(screen.getAllByText("Нет данных").length).toBeGreaterThan(0);
+      expect(screen.getByTestId("di-winner-hero")).toBeInTheDocument();
     });
+    fireEvent.click(screen.getByRole("button", { name: "Данные и расчёт" }));
+    expect(screen.getAllByText("Нет данных").length).toBeGreaterThan(0);
   });
 
   it("paginates appearances", async () => {
@@ -133,6 +135,10 @@ describe("DailyIntelligenceWinnerDetailView", () => {
       offset: 0,
     });
     render(<DailyIntelligenceWinnerDetailView reportDate="2026-10-10" videoId="abcdefghij1" />);
+    await waitFor(() => {
+      expect(screen.getByTestId("di-winner-hero")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Данные и расчёт" }));
     await waitFor(() => {
       expect(screen.getByTestId("di-toggle-all-appearances")).toBeInTheDocument();
     });
@@ -169,7 +175,7 @@ describe("DailyIntelligenceWinnerDetailView", () => {
     await waitFor(() => {
       expect(screen.getByText("Historical Winner")).toBeInTheDocument();
     });
-    expect(await screen.findByText(/контрольного измерения недоступен/i)).toBeInTheDocument();
+    expect(await screen.findByTestId("di-followup-inline-error")).toBeInTheDocument();
   });
 
   it("renders research sections and hides full appearances by default", async () => {
@@ -177,6 +183,9 @@ describe("DailyIntelligenceWinnerDetailView", () => {
     await waitFor(() => {
       expect(screen.getByTestId("di-winner-hero")).toBeInTheDocument();
     });
+    expect(screen.getByTestId("winner-insight-blocks")).toBeInTheDocument();
+    expect(screen.getByText("Почему в отчёте")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Данные и расчёт" }));
     expect(screen.getByText("Почему Radar выделил видео")).toBeInTheDocument();
     expect(screen.getByText("Что произошло дальше")).toBeInTheDocument();
     expect(screen.queryByTestId("di-appearance-table")).not.toBeInTheDocument();

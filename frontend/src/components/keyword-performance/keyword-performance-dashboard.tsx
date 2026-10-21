@@ -45,6 +45,7 @@ import {
   type KeywordPerformanceListResponse,
   type KeywordPerformanceMetricFamily,
 } from "@/lib/keyword-performance-types";
+import { keywordPerformanceListContextLines } from "@/lib/keyword-performance-context";
 import { formatDateTimeLocal } from "@/lib/monitoring-format";
 import { cn } from "@/lib/utils";
 
@@ -161,6 +162,11 @@ export function KeywordPerformanceDashboard() {
     0,
   );
 
+  const evaluationContextLines = useMemo(
+    () => (response ? keywordPerformanceListContextLines(response) : []),
+    [response],
+  );
+
   return (
     <div data-testid="keyword-performance-dashboard">
       <PageShell>
@@ -262,6 +268,27 @@ export function KeywordPerformanceDashboard() {
 
         <HelpText>{EVIDENCE_NOT_QUALITY}</HelpText>
 
+        {response && evaluationContextLines.length > 0 ? (
+          <div
+            className="space-y-1 rounded-md border border-border/60 bg-muted/30 px-3 py-2 text-xs text-muted-foreground"
+            data-testid="evaluation-context"
+          >
+            {evaluationContextLines.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+          </div>
+        ) : null}
+
+        {response?.data_source === "unavailable" && !loading ? (
+          <div data-testid="snapshot-unavailable">
+            <EmptyState
+              title="Снимок метрик недоступен"
+              description="Предрасчёт отдачи запросов ещё не выполнялся или недоступен. Данные появятся после job refresh read-model."
+              variant="unavailable"
+            />
+          </div>
+        ) : null}
+
         {metricFamily === "breakout" ? (
           <div className="space-y-2">
             <p
@@ -270,18 +297,9 @@ export function KeywordPerformanceDashboard() {
             >
               {BREAKOUT_TOP_DECILE_HELP}
             </p>
-            {response ? (
-              <p
-                className="text-xs text-muted-foreground"
-                data-testid="evaluation-context"
-              >
-                Оценка: {formatDateTimeLocal(response.evaluated_at)}
-                {response.ranking_version
-                  ? ` · ${response.ranking_version}`
-                  : null}
-                {globalEligible != null
-                  ? ` · глобально подходят ${globalEligible}`
-                  : null}
+            {response && globalEligible != null ? (
+              <p className="text-xs text-muted-foreground">
+                Глобально подходят для breakout: {globalEligible}
               </p>
             ) : null}
             {globalEligible === 0 ? (
@@ -369,7 +387,10 @@ export function KeywordPerformanceDashboard() {
           </div>
         ) : null}
 
-        {!error && response && filteredItems.length === 0 ? (
+        {!error &&
+        response &&
+        response.data_source !== "unavailable" &&
+        filteredItems.length === 0 ? (
           <EmptyState
             title="Нет ключевых слов"
             description={
@@ -381,7 +402,9 @@ export function KeywordPerformanceDashboard() {
           />
         ) : null}
 
-        {!error && filteredItems.length > 0 ? (
+        {!error &&
+        response?.data_source !== "unavailable" &&
+        filteredItems.length > 0 ? (
           <SectionPanel title="Ключевые слова">
             <div className={cn(loading && "opacity-60")}>
               {metricFamily === "discovery" ? (

@@ -137,6 +137,8 @@ class _EnsureCorsOnErrorsMiddleware(BaseHTTPMiddleware):
         return response
 
 
+app.add_middleware(_EnsureCorsOnErrorsMiddleware)
+
 # 3. Роуты и подключение router-ов
 @app.get("/health", tags=["system"])
 def health_check() -> dict[str, str]:

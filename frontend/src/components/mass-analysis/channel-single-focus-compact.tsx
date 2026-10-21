@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 
+import { CHANNEL_SINGLE_COMPARE_SELECTED_LABEL } from "@/lib/channel-single-analysis-copy";
 import { SaveVideoButton } from "@/components/saved-research/save-video-button";
 import { formatViewsAndAgeLine } from "@/lib/manual-search-published-format";
 import type { ChannelSingleAnalysisPublication } from "@/lib/types";
@@ -67,8 +68,8 @@ export function ChannelSingleFocusCompact({
         </div>
       </a>
       <div className="min-w-0 flex-1 space-y-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          Выбранное видео
+        <p className="text-xs font-medium uppercase tracking-wide text-primary">
+          {CHANNEL_SINGLE_COMPARE_SELECTED_LABEL}
         </p>
         <a
           href={pub.url}

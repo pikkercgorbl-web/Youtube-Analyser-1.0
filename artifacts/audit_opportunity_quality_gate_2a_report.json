@@ -1,0 +1,725 @@
+{
+  "summary": {
+    "run_id": "attention_20261013T045320Z",
+    "family_total": 20,
+    "winner_list_size": 50,
+    "gate_distribution_proposed": {
+      "diagnostic": 16,
+      "strong": 4
+    },
+    "by_kind": {
+      "keyword_provenance": 16,
+      "video_topic": 4
+    },
+    "flag_counts": {
+      "keyword_only": 13,
+      "broad_keyword_group": 13,
+      "topic_supported": 7,
+      "cross_source_supported": 4
+    }
+  },
+  "families": [
+    {
+      "rank": 1,
+      "family_key": "family:kw:1497",
+      "label": "minecraft challenge videos",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 25,
+      "channel_count": 25,
+      "keyword_count": 32,
+      "breakout_eligible_count": 25,
+      "winner_count": 4,
+      "non_winner_members": 21,
+      "zero_or_null_views_share": 0.08,
+      "vph_measured_count": 4,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1497"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 2,
+      "family_key": "family:kw:181",
+      "label": "free ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 29,
+      "channel_count": 24,
+      "keyword_count": 58,
+      "breakout_eligible_count": 29,
+      "winner_count": 0,
+      "non_winner_members": 29,
+      "zero_or_null_views_share": 0.0,
+      "vph_measured_count": 0,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:181"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 3,
+      "family_key": "family:kw:1505",
+      "label": "обучение нейросети видео",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 22,
+      "channel_count": 22,
+      "keyword_count": 32,
+      "breakout_eligible_count": 22,
+      "winner_count": 2,
+      "non_winner_members": 20,
+      "zero_or_null_views_share": 0.091,
+      "vph_measured_count": 2,
+      "has_phrase_support": false,
+      "has_topic_support": true,
+      "keyword_only": false,
+      "broad_keyword_group": false,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1505"
+      ],
+      "proposed_gate": "strong"
+    },
+    {
+      "rank": 4,
+      "family_key": "family:kw:1561",
+      "label": "видео с помощью нейросети",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 22,
+      "channel_count": 22,
+      "keyword_count": 39,
+      "breakout_eligible_count": 22,
+      "winner_count": 2,
+      "non_winner_members": 20,
+      "zero_or_null_views_share": 0.0,
+      "vph_measured_count": 2,
+      "has_phrase_support": false,
+      "has_topic_support": true,
+      "keyword_only": false,
+      "broad_keyword_group": false,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1561"
+      ],
+      "proposed_gate": "strong"
+    },
+    {
+      "rank": 5,
+      "family_key": "family:kw:186",
+      "label": "education ai tools for students",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 24,
+      "channel_count": 22,
+      "keyword_count": 32,
+      "breakout_eligible_count": 24,
+      "winner_count": 0,
+      "non_winner_members": 24,
+      "zero_or_null_views_share": 0.042,
+      "vph_measured_count": 0,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:186"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 6,
+      "family_key": "family:kw:1478",
+      "label": "how does it work animation",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 21,
+      "channel_count": 21,
+      "keyword_count": 25,
+      "breakout_eligible_count": 21,
+      "winner_count": 1,
+      "non_winner_members": 20,
+      "zero_or_null_views_share": 0.048,
+      "vph_measured_count": 1,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1478"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 7,
+      "family_key": "family:kw:1930",
+      "label": "how does it work song",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 25,
+      "channel_count": 20,
+      "keyword_count": 29,
+      "breakout_eligible_count": 23,
+      "winner_count": 1,
+      "non_winner_members": 24,
+      "zero_or_null_views_share": 0.0,
+      "vph_measured_count": 1,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 0.76,
+      "median_pairwise_token_jaccard": 0.083,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1930"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 8,
+      "family_key": "family:topic:86b8434548938bdc",
+      "label": "искусственный интеллект",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported"
+      ],
+      "support_sources": [
+        "topic"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 20,
+      "channel_count": 20,
+      "keyword_count": 5,
+      "breakout_eligible_count": 20,
+      "winner_count": 1,
+      "non_winner_members": 19,
+      "zero_or_null_views_share": 0.1,
+      "vph_measured_count": 1,
+      "has_phrase_support": false,
+      "has_topic_support": true,
+      "keyword_only": false,
+      "broad_keyword_group": false,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "topic:86b8434548938bdc"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 9,
+      "family_key": "family:kw:1506",
+      "label": "как работает обучение нейросети",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 19,
+      "channel_count": 19,
+      "keyword_count": 24,
+      "breakout_eligible_count": 19,
+      "winner_count": 4,
+      "non_winner_members": 15,
+      "zero_or_null_views_share": 0.105,
+      "vph_measured_count": 4,
+      "has_phrase_support": false,
+      "has_topic_support": true,
+      "keyword_only": false,
+      "broad_keyword_group": false,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1506"
+      ],
+      "proposed_gate": "strong"
+    },
+    {
+      "rank": 10,
+      "family_key": "family:kw:154",
+      "label": "ai tools for video editing",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 20,
+      "channel_count": 19,
+      "keyword_count": 19,
+      "breakout_eligible_count": 20,
+      "winner_count": 0,
+      "non_winner_members": 20,
+      "zero_or_null_views_share": 0.05,
+      "vph_measured_count": 0,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.056,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:154"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 11,
+      "family_key": "family:kw:1541",
+      "label": "unexplained video game mysteries",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 19,
+      "channel_count": 19,
+      "keyword_count": 17,
+      "breakout_eligible_count": 19,
+      "winner_count": 0,
+      "non_winner_members": 19,
+      "zero_or_null_views_share": 0.158,
+      "vph_measured_count": 0,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1541"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 12,
+      "family_key": "family:kw:179",
+      "label": "ai tools for educational videos",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 19,
+      "channel_count": 19,
+      "keyword_count": 15,
+      "breakout_eligible_count": 19,
+      "winner_count": 0,
+      "non_winner_members": 19,
+      "zero_or_null_views_share": 0.158,
+      "vph_measured_count": 0,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:179"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 13,
+      "family_key": "family:topic:298b5d20078b4f3f",
+      "label": "miniature painting tutorial beginners tabletop",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported"
+      ],
+      "support_sources": [
+        "topic"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 19,
+      "channel_count": 19,
+      "keyword_count": 41,
+      "breakout_eligible_count": 18,
+      "winner_count": 2,
+      "non_winner_members": 17,
+      "zero_or_null_views_share": 0.0,
+      "vph_measured_count": 2,
+      "has_phrase_support": false,
+      "has_topic_support": true,
+      "keyword_only": false,
+      "broad_keyword_group": false,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "topic:298b5d20078b4f3f"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 14,
+      "family_key": "family:kw:1488",
+      "label": "нейросети музыка",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 24,
+      "channel_count": 17,
+      "keyword_count": 25,
+      "breakout_eligible_count": 24,
+      "winner_count": 1,
+      "non_winner_members": 23,
+      "zero_or_null_views_share": 0.0,
+      "vph_measured_count": 1,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1488"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 15,
+      "family_key": "family:kw:180",
+      "label": "best ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 17,
+      "channel_count": 17,
+      "keyword_count": 49,
+      "breakout_eligible_count": 17,
+      "winner_count": 1,
+      "non_winner_members": 16,
+      "zero_or_null_views_share": 0.0,
+      "vph_measured_count": 1,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:180"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 16,
+      "family_key": "family:topic:4ac6a6a26765f407",
+      "label": "нейросети клипы",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 16,
+      "channel_count": 16,
+      "keyword_count": 30,
+      "breakout_eligible_count": 16,
+      "winner_count": 2,
+      "non_winner_members": 14,
+      "zero_or_null_views_share": 0.062,
+      "vph_measured_count": 2,
+      "has_phrase_support": false,
+      "has_topic_support": true,
+      "keyword_only": false,
+      "broad_keyword_group": false,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "topic:4ac6a6a26765f407"
+      ],
+      "proposed_gate": "strong"
+    },
+    {
+      "rank": 17,
+      "family_key": "family:kw:182",
+      "label": "top free ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 18,
+      "channel_count": 16,
+      "keyword_count": 53,
+      "breakout_eligible_count": 18,
+      "winner_count": 1,
+      "non_winner_members": 17,
+      "zero_or_null_views_share": 0.0,
+      "vph_measured_count": 1,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:182"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 18,
+      "family_key": "family:kw:1540",
+      "label": "obscure video game mysteries",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 16,
+      "channel_count": 16,
+      "keyword_count": 12,
+      "breakout_eligible_count": 16,
+      "winner_count": 2,
+      "non_winner_members": 14,
+      "zero_or_null_views_share": 0.062,
+      "vph_measured_count": 2,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1540"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 19,
+      "family_key": "family:topic:6837280f0baf4441",
+      "label": "new roguelike deck builder gameplay full run",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported"
+      ],
+      "support_sources": [
+        "topic"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 16,
+      "channel_count": 16,
+      "keyword_count": 0,
+      "breakout_eligible_count": 15,
+      "winner_count": 2,
+      "non_winner_members": 14,
+      "zero_or_null_views_share": 0.062,
+      "vph_measured_count": 2,
+      "has_phrase_support": false,
+      "has_topic_support": true,
+      "keyword_only": false,
+      "broad_keyword_group": false,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.0,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "topic:6837280f0baf4441"
+      ],
+      "proposed_gate": "diagnostic"
+    },
+    {
+      "rank": 20,
+      "family_key": "family:kw:1482",
+      "label": "science class 4 question answer",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "support_sources": [
+        "keyword"
+      ],
+      "grouping_reasons": [
+        "single_member_family"
+      ],
+      "video_count": 17,
+      "channel_count": 15,
+      "keyword_count": 26,
+      "breakout_eligible_count": 17,
+      "winner_count": 1,
+      "non_winner_members": 16,
+      "zero_or_null_views_share": 0.0,
+      "vph_measured_count": 1,
+      "has_phrase_support": false,
+      "has_topic_support": false,
+      "keyword_only": true,
+      "broad_keyword_group": true,
+      "unique_title_ratio": 1.0,
+      "median_pairwise_token_jaccard": 0.053,
+      "likely_heterogeneous": true,
+      "member_pattern_keys": [
+        "kw:1482"
+      ],
+      "proposed_gate": "diagnostic"
+    }
+  ],
+  "keyword_egе_examples": []
+}

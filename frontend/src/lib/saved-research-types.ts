@@ -88,6 +88,47 @@ export type SavedVideoManualRefreshResponse = {
   cooldown_seconds: number;
 };
 
+export type SavedVideoSimilarWatch = {
+  saved_video_id: number;
+  status: string;
+  display_state: string;
+  suggested_queries: string[];
+  confirmed_queries: string[];
+  confirmed_at: string | null;
+  next_scan_at: string | null;
+  last_scan_at: string | null;
+  last_error: string | null;
+  findings_count: number;
+  load_estimate: Record<string, unknown>;
+};
+
+export type SavedVideoSimilarFinding = {
+  id: number;
+  video_id: string;
+  title: string;
+  channel_title: string;
+  views_count: number | null;
+  published_text: string | null;
+  thumbnail_url: string | null;
+  matched_query: string;
+  last_found_at: string;
+  youtube_url: string;
+  relevance_score: number;
+  relevance_tier: string;
+  why_found: string | null;
+  other_reason: string | null;
+  user_verdict: "fit" | "not_fit" | null;
+  saved_to_research: boolean;
+};
+
+export type SavedVideoSimilarFindingsList = {
+  primary_items: SavedVideoSimilarFinding[];
+  other_items: SavedVideoSimilarFinding[];
+  primary_total: number;
+  other_total: number;
+  total: number;
+};
+
 export type SavedVideoDetail = {
   id: number;
   video_id: string;
@@ -124,6 +165,64 @@ export type SavedFamilyListItem = {
   current_channel_count: number | null;
   latest_analyst_verdict: SavedResearchAnalystVerdict | null;
   latest_analyst_verdict_at: string | null;
+};
+
+export type SavedFamilyTopicQuerySuggestionItem = {
+  query: string;
+  source_type: string;
+  source_explanation: string;
+  supporting_video_count: number | null;
+};
+
+export type SavedFamilyTopicDirection = {
+  direction_id: string;
+  label: string;
+  explanation: string;
+  suggestions: SavedFamilyTopicQuerySuggestionItem[];
+};
+
+export type SavedFamilyTopicWatch = {
+  saved_family_id: number;
+  status: string;
+  display_state: string;
+  suggested_queries: string[];
+  suggested_query_items: SavedFamilyTopicQuerySuggestionItem[];
+  suggestion_mode: string;
+  suggestion_message: string | null;
+  mixed_keyword_provenance: boolean;
+  search_directions: SavedFamilyTopicDirection[];
+  confirmed_queries: string[];
+  confirmed_at: string | null;
+  next_scan_at: string | null;
+  last_scan_at: string | null;
+  last_error: string | null;
+  findings_count: number;
+  load_estimate: Record<string, unknown>;
+  topic_label: string;
+  anchor_label: string;
+};
+
+export type SavedFamilyTopicFinding = {
+  id: number;
+  video_id: string;
+  title: string;
+  channel_title: string;
+  views_count: number | null;
+  published_text: string | null;
+  thumbnail_url: string | null;
+  matched_query: string;
+  last_found_at: string;
+  youtube_url: string;
+  saved_to_research: boolean;
+};
+
+export type SavedFamilyTopicFindingsList = {
+  items: SavedFamilyTopicFinding[];
+  total: number;
+  limit: number;
+  offset: number;
+  hits_by_query: Record<string, number>;
+  confirmed_queries: string[];
 };
 
 export type SavedFamilyDetail = {

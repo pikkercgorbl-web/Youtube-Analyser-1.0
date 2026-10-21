@@ -1,190 +1,238 @@
 "use client";
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { ChevronDown, ExternalLink } from "lucide-react";
+
+import { buttonVariants } from "@/components/ui/button";
+import { formatOptionalSubscribers } from "@/lib/attention-format";
+import type { AttentionChannelMomentum } from "@/lib/attention-types";
 import {
-  canonicalYoutubeUrl,
-  formatOptionalSubscribers,
-  formatOptionalVph,
-  humanReasonsForDisplay,
-} from "@/lib/attention-format";
-import type {
-  AttentionChannelMomentum,
-  AttentionVideoWinner,
-} from "@/lib/attention-types";
+  buildChannelCalculationDetails,
+  channelFaceSampleWarning,
+  channelMomentumHeadline,
+  classifyChannelMomentum,
+  formatChannelComparisonLine,
+  formatCategoryCountsSummary,
+  channelMomentumCategoryCounts,
+  formatEvidenceUnavailableMessage,
+  pickEvidenceVideos,
+  type ChannelMomentumCategory,
+} from "@/lib/channel-momentum-presentation";
+import { buildChannelSingleAnalysisUrl } from "@/lib/channel-single-analysis-url";
 import { surfaces } from "@/lib/design-system/layout";
 import { cn } from "@/lib/utils";
-import { HumanReasonsList } from "./signal-badges";
-function videoTitleLookup(
-  videoId: string,
-  winners: AttentionVideoWinner[] | undefined,
-): string {
-  const row = winners?.find((item) => item.video_id === videoId);
-  return row?.title?.trim() || "Открыть видео на YouTube";
+
+import { YoutubeThumb } from "./youtube-thumb";
+
+const CATEGORY_SORT: Record<ChannelMomentumCategory, number> = {
+  confirmed_growth: 0,
+  strong_outliers: 1,
+  insufficient_data: 2,
+};
+
+function ChannelAvatar({ title }: { title: string }) {
+  const initial = (title.trim()[0] || "?").toUpperCase();
+  return (
+    <div
+      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold text-muted-foreground"
+      aria-hidden
+    >
+      {initial}
+    </div>
+  );
 }
-function ChannelCard({
-  channel,
-  winnerLookup,
-}: {
-  channel: AttentionChannelMomentum;
-  winnerLookup?: AttentionVideoWinner[];
-}) {
-  const [open, setOpen] = useState(false);
+
+function ChannelCard({ channel }: { channel: AttentionChannelMomentum }) {
+  const [calcOpen, setCalcOpen] = useState(false);
+  const headline = channelMomentumHeadline(channel);
   const subs = formatOptionalSubscribers(channel.subscriber_count_latest);
-  const recentVph = formatOptionalVph(channel.recent_median_vph);
-  const prevVph = formatOptionalVph(channel.previous_median_vph);
   const ratio = channel.recent_median_vph_vs_previous;
-  const horizon = channel.momentum_horizon_hours ?? 24;
-  const tolerance = channel.momentum_horizon_tolerance_hours ?? 6;
-  const threshold = channel.improvement_ratio_threshold ?? 1.5;
-  const displayReasons = humanReasonsForDisplay(channel.human_reasons);
+  const improving = channel.recent_improvement_count ?? 0;
+  const evidencePick = pickEvidenceVideos(channel, 3);
+  const evidenceUnavailable = formatEvidenceUnavailableMessage(evidencePick, channel);
+  const sampleWarning = channelFaceSampleWarning(channel);
+  const calcLines = buildChannelCalculationDetails(channel);
+  const youtubeChannelUrl = `https://www.youtube.com/channel/${encodeURIComponent(channel.channel_id)}`;
+
   return (
     <article
-      className={cn(surfaces.sectionMuted, "p-4")}
+      className={cn(surfaces.section, "overflow-hidden rounded-2xl p-4 sm:p-5")}
       data-testid="channel-card"
+      data-channel-category={headline.category}
     >
-      <button
-        type="button"
-        className="flex w-full items-start justify-between text-left"
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-      >
-        <div>
-          <p className="font-medium">{channel.channel_title}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {subs ? `${subs} подп.` : "подписчики неизвестны"}
-            {" · "}
-            Роликов в новом / предыдущем периоде:{" "}
-            {channel.recent_eligible_count ?? channel.recent_video_count}/
-            {channel.previous_eligible_count ?? channel.previous_video_count}
-            {" · "}
-            измерения ~{horizon}h (±{tolerance}h):{" "}
-            {channel.recent_measurable_count ?? "—"}/
-            {channel.previous_measurable_count ?? "—"}
-          </p>
-        </div>
-        <ChevronDown
-          className={cn(
-            "h-4 w-4 shrink-0 text-muted-foreground",
-            open && "rotate-180",
-          )}
-        />
-      </button>
-      <dl className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-        <div>
-          Подходят для анализа Breakout (недавнее):{" "}
-          {channel.breakout_video_count}
-        </div>
-        <div>
-          Рост через 72 ч после обнаружения: {channel.confirmed_72h_count}
-        </div>
-        <div className="col-span-2">
-          Повторяемое улучшение: {channel.recent_improvement_count ?? "—"}{" "}
-          роликов ≥ {threshold}× типичного прошлого результата
-        </div>
-        {recentVph ? (
-          <div>
-            Медиана скорости новых видео (~{horizon}h): {recentVph}
+      <div className="flex gap-3">
+        <ChannelAvatar title={channel.channel_title} />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div className="min-w-0">
+              <h3 className="truncate text-base font-semibold sm:text-lg">{channel.channel_title}</h3>
+              <p className="text-xs text-muted-foreground sm:text-sm">
+                {subs ? `${subs} подписчиков` : "Подписчики неизвестны"}
+              </p>
+            </div>
+            <span
+              className={cn(
+                "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium",
+                headline.category === "confirmed_growth" && "bg-primary/15 text-primary",
+                headline.category === "strong_outliers" && "bg-amber-500/15 text-amber-200",
+                headline.category === "insufficient_data" && "bg-muted text-muted-foreground",
+              )}
+            >
+              {headline.title}
+            </span>
           </div>
-        ) : null}
-        {prevVph ? (
-          <div>
-            Медиана скорости предыдущих видео (~{horizon}h): {prevVph}
+
+          <p className="mt-3 text-sm leading-snug text-foreground">{formatChannelComparisonLine(channel)}</p>
+          {headline.hint ? (
+            <p className="mt-1 text-xs text-muted-foreground">{headline.hint}</p>
+          ) : null}
+          {sampleWarning ? (
+            <p className="mt-2 text-xs text-amber-200/90" data-testid="channel-sample-warning">
+              {sampleWarning}
+            </p>
+          ) : null}
+
+          <dl className="mt-4 grid grid-cols-2 gap-3">
+            <div>
+              <dt className="text-xs text-muted-foreground">Темп новых vs прежних</dt>
+              <dd className="mt-0.5 text-lg font-semibold tabular-nums text-primary sm:text-xl">
+                {ratio != null ? `${ratio.toFixed(2)}×` : "—"}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-xs text-muted-foreground">Сильных новых роликов</dt>
+              <dd className="mt-0.5 text-lg font-semibold tabular-nums sm:text-xl">{improving}</dd>
+            </div>
+          </dl>
+
+          {evidencePick.videos.length > 0 ? (
+            <div className="mt-4 space-y-2">
+              <p className="text-xs font-medium text-muted-foreground">На чём основан вывод</p>
+              <ul className="space-y-2">
+                {evidencePick.videos.map((v) => (
+                  <li key={v.video_id} className="flex gap-2">
+                    <YoutubeThumb
+                      videoId={v.video_id}
+                      title={v.title}
+                      className="h-12 w-20 shrink-0 rounded object-cover"
+                    />
+                    <div className="min-w-0 flex-1 text-xs sm:text-sm">
+                      <a
+                        href={v.youtube_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="line-clamp-2 font-medium hover:text-primary"
+                      >
+                        {v.title}
+                      </a>
+                      <p className="text-muted-foreground">
+                        {v.metricCaption ?? (v.vphLabel ? `VPH: ${v.vphLabel}` : "—")}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : evidenceUnavailable ? (
+            <p className="mt-4 text-xs text-muted-foreground" data-testid="channel-evidence-unavailable">
+              {evidenceUnavailable}
+            </p>
+          ) : null}
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <a
+              href={youtubeChannelUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+            >
+              YouTube <ExternalLink className="ml-1 h-3 w-3" />
+            </a>
+            <Link
+              href={buildChannelSingleAnalysisUrl({ channelId: channel.channel_id })}
+              className={cn(buttonVariants({ variant: "default", size: "sm" }))}
+            >
+              Анализ канала
+            </Link>
           </div>
-        ) : null}
-        {channel.previous_baseline_zero ? (
-          <div className="col-span-2">
-            Прошлый результат равен нулю — отношение не вычисляется
+
+          <div className="mt-4 border-t border-border/60 pt-3">
+            <button
+              type="button"
+              className="flex w-full items-center justify-between text-left text-sm text-muted-foreground hover:text-foreground"
+              aria-expanded={calcOpen}
+              onClick={() => setCalcOpen((v) => !v)}
+              data-testid="channel-calc-toggle"
+            >
+              Как рассчитано
+              <ChevronDown className={cn("h-4 w-4 shrink-0", calcOpen && "rotate-180")} />
+            </button>
+            {calcOpen ? (
+              <ul
+                className="mt-2 list-disc space-y-1 pl-4 text-xs leading-relaxed text-muted-foreground"
+                data-testid="channel-calc-details"
+              >
+                {calcLines.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            ) : null}
           </div>
-        ) : ratio != null ? (
-          <div className="col-span-2">
-            Отношение медиан: {ratio.toFixed(2)}×
-          </div>
-        ) : null}
-        {channel.subscriber_growth_available &&
-        channel.subscriber_growth_absolute != null ? (
-          <div className="col-span-2">
-            контекст подписчиков: +{channel.subscriber_growth_absolute}
-            {channel.subscriber_growth_pct != null
-              ? ` (${channel.subscriber_growth_pct.toFixed(1)}%)`
-              : ""}
-          </div>
-        ) : null}
-      </dl>
-      <HumanReasonsList reasons={displayReasons} />
-      {(channel.incompleteness_notes?.length ?? 0) > 0 ? (
-        <p
-          className="mt-2 text-xs text-muted-foreground"
-          data-testid="channel-incompleteness"
-        >
-          Неполная история: {channel.incompleteness_notes?.join("; ")}
-        </p>
-      ) : null}
-      {open ? (
-        <div
-          className="mt-3 space-y-2 border-t border-border/50 pt-3 text-sm"
-          data-testid="channel-expanded"
-        >
-          <p className="text-xs text-muted-foreground">
-            Примеры недавних видео, прошедших порог улучшения (до 5).
-          </p>
-          <ul className="space-y-1 text-sm">
-            {channel.representative_video_ids.map((videoId) => (
-              <li key={videoId}>
-                <a
-                  href={canonicalYoutubeUrl(videoId)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  {videoTitleLookup(videoId, winnerLookup)}
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
-      ) : null}
+      </div>
     </article>
   );
 }
+
 export function RisingChannelsSection({
   channels,
-  winnerLookup,
 }: {
   channels: AttentionChannelMomentum[];
-  winnerLookup?: AttentionVideoWinner[];
 }) {
+  const sorted = useMemo(() => {
+    return [...channels].sort((a, b) => {
+      const ca = classifyChannelMomentum(a);
+      const cb = classifyChannelMomentum(b);
+      if (CATEGORY_SORT[ca] !== CATEGORY_SORT[cb]) {
+        return CATEGORY_SORT[ca] - CATEGORY_SORT[cb];
+      }
+      const ra = a.recent_median_vph_vs_previous ?? 0;
+      const rb = b.recent_median_vph_vs_previous ?? 0;
+      return rb - ra;
+    });
+  }, [channels]);
+
+  const categoryCounts = channelMomentumCategoryCounts(channels);
+  const categorySummary = formatCategoryCountsSummary(categoryCounts);
   if (channels.length === 0) {
     return (
       <div
         className={cn(surfaces.sectionMuted, "space-y-2 p-5")}
         data-testid="channels-empty"
       >
-        <p className="text-lg font-medium">
-          Повторяющийся рост пока не подтверждён
-        </p>
+        <p className="text-lg font-medium">Сигналов по каналам пока нет</p>
         <p className="text-sm text-muted-foreground">
-          Нужны измерения нескольких новых и предыдущих видео канала на
-          одинаковом возрасте. Недостаток данных не означает, что каналы не
-          растут.
+          Нужны измерения нескольких новых и предыдущих видео на одинаковом возрасте (~24 ч после
+          публикации). Это не значит, что каналы не растут — данных в снимке может не хватать.
         </p>
-        <a
-          href="/monitoring"
-          className="inline-block text-sm text-primary hover:underline"
-        >
+        <a href="/monitoring" className="inline-block text-sm text-primary hover:underline">
           Проверить наблюдение за видео →
         </a>
       </div>
     );
   }
+
   return (
-    <div className="grid gap-3 md:grid-cols-2">
-      {channels.map((channel) => (
-        <ChannelCard
-          key={channel.channel_id}
-          channel={channel}
-          winnerLookup={winnerLookup}
-        />
-      ))}
+    <div className="space-y-4">
+      <p className="text-sm text-muted-foreground" data-testid="channels-category-summary">
+        {channels.length} каналов в снимке: {categorySummary}
+      </p>
+      <div className="grid gap-4 md:grid-cols-2">
+        {sorted.map((channel) => (
+          <ChannelCard key={channel.channel_id} channel={channel} />
+        ))}
+      </div>
     </div>
   );
 }

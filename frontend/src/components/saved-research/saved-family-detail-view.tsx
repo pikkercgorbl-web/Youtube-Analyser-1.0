@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
 import {
@@ -12,10 +13,12 @@ import {
   SectionPanel,
 } from "@/components/design-system";
 import { ObservationHistoryPanel } from "@/components/saved-research/observation-history-panel";
+import { SavedFamilyTopicWatchPanel } from "@/components/saved-research/saved-family-topic-watch-panel";
 import { SavedResearchAnalystFeedbackPanel } from "@/components/saved-research/saved-research-analyst-feedback-panel";
 import { SavedResearchMetadataForm } from "@/components/saved-research/saved-research-metadata-form";
 import { SavedResearchValidationPanel } from "@/components/saved-research/saved-research-validation-panel";
 import { familyDetailHref } from "@/lib/attention-format";
+import { savedResearchBackLink } from "@/lib/saved-research-return-nav";
 import {
   archiveSavedFamily,
   getSavedFamily,
@@ -42,6 +45,11 @@ import { cn } from "@/lib/utils";
 const HISTORY_PAGE = 20;
 
 export function SavedFamilyDetailView({ familyId }: { familyId: number }) {
+  const searchParams = useSearchParams();
+  const backLink = useMemo(
+    () => savedResearchBackLink(searchParams.get("returnTo")),
+    [searchParams],
+  );
   const [detail, setDetail] = useState<SavedFamilyDetail | null>(null);
   const [history, setHistory] = useState<SavedFamilyObservation[]>([]);
   const [historyTotal, setHistoryTotal] = useState(0);
@@ -135,11 +143,11 @@ export function SavedFamilyDetailView({ familyId }: { familyId: number }) {
   return (
     <PageShell>
       <Link
-        href="/saved"
+        href={backLink.href}
         className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "w-fit")}
       >
         <ArrowLeft className="mr-1 h-4 w-4" />
-        Сохранённое
+        {backLink.label}
       </Link>
       <PageHeader
         title={detail.label}
@@ -222,6 +230,13 @@ export function SavedFamilyDetailView({ familyId }: { familyId: number }) {
           <SavedResearchValidationPanel validation={validation} kind="family" />
         </div>
       ) : null}
+
+      <div className="mt-6">
+        <SavedFamilyTopicWatchPanel
+          savedFamilyId={familyId}
+          archived={Boolean(detail.archived_at)}
+        />
+      </div>
 
       <div className="mt-6">
         <SavedResearchAnalystFeedbackPanel

@@ -9,6 +9,9 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from app.services.daily_intelligence_winner_reason_summary import (
+    winner_reason_summary_from_evidence,
+)
 from app.models.orm import (
     DailyIntelligenceReport,
     DailyIntelligenceReportFamilyFinding,
@@ -178,6 +181,7 @@ def list_video_appearances(
 
 
 def _winner_list_item(row: DailyIntelligenceReportWinnerFinding) -> dict[str, Any]:
+    evidence = _json_loads(row.payload_json, {})
     return {
         "video_id": row.video_id,
         "rank": row.rank,
@@ -187,6 +191,7 @@ def _winner_list_item(row: DailyIntelligenceReportWinnerFinding) -> dict[str, An
         "youtube_url": row.youtube_url,
         "is_repeat_in_prior_reports": row.is_repeat_in_prior_reports,
         "discovery_provenance_available": _json_loads(row.discovery_provenance_json, {}).get("available"),
+        "reason_summary": winner_reason_summary_from_evidence(evidence),
     }
 
 

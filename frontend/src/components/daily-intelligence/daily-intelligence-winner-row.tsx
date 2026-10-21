@@ -2,27 +2,27 @@
 
 import Link from "next/link";
 
+import { buttonVariants } from "@/components/ui/button";
+import {
+  diWinnerListRankLabel,
+  diWinnerListReasonSummary,
+} from "@/lib/daily-intelligence-presentation";
 import { dailyIntelligenceWinnerDetailHref } from "@/lib/daily-intelligence-routes";
 import type { DailyIntelligenceWinnerListItem } from "@/lib/daily-intelligence-types";
+import { cn } from "@/lib/utils";
 
-import { DailyIntelligenceOutcomeCoverageBadge } from "./daily-intelligence-outcome-coverage-badge";
 import { DailyIntelligenceWinnerThumb } from "./daily-intelligence-winner-thumb";
 
 export function DailyIntelligenceWinnerRow({
   row,
   reportDate,
-  outcomeCoverage,
-  outcomeCoveragePending,
 }: {
   row: DailyIntelligenceWinnerListItem;
   reportDate: string;
-  outcomeCoverage?: { coverage_category: string; outcome_window_phase: string };
-  outcomeCoveragePending?: boolean;
 }) {
   return (
     <tr className="border-t border-border/60" data-testid="di-winner-row">
-      <td className="px-3 py-2 tabular-nums text-muted-foreground align-top">{row.rank}</td>
-      <td className="px-3 py-2 align-top min-w-[200px]">
+      <td className="px-3 py-3 align-top min-w-[220px]">
         <div className="flex gap-3 min-w-0">
           <DailyIntelligenceWinnerThumb
             videoId={row.video_id}
@@ -38,40 +38,29 @@ export function DailyIntelligenceWinnerRow({
             >
               {row.title}
             </a>
-            <p className="text-xs text-muted-foreground font-mono truncate mt-0.5">{row.video_id}</p>
-            <Link
-              href={dailyIntelligenceWinnerDetailHref(reportDate, row.video_id)}
-              className="text-xs text-primary hover:underline mt-1 inline-block"
-              data-testid="di-winner-evidence-link"
-            >
-              История и доказательства
-            </Link>
+            <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{row.channel_title}</p>
+            {row.is_repeat_in_prior_reports ? (
+              <p className="text-xs text-amber-200/90 mt-1">Уже было в более ранних отчётах</p>
+            ) : null}
           </div>
         </div>
       </td>
-      <td className="px-3 py-2 text-muted-foreground line-clamp-3 align-top max-w-[180px]">
-        {row.channel_title}
+      <td className="px-3 py-3 text-sm align-top max-w-[240px]">
+        <p className="font-medium leading-snug" data-testid="di-winner-reason-summary">
+          {diWinnerListReasonSummary(row.reason_summary)}
+        </p>
       </td>
-      <td className="px-3 py-2 text-xs align-top">
-        {row.discovery_provenance_available === true
-          ? "Есть"
-          : row.discovery_provenance_available === false
-            ? "Нет"
-            : "—"}
+      <td className="px-3 py-3 text-sm tabular-nums align-top whitespace-nowrap">
+        {diWinnerListRankLabel(row.rank)}
       </td>
-      <td className="px-3 py-2 text-xs align-top">{row.is_repeat_in_prior_reports ? "Да" : "Нет"}</td>
-      <td className="px-3 py-2 text-xs align-top">
-        {outcomeCoveragePending ? (
-          <span className="text-muted-foreground">…</span>
-        ) : outcomeCoverage ? (
-          <DailyIntelligenceOutcomeCoverageBadge
-            category={outcomeCoverage.coverage_category}
-            phase={outcomeCoverage.outcome_window_phase}
-            compact
-          />
-        ) : (
-          <span className="text-muted-foreground">—</span>
-        )}
+      <td className="px-3 py-3 align-top">
+        <Link
+          href={dailyIntelligenceWinnerDetailHref(reportDate, row.video_id)}
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+          data-testid="di-winner-evidence-link"
+        >
+          Карточка
+        </Link>
       </td>
     </tr>
   );

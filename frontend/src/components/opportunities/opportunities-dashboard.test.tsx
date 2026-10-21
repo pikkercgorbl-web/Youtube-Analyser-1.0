@@ -262,7 +262,7 @@ describe("Opportunities feed", () => {
       "2 → 6 → 14",
     );
     expect(screen.getByTestId("channels-empty")).toHaveTextContent(
-      "Повторяющийся рост пока не подтверждён",
+      "Сигналов по каналам пока нет",
     );
     expect(screen.queryByText("Растущих каналов нет")).not.toBeInTheDocument();
     expect(screen.queryByText(/магическ/i)).not.toBeInTheDocument();
@@ -336,7 +336,11 @@ describe("Opportunities feed", () => {
     vi.mocked(api.getAttentionChannels).mockResolvedValue(channelsEmpty());
     render(<OpportunitiesDashboard />);
     await waitFor(() =>
-      expect(screen.getByText("Подборка ещё не готова.")).toBeInTheDocument(),
+      expect(screen.getByText("Снимок Attention ещё не создан.")).toBeInTheDocument(),
+    );
+    expect(screen.getByRole("link", { name: "Состояние системы" })).toHaveAttribute(
+      "href",
+      "/operations",
     );
     expect(screen.getByTestId("refresh-hint")).toHaveTextContent(
       "python scripts/refresh_attention_engine.py",

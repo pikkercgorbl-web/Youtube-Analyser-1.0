@@ -14,6 +14,10 @@ from app.models.schemas import (
     ChannelSingleAnalysisShelfResponse,
     ChannelSingleCompareRequest,
     ChannelSingleCompareResponse,
+    CompetitorChannelPreviewRequest,
+    CompetitorChannelPreviewResponse,
+    FormatReconnaissanceRequest,
+    FormatReconnaissanceResponse,
     MassAnalysisRequest,
     MassAnalysisResponse,
     YouTubeLeadersResponse,
@@ -24,6 +28,9 @@ from app.services.channel_single_analysis_http import (
     run_channel_single_shelf,
     run_channel_single_shelf_more,
 )
+from app.services.competitor_channels_preview import run_competitor_channel_preview
+from app.services.format_reconnaissance import FormatReconnaissanceRequest as FormatReconRunRequest
+from app.services.format_reconnaissance import report_to_dict, run_format_reconnaissance
 from app.services.competitor_analysis_service import CompetitorAnalysisService
 
 router = APIRouter()
@@ -70,6 +77,41 @@ async def channel_single_compare(
 ) -> ChannelSingleCompareResponse:
     """Recompute comparison from enriched feed; optional single-video API fetch for focus."""
     return await run_channel_single_compare(youtube_client, payload)
+
+
+@router.post("/format-reconnaissance", response_model=FormatReconnaissanceResponse)
+async def format_reconnaissance(
+    payload: FormatReconnaissanceRequest,
+    youtube_client: YouTubeApiClient = Depends(get_youtube_client),
+) -> FormatReconnaissanceResponse:
+    """
+    Read-only format recon: InnerTube search + channel preview. No Discovery / SavedFamily / workers.
+    """
+    report = await run_format_reconnaissance(
+        youtube_client,
+        FormatReconRunRequest(
+            format_description=payload.format_description,
+            example_video_url=payload.example_video_url,
+            search_queries=payload.search_queries,
+            results_per_query=payload.results_per_query,
+            max_channel_previews=payload.max_channel_previews,
+        ),
+    )
+    return FormatReconnaissanceResponse.model_validate(report_to_dict(report))
+
+
+@router.post("/competitors/channel", response_model=CompetitorChannelPreviewResponse)
+async def competitor_channel_preview(
+    payload: CompetitorChannelPreviewRequest,
+    youtube_client: YouTubeApiClient = Depends(get_youtube_client),
+) -> CompetitorChannelPreviewResponse:
+    """Read-only shelf + enrich for one competitor channel (no DB writes)."""
+    if not payload.channel_id and not payload.channel_ref:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Укажите channel_ref или channel_id.",
+        )
+    return await run_competitor_channel_preview(youtube_client, payload)
 
 
 @router.post("/mass", response_model=MassAnalysisResponse)

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 
+import { CHANNEL_SINGLE_COMPARE_HINT, CHANNEL_SINGLE_COMPARE_METHOD_NOTE } from "@/lib/channel-single-analysis-copy";
 import type { ChannelSingleFocusComparison } from "@/lib/types";
 import {
   formatAgeHoursLabel,
@@ -13,10 +14,12 @@ export function ChannelSingleAgeComparison({
   comparison,
   busy,
   enrichError,
+  hasFocus = false,
 }: {
   comparison: ChannelSingleFocusComparison | undefined;
   busy: boolean;
   enrichError: string | null;
+  hasFocus?: boolean;
 }) {
   if (busy) {
     return (
@@ -31,7 +34,7 @@ export function ChannelSingleAgeComparison({
     return (
       <section className="rounded-lg border border-border/60 bg-card p-4 text-sm">
         <h3 className="mb-2 text-base font-semibold">Сравнение по возрасту</h3>
-        <p className="text-muted-foreground">Выберите видео для сравнения.</p>
+        <p className="text-muted-foreground">{CHANNEL_SINGLE_COMPARE_HINT}</p>
       </section>
     );
   }
@@ -45,6 +48,9 @@ export function ChannelSingleAgeComparison({
     <section className="rounded-lg border border-border/60 bg-card p-4 text-sm">
       <h3 className="mb-3 text-base font-semibold">Сравнение по возрасту</h3>
       <div className="space-y-3">
+        {!hasFocus && comparison.status === "no_focus" ? (
+          <p className="text-muted-foreground">{CHANNEL_SINGLE_COMPARE_HINT}</p>
+        ) : null}
         {showPeerDetails ? (
           <p className="text-muted-foreground">
             Искали обычные ролики возрастом{" "}
@@ -77,8 +83,9 @@ export function ChannelSingleAgeComparison({
           <>
             <p className="text-foreground/90">{comparison.message}</p>
             {insufficientPeers ? (
-              <p className="font-medium text-foreground">
-                Для расчёта коэффициента пока мало примеров.
+              <p className="text-muted-foreground">
+                Коэффициент относительно медианы не показываем — в выборке канала недостаточно
+                обычных роликов в окне возраста (нужно минимум 5).
               </p>
             ) : null}
             {comparison.peer_count > 0 ? (
@@ -113,6 +120,7 @@ export function ChannelSingleAgeComparison({
           </ul>
         ) : null}
 
+        <p className="text-xs text-muted-foreground">{CHANNEL_SINGLE_COMPARE_METHOD_NOTE}</p>
         <p className="text-xs text-muted-foreground">{comparison.disclaimer}</p>
         {enrichError ? (
           <p className="text-xs text-amber-600 dark:text-amber-500">{enrichError}</p>

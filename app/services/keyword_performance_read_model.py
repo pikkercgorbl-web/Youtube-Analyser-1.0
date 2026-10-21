@@ -193,7 +193,10 @@ def _keyword_list_stmt(
             (KeywordPerformanceKeywordSnapshot.keyword_id == TargetKeyword.id)
             & (KeywordPerformanceKeywordSnapshot.attribution_mode == attribution_mode),
         )
-        .order_by(TargetKeyword.id.asc())
+        .order_by(
+            TargetKeyword.last_checked.desc().nulls_last(),
+            TargetKeyword.id.desc(),
+        )
     )
     if lifecycle_status:
         stmt = stmt.where(TargetKeyword.lifecycle_status == lifecycle_status.lower())
@@ -315,7 +318,10 @@ def list_keyword_performance_live_page(
     keyword_records = list(
         session.scalars(
             select(TargetKeyword)
-            .order_by(TargetKeyword.id.asc())
+            .order_by(
+                TargetKeyword.last_checked.desc().nulls_last(),
+                TargetKeyword.id.desc(),
+            )
             .offset(max(0, offset))
             .limit(max(1, min(limit, 500))),
         ).all(),

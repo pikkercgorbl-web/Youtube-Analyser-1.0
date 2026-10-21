@@ -18,7 +18,11 @@ from app.services.channel_single_analysis_compare import (
     peer_age_in_window,
 )
 from app.services.channel_single_analysis_overview import compute_views_rank
-from app.services.channel_single_analysis_http import _compute_comparison_result
+from app.services.channel_single_analysis_http import (
+    _compute_comparison_result,
+    run_channel_single_shelf_more,
+)
+from app.models.schemas import ChannelSingleAnalysisShelfMoreRequest
 
 
 def _pub(
@@ -194,7 +198,29 @@ def test_compare_helper_matches_compute() -> None:
     assert via_http.multiplier == direct.multiplier
 
 
+async def test_shelf_more_response_type_names() -> None:
+    """Regression: wrong schema class name caused NameError → browser CORS mask."""
+
+    class _FakeClient:
+        async def get_channel_videos_tab(self, channel_id: str, *, max_results: int = 100):
+            return "title", []
+
+    result = await run_channel_single_shelf_more(
+        _FakeClient(),  # type: ignore[arg-type]
+        ChannelSingleAnalysisShelfMoreRequest(
+            channel_id="UC1",
+            existing_video_ids=["v1"],
+            max_total=100,
+        ),
+    )
+    assert result.channel_id == "UC1"
+    assert result.feed_loaded_count == 1
+
+
 def main() -> None:
+    import asyncio
+
+    asyncio.run(test_shelf_more_response_type_names())
     test_insufficient_peers_includes_samples()
     test_views_rank_ties()
     test_compare_helper_matches_compute()
