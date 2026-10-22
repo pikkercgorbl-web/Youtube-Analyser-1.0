@@ -1,0 +1,329 @@
+{
+  "run_id": "attention_20261013T061802Z",
+  "computed_at": "2026-10-13T06:18:02.132450+00:00",
+  "tier_counts": {
+    "search_collection": 20
+  },
+  "families": [
+    {
+      "family_key": "family:kw:1497",
+      "label": "minecraft challenge videos",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "8jW-kBlBEQw",
+        "Qay6w8GDBL4",
+        "UPO-7CkcNwY",
+        "pQbkiEJFpVM"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:181",
+      "label": "free ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1505",
+      "label": "обучение нейросети видео",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "общий поисковый запрос и тема из метаданных",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "JF2A0GZzezQ",
+        "PVclFAkeZog"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1561",
+      "label": "видео с помощью нейросети",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "общий поисковый запрос и тема из метаданных",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "29GOK7-NJ2U",
+        "omuA7jVGPzw"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:186",
+      "label": "education ai tools for students",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1478",
+      "label": "how does it work animation",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "sX9YtK8Dpps"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:topic:86b8434548938bdc",
+      "label": "искусственный интеллект",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "общий поисковый запрос и тема из метаданных",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "0o08ZDSJy8A"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1930",
+      "label": "how does it work song",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "67H54IqgJBI"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1506",
+      "label": "как работает обучение нейросети",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "общий поисковый запрос и тема из метаданных",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "-lSdkIhFmBw",
+        "29GOK7-NJ2U",
+        "zUN31YNxGUM"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:154",
+      "label": "ai tools for video editing",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1541",
+      "label": "unexplained video game mysteries",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:179",
+      "label": "ai tools for educational videos",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:topic:298b5d20078b4f3f",
+      "label": "miniature painting tutorial beginners tabletop",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "общая тема из метаданных",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "fs7uUUoFUwA",
+        "iv_zuQswIw8",
+        "llpd3E_GiEU"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1594",
+      "label": "искусственный интеллект клип",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "общий поисковый запрос и тема из метаданных",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "0o08ZDSJy8A"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1488",
+      "label": "нейросети музыка",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "PVclFAkeZog"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:180",
+      "label": "best ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "n0ryH4Banqs"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:topic:4ac6a6a26765f407",
+      "label": "нейросети клипы",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "общий поисковый запрос и тема из метаданных",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "-lSdkIhFmBw",
+        "omuA7jVGPzw"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:182",
+      "label": "top free ai tools for education",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "moOgK6cpi9Q"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1540",
+      "label": "obscure video game mysteries",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "_n2USlDO_mo",
+        "j1tTDmEPzAE"
+      ],
+      "title_evidence_video_ids": []
+    },
+    {
+      "family_key": "family:kw:1482",
+      "label": "science class 4 question answer",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "grouping_basis_label": "найдены по одному запросу",
+      "tier_reason": "группа объединена поиском или метаданными, без доказанного общего формата",
+      "feed_winner_video_ids": [
+        "67H54IqgJBI"
+      ],
+      "title_evidence_video_ids": []
+    }
+  ]
+}

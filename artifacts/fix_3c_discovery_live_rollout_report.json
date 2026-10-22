@@ -1,0 +1,32 @@
+{
+  "task": "Fix 3C Discovery restart + first cycle on tiered selector",
+  "database": "127.0.0.1:5433/youtube_radar_restore_check",
+  "discovery_worker_before_pid": 17096,
+  "discovery_worker_after": "start-discovery.ps1 (see terminal 618705)",
+  "selector_keyword_batch_size_confirmed": 4,
+  "exploration": "TOPIC_EXPLORATION_IN_DISCOVERY=1, fraction 0.2 → 1 exploration slot, 4 keyword slots to selector",
+  "capacity_scheduling": {
+    "source": "measured_probation_scan_runs",
+    "probation_scan_slots_per_day": 372.0,
+    "structural_general_2_per_cycle_x_186_cycles": 372.0,
+    "note": "864/day formula retired; uses min(measured probation rows/day, structural general)"
+  },
+  "first_cycle_on_new_code": {
+    "discovery_run_id": "discovery_20261013T113734Z_9caf8daa",
+    "started_at_utc": "2026-10-13T11:37:36Z",
+    "finished_at_utc": "2026-10-13T11:39:33Z",
+    "duration_seconds": 117.082,
+    "keyword_scans": 4,
+    "seed_or_active": 2,
+    "probation": 2,
+    "errors": 0,
+    "selected": [
+      {"id": 129, "seed|active", "next_scan_at": "2026-10-14T11:38:39Z", "interval_s": 86400},
+      {"id": 130, "seed|active", "next_scan_at": "2026-10-14T11:38:58Z", "interval_s": 86400},
+      {"id": 1934, "probation", "next_scan_at": "2026-10-17T19:27:59Z", "interval_s": 373730},
+      {"id": 1935, "probation", "next_scan_at": "2026-10-17T19:24:31Z", "interval_s": 373498}
+    ]
+  },
+  "interval_wording": "Probation next_scan is estimated rotation (~104h at current backlog), not a guaranteed frequency or SLA",
+  "follow_up": "Re-evaluate overdue seed vs probation after 24h daily report"
+}

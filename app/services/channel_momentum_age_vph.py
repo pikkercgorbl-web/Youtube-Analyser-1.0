@@ -28,6 +28,7 @@ class AgeAlignedVphMeasurement:
     actual_age_hours: float
     snapshot_captured_at: datetime
     views: int
+    snapshot_row_id: int | None = None
 
 
 def select_age_aligned_measurement(
@@ -69,4 +70,5 @@ def select_age_aligned_measurement(
         actual_age_hours=round(actual_age_hours, 4),
         snapshot_captured_at=captured,
         views=views,
+        snapshot_row_id=int(snap.id),
     )

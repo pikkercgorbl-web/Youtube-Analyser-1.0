@@ -1,4 +1,10 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -32,6 +38,12 @@ vi.mock("next/link", () => ({
 }));
 
 vi.mock("@/lib/api", () => ({
+  listSavedTopics: vi.fn().mockResolvedValue({ items: [] }),
+  saveSavedTopic: vi.fn(),
+  listSavedVideos: vi.fn().mockResolvedValue({ items: [] }),
+  listSavedFamilies: vi.fn().mockResolvedValue({ items: [] }),
+  saveSavedVideo: vi.fn(),
+  saveSavedFamily: vi.fn(),
   getAttentionSummary: vi.fn(),
   getAttentionVideos: vi.fn(),
   getAttentionPatterns: vi.fn(),
@@ -41,7 +53,9 @@ vi.mock("@/lib/api", () => ({
   getAttentionPatternFamilyDetail: vi.fn(),
 }));
 
-const winner = (overrides: Partial<AttentionVideoWinner> = {}): AttentionVideoWinner => ({
+const winner = (
+  overrides: Partial<AttentionVideoWinner> = {},
+): AttentionVideoWinner => ({
   video_id: "vid-a",
   title: "AI cartoon tutorial",
   channel_id: "ch-a",
@@ -58,7 +72,11 @@ const winner = (overrides: Partial<AttentionVideoWinner> = {}): AttentionVideoWi
   acceleration_state: "accelerating",
   delayed_outcome_state: "confirmed",
   delayed_outcome_growth: 500,
-  reason_codes: ["breakout_high_rank", "accelerating_velocity", "confirmed_72h_growth"],
+  reason_codes: [
+    "breakout_high_rank",
+    "accelerating_velocity",
+    "confirmed_72h_growth",
+  ],
   human_reasons: ["breakout_v1 rank 1 in this attention window"],
   keyword_ids: [1],
   ...overrides,
@@ -149,6 +167,13 @@ const families = (): AttentionPatternFamilyListResponse => ({
       participating_video_ids: ["vid-a", "vid-b"],
       participating_channel_ids: ["ch-a", "ch-b"],
       participating_keyword_ids: [1],
+      opportunity_presentation_tier: "needs_review",
+      grouping_basis_kind: "title_phrase_similarity",
+      grouping_basis_label:
+        "похожие формулировки в названиях (например: «ai se kaise banaye»)",
+      tier_reason: "сходство заголовков видно по сохранённым evidence",
+      feed_winner_video_ids: ["vid-a"],
+      title_evidence_video_ids: ["vid-a", "vid-b"],
     },
   ],
   data_source: "snapshot",
@@ -172,7 +197,16 @@ const channelsEmpty = (): AttentionChannelListResponse => ({
 function mockReady() {
   vi.mocked(api.getAttentionSummary).mockResolvedValue(summary());
   vi.mocked(api.getAttentionVideos).mockResolvedValue(
-    videos([winner(), winner({ video_id: "vid-b", title: "Second", youtube_url: "https://www.youtube.com/watch?v=vid-b", subscribers: 5000, breakout_rank: 2 })]),
+    videos([
+      winner(),
+      winner({
+        video_id: "vid-b",
+        title: "Second",
+        youtube_url: "https://www.youtube.com/watch?v=vid-b",
+        subscribers: 5000,
+        breakout_rank: 2,
+      }),
+    ]),
   );
   vi.mocked(api.getAttentionPatternFamilies).mockResolvedValue(families());
   vi.mocked(api.getAttentionChannels).mockResolvedValue(channelsEmpty());
@@ -190,39 +224,94 @@ describe("Opportunities feed", () => {
   it("renders snapshot summary, winners, patterns, and insufficient-history channels", async () => {
     mockReady();
     render(<OpportunitiesDashboard />);
-    await waitFor(() => expect(screen.getByTestId("snapshot-meta")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId("snapshot-meta")).toBeInTheDocument(),
+    );
     expect(screen.getByText("Возможности")).toBeInTheDocument();
     expect(screen.getByTestId("metric-winners")).toHaveTextContent("2");
     expect(screen.getByTestId("metric-patterns")).toHaveTextContent("1");
     expect(screen.getByText(/source=snapshot/)).toBeInTheDocument();
     expect(screen.getByText(/14[^\d]?553/)).toBeInTheDocument();
     expect(screen.queryByTestId("winner-card")).not.toBeInTheDocument();
-    expect(screen.getAllByTestId("winner-row").length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByRole("link", { name: /AI cartoon tutorial/ })[0]).toHaveAttribute(
-      "href",
-      "https://www.youtube.com/watch?v=vid-a",
+    expect(screen.getAllByTestId("winner-row").length).toBeGreaterThanOrEqual(
+      2,
     );
+    expect(
+      screen.getAllByRole("link", { name: /AI cartoon tutorial/ })[0],
+    ).toHaveAttribute("href", "https://www.youtube.com/watch?v=vid-a");
     expect(screen.queryByText("Subscribers: 0")).not.toBeInTheDocument();
-    expect(screen.getByTestId("pattern-family-card")).toHaveTextContent("ai se kaise banaye");
-    expect(screen.getByTestId("pattern-channel-diversity")).toHaveTextContent("56");
-    expect(screen.getByTestId("family-grouping")).toHaveTextContent("фраз");
-    expect(screen.getAllByText(/подходят для анализа Breakout/i).length).toBeGreaterThan(0);
+    fireEvent.click(
+      screen.getByRole("button", { name: /Группы для исследования/ }),
+    );
+    expect(screen.getByTestId("patterns-empty")).toBeInTheDocument();
+    expect(screen.getByTestId("pattern-family-card")).toHaveTextContent(
+      "ai se kaise banaye",
+    );
+    expect(screen.getByTestId("pattern-channel-diversity")).toHaveTextContent(
+      "56",
+    );
+    expect(screen.getByTestId("family-grouping")).toHaveTextContent("назван");
+    expect(screen.getByTestId("family-feed-winners")).toHaveTextContent(
+      "AI cartoon tutorial",
+    );
+    expect(
+      screen.getAllByText(/подходят для анализа Breakout/i).length,
+    ).toBeGreaterThan(0);
     expect(screen.queryByText(/breakout winner/i)).not.toBeInTheDocument();
-    expect(screen.getByTestId("pattern-activity")).toHaveTextContent("2 → 6 → 14");
-    expect(screen.getByTestId("channels-empty")).toHaveTextContent("нет каналов с Channel Momentum");
+    expect(screen.getByTestId("pattern-activity")).toHaveTextContent(
+      "2 → 6 → 14",
+    );
+    expect(screen.getByTestId("channels-empty")).toHaveTextContent(
+      "Сигналов по каналам пока нет",
+    );
     expect(screen.queryByText("Растущих каналов нет")).not.toBeInTheDocument();
     expect(screen.queryByText(/магическ/i)).not.toBeInTheDocument();
-    const save = screen.getByTestId("save-pattern");
-    expect(save).toBeDisabled();
-    expect(save).toHaveAttribute("title", "Закладки будут подключены на следующем этапе");
+    const familyCard = screen.getByTestId("pattern-family-card");
+    await waitFor(() =>
+      expect(
+        familyCard.querySelector('[data-testid="save-family"]'),
+      ).not.toHaveAttribute("disabled"),
+    );
+
     expect(api.getAttentionSummary).toHaveBeenCalled();
-    expect(vi.mocked(api.getAttentionSummary).mock.calls[0]?.[0]).toBeUndefined();
+    expect(vi.mocked(api.getAttentionSummary).mock.calls[0]).toEqual([]);
+  });
+
+  it("opens winners tab and focuses row when following hash from family card", async () => {
+    window.history.pushState({}, "", "/opportunities");
+    mockReady();
+    render(<OpportunitiesDashboard />);
+    await waitFor(() =>
+      expect(screen.getByTestId("summary-cards")).toBeInTheDocument(),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: /Группы для исследования/ }),
+    );
+    expect(screen.getByTestId("metric-winners").closest("button")).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+    const winnerLink = screen.getByRole("link", { name: /AI cartoon tutorial/ });
+    expect(winnerLink).toHaveAttribute("href", "/opportunities#winner-vid-a");
+    fireEvent.click(winnerLink);
+    await waitFor(() =>
+      expect(screen.getByTestId("metric-winners").closest("button")).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      ),
+    );
+    const row = document.getElementById("winner-vid-a");
+    expect(row).toBeTruthy();
+    expect(row?.closest("[hidden]")).toBeNull();
+    window.location.hash = "";
   });
 
   it("does not request live recompute", async () => {
     mockReady();
     render(<OpportunitiesDashboard />);
-    await waitFor(() => expect(screen.getByTestId("summary-cards")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId("summary-cards")).toBeInTheDocument(),
+    );
     const serialized = JSON.stringify([
       vi.mocked(api.getAttentionSummary).mock.calls,
       vi.mocked(api.getAttentionVideos).mock.calls,
@@ -234,23 +323,44 @@ describe("Opportunities feed", () => {
   });
 
   it("handles unavailable snapshot", async () => {
-    vi.mocked(api.getAttentionSummary).mockResolvedValue({ summary: null, data_source: "unavailable" });
+    vi.mocked(api.getAttentionSummary).mockResolvedValue({
+      summary: null,
+      data_source: "unavailable",
+    });
     vi.mocked(api.getAttentionVideos).mockResolvedValue(videos([]));
-    vi.mocked(api.getAttentionPatternFamilies).mockResolvedValue({ ...families(), items: [], total: 0 });
+    vi.mocked(api.getAttentionPatternFamilies).mockResolvedValue({
+      ...families(),
+      items: [],
+      total: 0,
+    });
     vi.mocked(api.getAttentionChannels).mockResolvedValue(channelsEmpty());
     render(<OpportunitiesDashboard />);
-    await waitFor(() => expect(screen.getByText("Attention Engine ещё не рассчитан.")).toBeInTheDocument());
-    expect(screen.getByTestId("refresh-hint")).toHaveTextContent("python scripts/refresh_attention_engine.py");
+    await waitFor(() =>
+      expect(screen.getByText("Снимок Attention ещё не создан.")).toBeInTheDocument(),
+    );
+    expect(screen.getByRole("link", { name: "Состояние системы" })).toHaveAttribute(
+      "href",
+      "/operations",
+    );
+    expect(screen.getByTestId("refresh-hint")).toHaveTextContent(
+      "python scripts/refresh_attention_engine.py",
+    );
   });
 
   it("handles API error with retry", async () => {
     vi.mocked(api.getAttentionSummary).mockRejectedValue(new Error("boom"));
     vi.mocked(api.getAttentionVideos).mockRejectedValue(new Error("boom"));
-    vi.mocked(api.getAttentionPatternFamilies).mockRejectedValue(new Error("boom"));
+    vi.mocked(api.getAttentionPatternFamilies).mockRejectedValue(
+      new Error("boom"),
+    );
     vi.mocked(api.getAttentionChannels).mockRejectedValue(new Error("boom"));
     render(<OpportunitiesDashboard />);
-    await waitFor(() => expect(screen.getByTestId("error-state")).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: "Повторить" })).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId("error-state")).toBeInTheDocument(),
+    );
+    expect(
+      screen.getByRole("button", { name: "Повторить" }),
+    ).toBeInTheDocument();
   });
 });
 
@@ -317,14 +427,24 @@ describe("Pattern detail", () => {
     };
     vi.mocked(api.getAttentionPatternDetail).mockResolvedValue(detail);
     render(<PatternDetailView patternKey="phrase:178e9c4fc2b0644e" />);
-    await waitFor(() => expect(screen.getByTestId("pattern-member-list")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByTestId("pattern-member-list")).toBeInTheDocument(),
+    );
     expect(screen.getAllByTestId("pattern-member")).toHaveLength(2);
     expect(screen.getByText("ai cartoon")).toBeInTheDocument();
     expect(screen.getAllByText("Channel B").length).toBeGreaterThan(0);
-    expect(screen.getByText(/Источник группировки: повторяющаяся фраза/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Источник группировки: повторяющаяся фраза/),
+    ).toBeInTheDocument();
     expect(screen.getByTestId("save-pattern")).toBeDisabled();
-    fireEvent.click(screen.getByRole("button", { name: /Технические детали/i }));
-    expect(screen.getByText(/pattern_key: phrase:178e9c4fc2b0644e/)).toBeInTheDocument();
-    expect(vi.mocked(api.getAttentionPatternDetail).mock.calls[0]?.[0]).toBe("phrase:178e9c4fc2b0644e");
+    fireEvent.click(
+      screen.getByRole("button", { name: /Технические детали/i }),
+    );
+    expect(
+      screen.getByText(/pattern_key: phrase:178e9c4fc2b0644e/),
+    ).toBeInTheDocument();
+    expect(vi.mocked(api.getAttentionPatternDetail).mock.calls[0]?.[0]).toBe(
+      "phrase:178e9c4fc2b0644e",
+    );
   });
 });

@@ -35,7 +35,7 @@ import type {
   KeywordPerformanceListResponse,
   KeywordPerformanceMetrics,
 } from "./keyword-performance-types";
-import type { TargetKeywordItem } from "./keyword-pool-types";
+import type { KeywordPoolSummary, TargetKeywordItem } from "./keyword-pool-types";
 import type {
   OperationsOverviewParams,
   OperationsOverviewResponse,
@@ -48,6 +48,7 @@ import type {
   AttentionPatternFamilyListResponse,
   AttentionPatternListResponse,
   AttentionSummaryApiResponse,
+  AttentionVideoDetailResponse,
   AttentionVideoListResponse,
 } from "./attention-types";
 import type {
@@ -61,9 +62,49 @@ import type {
   SavedTopicTimelineResponse,
 } from "./saved-topics-types";
 import type { ValidationReport } from "./validation-types";
+import type {
+  SavedFamilyDetail,
+  SavedFamilyHistoryResponse,
+  SavedFamilyListItem,
+  SavedFamilyTopicFindingsList,
+  SavedFamilyTopicWatch,
+  SavedResearchStatus,
+  SavedVideoDetail,
+  SavedVideoHistoryResponse,
+  SavedVideoListItem,
+  SavedVideoManualRefreshResponse,
+} from "./saved-research-types";
+import type { SavedResearchFeedbackOverview } from "./saved-research-feedback-types";
+import type {
+  SavedResearchFeedbackHistory,
+  SavedResearchFeedbackPayload,
+} from "./saved-research-analyst-feedback-types";
+import type {
+  DailyIntelligenceDateListResponse,
+  DailyIntelligenceFamilyDetail,
+  DailyIntelligenceFamilyListResponse,
+  DailyIntelligenceReportSummary,
+  DailyIntelligenceRunListResponse,
+  DailyIntelligenceVideoAppearanceListResponse,
+  DailyIntelligenceWinnerDetail,
+  DailyIntelligenceWinnerListResponse,
+} from "./daily-intelligence-types";
+import type {
+  DailyIntelligenceOutcomeCoverageResponse,
+  DailyIntelligenceWinnerOutcomeFollowUp,
+} from "./daily-intelligence-outcome-types";
+
+/** Browser calls hit the backend directly to avoid Next.js rewrite proxy timeouts on long searches. */
+function resolveClientApiBaseUrl(): string {
+  const configured = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+  if (typeof window !== "undefined" && configured) {
+    return configured;
+  }
+  return "";
+}
 
 const api = axios.create({
-  baseURL: "",
+  baseURL: resolveClientApiBaseUrl(),
   timeout: 60_000,
   headers: {
     "Content-Type": "application/json",
@@ -86,13 +127,35 @@ export async function searchAnomalies(params: AnomalySearchParams): Promise<Exte
   return data;
 }
 
+export type ManualSearchApiResponse = {
+  items: EnrichedVideoModel[];
+  needs_channel_enrichment: boolean;
+  timing?: Record<string, unknown> | null;
+};
+
 export async function searchVideos(
   payload: SearchRequestPayload,
-): Promise<EnrichedVideoModel[]> {
-  // Channel enrichment can take a while, so allow a longer timeout than the default.
-  const { data } = await api.post<EnrichedVideoModel[]>("/api/search", payload, {
+  options?: { phase?: "basic" | "full"; includeTiming?: boolean },
+): Promise<ManualSearchApiResponse> {
+  const { data } = await api.post<ManualSearchApiResponse>("/api/search", {
+    ...payload,
+    phase: options?.phase,
+    include_timing: options?.includeTiming ?? false,
+  }, {
     timeout: 180_000,
   });
+  return data;
+}
+
+export async function enrichSearchVideos(
+  payload: SearchRequestPayload & { items: EnrichedVideoModel[] },
+): Promise<ManualSearchApiResponse> {
+  const { items, ...rest } = payload;
+  const { data } = await api.post<ManualSearchApiResponse>(
+    "/api/search/enrich",
+    { items, filters: rest.filters, sort_by: rest.sort_by },
+    { timeout: 180_000 },
+  );
   return data;
 }
 
@@ -100,6 +163,26 @@ export async function fetchSuggestions(query: string): Promise<string[]> {
   const { data } = await api.get<string[]>("/api/suggestions", {
     params: { query },
   });
+  return data;
+}
+
+export async function fetchCompetitorChannelPreview(
+  payload: {
+    input_ref?: string;
+    channel_ref?: string;
+    channel_id?: string;
+  },
+  signal?: AbortSignal,
+): Promise<import("@/lib/types").CompetitorChannelPreviewResponse> {
+  const { data } = await api.post<import("@/lib/types").CompetitorChannelPreviewResponse>(
+    "/api/analysis/competitors/channel",
+    {
+      input_ref: payload.input_ref ?? null,
+      channel_ref: payload.channel_ref ?? null,
+      channel_id: payload.channel_id ?? null,
+    },
+    { timeout: 120_000, signal },
+  );
   return data;
 }
 
@@ -113,6 +196,69 @@ export async function runMassAnalysis(
   }, {
     timeout: 300_000,
   });
+  return data;
+}
+
+export async function fetchChannelSingleShelf(payload: {
+  channel_id?: string;
+  channel_ref?: string;
+}): Promise<import("@/lib/types").ChannelSingleAnalysisShelfResponse> {
+  const { data } = await api.post<import("@/lib/types").ChannelSingleAnalysisShelfResponse>(
+    "/api/analysis/channel/shelf",
+    payload,
+    { timeout: 120_000 },
+  );
+  return data;
+}
+
+export async function enrichChannelSingle(payload: {
+  channel_id: string;
+  focus_video_id?: string;
+  publications: import("@/lib/types").ChannelSingleAnalysisPublication[];
+}): Promise<import("@/lib/types").ChannelSingleAnalysisEnrichResponse> {
+  const { data } = await api.post<import("@/lib/types").ChannelSingleAnalysisEnrichResponse>(
+    "/api/analysis/channel/enrich",
+    {
+      channel_id: payload.channel_id,
+      focus_video_id: payload.focus_video_id ?? null,
+      publications: payload.publications,
+    },
+    { timeout: 120_000 },
+  );
+  return data;
+}
+
+export async function fetchChannelSingleShelfMore(payload: {
+  channel_id: string;
+  existing_video_ids: string[];
+  max_total?: number;
+}): Promise<import("@/lib/types").ChannelSingleAnalysisShelfMoreResponse> {
+  const { data } = await api.post<import("@/lib/types").ChannelSingleAnalysisShelfMoreResponse>(
+    "/api/analysis/channel/shelf/more",
+    {
+      channel_id: payload.channel_id,
+      existing_video_ids: payload.existing_video_ids,
+      max_total: payload.max_total ?? 100,
+    },
+    { timeout: 120_000 },
+  );
+  return data;
+}
+
+export async function compareChannelSingleFocus(payload: {
+  channel_id: string;
+  focus_video_id?: string;
+  publications: import("@/lib/types").ChannelSingleAnalysisPublication[];
+}): Promise<import("@/lib/types").ChannelSingleCompareResponse> {
+  const { data } = await api.post<import("@/lib/types").ChannelSingleCompareResponse>(
+    "/api/analysis/channel/compare",
+    {
+      channel_id: payload.channel_id,
+      focus_video_id: payload.focus_video_id ?? null,
+      publications: payload.publications,
+    },
+    { timeout: 45_000 },
+  );
   return data;
 }
 
@@ -316,6 +462,11 @@ export async function fetchTargetKeywords(
   return data;
 }
 
+export async function fetchKeywordPoolSummary(): Promise<KeywordPoolSummary> {
+  const { data } = await api.get<KeywordPoolSummary>("/api/keywords/pool-summary");
+  return data;
+}
+
 export async function fetchKeywordPerformanceList(
   params: KeywordPerformanceListParams = {},
 ): Promise<KeywordPerformanceListResponse> {
@@ -361,6 +512,13 @@ export async function getAttentionVideos(params: { limit?: number; offset?: numb
   const { data } = await api.get<AttentionVideoListResponse>("/api/attention/videos", {
     params: { limit: params.limit ?? 50, offset: params.offset ?? 0 },
   });
+  return data;
+}
+
+export async function getAttentionVideo(videoId: string): Promise<AttentionVideoDetailResponse> {
+  const { data } = await api.get<AttentionVideoDetailResponse>(
+    `/api/attention/videos/${encodeURIComponent(videoId)}`,
+  );
   return data;
 }
 
@@ -466,6 +624,435 @@ export async function getValidationReport(params?: {
   period_end?: string;
 }): Promise<ValidationReport> {
   const { data } = await api.get<ValidationReport>("/api/validation/report", { params });
+  return data;
+}
+
+export async function saveSavedVideo(videoId: string): Promise<{ item: SavedVideoDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post("/api/saved-videos", { video_id: videoId });
+  return data;
+}
+
+export type ManualSearchVideoContextItem = {
+  video_id: string;
+  in_corpus: boolean;
+  saved_video_id: number | null;
+  snapshot_count: number;
+  latest_snapshot_at: string | null;
+};
+
+export async function fetchManualSearchVideoContext(
+  videoIds: string[],
+): Promise<{ items: ManualSearchVideoContextItem[] }> {
+  const { data } = await api.post<{ items: ManualSearchVideoContextItem[] }>(
+    "/api/manual-search/video-context",
+    { video_ids: videoIds },
+  );
+  return data;
+}
+
+export async function saveManualSearchVideo(
+  videoId: string,
+): Promise<{ item: SavedVideoDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post("/api/manual-search/save-video", { video_id: videoId });
+  return data;
+}
+
+export async function listSavedVideos(params?: {
+  archived?: "active" | "archived" | "all";
+  status?: string;
+  tag?: string;
+}): Promise<{ items: SavedVideoListItem[]; total: number }> {
+  const { data } = await api.get("/api/saved-videos", { params });
+  return data;
+}
+
+export async function getSavedVideo(id: number): Promise<SavedVideoDetail> {
+  const { data } = await api.get(`/api/saved-videos/${id}`);
+  return data;
+}
+
+export async function patchSavedVideo(
+  id: number,
+  payload: { status?: SavedResearchStatus; notes?: string; tags?: string[] },
+): Promise<SavedVideoDetail> {
+  const { data } = await api.patch(`/api/saved-videos/${id}`, payload);
+  return data;
+}
+
+export async function archiveSavedVideo(id: number): Promise<SavedVideoDetail> {
+  const { data } = await api.post(`/api/saved-videos/${id}/archive`);
+  return data;
+}
+
+export async function restoreSavedVideo(id: number): Promise<SavedVideoDetail> {
+  const { data } = await api.post(`/api/saved-videos/${id}/restore`);
+  return data;
+}
+
+export async function getSavedVideoHistory(
+  id: number,
+  params?: { limit?: number; offset?: number },
+): Promise<SavedVideoHistoryResponse> {
+  const { data } = await api.get<SavedVideoHistoryResponse>(`/api/saved-videos/${id}/history`, {
+    params,
+  });
+  return data;
+}
+
+export async function getSavedVideoValidation(id: number): Promise<{
+  video_id: string;
+  saved_at: string;
+  status: SavedResearchStatus;
+  validation: Record<string, unknown>;
+}> {
+  const { data } = await api.get(`/api/saved-videos/${id}/validation`);
+  return data;
+}
+
+export async function getSavedVideoFeedback(
+  id: number,
+  params?: { limit?: number; offset?: number },
+): Promise<SavedResearchFeedbackHistory> {
+  const { data } = await api.get<SavedResearchFeedbackHistory>(`/api/saved-videos/${id}/feedback`, {
+    params,
+  });
+  return data;
+}
+
+export async function postSavedVideoFeedback(
+  id: number,
+  payload: SavedResearchFeedbackPayload,
+): Promise<SavedResearchFeedbackHistory["latest"]> {
+  const { data } = await api.post(`/api/saved-videos/${id}/feedback`, payload);
+  return data;
+}
+
+export async function getSavedFamilyValidation(id: number): Promise<{
+  family_key: string;
+  saved_at: string;
+  status: SavedResearchStatus;
+  validation: Record<string, unknown>;
+}> {
+  const { data } = await api.get(`/api/saved-families/${id}/validation`);
+  return data;
+}
+
+export async function getSavedFamilyFeedback(
+  id: number,
+  params?: { limit?: number; offset?: number },
+): Promise<SavedResearchFeedbackHistory> {
+  const { data } = await api.get<SavedResearchFeedbackHistory>(`/api/saved-families/${id}/feedback`, {
+    params,
+  });
+  return data;
+}
+
+export async function postSavedFamilyFeedback(
+  id: number,
+  payload: SavedResearchFeedbackPayload,
+): Promise<SavedResearchFeedbackHistory["latest"]> {
+  const { data } = await api.post(`/api/saved-families/${id}/feedback`, payload);
+  return data;
+}
+
+export async function getSavedResearchFeedbackOverview(params?: {
+  archived?: "active" | "archived" | "all";
+  video_limit?: number;
+  video_offset?: number;
+  family_limit?: number;
+  family_offset?: number;
+}): Promise<SavedResearchFeedbackOverview> {
+  const { data } = await api.get<SavedResearchFeedbackOverview>(
+    "/api/saved-research/feedback-overview",
+    { params },
+  );
+  return data;
+}
+
+export async function refreshSavedVideoMetrics(
+  id: number,
+  body?: { capture_run_id?: string },
+): Promise<SavedVideoManualRefreshResponse> {
+  const { data } = await api.post(`/api/saved-videos/${id}/refresh-metrics`, body ?? {});
+  return data;
+}
+
+export async function getSavedVideoSimilarWatch(id: number): Promise<import("./saved-research-types").SavedVideoSimilarWatch> {
+  const { data } = await api.get(`/api/saved-videos/${id}/similar-watch`);
+  return data;
+}
+
+export async function confirmSavedVideoSimilarWatch(
+  id: number,
+  queries: string[],
+): Promise<import("./saved-research-types").SavedVideoSimilarWatch> {
+  const { data } = await api.post(`/api/saved-videos/${id}/similar-watch/confirm`, { queries });
+  return data;
+}
+
+export async function runSavedVideoSimilarWatchNow(id: number): Promise<{
+  scan_id: number;
+  display_state: string;
+}> {
+  const { data } = await api.post(`/api/saved-videos/${id}/similar-watch/run-now`);
+  return data;
+}
+
+export async function pauseSavedVideoSimilarWatch(id: number): Promise<import("./saved-research-types").SavedVideoSimilarWatch> {
+  const { data } = await api.post(`/api/saved-videos/${id}/similar-watch/pause`);
+  return data;
+}
+
+export async function resumeSavedVideoSimilarWatch(id: number): Promise<import("./saved-research-types").SavedVideoSimilarWatch> {
+  const { data } = await api.post(`/api/saved-videos/${id}/similar-watch/resume`);
+  return data;
+}
+
+export async function getSavedVideoSimilarFindings(
+  id: number,
+  params?: { primary_limit?: number; other_limit?: number },
+): Promise<import("./saved-research-types").SavedVideoSimilarFindingsList> {
+  const { data } = await api.get(`/api/saved-videos/${id}/similar-watch/findings`, { params });
+  return data;
+}
+
+export async function saveSimilarFinding(
+  savedVideoId: number,
+  findingId: number,
+): Promise<{ item: import("./saved-research-types").SavedVideoDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post(
+    `/api/saved-videos/${savedVideoId}/similar-watch/findings/${findingId}/save`,
+  );
+  return data;
+}
+
+export async function setSimilarFindingFeedback(
+  savedVideoId: number,
+  findingId: number,
+  verdict: "fit" | "not_fit",
+): Promise<import("./saved-research-types").SavedVideoSimilarFinding> {
+  const { data } = await api.post(
+    `/api/saved-videos/${savedVideoId}/similar-watch/findings/${findingId}/feedback`,
+    { verdict },
+  );
+  return data;
+}
+
+export async function saveSavedFamily(familyKey: string): Promise<{ item: SavedFamilyDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post("/api/saved-families", { family_key: familyKey });
+  return data;
+}
+
+export async function listSavedFamilies(params?: {
+  archived?: "active" | "archived" | "all";
+  status?: string;
+  tag?: string;
+}): Promise<{ items: SavedFamilyListItem[]; total: number }> {
+  const { data } = await api.get("/api/saved-families", { params });
+  return data;
+}
+
+export async function getSavedFamily(id: number): Promise<SavedFamilyDetail> {
+  const { data } = await api.get(`/api/saved-families/${id}`);
+  return data;
+}
+
+export async function patchSavedFamily(
+  id: number,
+  payload: { status?: SavedResearchStatus; notes?: string; tags?: string[] },
+): Promise<SavedFamilyDetail> {
+  const { data } = await api.patch(`/api/saved-families/${id}`, payload);
+  return data;
+}
+
+export async function archiveSavedFamily(id: number): Promise<SavedFamilyDetail> {
+  const { data } = await api.post(`/api/saved-families/${id}/archive`);
+  return data;
+}
+
+export async function restoreSavedFamily(id: number): Promise<SavedFamilyDetail> {
+  const { data } = await api.post(`/api/saved-families/${id}/restore`);
+  return data;
+}
+
+export async function getSavedFamilyTopicWatch(id: number): Promise<SavedFamilyTopicWatch> {
+  const { data } = await api.get(`/api/saved-families/${id}/topic-watch`);
+  return data;
+}
+
+export async function confirmSavedFamilyTopicWatch(
+  id: number,
+  queries: string[],
+): Promise<SavedFamilyTopicWatch> {
+  const { data } = await api.post(`/api/saved-families/${id}/topic-watch/confirm`, { queries });
+  return data;
+}
+
+export async function runSavedFamilyTopicWatchNow(id: number): Promise<{
+  scan_id: number;
+  display_state: string;
+}> {
+  const { data } = await api.post(`/api/saved-families/${id}/topic-watch/run-now`);
+  return data;
+}
+
+export async function pauseSavedFamilyTopicWatch(id: number): Promise<SavedFamilyTopicWatch> {
+  const { data } = await api.post(`/api/saved-families/${id}/topic-watch/pause`);
+  return data;
+}
+
+export async function resumeSavedFamilyTopicWatch(id: number): Promise<SavedFamilyTopicWatch> {
+  const { data } = await api.post(`/api/saved-families/${id}/topic-watch/resume`);
+  return data;
+}
+
+export async function getSavedFamilyTopicFindings(
+  id: number,
+  params?: { limit?: number; offset?: number },
+): Promise<SavedFamilyTopicFindingsList> {
+  const { data } = await api.get(`/api/saved-families/${id}/topic-watch/findings`, { params });
+  return data;
+}
+
+export async function saveFamilyTopicFinding(
+  savedFamilyId: number,
+  findingId: number,
+): Promise<{ item: SavedVideoDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post(
+    `/api/saved-families/${savedFamilyId}/topic-watch/findings/${findingId}/save`,
+  );
+  return data;
+}
+
+export async function getSavedFamilyHistory(
+  id: number,
+  params?: { limit?: number; offset?: number },
+): Promise<SavedFamilyHistoryResponse> {
+  const { data } = await api.get<SavedFamilyHistoryResponse>(`/api/saved-families/${id}/history`, {
+    params,
+  });
+  return data;
+}
+
+export async function listDailyIntelligenceDates(params?: {
+  limit?: number;
+  offset?: number;
+}): Promise<DailyIntelligenceDateListResponse> {
+  const { data } = await api.get<DailyIntelligenceDateListResponse>("/api/daily-intelligence/dates", {
+    params,
+  });
+  return data;
+}
+
+export async function getDailyIntelligenceReport(
+  reportDate: string,
+): Promise<DailyIntelligenceReportSummary> {
+  const { data } = await api.get<DailyIntelligenceReportSummary>(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}`,
+  );
+  return data;
+}
+
+export async function listDailyIntelligenceWinners(
+  reportDate: string,
+  params?: { limit?: number; offset?: number },
+): Promise<DailyIntelligenceWinnerListResponse> {
+  const { data } = await api.get<DailyIntelligenceWinnerListResponse>(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/winners`,
+    { params },
+  );
+  return data;
+}
+
+export async function listDailyIntelligenceFamilies(
+  reportDate: string,
+  params?: { limit?: number; offset?: number },
+): Promise<DailyIntelligenceFamilyListResponse> {
+  const { data } = await api.get<DailyIntelligenceFamilyListResponse>(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/families`,
+    { params },
+  );
+  return data;
+}
+
+export async function listDailyIntelligenceRuns(
+  reportDate: string,
+  params?: { limit?: number; offset?: number },
+): Promise<DailyIntelligenceRunListResponse> {
+  const { data } = await api.get<DailyIntelligenceRunListResponse>(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/runs`,
+    { params },
+  );
+  return data;
+}
+
+export async function getDailyIntelligenceWinner(
+  reportDate: string,
+  videoId: string,
+): Promise<DailyIntelligenceWinnerDetail> {
+  const { data } = await api.get<DailyIntelligenceWinnerDetail>(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/winners/${encodeURIComponent(videoId)}`,
+  );
+  return data;
+}
+
+export async function getDailyIntelligenceOutcomeCoverage(
+  reportDate: string,
+): Promise<DailyIntelligenceOutcomeCoverageResponse> {
+  const { data } = await api.get<DailyIntelligenceOutcomeCoverageResponse>(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/outcome-coverage`,
+  );
+  return data;
+}
+
+export async function getDailyIntelligenceWinnerOutcomeFollowUp(
+  reportDate: string,
+  videoId: string,
+): Promise<DailyIntelligenceWinnerOutcomeFollowUp> {
+  const { data } = await api.get<DailyIntelligenceWinnerOutcomeFollowUp>(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/winners/${encodeURIComponent(videoId)}/outcome-follow-up`,
+  );
+  return data;
+}
+
+export async function getDailyIntelligenceFamily(
+  reportDate: string,
+  familyKey: string,
+): Promise<DailyIntelligenceFamilyDetail> {
+  const { data } = await api.get<DailyIntelligenceFamilyDetail>(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/families/${encodeURIComponent(familyKey)}`,
+  );
+  return data;
+}
+
+export async function listDailyIntelligenceVideoAppearances(
+  videoId: string,
+  params?: { limit?: number; offset?: number },
+): Promise<DailyIntelligenceVideoAppearanceListResponse> {
+  const { data } = await api.get<DailyIntelligenceVideoAppearanceListResponse>(
+    `/api/daily-intelligence/videos/${encodeURIComponent(videoId)}/appearances`,
+    { params },
+  );
+  return data;
+}
+
+export async function saveDailyIntelligenceVideoToResearch(
+  reportDate: string,
+  videoId: string,
+): Promise<{ item: SavedVideoDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/winners/${encodeURIComponent(videoId)}/save-to-research`,
+  );
+  return data;
+}
+
+export async function saveDailyIntelligenceFamilyToResearch(
+  reportDate: string,
+  familyKey: string,
+): Promise<{ item: SavedFamilyDetail; created: boolean; idempotent: boolean }> {
+  const { data } = await api.post(
+    `/api/daily-intelligence/reports/${encodeURIComponent(reportDate)}/families/${encodeURIComponent(familyKey)}/save-to-research`,
+  );
   return data;
 }
 

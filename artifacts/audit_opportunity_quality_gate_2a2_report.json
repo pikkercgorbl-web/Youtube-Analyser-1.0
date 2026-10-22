@@ -1,0 +1,800 @@
+{
+  "run_id": "attention_20261013T061802Z",
+  "supported_family_deep_dive": [
+    {
+      "family_key": "family:kw:1505",
+      "label": "обучение нейросети видео",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_pattern_keys": [
+        "kw:1505"
+      ],
+      "member_patterns": [
+        {
+          "pattern_key": "kw:1505",
+          "kind": "keyword_provenance",
+          "label": "обучение нейросети видео"
+        }
+      ],
+      "cross_source_explanation": {
+        "definition": "cross_source_supported iff len(support_sources)>=2 after _support_and_flags, i.e. among patterns in the TRUNCATED top-N list, same videos appear in patterns of different kinds (keyword_provenance, title_phrase, video_topic).",
+        "overlapping_kinds_in_top20_patterns": [
+          "keyword_provenance",
+          "video_topic"
+        ],
+        "other_overlapping_patterns_sample": [
+          {
+            "pattern_key": "kw:1561",
+            "kind": "keyword_provenance",
+            "label": "видео с помощью нейросети"
+          },
+          {
+            "pattern_key": "kw:1506",
+            "kind": "keyword_provenance",
+            "label": "как работает обучение нейросети"
+          },
+          {
+            "pattern_key": "kw:1594",
+            "kind": "keyword_provenance",
+            "label": "искусственный интеллект клип"
+          },
+          {
+            "pattern_key": "kw:1488",
+            "kind": "keyword_provenance",
+            "label": "нейросети музыка"
+          },
+          {
+            "pattern_key": "topic:4ac6a6a26765f407",
+            "kind": "video_topic",
+            "label": "нейросети клипы"
+          }
+        ]
+      },
+      "feed_winner_count": 2,
+      "member_count": 22,
+      "feed_winners": [
+        {
+          "role": "feed_winner",
+          "video_id": "JF2A0GZzezQ",
+          "title": "Я Нашел САМОГО РАЗЫСКИВАЕМОГО ХАКЕРА РОССИИ",
+          "channel_id": "UCpXnlh1UWRI3y4Vndx4DoTQ",
+          "channel_title": "Maska",
+          "video_topic": "обучение нейросети видео",
+          "youtube_url": "https://www.youtube.com/watch?v=JF2A0GZzezQ",
+          "in_feed_winners": true,
+          "winner_payload_vph": 8036.2965
+        },
+        {
+          "role": "feed_winner",
+          "video_id": "PVclFAkeZog",
+          "title": "Сможет ли ChatGPT пройти РЫБКА ФРЕДДИ: ДЕЛО О МОРСКОЙ КАПУСТЕ?",
+          "channel_id": "UCMEOMAqINiuDlJ4iuxNt3bQ",
+          "channel_title": "J. Whiskas",
+          "video_topic": "нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=PVclFAkeZog",
+          "in_feed_winners": true,
+          "winner_payload_vph": 645.2407
+        }
+      ],
+      "sample_non_winner_members": [
+        {
+          "role": "member",
+          "video_id": "3VEKwDI2qSk",
+          "title": "НЕ ВНОСИ ДЕПОЗИТ пока не проверишь этого бота! Трейдинг с нуля, как заработать в интернете",
+          "channel_id": "UCQkq2bGw8IeMxw18jg5dsDA",
+          "channel_title": "Max Black Трейдер | Трейдинг на простом языке",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=3VEKwDI2qSk",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "4pxVdBBdYs4",
+          "title": "Vela 2.0: одна открытая нейросеть вместо 9 классификаторов безопасности и маршрутизации",
+          "channel_id": "UCYfS_ightrWcI46hExulCpQ",
+          "channel_title": "Emma Explains AI",
+          "video_topic": "ии машинное обучение нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=4pxVdBBdYs4",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "5lH89pVSSio",
+          "title": "Секретное оружие скальпера: Обзор всех функций MindScan",
+          "channel_id": "UC6FSUyH759GADvrnuQM13Sw",
+          "channel_title": "MindMax",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=5lH89pVSSio",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "9E7GKE5bM08",
+          "title": "Джуны больше не нужны? Вся правда о рынке геймдева 2026!",
+          "channel_id": "UCArbKFvW1KWU-zm_5ArYOtg",
+          "channel_title": "PRO Gamedev",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=9E7GKE5bM08",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        }
+      ]
+    },
+    {
+      "family_key": "family:kw:1561",
+      "label": "видео с помощью нейросети",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_pattern_keys": [
+        "kw:1561"
+      ],
+      "member_patterns": [
+        {
+          "pattern_key": "kw:1561",
+          "kind": "keyword_provenance",
+          "label": "видео с помощью нейросети"
+        }
+      ],
+      "cross_source_explanation": {
+        "definition": "cross_source_supported iff len(support_sources)>=2 after _support_and_flags, i.e. among patterns in the TRUNCATED top-N list, same videos appear in patterns of different kinds (keyword_provenance, title_phrase, video_topic).",
+        "overlapping_kinds_in_top20_patterns": [
+          "keyword_provenance",
+          "video_topic"
+        ],
+        "other_overlapping_patterns_sample": [
+          {
+            "pattern_key": "kw:1505",
+            "kind": "keyword_provenance",
+            "label": "обучение нейросети видео"
+          },
+          {
+            "pattern_key": "kw:1506",
+            "kind": "keyword_provenance",
+            "label": "как работает обучение нейросети"
+          },
+          {
+            "pattern_key": "kw:1594",
+            "kind": "keyword_provenance",
+            "label": "искусственный интеллект клип"
+          },
+          {
+            "pattern_key": "kw:1488",
+            "kind": "keyword_provenance",
+            "label": "нейросети музыка"
+          },
+          {
+            "pattern_key": "topic:4ac6a6a26765f407",
+            "kind": "video_topic",
+            "label": "нейросети клипы"
+          }
+        ]
+      },
+      "feed_winner_count": 2,
+      "member_count": 22,
+      "feed_winners": [
+        {
+          "role": "feed_winner",
+          "video_id": "29GOK7-NJ2U",
+          "title": "BinoDex Бинодекс бинарные опционы стратегия для Бинодекс",
+          "channel_id": "UCMz7A8zspOiX-oBwV6B3uqw",
+          "channel_title": "ProInvest | Трейдинг и Инвестиции",
+          "video_topic": "нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=29GOK7-NJ2U",
+          "in_feed_winners": true,
+          "winner_payload_vph": 464.7493
+        },
+        {
+          "role": "feed_winner",
+          "video_id": "omuA7jVGPzw",
+          "title": "🤖 ЛУЧШИЕ ИИ СОЗДАЮТ ВЕДЬМАК НА GODOT! Claude Opus 5.5 vs GPT 6.1 Sol",
+          "channel_id": "UC60hjuXFHCykGPzKgMAQmYQ",
+          "channel_title": "промтович",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=omuA7jVGPzw",
+          "in_feed_winners": true,
+          "winner_payload_vph": 829.3335
+        }
+      ],
+      "sample_non_winner_members": [
+        {
+          "role": "member",
+          "video_id": "5P_OO84FkB8",
+          "title": "УБИЛ ВЕСЬ РИЛИВОРЛД С КРИСТАЛ АУРОЙ В ЛУЧШЕМ ЧИТЕ QUICK CLIENT |26.2|",
+          "channel_id": "UC1S2oHkZZYmuMQ-ZilOg8DA",
+          "channel_title": "rew1ss",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=5P_OO84FkB8",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "9E7GKE5bM08",
+          "title": "Джуны больше не нужны? Вся правда о рынке геймдева 2026!",
+          "channel_id": "UCArbKFvW1KWU-zm_5ArYOtg",
+          "channel_title": "PRO Gamedev",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=9E7GKE5bM08",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "CpC-1rynsAw",
+          "title": "Вайбкодинг MMO 2D метавселенной подписчиков. Тестируем и исправляем баги с помощью Hermes агента.",
+          "channel_id": "UCDHdnCWPz_htsZ2uh7GBmkg",
+          "channel_title": "Кибер-странник Jekardos",
+          "video_topic": "нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=CpC-1rynsAw",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "dV35DCKG7CM",
+          "title": "Самое ВЛАЖНОЕ место Европы! Грузия, о которой вы не знали | Мтирала, водопад и горное озеро #грузия",
+          "channel_id": "UCfLsjgOzDAf9UYkhNglQWyg",
+          "channel_title": "Путешествия по всему миру",
+          "video_topic": "нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=dV35DCKG7CM",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        }
+      ]
+    },
+    {
+      "family_key": "family:kw:1506",
+      "label": "как работает обучение нейросети",
+      "family_kind": "keyword_provenance",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_pattern_keys": [
+        "kw:1506"
+      ],
+      "member_patterns": [
+        {
+          "pattern_key": "kw:1506",
+          "kind": "keyword_provenance",
+          "label": "как работает обучение нейросети"
+        }
+      ],
+      "cross_source_explanation": {
+        "definition": "cross_source_supported iff len(support_sources)>=2 after _support_and_flags, i.e. among patterns in the TRUNCATED top-N list, same videos appear in patterns of different kinds (keyword_provenance, title_phrase, video_topic).",
+        "overlapping_kinds_in_top20_patterns": [
+          "keyword_provenance",
+          "video_topic"
+        ],
+        "other_overlapping_patterns_sample": [
+          {
+            "pattern_key": "kw:1505",
+            "kind": "keyword_provenance",
+            "label": "обучение нейросети видео"
+          },
+          {
+            "pattern_key": "kw:1561",
+            "kind": "keyword_provenance",
+            "label": "видео с помощью нейросети"
+          },
+          {
+            "pattern_key": "kw:1594",
+            "kind": "keyword_provenance",
+            "label": "искусственный интеллект клип"
+          },
+          {
+            "pattern_key": "topic:4ac6a6a26765f407",
+            "kind": "video_topic",
+            "label": "нейросети клипы"
+          }
+        ]
+      },
+      "feed_winner_count": 3,
+      "member_count": 19,
+      "feed_winners": [
+        {
+          "role": "feed_winner",
+          "video_id": "29GOK7-NJ2U",
+          "title": "BinoDex Бинодекс бинарные опционы стратегия для Бинодекс",
+          "channel_id": "UCMz7A8zspOiX-oBwV6B3uqw",
+          "channel_title": "ProInvest | Трейдинг и Инвестиции",
+          "video_topic": "нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=29GOK7-NJ2U",
+          "in_feed_winners": true,
+          "winner_payload_vph": 464.7493
+        },
+        {
+          "role": "feed_winner",
+          "video_id": "-lSdkIhFmBw",
+          "title": "КАК Я ПОПАЛ В МИРОВОЙ ТОП ЗОМБИ РЕЖИМА ABI?",
+          "channel_id": "UC35sopTLcbKNEe9CZ7l8h0w",
+          "channel_title": "LEVVA",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=-lSdkIhFmBw",
+          "in_feed_winners": true,
+          "winner_payload_vph": 472.0254
+        },
+        {
+          "role": "feed_winner",
+          "video_id": "zUN31YNxGUM",
+          "title": "ЯНДЕКС ПЕРЕСТАЛ РАБОТАТЬ | АТАКА БПЛА | ДОХОД В ТАКСИ КОМФОРТ + ЕКАТЕРИНБУРГ",
+          "channel_id": "UC4kJ9Q-31CPSfHYYUFNOowg",
+          "channel_title": "Степан Банных Live",
+          "video_topic": "как работает обучение нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=zUN31YNxGUM",
+          "in_feed_winners": true,
+          "winner_payload_vph": 650.1615
+        }
+      ],
+      "sample_non_winner_members": [
+        {
+          "role": "member",
+          "video_id": "4pxVdBBdYs4",
+          "title": "Vela 2.0: одна открытая нейросеть вместо 9 классификаторов безопасности и маршрутизации",
+          "channel_id": "UCYfS_ightrWcI46hExulCpQ",
+          "channel_title": "Emma Explains AI",
+          "video_topic": "ии машинное обучение нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=4pxVdBBdYs4",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "5lH89pVSSio",
+          "title": "Секретное оружие скальпера: Обзор всех функций MindScan",
+          "channel_id": "UC6FSUyH759GADvrnuQM13Sw",
+          "channel_title": "MindMax",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=5lH89pVSSio",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "865Ku_BXgKY",
+          "title": "Законы мышления: в поисках математической теории разума - Том Гриффитс",
+          "channel_id": "UC5A1U-qgxbT7QCCJA0MI3gA",
+          "channel_title": "Книга за час",
+          "video_topic": "нейросети",
+          "youtube_url": "https://www.youtube.com/watch?v=865Ku_BXgKY",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "9E7GKE5bM08",
+          "title": "Джуны больше не нужны? Вся правда о рынке геймдева 2026!",
+          "channel_id": "UCArbKFvW1KWU-zm_5ArYOtg",
+          "channel_title": "PRO Gamedev",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=9E7GKE5bM08",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        }
+      ]
+    },
+    {
+      "family_key": "family:topic:4ac6a6a26765f407",
+      "label": "нейросети клипы",
+      "family_kind": "video_topic",
+      "quality_flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "support_sources": [
+        "keyword",
+        "topic"
+      ],
+      "member_pattern_keys": [
+        "topic:4ac6a6a26765f407"
+      ],
+      "member_patterns": [
+        {
+          "pattern_key": "topic:4ac6a6a26765f407",
+          "kind": "video_topic",
+          "label": "нейросети клипы"
+        }
+      ],
+      "cross_source_explanation": {
+        "definition": "cross_source_supported iff len(support_sources)>=2 after _support_and_flags, i.e. among patterns in the TRUNCATED top-N list, same videos appear in patterns of different kinds (keyword_provenance, title_phrase, video_topic).",
+        "overlapping_kinds_in_top20_patterns": [
+          "keyword_provenance",
+          "video_topic"
+        ],
+        "other_overlapping_patterns_sample": [
+          {
+            "pattern_key": "kw:1505",
+            "kind": "keyword_provenance",
+            "label": "обучение нейросети видео"
+          },
+          {
+            "pattern_key": "kw:1561",
+            "kind": "keyword_provenance",
+            "label": "видео с помощью нейросети"
+          },
+          {
+            "pattern_key": "kw:1506",
+            "kind": "keyword_provenance",
+            "label": "как работает обучение нейросети"
+          },
+          {
+            "pattern_key": "kw:1594",
+            "kind": "keyword_provenance",
+            "label": "искусственный интеллект клип"
+          }
+        ]
+      },
+      "feed_winner_count": 2,
+      "member_count": 16,
+      "feed_winners": [
+        {
+          "role": "feed_winner",
+          "video_id": "-lSdkIhFmBw",
+          "title": "КАК Я ПОПАЛ В МИРОВОЙ ТОП ЗОМБИ РЕЖИМА ABI?",
+          "channel_id": "UC35sopTLcbKNEe9CZ7l8h0w",
+          "channel_title": "LEVVA",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=-lSdkIhFmBw",
+          "in_feed_winners": true,
+          "winner_payload_vph": 472.0254
+        },
+        {
+          "role": "feed_winner",
+          "video_id": "omuA7jVGPzw",
+          "title": "🤖 ЛУЧШИЕ ИИ СОЗДАЮТ ВЕДЬМАК НА GODOT! Claude Opus 5.5 vs GPT 6.1 Sol",
+          "channel_id": "UC60hjuXFHCykGPzKgMAQmYQ",
+          "channel_title": "промтович",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=omuA7jVGPzw",
+          "in_feed_winners": true,
+          "winner_payload_vph": 829.3335
+        }
+      ],
+      "sample_non_winner_members": [
+        {
+          "role": "member",
+          "video_id": "3VEKwDI2qSk",
+          "title": "НЕ ВНОСИ ДЕПОЗИТ пока не проверишь этого бота! Трейдинг с нуля, как заработать в интернете",
+          "channel_id": "UCQkq2bGw8IeMxw18jg5dsDA",
+          "channel_title": "Max Black Трейдер | Трейдинг на простом языке",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=3VEKwDI2qSk",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "5lH89pVSSio",
+          "title": "Секретное оружие скальпера: Обзор всех функций MindScan",
+          "channel_id": "UC6FSUyH759GADvrnuQM13Sw",
+          "channel_title": "MindMax",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=5lH89pVSSio",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "5P_OO84FkB8",
+          "title": "УБИЛ ВЕСЬ РИЛИВОРЛД С КРИСТАЛ АУРОЙ В ЛУЧШЕМ ЧИТЕ QUICK CLIENT |26.2|",
+          "channel_id": "UC1S2oHkZZYmuMQ-ZilOg8DA",
+          "channel_title": "rew1ss",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=5P_OO84FkB8",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        },
+        {
+          "role": "member",
+          "video_id": "8Jx_c7NLT0Q",
+          "title": "Qwen 3.8 Omni Flash: Создаем готовый сайт с кодом и маркетингом прямо в чате! 🚀",
+          "channel_id": "UCF6jvvw-rqhjM08VG7cg9Kw",
+          "channel_title": "Ватлин и Чугунов | Маркетинг × Нейросети",
+          "video_topic": "нейросети клипы",
+          "youtube_url": "https://www.youtube.com/watch?v=8Jx_c7NLT0Q",
+          "in_feed_winners": false,
+          "winner_payload_vph": null
+        }
+      ]
+    }
+  ],
+  "full_table_20": [
+    {
+      "rank": 1,
+      "family_key": "family:kw:1497",
+      "label": "minecraft challenge videos",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R4",
+      "feed_winners": 4
+    },
+    {
+      "rank": 2,
+      "family_key": "family:kw:181",
+      "label": "free ai tools for education",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "rule_id": "R1",
+      "feed_winners": 0
+    },
+    {
+      "rank": 3,
+      "family_key": "family:kw:1505",
+      "label": "обучение нейросети видео",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "supported_opportunity",
+      "rule_id": "R2",
+      "feed_winners": 2
+    },
+    {
+      "rank": 4,
+      "family_key": "family:kw:1561",
+      "label": "видео с помощью нейросети",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "supported_opportunity",
+      "rule_id": "R2",
+      "feed_winners": 2
+    },
+    {
+      "rank": 5,
+      "family_key": "family:kw:186",
+      "label": "education ai tools for students",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "rule_id": "R1",
+      "feed_winners": 0
+    },
+    {
+      "rank": 6,
+      "family_key": "family:kw:1478",
+      "label": "how does it work animation",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R4",
+      "feed_winners": 1
+    },
+    {
+      "rank": 7,
+      "family_key": "family:topic:86b8434548938bdc",
+      "label": "искусственный интеллект",
+      "family_kind": "video_topic",
+      "flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R5",
+      "feed_winners": 1
+    },
+    {
+      "rank": 8,
+      "family_key": "family:kw:1930",
+      "label": "how does it work song",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R4",
+      "feed_winners": 1
+    },
+    {
+      "rank": 9,
+      "family_key": "family:kw:1506",
+      "label": "как работает обучение нейросети",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "supported_opportunity",
+      "rule_id": "R2",
+      "feed_winners": 3
+    },
+    {
+      "rank": 10,
+      "family_key": "family:kw:154",
+      "label": "ai tools for video editing",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "rule_id": "R1",
+      "feed_winners": 0
+    },
+    {
+      "rank": 11,
+      "family_key": "family:kw:1541",
+      "label": "unexplained video game mysteries",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "rule_id": "R1",
+      "feed_winners": 0
+    },
+    {
+      "rank": 12,
+      "family_key": "family:kw:179",
+      "label": "ai tools for educational videos",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "search_collection",
+      "rule_id": "R1",
+      "feed_winners": 0
+    },
+    {
+      "rank": 13,
+      "family_key": "family:topic:298b5d20078b4f3f",
+      "label": "miniature painting tutorial beginners tabletop",
+      "family_kind": "video_topic",
+      "flags": [
+        "topic_supported"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R7",
+      "feed_winners": 3
+    },
+    {
+      "rank": 14,
+      "family_key": "family:kw:1594",
+      "label": "искусственный интеллект клип",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R5",
+      "feed_winners": 1
+    },
+    {
+      "rank": 15,
+      "family_key": "family:kw:1488",
+      "label": "нейросети музыка",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R4",
+      "feed_winners": 1
+    },
+    {
+      "rank": 16,
+      "family_key": "family:kw:180",
+      "label": "best ai tools for education",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R4",
+      "feed_winners": 1
+    },
+    {
+      "rank": 17,
+      "family_key": "family:topic:4ac6a6a26765f407",
+      "label": "нейросети клипы",
+      "family_kind": "video_topic",
+      "flags": [
+        "topic_supported",
+        "cross_source_supported"
+      ],
+      "tier": "supported_opportunity",
+      "rule_id": "R2",
+      "feed_winners": 2
+    },
+    {
+      "rank": 18,
+      "family_key": "family:kw:182",
+      "label": "top free ai tools for education",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R4",
+      "feed_winners": 1
+    },
+    {
+      "rank": 19,
+      "family_key": "family:kw:1540",
+      "label": "obscure video game mysteries",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R4",
+      "feed_winners": 2
+    },
+    {
+      "rank": 20,
+      "family_key": "family:kw:1482",
+      "label": "science class 4 question answer",
+      "family_kind": "keyword_provenance",
+      "flags": [
+        "keyword_only",
+        "broad_keyword_group"
+      ],
+      "tier": "needs_review",
+      "rule_id": "R4",
+      "feed_winners": 1
+    }
+  ],
+  "tier_counts_from_table": {
+    "needs_review": 11,
+    "search_collection": 5,
+    "supported_opportunity": 4
+  },
+  "family_key_unique": true,
+  "pattern_cap_hook": {
+    "file": "app/services/attention_patterns.py",
+    "function": "build_pattern_candidates",
+    "count_before_truncation_line": "~300 (patterns.sort; return patterns[: config.pattern_limit])",
+    "requires": "AttentionEvidenceBundle from load_attention_evidence — full recompute >10min on restore_check",
+    "safe_alternative_for_next_refresh": "Append-only JSON in attention_runs.notes_json at end of compute_attention_engine: pattern_candidates_by_kind_before_cap, pattern_candidates_by_kind_after_cap, dropped_title_phrase_count — read-only logging inside existing compute, no sort/cap change.",
+    "persisted_top20_by_kind": {
+      "keyword_provenance": 17,
+      "video_topic": 3
+    }
+  }
+}

@@ -1,0 +1,613 @@
+{
+  "snapshot_at_utc": "2026-10-13T11:23:07.597579+00:00",
+  "code_spillover": "Tiered selector fills priority[:reserved_n] then general until batch full; if priority due < reserved_n, unused reserved capacity is filled from general (see test_unused_priority_slots_spill_to_general).",
+  "theoretical_batch_5_interval_300s": {
+    "total_keyword_slots_per_day": 1440.0,
+    "reserved_slots_per_batch": 2,
+    "general_probation_slots_per_day_conservative": 864.0,
+    "formula_old_24xdue_1440_hours": 26.83,
+    "formula_new_24xdue_general_slots_hours": 44.72,
+    "note_old_formula_ignores_reserved_and_is_optimistic": true
+  },
+  "probation_due_now": 1610,
+  "measured_windows": {
+    "last_24h": {
+      "completed_discovery_cycles": 181,
+      "keyword_scan_run_rows": 724,
+      "successful_scan_runs": 724,
+      "unique_keywords_scanned": 724,
+      "unique_probation_keywords_scanned": 697,
+      "avg_scans_per_cycle": 4.0,
+      "scan_runs_per_day_extrapolated": 724.0,
+      "unique_keywords_per_day_extrapolated": 724.0,
+      "cycles_per_day_extrapolated": 181.0,
+      "measured_probation_interval_if_all_probation_due": 53.37
+    },
+    "last_72h": {
+      "completed_discovery_cycles": 558,
+      "keyword_scan_run_rows": 2231,
+      "successful_scan_runs": 2231,
+      "unique_keywords_scanned": 1861,
+      "unique_probation_keywords_scanned": 1781,
+      "avg_scans_per_cycle": 3.998,
+      "scan_runs_per_day_extrapolated": 743.7,
+      "unique_keywords_per_day_extrapolated": 620.3,
+      "cycles_per_day_extrapolated": 186.0,
+      "measured_probation_interval_if_all_probation_due": 51.96
+    }
+  },
+  "sequential_batch_replay_12x5": {
+    "batches_traced": [
+      {
+        "batch_index": 0,
+        "picked": [
+          {
+            "id": 127,
+            "keyword": "странная история",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-10T19:04:32.746269+00:00"
+          },
+          {
+            "id": 128,
+            "keyword": "забытые истории",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-10T19:11:41.683910+00:00"
+          },
+          {
+            "id": 1932,
+            "keyword": "дисциплина казакша",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": null
+          },
+          {
+            "id": 1933,
+            "keyword": "дисциплин",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": null
+          },
+          {
+            "id": 1934,
+            "keyword": "дисциплина режим",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": null
+          }
+        ]
+      },
+      {
+        "batch_index": 1,
+        "picked": [
+          {
+            "id": 129,
+            "keyword": "история России",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-10T19:12:30.262016+00:00"
+          },
+          {
+            "id": 130,
+            "keyword": "исторические загадки",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-10T19:20:51.552265+00:00"
+          },
+          {
+            "id": 1935,
+            "keyword": "факты о психологии человека",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": null
+          },
+          {
+            "id": 1936,
+            "keyword": "психология человека 25 фактов которые ну",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": null
+          },
+          {
+            "id": 282,
+            "keyword": "how things work class 4",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T01:58:49.096931+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 2,
+        "picked": [
+          {
+            "id": 131,
+            "keyword": "древние цивилизации",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-10T19:21:23.514293+00:00"
+          },
+          {
+            "id": 132,
+            "keyword": "космос",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T20:16:48.819117+00:00"
+          },
+          {
+            "id": 283,
+            "keyword": "how things work for kids",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T01:59:51.281022+00:00"
+          },
+          {
+            "id": 284,
+            "keyword": "how things work class 4 evs",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T01:59:56.420743+00:00"
+          },
+          {
+            "id": 1701,
+            "keyword": "дисциплина решает",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:00:18.401145+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 3,
+        "picked": [
+          {
+            "id": 133,
+            "keyword": "тайны космоса",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T20:17:03.777100+00:00"
+          },
+          {
+            "id": 134,
+            "keyword": "научные эксперименты",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T20:17:15.452705+00:00"
+          },
+          {
+            "id": 1702,
+            "keyword": "дисциплина счастья",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:05:53.032653+00:00"
+          },
+          {
+            "id": 1703,
+            "keyword": "дисциплина для девушек",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:06:06.416676+00:00"
+          },
+          {
+            "id": 1704,
+            "keyword": "дисциплина в исламе",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:06:31.155158+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 4,
+        "picked": [
+          {
+            "id": 135,
+            "keyword": "игры",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T20:26:37.777576+00:00"
+          },
+          {
+            "id": 136,
+            "keyword": "Minecraft испытания",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T20:40:09.579009+00:00"
+          },
+          {
+            "id": 1705,
+            "keyword": "песня дисциплинарный батальон",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:06:49.937400+00:00"
+          },
+          {
+            "id": 1706,
+            "keyword": "дисциплинарный батальон песня комиссар",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:12:25.505983+00:00"
+          },
+          {
+            "id": 1707,
+            "keyword": "песня про мотивацию",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:12:33.585499+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 5,
+        "picked": [
+          {
+            "id": 137,
+            "keyword": "игровые эксперименты",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T20:41:09.024459+00:00"
+          },
+          {
+            "id": 138,
+            "keyword": "тайны видеоигр",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T20:41:33.353245+00:00"
+          },
+          {
+            "id": 1708,
+            "keyword": "песня мотивационные",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:12:41.238796+00:00"
+          },
+          {
+            "id": 1709,
+            "keyword": "песня про цель",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:13:03.478331+00:00"
+          },
+          {
+            "id": 285,
+            "keyword": "how things work animation",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:20:03.317459+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 6,
+        "picked": [
+          {
+            "id": 140,
+            "keyword": "организация дома",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T20:56:33.290697+00:00"
+          },
+          {
+            "id": 141,
+            "keyword": "ремонт своими руками",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:02:37.045064+00:00"
+          },
+          {
+            "id": 286,
+            "keyword": "how things work class 4 question answer",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:20:32.971192+00:00"
+          },
+          {
+            "id": 287,
+            "keyword": "how things work in busytown",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:20:38.106536+00:00"
+          },
+          {
+            "id": 288,
+            "keyword": "нейросети песни",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:20:47.885618+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 7,
+        "picked": [
+          {
+            "id": 142,
+            "keyword": "лайфхаки",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:03:08.120382+00:00"
+          },
+          {
+            "id": 143,
+            "keyword": "путешествия",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:16:44.573951+00:00"
+          },
+          {
+            "id": 289,
+            "keyword": "нейросети обучение",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:26:19.370149+00:00"
+          },
+          {
+            "id": 290,
+            "keyword": "нейросети для создания видео",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:26:32.725531+00:00"
+          },
+          {
+            "id": 291,
+            "keyword": "нейросети для фото",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:26:39.778680+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 8,
+        "picked": [
+          {
+            "id": 144,
+            "keyword": "необычные места",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:23:04.106333+00:00"
+          },
+          {
+            "id": 145,
+            "keyword": "истории выживания",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:29:30.312611+00:00"
+          },
+          {
+            "id": 292,
+            "keyword": "нейросети играют в мафию",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:26:57.253252+00:00"
+          },
+          {
+            "id": 496,
+            "keyword": "что если бросить тебя ремикс",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:33:01.679047+00:00"
+          },
+          {
+            "id": 497,
+            "keyword": "что если бросить тебя нурминский",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:33:13.480382+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 9,
+        "picked": [
+          {
+            "id": 146,
+            "keyword": "реальные истории",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:30:58.518995+00:00"
+          },
+          {
+            "id": 147,
+            "keyword": "истории с Reddit",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:31:28.852701+00:00"
+          },
+          {
+            "id": 293,
+            "keyword": "нейросети робофинист",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:33:25.511839+00:00"
+          },
+          {
+            "id": 294,
+            "keyword": "нейросети видео",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:34:01.410485+00:00"
+          },
+          {
+            "id": 295,
+            "keyword": "нейросети для учителей",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:39:27.926668+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 10,
+        "picked": [
+          {
+            "id": 149,
+            "keyword": "тогда и сейчас",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:51:10.941297+00:00"
+          },
+          {
+            "id": 150,
+            "keyword": "как это работает",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T21:52:39.241662+00:00"
+          },
+          {
+            "id": 296,
+            "keyword": "нейросети с нуля",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:39:40.448650+00:00"
+          },
+          {
+            "id": 498,
+            "keyword": "а что если да слепаков",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:40:01.176049+00:00"
+          },
+          {
+            "id": 499,
+            "keyword": "а что если бы",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:41:46.476825+00:00"
+          }
+        ]
+      },
+      {
+        "batch_index": 11,
+        "picked": [
+          {
+            "id": 1,
+            "keyword": "AI tools",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T22:06:40.181080+00:00"
+          },
+          {
+            "id": 2,
+            "keyword": "gaming",
+            "source": "seed",
+            "lifecycle": "active",
+            "priority": true,
+            "last_checked": "2026-10-11T22:19:13.653824+00:00"
+          },
+          {
+            "id": 500,
+            "keyword": "а что если она говорит",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:48:00.530963+00:00"
+          },
+          {
+            "id": 501,
+            "keyword": "а что если нет",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:49:52.458194+00:00"
+          },
+          {
+            "id": 502,
+            "keyword": "а что если парашют не раскроется новый д",
+            "source": "suggestion",
+            "lifecycle": "probation",
+            "priority": false,
+            "last_checked": "2026-10-11T02:50:09.961435+00:00"
+          }
+        ]
+      }
+    ],
+    "seed_127_131_selected": [
+      {
+        "batch": 0,
+        "id": 127
+      },
+      {
+        "batch": 0,
+        "id": 128
+      },
+      {
+        "batch": 1,
+        "id": 129
+      },
+      {
+        "batch": 1,
+        "id": 130
+      },
+      {
+        "batch": 2,
+        "id": 131
+      }
+    ],
+    "never_checked_probation_picks": 5,
+    "old_probation_picks": 31,
+    "remaining_due_after": 1603
+  },
+  "conclusions": {
+    "promise_probation_6h_at_current_backlog": false,
+    "honest_scheduling_interval_hours": 44.72,
+    "exploration_slots_not_in_theoretical_prob_budget": true
+  }
+}

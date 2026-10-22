@@ -17,7 +17,6 @@ from app.models.orm import (
     VideoFormat,
     VideoFormatEnrichmentAttempt,
 )
-from app.services.channel_subscriber_enrichment import attempt_subscriber_fetch_due
 from app.services.format_enrichment_attempts import (
     FORMAT_ENRICHMENT_RETRY_OUTCOMES,
     format_enrichment_retry_due,
@@ -28,6 +27,7 @@ from app.services.channel_subscriber_backfill import (
     SUBSCRIBERS_API_KNOWN,
     SUBSCRIBERS_API_MISSING,
 )
+from app.services.enrichment_queue_split import pick_with_backlog_quota
 from app.services.metrics import ensure_utc, utc_now
 from app.services.radar_enrichment_config import RadarEnrichmentSettings, radar_enrichment_settings
 from app.services.radar_target_eligibility import RADAR_MAX_CHANNEL_SUBSCRIBERS, resolve_known_subscribers
@@ -44,6 +44,72 @@ class RadarEnrichmentPassContext:
     pass_sequence: int = 0
     fetched_channel_ids: frozenset[str] = frozenset()
     fetched_video_ids: frozenset[str] = frozenset()
+
+
+_SUBSCRIBER_SELECTION_PAGE_SIZE = 500
+
+
+def _subscriber_fetch_due_sql(
+    *,
+    reference: datetime,
+    cfg: RadarEnrichmentSettings,
+):
+    hidden_cutoff = reference - timedelta(hours=cfg.subscriber_hidden_cooldown_hours)
+    retry_cutoff = reference - timedelta(hours=cfg.subscriber_retry_after_hours)
+    known_cutoff = reference - timedelta(days=cfg.subscriber_known_recheck_days)
+    known_recheck = cfg.subscriber_known_recheck_days > 0
+    return or_(
+        Channel.subscribers_api_status.is_(None),
+        and_(
+            Channel.subscribers_api_status == SUBSCRIBERS_API_KNOWN,
+            known_recheck,
+            or_(
+                Channel.subscribers_api_checked_at.is_(None),
+                Channel.subscribers_api_checked_at <= known_cutoff,
+            ),
+        ),
+        and_(
+            Channel.subscribers_api_status == SUBSCRIBERS_API_HIDDEN,
+            Channel.subscribers_api_checked_at.isnot(None),
+            Channel.subscribers_api_checked_at <= hidden_cutoff,
+        ),
+        and_(
+            Channel.subscribers_api_status.in_((SUBSCRIBERS_API_FAILED, SUBSCRIBERS_API_MISSING)),
+            or_(
+                Channel.subscribers_api_checked_at.is_(None),
+                Channel.subscribers_api_checked_at <= retry_cutoff,
+            ),
+        ),
+    )
+
+
+def _orphan_attempt_fetch_due_sql(
+    *,
+    reference: datetime,
+    cfg: RadarEnrichmentSettings,
+):
+    hidden_cutoff = reference - timedelta(hours=cfg.subscriber_hidden_cooldown_hours)
+    retry_cutoff = reference - timedelta(hours=cfg.subscriber_retry_after_hours)
+    known_cutoff = reference - timedelta(days=cfg.subscriber_known_recheck_days)
+    known_recheck = cfg.subscriber_known_recheck_days > 0
+    attempt = ChannelSubscriberEnrichmentAttempt
+    return or_(
+        attempt.channel_id.is_(None),
+        attempt.last_outcome.is_(None),
+        and_(
+            attempt.last_outcome == SUBSCRIBERS_API_KNOWN,
+            known_recheck,
+            attempt.last_attempt_at <= known_cutoff,
+        ),
+        and_(
+            attempt.last_outcome == SUBSCRIBERS_API_HIDDEN,
+            attempt.last_attempt_at <= hidden_cutoff,
+        ),
+        and_(
+            attempt.last_outcome.in_((SUBSCRIBERS_API_FAILED, SUBSCRIBERS_API_MISSING)),
+            attempt.last_attempt_at <= retry_cutoff,
+        ),
+    )
 
 
 def _channel_subscriber_fetch_due(
@@ -87,7 +153,7 @@ def _channel_priority(
     else:
         band = 2
     tie = (zlib.crc32(channel_id.encode("utf-8")) ^ pass_sequence) if band == 2 else 0
-    return (band, tie)
+    return (band, tie, channel_id)
 
 
 def select_subscriber_enrichment_channel_ids(
@@ -117,41 +183,59 @@ def select_subscriber_enrichment_channel_ids(
     )
 
     exclude = set(context.fetched_channel_ids)
-    stmt = select(Channel).order_by(Channel.updated_at.desc()).limit(max(limit * 20, 500))
+    fetch_due = _subscriber_fetch_due_sql(reference=reference, cfg=cfg)
     candidates: list[tuple[tuple, str]] = []
     seen: set[str] = set()
-    for channel in session.scalars(stmt).all():
-        if channel.id in exclude:
-            continue
-        if not _channel_subscriber_fetch_due(channel, now=reference, settings=cfg):
-            continue
-        key = _channel_priority(channel.id, context=context, recent_channel_ids=recent_channel_ids, pass_sequence=context.pass_sequence)
-        candidates.append((key, channel.id))
-        seen.add(channel.id)
 
-    orphan_ids = session.scalars(
-        select(Video.channel_id)
-        .distinct()
-        .where(
-            Video.channel_id.is_not(None),
-            ~Video.channel_id.in_(select(Channel.id)),
-        )
-        .limit(max(limit * 10, 200)),
-    ).all()
-    if orphan_ids:
-        attempts = {
-            row.channel_id: row
-            for row in session.scalars(
-                select(ChannelSubscriberEnrichmentAttempt).where(
-                    ChannelSubscriberEnrichmentAttempt.channel_id.in_(orphan_ids),
-                ),
-            ).all()
-        }
-        for cid in orphan_ids:
-            if not cid or cid in exclude or cid in seen:
+    cursor_id = ""
+    while True:
+        page = session.scalars(
+            select(Channel)
+            .where(fetch_due)
+            .where(Channel.id > cursor_id)
+            .order_by(Channel.id)
+            .limit(_SUBSCRIBER_SELECTION_PAGE_SIZE),
+        ).all()
+        if not page:
+            break
+        cursor_id = page[-1].id
+        for channel in page:
+            if channel.id in exclude or channel.id in seen:
                 continue
-            attempt = attempts.get(cid)
-            if attempt is not None and not attempt_subscriber_fetch_due(attempt, now=reference, settings=cfg):
+            key = _channel_priority(
+                channel.id,
+                context=context,
+                recent_channel_ids=recent_channel_ids,
+                pass_sequence=context.pass_sequence,
+            )
+            candidates.append((key, channel.id))
+            seen.add(channel.id)
+
+    orphan_cursor = ""
+    channel_exists = select(Channel.id).where(Channel.id == Video.channel_id).correlate(Video)
+    attempt_due = _orphan_attempt_fetch_due_sql(reference=reference, cfg=cfg)
+    while True:
+        orphan_page = session.scalars(
+            select(Video.channel_id)
+            .distinct()
+            .outerjoin(
+                ChannelSubscriberEnrichmentAttempt,
+                ChannelSubscriberEnrichmentAttempt.channel_id == Video.channel_id,
+            )
+            .where(
+                Video.channel_id.is_not(None),
+                Video.channel_id > orphan_cursor,
+                ~exists(channel_exists),
+                attempt_due,
+            )
+            .order_by(Video.channel_id)
+            .limit(_SUBSCRIBER_SELECTION_PAGE_SIZE),
+        ).all()
+        if not orphan_page:
+            break
+        orphan_cursor = orphan_page[-1]
+        for cid in orphan_page:
+            if not cid or cid in exclude or cid in seen:
                 continue
             key = _channel_priority(
                 cid,
@@ -163,12 +247,12 @@ def select_subscriber_enrichment_channel_ids(
             seen.add(cid)
 
     candidates.sort(key=lambda item: item[0])
-    out: list[str] = []
-    for _, cid in candidates:
-        out.append(cid)
-        if len(out) >= limit:
-            break
-    return out
+    return pick_with_backlog_quota(
+        candidates,
+        limit=limit,
+        backlog_fraction=cfg.enrichment_backlog_pass_fraction,
+        backlog_band=2,
+    )
 
 
 def _format_priority(
@@ -341,11 +425,13 @@ def select_format_enrichment_video_ids(
             candidates.append((key, video.id))
 
     candidates.sort(key=lambda item: item[0])
-    out: list[str] = []
-    for _, vid in candidates:
-        out.append(vid)
-        if len(out) >= limit:
-            break
+    out = pick_with_backlog_quota(
+        candidates,
+        limit=limit,
+        backlog_fraction=cfg.enrichment_backlog_pass_fraction,
+        backlog_band=2,
+        band_index=1,
+    )
 
     if selection_profile is not None:
         selection_profile.clear()

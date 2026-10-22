@@ -1,0 +1,40 @@
+{
+  "phase": "before",
+  "base": "http://127.0.0.1:3100",
+  "checks": [
+    {
+      "viewport": "desktop",
+      "minecraft": {
+        "familyKey": "family:kw:1497",
+        "url": "http://127.0.0.1:3100/opportunities/families/family%3Akw%3A1497",
+        "detailLinks": 0,
+        "members": 25,
+        "saveControls": 1
+      },
+      "small": {
+        "familyKey": "family:kw:181",
+        "url": "http://127.0.0.1:3100/opportunities/families/family%3Akw%3A181",
+        "detailLinks": 0,
+        "members": 29,
+        "saveControls": 1
+      }
+    },
+    {
+      "viewport": "390px",
+      "minecraft": {
+        "familyKey": "family:kw:1497",
+        "url": "http://127.0.0.1:3100/opportunities/families/family%3Akw%3A1497",
+        "detailLinks": 0,
+        "members": 25,
+        "saveControls": 1
+      },
+      "small": {
+        "familyKey": "family:kw:181",
+        "url": "http://127.0.0.1:3100/opportunities/families/family%3Akw%3A181",
+        "detailLinks": 0,
+        "members": 29,
+        "saveControls": 1
+      }
+    }
+  ]
+}

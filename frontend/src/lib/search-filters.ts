@@ -137,6 +137,17 @@ export interface SearchRequestPayload {
   sort_by: string;
 }
 
+export function filtersNeedChannelBrowse(advanced: SearchFilters): boolean {
+  return (
+    advanced.channel_views_min !== null ||
+    advanced.channel_views_max !== null ||
+    advanced.channel_videos_min !== null ||
+    advanced.channel_videos_max !== null ||
+    advanced.channel_age_min !== null ||
+    advanced.channel_age_max !== null
+  );
+}
+
 export function buildSearchPayload(
   query: string,
   base: BaseFilters,

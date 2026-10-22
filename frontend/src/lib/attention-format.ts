@@ -1,5 +1,14 @@
-import { formatAgeHours, formatDateTimeLocal, formatMonitoringViews, formatMonitoringVph } from "@/lib/monitoring-format";
-import { formatCompactNumber, youtubeThumbnail, youtubeVideoUrl } from "@/lib/utils";
+import {
+  formatAgeHours,
+  formatDateTimeLocal,
+  formatMonitoringViews,
+  formatMonitoringVph,
+} from "@/lib/monitoring-format";
+import {
+  formatCompactNumber,
+  youtubeThumbnail,
+  youtubeVideoUrl,
+} from "@/lib/utils";
 
 import type { AttentionPattern, AttentionVideoWinner } from "./attention-types";
 
@@ -13,12 +22,17 @@ export function rewriteHumanReason(text: string): string {
     "$1 видео подходят для анализа Breakout",
   );
   out = out.replace(/breakout-eligible/gi, "подходят для анализа Breakout");
-  out = out.replace(/qualify for Breakout analysis/gi, "подходят для анализа Breakout");
+  out = out.replace(
+    /qualify for Breakout analysis/gi,
+    "подходят для анализа Breakout",
+  );
   out = out.replace(/^Context:/gi, "Контекст:");
   return out;
 }
 
-export function humanReasonsForDisplay(reasons: string[] | undefined): string[] {
+export function humanReasonsForDisplay(
+  reasons: string[] | undefined,
+): string[] {
   return (reasons ?? []).map(rewriteHumanReason);
 }
 
@@ -31,9 +45,9 @@ export function groupingSourceLabel(kind: string): string {
     case "title_phrase":
       return "Источник группировки: повторяющаяся фраза в названии";
     case "keyword_provenance":
-      return "Источник группировки: общий поисковый keyword";
+      return "Источник группировки: общий поисковый запрос";
     case "video_topic":
-      return "Источник группировки: общий topic";
+      return "Источник группировки: общая тема";
     default:
       return `Источник группировки: ${kind}`;
   }
@@ -44,43 +58,53 @@ export function groupingSourceShort(kind: string): string {
     case "title_phrase":
       return "фраза в названии";
     case "keyword_provenance":
-      return "поисковый keyword";
+      return "поисковый запрос";
     case "video_topic":
-      return "video topic";
+      return "тема видео";
     default:
       return kind;
   }
 }
 
-export function formatOptionalCount(value: number | null | undefined): string | null {
+export function formatOptionalCount(
+  value: number | null | undefined,
+): string | null {
   if (value == null || Number.isNaN(value)) {
     return null;
   }
   return formatCompactNumber(value);
 }
 
-export function formatOptionalViews(value: number | null | undefined): string | null {
+export function formatOptionalViews(
+  value: number | null | undefined,
+): string | null {
   if (value == null) {
     return null;
   }
   return formatMonitoringViews(value);
 }
 
-export function formatOptionalVph(value: number | null | undefined): string | null {
+export function formatOptionalVph(
+  value: number | null | undefined,
+): string | null {
   if (value == null || Number.isNaN(value)) {
     return null;
   }
   return `${formatMonitoringVph(value)} VPH`;
 }
 
-export function formatOptionalSubscribers(value: number | null | undefined): string | null {
+export function formatOptionalSubscribers(
+  value: number | null | undefined,
+): string | null {
   if (value == null || Number.isNaN(value) || value <= 0) {
     return null;
   }
   return formatCompactNumber(value);
 }
 
-export function formatOptionalAge(hours: number | null | undefined): string | null {
+export function formatOptionalAge(
+  hours: number | null | undefined,
+): string | null {
   if (hours == null || Number.isNaN(hours)) {
     return null;
   }
@@ -142,16 +166,32 @@ export type PatternActivity = {
   label: string;
 };
 
-export function patternActivity(pattern: Pick<
-  AttentionPattern,
-  "videos_previous_48_24h" | "videos_previous_24h" | "videos_last_24h" | "first_seen_at" | "latest_seen_at"
->): PatternActivity {
+export function patternActivity(
+  pattern: Pick<
+    AttentionPattern,
+    | "videos_previous_48_24h"
+    | "videos_previous_24h"
+    | "videos_last_24h"
+    | "first_seen_at"
+    | "latest_seen_at"
+  >,
+): PatternActivity {
   const previous48 = pattern.videos_previous_48_24h ?? 0;
   const previous24 = pattern.videos_previous_24h ?? 0;
   const last24 = pattern.videos_last_24h ?? 0;
-  const hasAny = previous48 > 0 || previous24 > 0 || last24 > 0 || Boolean(pattern.first_seen_at || pattern.latest_seen_at);
+  const hasAny =
+    previous48 > 0 ||
+    previous24 > 0 ||
+    last24 > 0 ||
+    Boolean(pattern.first_seen_at || pattern.latest_seen_at);
   if (!hasAny) {
-    return { available: false, previous48, previous24, last24, label: "Недостаточно истории" };
+    return {
+      available: false,
+      previous48,
+      previous24,
+      last24,
+      label: "Недостаточно истории",
+    };
   }
   return {
     available: true,
@@ -162,8 +202,11 @@ export function patternActivity(pattern: Pick<
   };
 }
 
-export function confirmed72hCount(videos: Pick<AttentionVideoWinner, "delayed_outcome_state">[]): number {
-  return videos.filter((row) => row.delayed_outcome_state === "confirmed").length;
+export function confirmed72hCount(
+  videos: Pick<AttentionVideoWinner, "delayed_outcome_state">[],
+): number {
+  return videos.filter((row) => row.delayed_outcome_state === "confirmed")
+    .length;
 }
 
 export function winnerSignalFlags(row: {
@@ -183,13 +226,20 @@ export function winnerSignalFlags(row: {
   return {
     winner: Boolean(row.in_winner_snapshot) || codes.has("breakout_high_rank"),
     accelerating: row.acceleration_state === "accelerating",
-    confirmed72h: row.delayed_outcome_state === "confirmed" || codes.has("confirmed_72h_growth"),
+    confirmed72h:
+      row.delayed_outcome_state === "confirmed" ||
+      codes.has("confirmed_72h_growth"),
     smallChannel: codes.has("small_channel_in_observed_universe"),
-    strongerThanChannel: codes.has("channel_relative_outlier") || row.channel_relative_signal?.status === "production_ready",
+    strongerThanChannel:
+      codes.has("channel_relative_outlier") ||
+      row.channel_relative_signal?.status === "production_ready",
   };
 }
 
-export function canonicalYoutubeUrl(videoId: string, stored?: string | null): string {
+export function canonicalYoutubeUrl(
+  videoId: string,
+  stored?: string | null,
+): string {
   if (stored && stored.startsWith("https://www.youtube.com/watch?v=")) {
     return stored;
   }

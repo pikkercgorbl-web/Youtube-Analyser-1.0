@@ -65,11 +65,28 @@ python scripts/run_radar_enrichment_pass.py --dry-run
 
 Attention refresh remains a separate one-shot (`scripts/refresh_attention_engine.py`); it reads the DB only.
 
+## Keyword expansion pass (Stage 5)
+
+When `KEYWORD_EXPANSION_AFTER_DISCOVERY=1` (default **off**), after enrichment (if any) the worker runs **one expansion batch** in a **separate DB session** (errors do not roll back discovery):
+
+- Seeds = keywords that **completed discovery successfully** in that cycle (`DiscoveryKeywordSummary.status == ok`).
+- Reuses `run_keyword_expansion_orchestrated_batch` (admission, dedup, cooldown, depth, budgets).
+- Sources: autocomplete (`suggestion`, `related` via InnerTube) and `channel` (`Video.topic` from persisted hits). **No LLM source** in this pipeline (stage 7 is separate).
+- New keywords: `probation` + `source_type` + `parent_keyword_id`; not expanded again in the same orchestration run.
+
+Manual / API (unchanged):
+
+```bash
+python scripts/run_keyword_expansion_orchestrator.py --seed-id ID [--dry-run]
+python scripts/run_keyword_expansion.py --seed-id ID [--dry-run]
+POST /api/keywords/{id}/expand
+```
+
 ## What it does NOT do
 
-- LLM or keyword expansion
+- LLM keyword expansion (planned stage 7; `SOURCE_LLM` not wired to orchestrator)
 - Keyword scoring, archive, or deletion
-- Related-query expansion
+- Automatic lifecycle promotion/demotion
 - Monitoring cycles or `VideoSnapshot` writes (monitoring worker still separate)
 - Alerts or ranking changes
 

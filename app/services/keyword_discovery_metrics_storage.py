@@ -8,7 +8,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from app.integrations.youtube.client import LiveBroadcastStatus, VideoSearchModel, video_is_stream_content
-from app.models.orm import KeywordDiscoveryHit, KeywordScanRun
+from app.models.orm import KeywordDiscoveryHit, Video, KeywordScanRun
 from app.services.discovery_keyword_scan import KeywordDiscoveryScanResult
 from app.services.radar_candidate import RadarCandidate
 
@@ -151,4 +151,8 @@ def mark_hits_persisted_for_monitoring(
     ).all()
     for hit in hits:
         hit.persisted_for_monitoring = True
+    for vid in video_ids:
+        video = session.get(Video, vid)
+        if video is not None:
+            video.automatic_monitoring_withheld = False
     session.flush()

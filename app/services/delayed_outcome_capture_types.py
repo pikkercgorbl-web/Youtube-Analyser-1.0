@@ -45,6 +45,29 @@ class OutcomeVideoFetchCandidate:
     priority_hours_to_window_end: float
     observation_count: int
     states: tuple[OutcomeCaptureState, ...]
+    window_end: datetime | None = None
+    is_di_winner_priority: bool = False
+
+
+@dataclass(slots=True)
+class OutcomeCaptureSelectionInstrumentation:
+    """Planner/cycle counters: selection vs successful capture (Stage 1.23C.1A)."""
+
+    priority_enabled: bool = False
+    priority_due: int = 0
+    background_due: int = 0
+    priority_selected: int = 0
+    background_selected: int = 0
+    priority_deferred: int = 0
+    background_deferred: int = 0
+    priority_inserted: int = 0
+    background_inserted: int = 0
+    priority_fetch_failed: int = 0
+    background_fetch_failed: int = 0
+    priority_duplicate: int = 0
+    background_duplicate: int = 0
+    priority_missing_video: int = 0
+    background_missing_video: int = 0
 
 
 @dataclass
@@ -60,3 +83,7 @@ class DelayedOutcomeCapturePlan:
     unique_due_video_count: int = 0
     observations: list[OutcomeObservationPlan] = field(default_factory=list)
     fetch_candidates: list[OutcomeVideoFetchCandidate] = field(default_factory=list)
+    selected_fetch_candidates: list[OutcomeVideoFetchCandidate] = field(default_factory=list)
+    selection: OutcomeCaptureSelectionInstrumentation = field(
+        default_factory=OutcomeCaptureSelectionInstrumentation,
+    )

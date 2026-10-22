@@ -1,0 +1,47 @@
+{
+  "task": "Fix 3B.1 monitoring worker rollout + one live cycle",
+  "database_verified": "127.0.0.1:5433/youtube_radar_restore_check (youtube_radar_restore_check, not Supabase)",
+  "monitoring_worker_before": {
+    "pid": 6604,
+    "command": "python scripts/run_monitoring_worker.py --interval-seconds 900 --error-backoff-seconds 300"
+  },
+  "monitoring_worker_after": {
+    "pid": 31588,
+    "powershell_pid": 31228,
+    "started_via": "scripts/start-monitoring.ps1",
+    "command": "python scripts/run_monitoring_worker.py --interval-seconds 900 --error-backoff-seconds 300"
+  },
+  "pre_restart_snapshot_utc": "2026-10-13T11:02:10Z",
+  "pre_last_cycle": {
+    "run_id": "monitoring_20261013T105529Z_6463a1f1",
+    "cycle_status": "partial",
+    "selected": 12,
+    "inserted": 11,
+    "missing": 1,
+    "unfinished_cycle": false,
+    "lock_holder": "LAPTOP-K7VTSODB:1"
+  },
+  "post_first_cycle_utc": "2026-10-13T11:03:10Z",
+  "post_first_cycle": {
+    "run_id": "monitoring_20261013T110306Z_6c86b566",
+    "cycle_status": "ok",
+    "selected": 14,
+    "inserted": 14,
+    "missing": 0,
+    "fetch_failed": 0
+  },
+  "yxodhWM0RiI_cp24": {
+    "last_missing_attempt_utc": "2026-10-13T10:55:29.274848Z",
+    "retry_interval_seconds": 12960,
+    "retry_at_utc": "2026-10-13T14:31:29.274848Z",
+    "cooldown_active_at_post_cycle": true,
+    "in_post_cycle_capture_outcomes": false,
+    "interpretation": "Cooldown suppressed API capture; no new missing row for run monitoring_20261013T110306Z_6c86b566. cp24 not expired (checkpoint expiry age ~36h per policy)."
+  },
+  "comparison_previous_partial": {
+    "note": "Prior cycle selected=12, missing=1 (YXodh pattern). Post-restart cycle missing=0 and no YXodh outcome — consistent with suppression, not with continued no-item hammering."
+  },
+  "single_worker_confirmed": true,
+  "lock_reset_manually": false,
+  "checkpoints_budgets_outcomes_history_modified": false
+}

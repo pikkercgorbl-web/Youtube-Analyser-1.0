@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 
 from app.services.attention_engine_types import (
@@ -182,6 +182,7 @@ def build_pattern_candidates(
     winners: list[VideoWinner],
     now: datetime,
     publishable_confirmed_ids: frozenset[str] | None = None,
+    pattern_build_stats: dict[str, int] | None = None,
 ) -> list[PatternCandidate]:
     """
     Conservative grouping: keyword provenance, then title ngrams, then Video.topic.
@@ -298,4 +299,32 @@ def build_pattern_candidates(
         )
 
     patterns.sort(key=sort_key)
+    if pattern_build_stats is not None:
+        before = Counter(row.kind for row in patterns)
+        capped = patterns[: config.pattern_limit]
+        after = Counter(row.kind for row in capped)
+        pattern_build_stats.clear()
+        pattern_build_stats.update(
+            {
+                "pattern_candidates_total_before_cap": len(patterns),
+                "pattern_candidates_total_after_cap": len(capped),
+                "pattern_candidates_title_phrase_before_cap": before.get("title_phrase", 0),
+                "pattern_candidates_title_phrase_after_cap": after.get("title_phrase", 0),
+                "pattern_candidates_title_phrase_dropped_by_cap": max(
+                    0,
+                    before.get("title_phrase", 0) - after.get("title_phrase", 0),
+                ),
+                "pattern_candidates_keyword_provenance_before_cap": before.get(
+                    "keyword_provenance",
+                    0,
+                ),
+                "pattern_candidates_keyword_provenance_after_cap": after.get(
+                    "keyword_provenance",
+                    0,
+                ),
+                "pattern_candidates_video_topic_before_cap": before.get("video_topic", 0),
+                "pattern_candidates_video_topic_after_cap": after.get("video_topic", 0),
+            },
+        )
+        return capped
     return patterns[: config.pattern_limit]

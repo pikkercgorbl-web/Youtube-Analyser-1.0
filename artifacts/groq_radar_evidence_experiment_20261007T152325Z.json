@@ -1,0 +1,464 @@
+{
+  "started_at_utc": "2026-10-07T15:23:25.746805+00:00",
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+  "groq_api_key_configured": true,
+  "db_read_only": true,
+  "note": "No DB writes, no keyword insert, no workers.",
+  "evidence_source_note": "no_exploration_observations; using keyword_discovery_hit",
+  "packet_count": 5,
+  "input_snapshot": "artifacts\\groq_radar_evidence_packets_20261007T152325Z.json",
+  "stopped_reason": "HTTP 429 rate limit — remaining packets skipped",
+  "runs": [
+    {
+      "packet_id": "keyword:1",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "AI tools",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 3243,
+      "api": {
+        "http_status": 200,
+        "duration_seconds": 1.898,
+        "rate_limit_headers": {
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "999",
+          "x-ratelimit-remaining-tokens": "6222",
+          "x-ratelimit-reset-requests": "1m26.4s",
+          "x-ratelimit-reset-tokens": "13.335s",
+          "x-request-id": "req_01m4bjq5nwep0rh9fn0gqpv759"
+        },
+        "response_model": "openai/gpt-oss-120b",
+        "usage": {
+          "queue_time": 0.005045127,
+          "prompt_tokens": 1426,
+          "prompt_time": 0.075554544,
+          "completion_tokens": 800,
+          "completion_time": 1.685596795,
+          "total_tokens": 2226,
+          "total_time": 1.761151339,
+          "completion_tokens_details": {
+            "reasoning_tokens": 653
+          }
+        },
+        "parse_error": "json_substring: Expecting ',' delimiter: line 7 column 6 (char 305)",
+        "parsed": null
+      },
+      "raw_assistant_content": "{\n  \"suggestions\": [\n    {\n      \"query\": \"videos with extremely high views per hour\",\n      \"reason\": \"These videos have exceptionally high VPH values (over 8,000), indicating viral or rapidly growing content.\",\n      \"source_video_ids\": [\"03Fc936si_c\", \"03ptRLlEHl4\", \"0DXbQ6Voao4\", \"0F7fGYpqOZg\"]\n    },\n    {\n      \"query\": \"videos with moderate views per hour (100-300)\",\n      \"reason\": \"These videos show VPH in the 100‑300 range, representing steady but not explosive growth.\",\n      \"",
+      "validated_suggestions": [],
+      "rejected_suggestions": [],
+      "parse_issues": [
+        {
+          "error": "json_substring: Expecting ',' delimiter: line 7 column 6 (char 305)"
+        }
+      ],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [],
+        "rejected_sample": [
+          {
+            "phrase": "02ow34",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "02ow34 s1ra",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "03fc936si_c",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "03jg4nmfel4",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "03ptrllehl4",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "052uvipx4my",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "06gfed7ai",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "084ivh5k0e8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0aqzqnk0cns",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0bln3m_mng8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0cdxshdwrdo",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0dxbq6voao4",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0f7fgypqozg",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0fwmpr41zg8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0geezts0rvq",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    },
+    {
+      "packet_id": "keyword:2",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "gaming",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 3337,
+      "api": {
+        "http_status": 200,
+        "duration_seconds": 1.948,
+        "rate_limit_headers": {
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "998",
+          "x-ratelimit-remaining-tokens": "4230",
+          "x-ratelimit-reset-requests": "2m52.8s",
+          "x-ratelimit-reset-tokens": "28.275s",
+          "x-request-id": "req_01m4bjq7kkes5bqbpzqyekk09w"
+        },
+        "response_model": "openai/gpt-oss-120b",
+        "usage": {
+          "queue_time": 0.038467008,
+          "prompt_tokens": 1454,
+          "prompt_time": 0.084916172,
+          "completion_tokens": 800,
+          "completion_time": 1.71443835,
+          "total_tokens": 2254,
+          "total_time": 1.799354522,
+          "completion_tokens_details": {
+            "reasoning_tokens": 647
+          }
+        },
+        "parse_error": "json_substring: Expecting ',' delimiter: line 12 column 6 (char 492)",
+        "parsed": null
+      },
+      "raw_assistant_content": "{\n  \"suggestions\": [\n    {\n      \"query\": \"gaming highlights\",\n      \"reason\": \"Several videos have extremely high views per hour, a pattern typical of popular gaming highlight reels.\",\n      \"source_video_ids\": [\"02HLygCthuE\", \"0falv6in1gA\", \"070Gii-VQBA\"]\n    },\n    {\n      \"query\": \"gameplay walkthrough\",\n      \"reason\": \"High view‑per‑hour counts suggest viewers are seeking detailed gameplay walkthroughs.\",\n      \"source_video_ids\": [\"06_mA3C4ahA\", \"0aRvAqR8H2k\", \"0477hdNDwYQ\"]\n    },\n",
+      "validated_suggestions": [],
+      "rejected_suggestions": [],
+      "parse_issues": [
+        {
+          "error": "json_substring: Expecting ',' delimiter: line 12 column 6 (char 492)"
+        }
+      ],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [],
+        "rejected_sample": [
+          {
+            "phrase": "00mmzridjfa",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "02hlygcthue",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0477hdndwyq",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "04_m81gmxgi",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "05474zeuj48",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "06_ma3c4aha",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "06dyvnmkavo",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "070gii",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "070gii vqba",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "09kix7rivt0",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "09xsgl5czv8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0_7khg8hpx8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0afmyyx4yds",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0arvaqr8h2k",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0dizhixecbs",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    },
+    {
+      "packet_id": "keyword:3",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "history",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 3267,
+      "api": {
+        "http_status": 200,
+        "duration_seconds": 2.168,
+        "rate_limit_headers": {
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "997",
+          "x-ratelimit-remaining-tokens": "1827",
+          "x-ratelimit-reset-requests": "4m19.2s",
+          "x-ratelimit-reset-tokens": "46.297s",
+          "x-request-id": "req_01m4bjq9kwe6hbn72n23xgtq6g"
+        },
+        "response_model": "openai/gpt-oss-120b",
+        "usage": {
+          "queue_time": 0.302134372,
+          "prompt_tokens": 1429,
+          "prompt_time": 0.075834762,
+          "completion_tokens": 800,
+          "completion_time": 1.6882985320000001,
+          "total_tokens": 2229,
+          "total_time": 1.764133294,
+          "completion_tokens_details": {
+            "reasoning_tokens": 798
+          }
+        },
+        "parse_error": "empty_content",
+        "parsed": null
+      },
+      "raw_assistant_content": "",
+      "validated_suggestions": [],
+      "rejected_suggestions": [],
+      "parse_issues": [
+        {
+          "error": "empty_content"
+        }
+      ],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [],
+        "rejected_sample": [
+          {
+            "phrase": "004djofhmc4",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "02ppfhe7o7s",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "05jmarxpn",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "05yflnvy0tm",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0761bdjy0oc",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "08up9",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "08up9 leuw8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "09n74wrro6k",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0a5gq8fc2no",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0alfe7yzjd8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0auamvumqro",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0bbnunikrhi",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0bich2cczyy",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0c0lb2lrbg8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0fkaxhxwdsg",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    },
+    {
+      "packet_id": "keyword:4",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "technology",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 3259,
+      "api": {
+        "http_status": 429,
+        "duration_seconds": 0.113,
+        "rate_limit_headers": {
+          "retry-after": "1",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "997",
+          "x-ratelimit-remaining-tokens": "2127",
+          "x-ratelimit-reset-requests": "4m19.2s",
+          "x-ratelimit-reset-tokens": "44.047s",
+          "x-request-id": "req_01m4bjqbtberwt2r5x93ngprve"
+        },
+        "error": "rate_limited_429",
+        "body": {
+          "error": {
+            "message": "Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m1xtnbymey1b1v3b5g46d6ye` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5873, Requested 2247. Please try again in 899.999999ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing",
+            "type": "tokens",
+            "code": "rate_limit_exceeded"
+          }
+        }
+      },
+      "raw_assistant_content": null,
+      "validated_suggestions": [],
+      "rejected_suggestions": [],
+      "parse_issues": [],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [],
+        "rejected_sample": [
+          {
+            "phrase": "01sxjjqhroe",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "03ptrllehl4",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "05lgzhz8qms",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "05vvbyywi2o",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0675al2kzd4",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "085mu7rhi90",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0biwlrdcz3w",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0bymsdr",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0bymsdr 4xc",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0c9",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0c9 pc2kwyc",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0cdfzu4_ete",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0d",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0d 5f8",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "0d 5f8 nolw",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    }
+  ],
+  "manual_review_table": [],
+  "api_calls_made": 4,
+  "finished_at_utc": "2026-10-07T15:23:33.360628+00:00",
+  "ok": false
+}

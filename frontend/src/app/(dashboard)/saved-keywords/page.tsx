@@ -6,6 +6,7 @@ import { Bookmark, Loader2, Pencil, Trash2, X } from "lucide-react";
 import { deleteSavedKeyword, fetchSavedKeywords, saveSavedKeyword } from "@/lib/api";
 import type { SavedKeywordItem } from "@/lib/types";
 import { cn, keywordScoreTextColor } from "@/lib/utils";
+import { LegacyArchivedBanner } from "@/components/layout/legacy-archived-banner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -69,6 +70,11 @@ export default function SavedKeywordsPage() {
 
   return (
     <div className="space-y-6">
+      <LegacyArchivedBanner
+        route="saved-keywords"
+        primaryHref="/saved"
+        primaryLabel="Перейти к сохранённым исследованиям"
+      />
       <header>
         <div className="flex items-center gap-2">
           <Bookmark className="h-6 w-6 text-primary" />

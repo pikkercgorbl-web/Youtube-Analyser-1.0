@@ -1,0 +1,60 @@
+{
+  "snapshot_at_utc": "2026-10-13T11:14:26.344802+00:00",
+  "throughput_assumption": {
+    "keyword_batch_size": 5,
+    "worker_interval_seconds": 300,
+    "cycles_per_day": 288.0,
+    "keyword_slots_per_day": 1440.0
+  },
+  "before_due_stats": {
+    "due_total": 1663,
+    "due_by_bucket": {
+      "seed_active": 53,
+      "probation": 1610
+    },
+    "seed_active_due_count": 53,
+    "seed_active_overdue_hours_p50": 12.4,
+    "seed_active_overdue_hours_p90": 14.96,
+    "seed_active_overdue_hours_max": 40.16,
+    "all_due_overdue_hours_p50": 26.01
+  },
+  "first_batch_legacy_ids": [
+    1697,
+    1698,
+    1699,
+    1700,
+    282
+  ],
+  "first_batch_tiered_ids": [
+    127,
+    128,
+    1932,
+    1933,
+    1934
+  ],
+  "simulated_day_slot_share_legacy": {
+    "suggestion|probation": 1374,
+    "related|probation": 10,
+    "channel|probation": 3,
+    "seed|active": 53
+  },
+  "simulated_day_slot_share_tiered_3c": {
+    "seed|active": 53,
+    "suggestion|probation": 1374,
+    "related|probation": 10,
+    "channel|probation": 3
+  },
+  "fulfillable_intervals": {
+    "policy_interval_hours": {
+      "probation": 6,
+      "active": 24,
+      "weak": 72
+    },
+    "estimated_keyword_slots_per_day": 1440.0,
+    "probation_due_now": 1610,
+    "effective_probation_interval_hours_honest": 26.83,
+    "can_honor_probation_6h_at_current_backlog": false,
+    "can_honor_active_24h_with_tiered_reserved_slots": true
+  },
+  "why_seed_waited_legacy": "Single pool sorts by overdue only; ~1600 suggestion|probation keys are more overdue (26–51h) than seed|active (~12–39h), so batch-5 cycles rarely reach seeds despite source tie-break."
+}

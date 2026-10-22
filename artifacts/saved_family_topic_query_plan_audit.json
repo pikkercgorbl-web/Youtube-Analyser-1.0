@@ -1,0 +1,169 @@
+{
+  "families": [
+    {
+      "id": 1,
+      "label": "memes then vs now died",
+      "mode": "auto",
+      "message": "В Attention к теме привязаны разные группы ключевых слов. Выберите одно направление или отредактируйте набор запросов — не объединяйте, например, мемы, Reddit и музыку в одну выдачу.",
+      "mixed_keyword_provenance": true,
+      "suggestions": [
+        {
+          "query": "memes then vs now died",
+          "source_type": "family_label",
+          "source_explanation": "Название сохранённой темы (в Attention у семьи 23 видео)."
+        },
+        {
+          "query": "мемы тогда и сейчас",
+          "source_type": "aligned_keyword",
+          "source_explanation": "Ключевое слово той же тематической группы, что и название темы (shared keyword provenance)."
+        },
+        {
+          "query": "memes now vs then edit",
+          "source_type": "aligned_keyword",
+          "source_explanation": "Ключевое слово той же тематической группы, что и название темы (shared keyword provenance)."
+        },
+        {
+          "query": "then vs now meme song",
+          "source_type": "aligned_keyword",
+          "source_explanation": "Ключевое слово той же тематической группы, что и название темы (shared keyword provenance)."
+        }
+      ],
+      "directions": [
+        {
+          "direction_id": "primary",
+          "label": "memes then vs now died",
+          "queries": [
+            "memes now vs then edit",
+            "мемы тогда и сейчас",
+            "then vs now meme song"
+          ]
+        },
+        {
+          "direction_id": "other_5",
+          "label": "weird facts about the male body",
+          "queries": [
+            "weird facts about the human body",
+            "weird facts about me",
+            "weird facts about the male body",
+            "weird facts about animals",
+            "weird facts about history"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "discipline meme",
+      "mode": "auto",
+      "message": "В Attention к теме привязаны разные группы ключевых слов. Выберите одно направление или отредактируйте набор запросов — не объединяйте, например, мемы, Reddit и музыку в одну выдачу.",
+      "mixed_keyword_provenance": true,
+      "suggestions": [
+        {
+          "query": "discipline meme",
+          "source_type": "family_label",
+          "source_explanation": "Название сохранённой темы (в Attention у семьи 16 видео)."
+        },
+        {
+          "query": "дисциплина",
+          "source_type": "aligned_keyword",
+          "source_explanation": "Ключевое слово той же тематической группы, что и название темы (shared keyword provenance)."
+        },
+        {
+          "query": "discipline song",
+          "source_type": "aligned_keyword",
+          "source_explanation": "Ключевое слово той же тематической группы, что и название темы (shared keyword provenance)."
+        },
+        {
+          "query": "memes now vs then edit",
+          "source_type": "aligned_keyword",
+          "source_explanation": "Ключевое слово той же тематической группы, что и название темы (shared keyword provenance)."
+        },
+        {
+          "query": "then vs now meme song",
+          "source_type": "aligned_keyword",
+          "source_explanation": "Ключевое слово той же тематической группы, что и название темы (shared keyword provenance)."
+        }
+      ],
+      "directions": [
+        {
+          "direction_id": "primary",
+          "label": "discipline meme",
+          "queries": [
+            "memes now vs then edit",
+            "then vs now meme song"
+          ]
+        },
+        {
+          "direction_id": "other_4",
+          "label": "what if i miss you for the rest of my life karaoke",
+          "queries": [
+            "what if it happened to you on a different day karaoke",
+            "what if it happened to you on a different day song",
+            "what if god was one of us karaoke",
+            "what if i miss you for the rest of my life karaoke"
+          ]
+        },
+        {
+          "direction_id": "other_5",
+          "label": "50 cent ayo technology",
+          "queries": [
+            "50 cent ayo technology",
+            "love ayo technology"
+          ]
+        },
+        {
+          "direction_id": "other_6",
+          "label": "self improvement is self destruction",
+          "queries": [
+            "self improvement is self destruction",
+            "self improvement challenges"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "what if",
+      "mode": "auto",
+      "message": "В Attention к теме привязаны разные группы ключевых слов. Выберите одно направление или отредактируйте набор запросов — не объединяйте, например, мемы, Reddit и музыку в одну выдачу.",
+      "mixed_keyword_provenance": true,
+      "suggestions": [
+        {
+          "query": "what if",
+          "source_type": "family_label",
+          "source_explanation": "Название сохранённой темы (в Attention у семьи 29 видео)."
+        },
+        {
+          "query": "что если",
+          "source_type": "aligned_keyword",
+          "source_explanation": "Ключевое слово той же тематической группы, что и название темы (shared keyword provenance)."
+        }
+      ],
+      "directions": [
+        {
+          "direction_id": "primary",
+          "label": "what if",
+          "queries": [
+            "что если",
+            "what if"
+          ]
+        },
+        {
+          "direction_id": "other_0",
+          "label": "space mysteries",
+          "queries": [
+            "space secrets documentary",
+            "space mysteries"
+          ]
+        }
+      ]
+    }
+  ],
+  "old_id1_queries": [
+    "memes then vs now died",
+    "doctor phonk",
+    "истории reddit 1 час",
+    "мемы тогда и сейчас",
+    "i will miss you for the rest of my life"
+  ]
+}

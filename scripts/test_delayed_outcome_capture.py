@@ -17,7 +17,15 @@ from sqlalchemy.orm import sessionmaker
 import app.models.orm  # noqa: F401
 from app.integrations.youtube.client import YouTubeVideoDetails
 from app.models.db import Base
-from app.models.orm import Channel, KeywordDiscoveryHit, TargetKeyword, Video, VideoSnapshot
+from app.models.orm import (
+    Channel,
+    DailyIntelligenceRunSnapshot,
+    DailyIntelligenceRunWinnerAppearance,
+    KeywordDiscoveryHit,
+    TargetKeyword,
+    Video,
+    VideoSnapshot,
+)
 from app.services.delayed_outcome_capture_config import (
     OUTCOME_CAPTURE_SOURCE,
     OutcomeCaptureBudgetPolicy,
@@ -25,9 +33,11 @@ from app.services.delayed_outcome_capture_config import (
 from app.services.delayed_outcome_capture_cycle import run_delayed_outcome_capture_cycle
 from app.services.delayed_outcome_capture_planner import (
     classify_outcome_observation,
+    load_di_winner_priority_video_ids,
     plan_delayed_outcome_capture,
+    select_fetch_candidates_for_cycle,
 )
-from app.services.delayed_outcome_capture_types import OutcomeObservationRecord
+from app.services.delayed_outcome_capture_types import OutcomeObservationRecord, OutcomeVideoFetchCandidate
 from app.services.keyword_performance_evaluation import (
     HORIZON_SNAPSHOT_TOLERANCE_HOURS,
     match_horizon_outcome,
@@ -448,7 +458,7 @@ def test_no_n_plus_one_snapshot_load() -> None:
     )
     session.commit()
     with patch(
-        "app.services.delayed_outcome_capture_planner.get_snapshots_for_videos",
+        "app.services.video_snapshot_storage.get_snapshots_for_videos",
         wraps=get_snapshots_for_videos,
     ) as mocked:
         plan_delayed_outcome_capture(session, reference=NOW)
@@ -506,6 +516,152 @@ def test_repeated_cycle_idempotent() -> None:
     assert plan.satisfied_count >= 1
 
 
+def _seed_di_appearance(session, video_id: str, *, run_id: str = "attn_run_1") -> None:
+    if session.get(DailyIntelligenceRunSnapshot, run_id) is None:
+        session.add(
+            DailyIntelligenceRunSnapshot(
+                source_run_id=run_id,
+                report_date=NOW.date(),
+                source_computed_at=NOW,
+                captured_at=NOW,
+                winner_count=1,
+                family_count=0,
+            ),
+        )
+        session.flush()
+    session.add(
+        DailyIntelligenceRunWinnerAppearance(
+            source_run_id=run_id,
+            report_date=NOW.date(),
+            source_computed_at=NOW,
+            video_id=video_id,
+            rank=1,
+            title="t",
+            channel_id="ch",
+            discovery_provenance_json="{}",
+            payload_json="{}",
+        ),
+    )
+    session.flush()
+
+
+def test_flag_off_matches_legacy_head_slice() -> None:
+    session = _session()
+    for idx in range(5):
+        vid = f"v{idx}"
+        _seed_video(session, vid)
+        kw = TargetKeyword(keyword=f"k{idx}", lifecycle_status="active", source_type="seed")
+        session.add(kw)
+        session.flush()
+        session.add(
+            KeywordDiscoveryHit(
+                keyword_id=kw.id,
+                video_id=vid,
+                discovery_run_id="r",
+                discovered_at=NOW - timedelta(hours=70),
+                views_at_discovery=1,
+            ),
+        )
+    session.commit()
+    plan = plan_delayed_outcome_capture(session, reference=NOW)
+    assert plan.selected_fetch_candidates == plan.fetch_candidates[:100]
+    assert plan.selection.priority_enabled is False
+
+
+def test_priority_budget_invariant_30_70() -> None:
+    budget = OutcomeCaptureBudgetPolicy(
+        max_videos_per_cycle=100,
+        di_winner_priority_enabled=True,
+        priority_max_slots=30,
+        background_min_slots=70,
+    )
+    pri_ids = frozenset({f"p{i}" for i in range(40)})
+    candidates = [
+        OutcomeVideoFetchCandidate(
+            video_id=f"p{i}",
+            channel_id="ch",
+            priority_hours_to_window_end=float(i),
+            observation_count=1,
+            states=("capture_due",),
+            window_end=NOW + timedelta(hours=10 - i),
+        )
+        for i in range(40)
+    ] + [
+        OutcomeVideoFetchCandidate(
+            video_id=f"b{i}",
+            channel_id="ch",
+            priority_hours_to_window_end=float(i),
+            observation_count=1,
+            states=("capture_due",),
+            window_end=NOW + timedelta(hours=20),
+        )
+        for i in range(80)
+    ]
+    selected, inst = select_fetch_candidates_for_cycle(
+        candidates,
+        budget=budget,
+        di_winner_video_ids=pri_ids,
+    )
+    assert len(selected) == 100
+    assert inst.priority_selected == 30
+    assert inst.background_selected == 70
+    assert sum(1 for row in selected if row.is_di_winner_priority) == 30
+
+
+def test_priority_dedup_one_video_multiple_appearances() -> None:
+    session = _session()
+    _seed_video(session, "v1")
+    _seed_di_appearance(session, "v1", run_id="run_a")
+    _seed_di_appearance(session, "v1", run_id="run_b")
+    kw = TargetKeyword(keyword="k", lifecycle_status="active", source_type="seed")
+    session.add(kw)
+    session.flush()
+    session.add(
+        KeywordDiscoveryHit(
+            keyword_id=kw.id,
+            video_id="v1",
+            discovery_run_id="r",
+            discovered_at=NOW - timedelta(hours=70),
+            views_at_discovery=5,
+        ),
+    )
+    session.commit()
+    assert load_di_winner_priority_video_ids(session) == frozenset({"v1"})
+    plan = plan_delayed_outcome_capture(
+        session,
+        reference=NOW,
+        budget=OutcomeCaptureBudgetPolicy(di_winner_priority_enabled=True),
+    )
+    assert plan.unique_due_video_count == 1
+    assert plan.selection.priority_due == 1
+    assert plan.selected_fetch_candidates[0].is_di_winner_priority
+
+
+def test_priority_excludes_missing_baseline_and_satisfied() -> None:
+    session = _session()
+    _seed_video(session, "v_no_views")
+    _seed_di_appearance(session, "v_no_views")
+    kw = TargetKeyword(keyword="k", lifecycle_status="active", source_type="seed")
+    session.add(kw)
+    session.flush()
+    session.add(
+        KeywordDiscoveryHit(
+            keyword_id=kw.id,
+            video_id="v_no_views",
+            discovery_run_id="r",
+            discovered_at=NOW - timedelta(hours=70),
+            views_at_discovery=None,
+        ),
+    )
+    session.commit()
+    plan = plan_delayed_outcome_capture(
+        session,
+        reference=NOW,
+        budget=OutcomeCaptureBudgetPolicy(di_winner_priority_enabled=True),
+    )
+    assert plan.selection.priority_due == 0
+
+
 def test_monitoring_cycle_unchanged_dry_run() -> None:
     session = _session()
     _seed_video(session)
@@ -532,6 +688,10 @@ def main() -> None:
         test_no_n_plus_one_snapshot_load,
         test_repeated_cycle_idempotent,
         test_monitoring_cycle_unchanged_dry_run,
+        test_flag_off_matches_legacy_head_slice,
+        test_priority_budget_invariant_30_70,
+        test_priority_dedup_one_video_multiple_appearances,
+        test_priority_excludes_missing_baseline_and_satisfied,
     ]
     for fn in tests:
         fn()

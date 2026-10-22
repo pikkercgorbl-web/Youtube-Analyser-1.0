@@ -24,6 +24,7 @@ from app.services.channel_velocity_baseline import (
     compute_channel_velocity_baseline_from_snapshots,
     snapshot_record_from_orm,
 )
+from app.services.snapshot_measurement import vph_series_from_snapshots
 from app.services.radar_candidate_analysis import _percentile
 from app.models.orm import VideoFormat
 from app.services.radar_target_eligibility import radar_target_rejection_reason
@@ -46,7 +47,9 @@ def _human_reasons(codes: list[str], rec: AttentionVideoRecord, *, growth: int |
     if REASON_CHANNEL_RELATIVE_OUTLIER in codes:
         lines.append("VPH is at least 2× this channel's age-aligned historical median (production-ready baseline)")
     if REASON_ACCELERATING in codes:
-        lines.append("VPH increased across 3+ snapshots (last ≥ 2× first)")
+        lines.append(
+            "average views-per-hour from publication rose across 3+ snapshot measurements (last ≥ 2× first)",
+        )
     if REASON_CONFIRMED_72H in codes:
         if growth is not None:
             lines.append(f"72h horizon snapshot shows +{growth} views vs discovery")
@@ -72,7 +75,10 @@ def _channel_relative(
     records = []
     for vid in sibling_ids:
         for row in bundle.extra_snapshots_by_video.get(vid, []):
-            records.append(snapshot_record_from_orm(row))
+            video = next((v for v in bundle.extra_channel_videos.get(channel_id, []) if v.id == vid), None)
+            if video is None:
+                video = rec.video if rec.video.id == vid else None
+            records.append(snapshot_record_from_orm(row, video=video))
     if not records:
         return ChannelRelativeSignal(
             status="unavailable",
@@ -142,7 +148,11 @@ def build_video_winners(
             ):
                 continue
         acceleration = classify_acceleration(
-            [snap.vph for snap in rec.snapshots],
+            vph_series_from_snapshots(
+                video=rec.video,
+                snapshots=rec.snapshots,
+                compute_before=now,
+            ),
             min_points=config.min_acceleration_snapshots,
         )
         delayed_state, delayed_growth = delayed_outcome_for_video(

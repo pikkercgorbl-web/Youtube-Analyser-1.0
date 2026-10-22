@@ -1,0 +1,937 @@
+{
+  "started_at_utc": "2026-10-07T15:24:14.769961+00:00",
+  "model": "openai/gpt-oss-120b",
+  "endpoint": "https://api.groq.com/openai/v1/chat/completions",
+  "groq_api_key_configured": true,
+  "db_read_only": true,
+  "note": "No DB writes, no keyword insert, no workers.",
+  "evidence_source_note": "no_exploration_observations; using keyword_discovery_hit",
+  "packet_count": 5,
+  "input_snapshot": "artifacts\\groq_radar_evidence_packets_20261007T152414Z.json",
+  "stopped_reason": "HTTP 429 rate limit — remaining packets skipped",
+  "runs": [
+    {
+      "packet_id": "keyword:146",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "реальные истории",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 4122,
+      "api": {
+        "http_status": 200,
+        "duration_seconds": 1.884,
+        "rate_limit_headers": {
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "996",
+          "x-ratelimit-remaining-tokens": "5539",
+          "x-ratelimit-reset-requests": "5m45.6s",
+          "x-ratelimit-reset-tokens": "18.457s",
+          "x-request-id": "req_01m4bjrqfte53tkpv0q88tjksg"
+        },
+        "response_model": "openai/gpt-oss-120b",
+        "usage": {
+          "queue_time": 0.005048181,
+          "prompt_tokens": 1661,
+          "prompt_time": 0.07932595,
+          "completion_tokens": 798,
+          "completion_time": 1.677723941,
+          "total_tokens": 2459,
+          "total_time": 1.7570498909999999,
+          "completion_tokens_details": {
+            "reasoning_tokens": 419
+          }
+        },
+        "parse_error": null,
+        "parsed": {
+          "suggestions": [
+            {
+              "query": "real life betrayal stories",
+              "reason": "Several videos describe personal betrayals such as a husband cheating, a mother‑in‑law humiliating a daughter‑in‑law, and a husband demanding money from his wife’s mother, indicating strong interest in betrayal narratives.",
+              "source_video_ids": [
+                "0bAwA1ZWIXk",
+                "09H9FEnBEQc",
+                "0E-tkcvVirA"
+              ]
+            },
+            {
+              "query": "real criminal stories early autumn",
+              "reason": "One video explicitly presents \"real criminal stories\" from the beginning of autumn, suggesting a demand for true crime content set in that seasonal context.",
+              "source_video_ids": [
+                "0f7ptUm3eEM"
+              ]
+            },
+            {
+              "query": "real stories of family inheritance scams",
+              "reason": "Videos feature plots about forced property transfers at a funeral and a husband demanding millions for his mother, highlighting scams involving family inheritance.",
+              "source_video_ids": [
+                "0FyjgTSAYt0",
+                "0aDT6eQ0WYA"
+              ]
+            },
+            {
+              "query": "real stories of mysterious abandoned places",
+              "reason": "A video describes buying an abandoned ranch and discovering four women inside, reflecting interest in eerie, abandoned‑location narratives.",
+              "source_video_ids": [
+                "09owcRnAXqI"
+              ]
+            },
+            {
+              "query": "real stories of extreme weather survival",
+              "reason": "One video recounts a person losing family in a severe frost and receiving a second chance, indicating audience interest in survival tales under harsh weather conditions.",
+              "source_video_ids": [
+                "0ffvruqIs6A"
+              ]
+            }
+          ]
+        }
+      },
+      "raw_assistant_content": "{\n  \"suggestions\": [\n    {\n      \"query\": \"real life betrayal stories\",\n      \"reason\": \"Several videos describe personal betrayals such as a husband cheating, a mother‑in‑law humiliating a daughter‑in‑law, and a husband demanding money from his wife’s mother, indicating strong interest in betrayal narratives.\",\n      \"source_video_ids\": [\"0bAwA1ZWIXk\", \"09H9FEnBEQc\", \"0E-tkcvVirA\"]\n    },\n    {\n      \"query\": \"real criminal stories early autumn\",\n      \"reason\": \"One video explicitly presents \\\"real criminal stories\\\" from the beginning of autumn, suggesting a demand for true crime content set in that seasonal context.\",\n      \"source_video_ids\": [\"0f7ptUm3eEM\"]\n    },\n    {\n      \"query\": \"real stories of family inheritance scams\",\n      \"reason\": \"Videos feature plots about forced property transfers at a funeral and a husband demanding millions for his mother, highlighting scams involving family inheritance.\",\n      \"source_video_ids\": [\"0FyjgTSAYt0\", \"0aDT6eQ0WYA\"]\n    },\n    {\n      \"query\": \"real stories of mysterious abandoned places\",\n      \"reason\": \"A video describes buying an abandoned ranch and discovering four women inside, reflecting interest in eerie, abandoned‑location narratives.\",\n      \"source_video_ids\": [\"09owcRnAXqI\"]\n    },\n    {\n      \"query\": \"real stories of extreme weather survival\",\n      \"reason\": \"One video recounts a person losing family in a severe frost and receiving a second chance, indicating audience interest in survival tales under harsh weather conditions.\",\n      \"source_video_ids\": [\"0ffvruqIs6A\"]\n    }\n  ]\n}",
+      "validated_suggestions": [
+        {
+          "query": "real life betrayal stories",
+          "reason": "Several videos describe personal betrayals such as a husband cheating, a mother‑in‑law humiliating a daughter‑in‑law, and a husband demanding money from his wife’s mother, indicating strong interest in betrayal narratives.",
+          "source_video_ids": [
+            "0bAwA1ZWIXk",
+            "09H9FEnBEQc",
+            "0E-tkcvVirA"
+          ],
+          "flags": []
+        },
+        {
+          "query": "real criminal stories early autumn",
+          "reason": "One video explicitly presents \"real criminal stories\" from the beginning of autumn, suggesting a demand for true crime content set in that seasonal context.",
+          "source_video_ids": [
+            "0f7ptUm3eEM"
+          ],
+          "flags": []
+        },
+        {
+          "query": "real stories of family inheritance scams",
+          "reason": "Videos feature plots about forced property transfers at a funeral and a husband demanding millions for his mother, highlighting scams involving family inheritance.",
+          "source_video_ids": [
+            "0FyjgTSAYt0",
+            "0aDT6eQ0WYA"
+          ],
+          "flags": []
+        },
+        {
+          "query": "real stories of mysterious abandoned places",
+          "reason": "A video describes buying an abandoned ranch and discovering four women inside, reflecting interest in eerie, abandoned‑location narratives.",
+          "source_video_ids": [
+            "09owcRnAXqI"
+          ],
+          "flags": []
+        },
+        {
+          "query": "real stories of extreme weather survival",
+          "reason": "One video recounts a person losing family in a severe frost and receiving a second chance, indicating audience interest in survival tales under harsh weather conditions.",
+          "source_video_ids": [
+            "0ffvruqIs6A"
+          ],
+          "flags": []
+        }
+      ],
+      "rejected_suggestions": [],
+      "parse_issues": [],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [
+          "его",
+          "ему",
+          "когда",
+          "лет",
+          "меня",
+          "муж",
+          "но",
+          "он",
+          "она",
+          "пока",
+          "свекровь",
+          "семью"
+        ],
+        "rejected_sample": [
+          {
+            "phrase": "2026",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "2026 реальные",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "2026 реальные криминальные",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "2026 реальные криминальные истории",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "srt",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бабушки",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бабушки подписывай",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бабушки подписывай дарственную",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бабушки подписывай дарственную маму",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бедняк",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бедняк получил",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бедняк получил горного",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бедняк получил горного бога",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бога",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "бога рентген",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    },
+    {
+      "packet_id": "keyword:148",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "что если",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 4165,
+      "api": {
+        "http_status": 200,
+        "duration_seconds": 2.161,
+        "rate_limit_headers": {
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "995",
+          "x-ratelimit-remaining-tokens": "3820",
+          "x-ratelimit-reset-requests": "7m12s",
+          "x-ratelimit-reset-tokens": "31.349s",
+          "x-request-id": "req_01m4bjrxtqenb9a6w7rb78n7hn"
+        },
+        "response_model": "openai/gpt-oss-120b",
+        "usage": {
+          "queue_time": 0.186196994,
+          "prompt_tokens": 1785,
+          "prompt_time": 0.078891482,
+          "completion_tokens": 854,
+          "completion_time": 1.7926294999999999,
+          "total_tokens": 2639,
+          "total_time": 1.871520982,
+          "completion_tokens_details": {
+            "reasoning_tokens": 453
+          }
+        },
+        "parse_error": null,
+        "parsed": {
+          "suggestions": [
+            {
+              "query": "what if you were born in India",
+              "reason": "Matches the Russian title \"Что если бы ты родился в Индии?\" which explores a hypothetical scenario of being born in India.",
+              "source_video_ids": [
+                "07woKSRDVEM"
+              ]
+            },
+            {
+              "query": "what if you refuse to go to light after death",
+              "reason": "Based on the video about a Sumerian tablet describing what happens if, after death, one refuses to go to the light.",
+              "source_video_ids": [
+                "044o12_kz4M"
+              ]
+            },
+            {
+              "query": "what if you have cursed energy",
+              "reason": "Derived from the title \"Что если бы у ДЕКУ была ПРОКЛЯТАЯ ЭНЕРГИЯ\" which asks a hypothetical about possessing cursed energy.",
+              "source_video_ids": [
+                "0hbSsxY3jd8"
+              ]
+            },
+            {
+              "query": "what if you commit a sin that angers your guardian angel",
+              "reason": "Inspired by the video \"ЭДГАР КЕЙСИ РАСКРЫВАЕТ: ОДИН ГРЕХ, КОТОРЫЙ ОСОБЕННО ОГОРЧАЕТ ВАШЕГО АНГЕЛА-ХРАНИТЕЛЯ\" which discusses a sin that especially upsets a guardian angel.",
+              "source_video_ids": [
+                "02t33h4hmsQ"
+              ]
+            },
+            {
+              "query": "what if men use tarot",
+              "reason": "From the title \"ТАРО ДЛЯ МУЖЧИН\" which poses a hypothetical about tarot practices aimed at men.",
+              "source_video_ids": [
+                "058w5fU6iwU"
+              ]
+            }
+          ]
+        }
+      },
+      "raw_assistant_content": "{\n  \"suggestions\": [\n    {\n      \"query\": \"what if you were born in India\",\n      \"reason\": \"Matches the Russian title \\\"Что если бы ты родился в Индии?\\\" which explores a hypothetical scenario of being born in India.\",\n      \"source_video_ids\": [\"07woKSRDVEM\"]\n    },\n    {\n      \"query\": \"what if you refuse to go to light after death\",\n      \"reason\": \"Based on the video about a Sumerian tablet describing what happens if, after death, one refuses to go to the light.\",\n      \"source_video_ids\": [\"044o12_kz4M\"]\n    },\n    {\n      \"query\": \"what if you have cursed energy\",\n      \"reason\": \"Derived from the title \\\"Что если бы у ДЕКУ была ПРОКЛЯТАЯ ЭНЕРГИЯ\\\" which asks a hypothetical about possessing cursed energy.\",\n      \"source_video_ids\": [\"0hbSsxY3jd8\"]\n    },\n    {\n      \"query\": \"what if you commit a sin that angers your guardian angel\",\n      \"reason\": \"Inspired by the video \\\"ЭДГАР КЕЙСИ РАСКРЫВАЕТ: ОДИН ГРЕХ, КОТОРЫЙ ОСОБЕННО ОГОРЧАЕТ ВАШЕГО АНГЕЛА-ХРАНИТЕЛЯ\\\" which discusses a sin that especially upsets a guardian angel.\",\n      \"source_video_ids\": [\"02t33h4hmsQ\"]\n    },\n    {\n      \"query\": \"what if men use tarot\",\n      \"reason\": \"From the title \\\"ТАРО ДЛЯ МУЖЧИН\\\" which poses a hypothetical about tarot practices aimed at men.\",\n      \"source_video_ids\": [\"058w5fU6iwU\"]\n    }\n  ]\n}",
+      "validated_suggestions": [
+        {
+          "query": "what if you were born in India",
+          "reason": "Matches the Russian title \"Что если бы ты родился в Индии?\" which explores a hypothetical scenario of being born in India.",
+          "source_video_ids": [
+            "07woKSRDVEM"
+          ],
+          "flags": []
+        },
+        {
+          "query": "what if you refuse to go to light after death",
+          "reason": "Based on the video about a Sumerian tablet describing what happens if, after death, one refuses to go to the light.",
+          "source_video_ids": [
+            "044o12_kz4M"
+          ],
+          "flags": []
+        },
+        {
+          "query": "what if you have cursed energy",
+          "reason": "Derived from the title \"Что если бы у ДЕКУ была ПРОКЛЯТАЯ ЭНЕРГИЯ\" which asks a hypothetical about possessing cursed energy.",
+          "source_video_ids": [
+            "0hbSsxY3jd8"
+          ],
+          "flags": []
+        },
+        {
+          "query": "what if you commit a sin that angers your guardian angel",
+          "reason": "Inspired by the video \"ЭДГАР КЕЙСИ РАСКРЫВАЕТ: ОДИН ГРЕХ, КОТОРЫЙ ОСОБЕННО ОГОРЧАЕТ ВАШЕГО АНГЕЛА-ХРАНИТЕЛЯ\" which discusses a sin that especially upsets a guardian angel.",
+          "source_video_ids": [
+            "02t33h4hmsQ"
+          ],
+          "flags": []
+        },
+        {
+          "query": "what if men use tarot",
+          "reason": "From the title \"ТАРО ДЛЯ МУЖЧИН\" which poses a hypothetical about tarot practices aimed at men.",
+          "source_video_ids": [
+            "058w5fU6iwU"
+          ],
+          "flags": []
+        }
+      ],
+      "rejected_suggestions": [],
+      "parse_issues": [],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [
+          "бы",
+          "если бы",
+          "мужчин",
+          "родился",
+          "ты"
+        ],
+        "rejected_sample": [
+          {
+            "phrase": "aftermath",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "aftermath bunker",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "aftermath bunker trader",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "bunker",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "bunker trader",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "busova",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "busova человеку",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "busova человеку нельзя",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "busova человеку нельзя отдавать",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "classic",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "classic second",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "classic second encounter",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "classic second encounter потею",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "encounter",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "encounter потею",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    },
+    {
+      "packet_id": "keyword:90",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "historical mysteries",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 3899,
+      "api": {
+        "http_status": 200,
+        "duration_seconds": 2.656,
+        "rate_limit_headers": {
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "994",
+          "x-ratelimit-remaining-tokens": "2421",
+          "x-ratelimit-reset-requests": "8m38.4s",
+          "x-ratelimit-reset-tokens": "41.842s",
+          "x-request-id": "req_01m4bjs3sqemab8ha0jvegcj6y"
+        },
+        "response_model": "openai/gpt-oss-120b",
+        "usage": {
+          "queue_time": 0.302612627,
+          "prompt_tokens": 1486,
+          "prompt_time": 0.088650736,
+          "completion_tokens": 1024,
+          "completion_time": 2.159363217,
+          "total_tokens": 2510,
+          "total_time": 2.248013953,
+          "completion_tokens_details": {
+            "reasoning_tokens": 639
+          }
+        },
+        "parse_error": "json_substring: Expecting ',' delimiter: line 22 column 6 (char 1169)",
+        "parsed": null
+      },
+      "raw_assistant_content": "{\n  \"suggestions\": [\n    {\n      \"query\": \"lost ancient armies mystery\",\n      \"reason\": \"Both the \\\"Lost Persian Army\\\" and the story of the king who sailed with 2,000 ships and never returned explore vanished military forces from history.\",\n      \"source_video_ids\": [\"00b__x1DFRM\", \"06GfED7aI-c\"]\n    },\n    {\n      \"query\": \"mysterious ship disappearances history\",\n      \"reason\": \"The video about the ghost ship of Diamond Shoals investigates a historic maritime vanishing, a classic theme for ship‑related mysteries.\",\n      \"source_video_ids\": [\"0DFJHDP3hAU\"]\n    },\n    {\n      \"query\": \"ancient treasure and artifact mysteries\",\n      \"reason\": \"Content covering the Koh‑i‑Noor diamond, how ancient looters broke into pyramids, and broader Egyptian secrets all focus on enigmatic valuable artifacts.\",\n      \"source_video_ids\": [\"0g2Ek1d8_qI\", \"0GLAyThWn84\", \"0GSTihqBS6g\"]\n    },\n    {\n      \"query\": \"mythical pirate colonies lost history\",\n      \"reason\": \"The video on Madagascar’s alleged Libertalia examines the possibility of a pirate republic that may never have existed, a popular historical mystery.\",\n      \"source_video_ids\": [\"0FK4V7rehIU\"]\n    },\n    {\n      \"query\": \"historical unsolved disappearances\",\n      \"reason\": \"Stories like the Dyatlov Pass tragedy, the vanished Persian army, and the king who never returned all deal with unexplained historical vanishings.\",\n      \"source_video_ids\": [\"09b-lzmNMck\", \"00b__x1DFRM\", \"06GfED7aI-c\"]\n",
+      "validated_suggestions": [],
+      "rejected_suggestions": [],
+      "parse_issues": [
+        {
+          "error": "json_substring: Expecting ',' delimiter: line 22 column 6 (char 1169)"
+        }
+      ],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [
+          "000",
+          "ancient",
+          "came",
+          "diamond",
+          "india",
+          "into",
+          "lost",
+          "never",
+          "really",
+          "what",
+          "who"
+        ],
+        "rejected_sample": [
+          {
+            "phrase": "000 ships",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "000 ships 1311",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "000 ships 1311 never",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "000 soldiers",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "000 soldiers really",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "000 soldiers really vanish",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "1311",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "1311 never",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "1311 never came",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "1311 never came back",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "500",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "500 year",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "500 year old",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "500 year old map",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "about",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    },
+    {
+      "packet_id": "keyword:143",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "путешествия",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 4027,
+      "api": {
+        "http_status": 200,
+        "duration_seconds": 1.511,
+        "rate_limit_headers": {
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "993",
+          "x-ratelimit-remaining-tokens": "427",
+          "x-ratelimit-reset-requests": "10m4.8s",
+          "x-ratelimit-reset-tokens": "56.797s",
+          "x-request-id": "req_01m4bjs9wcecn9kv1xydgbnq5r"
+        },
+        "response_model": "openai/gpt-oss-120b",
+        "usage": {
+          "queue_time": 0.004562433,
+          "prompt_tokens": 1674,
+          "prompt_time": 0.076298361,
+          "completion_tokens": 634,
+          "completion_time": 1.328166227,
+          "total_tokens": 2308,
+          "total_time": 1.404464588,
+          "completion_tokens_details": {
+            "reasoning_tokens": 297
+          }
+        },
+        "parse_error": null,
+        "parsed": {
+          "suggestions": [
+            {
+              "query": "Armenia travel vlog 5 days",
+              "reason": "Matches a 5‑day vlog exploring what to see and do in Yerevan, appealing to viewers looking for detailed Armenia travel guides.",
+              "source_video_ids": [
+                "03H32Gb1XBg"
+              ]
+            },
+            {
+              "query": "Jeju Island lava rock trail vlog",
+              "reason": "Corresponds to a dangerous trail on lava rocks in Jeju, South Korea, attracting adventure‑seeking travel audiences.",
+              "source_video_ids": [
+                "0BAEicMKqIg"
+              ]
+            },
+            {
+              "query": "Italy solo travel packing 15 nights minimalist",
+              "reason": "Reflects a 15‑night solo Italy trip packed into 4 kg, useful for minimalist backpackers searching for ultra‑light packing tips.",
+              "source_video_ids": [
+                "05EXVolCKf0"
+              ]
+            },
+            {
+              "query": "one night two day backpack packing review",
+              "reason": "Based on a short‑trip backpack packing video, ideal for viewers planning brief getaways and seeking gear recommendations.",
+              "source_video_ids": [
+                "0FX6vlEkYVg"
+              ]
+            },
+            {
+              "query": "Russian travel advice before going abroad",
+              "reason": "Derived from a Russian‑language warning video urging viewers to watch before traveling overseas, relevant for Russian‑speaking travelers seeking pre‑trip guidance.",
+              "source_video_ids": [
+                "042ZE0IKgEI"
+              ]
+            }
+          ]
+        }
+      },
+      "raw_assistant_content": "{\n  \"suggestions\": [\n    {\n      \"query\": \"Armenia travel vlog 5 days\",\n      \"reason\": \"Matches a 5‑day vlog exploring what to see and do in Yerevan, appealing to viewers looking for detailed Armenia travel guides.\",\n      \"source_video_ids\": [\"03H32Gb1XBg\"]\n    },\n    {\n      \"query\": \"Jeju Island lava rock trail vlog\",\n      \"reason\": \"Corresponds to a dangerous trail on lava rocks in Jeju, South Korea, attracting adventure‑seeking travel audiences.\",\n      \"source_video_ids\": [\"0BAEicMKqIg\"]\n    },\n    {\n      \"query\": \"Italy solo travel packing 15 nights minimalist\",\n      \"reason\": \"Reflects a 15‑night solo Italy trip packed into 4 kg, useful for minimalist backpackers searching for ultra‑light packing tips.\",\n      \"source_video_ids\": [\"05EXVolCKf0\"]\n    },\n    {\n      \"query\": \"one night two day backpack packing review\",\n      \"reason\": \"Based on a short‑trip backpack packing video, ideal for viewers planning brief getaways and seeking gear recommendations.\",\n      \"source_video_ids\": [\"0FX6vlEkYVg\"]\n    },\n    {\n      \"query\": \"Russian travel advice before going abroad\",\n      \"reason\": \"Derived from a Russian‑language warning video urging viewers to watch before traveling overseas, relevant for Russian‑speaking travelers seeking pre‑trip guidance.\",\n      \"source_video_ids\": [\"042ZE0IKgEI\"]\n    }\n  ]\n}",
+      "validated_suggestions": [
+        {
+          "query": "Armenia travel vlog 5 days",
+          "reason": "Matches a 5‑day vlog exploring what to see and do in Yerevan, appealing to viewers looking for detailed Armenia travel guides.",
+          "source_video_ids": [
+            "03H32Gb1XBg"
+          ],
+          "flags": []
+        },
+        {
+          "query": "Jeju Island lava rock trail vlog",
+          "reason": "Corresponds to a dangerous trail on lava rocks in Jeju, South Korea, attracting adventure‑seeking travel audiences.",
+          "source_video_ids": [
+            "0BAEicMKqIg"
+          ],
+          "flags": []
+        },
+        {
+          "query": "Italy solo travel packing 15 nights minimalist",
+          "reason": "Reflects a 15‑night solo Italy trip packed into 4 kg, useful for minimalist backpackers searching for ultra‑light packing tips.",
+          "source_video_ids": [
+            "05EXVolCKf0"
+          ],
+          "flags": []
+        },
+        {
+          "query": "one night two day backpack packing review",
+          "reason": "Based on a short‑trip backpack packing video, ideal for viewers planning brief getaways and seeking gear recommendations.",
+          "source_video_ids": [
+            "0FX6vlEkYVg"
+          ],
+          "flags": []
+        },
+        {
+          "query": "Russian travel advice before going abroad",
+          "reason": "Derived from a Russian‑language warning video urging viewers to watch before traveling overseas, relevant for Russian‑speaking travelers seeking pre‑trip guidance.",
+          "source_video_ids": [
+            "042ZE0IKgEI"
+          ],
+          "flags": []
+        }
+      ],
+      "rejected_suggestions": [],
+      "parse_issues": [],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [
+          "влог",
+          "во"
+        ],
+        "rejected_sample": [
+          {
+            "phrase": "15泊イタリアひとり旅",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "15泊イタリアひとり旅 4kgのミニマリスト全荷物",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "15泊イタリアひとり旅 4kgのミニマリスト全荷物 着替えなし",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "1泊2日パッキング",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "1泊2日パッキング 旅行にも最適なバックパック",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "380",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "380 путь",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "380 путь света",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "380 путь света вот",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "461",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "461 бушующее",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "461 бушующее море",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "461 бушующее море велокочевник",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "4kgのミニマリスト全荷物",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "4kgのミニマリスト全荷物 着替えなし",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    },
+    {
+      "packet_id": "keyword:150",
+      "provenance_type": "keyword_discovery_hit",
+      "direction": "как это работает",
+      "row_count": 15,
+      "prompt_user_excerpt_len": 4027,
+      "api": {
+        "http_status": 429,
+        "duration_seconds": 0.118,
+        "rate_limit_headers": {
+          "retry-after": "5",
+          "x-ratelimit-limit-requests": "1000",
+          "x-ratelimit-limit-tokens": "8000",
+          "x-ratelimit-remaining-requests": "993",
+          "x-ratelimit-remaining-tokens": "1259",
+          "x-ratelimit-reset-requests": "10m4.8s",
+          "x-ratelimit-reset-tokens": "50.557s",
+          "x-request-id": "req_01m4bjset0e7stehsc0f6ykgng"
+        },
+        "error": "rate_limited_429",
+        "body": {
+          "error": {
+            "message": "Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m1xtnbymey1b1v3b5g46d6ye` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6741, Requested 1874. Please try again in 4.6125s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing",
+            "type": "tokens",
+            "code": "rate_limit_exceeded"
+          }
+        }
+      },
+      "raw_assistant_content": null,
+      "validated_suggestions": [],
+      "rejected_suggestions": [],
+      "parse_issues": [],
+      "deterministic_baseline": {
+        "source": "topic_exploration_mining (title n-grams)",
+        "network_sources_skipped": [
+          "SuggestionExpansionSource",
+          "RelatedQueryExpansionSource",
+          "InnerTube autocomplete — requires network, not run"
+        ],
+        "proposed_phrases": [
+          "всё",
+          "или"
+        ],
+        "rejected_sample": [
+          {
+            "phrase": "afd",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "afd ина",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "afd ина олийник",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "afd ина олийник юрий",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "ai",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "ai дает",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "ai дает всё",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "ai дает всё бесплатно",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "arrives",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "arrives muslim",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "arrives muslim home",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "arrives muslim home upset",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "beeline",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "beeline kazakhstan",
+            "reason": "insufficient_channel_support"
+          },
+          {
+            "phrase": "beeline kazakhstan starlink",
+            "reason": "insufficient_channel_support"
+          }
+        ]
+      }
+    }
+  ],
+  "manual_review_table": [
+    {
+      "packet_id": "keyword:146",
+      "query": "real life betrayal stories",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:146",
+      "query": "real criminal stories early autumn",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:146",
+      "query": "real stories of family inheritance scams",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:146",
+      "query": "real stories of mysterious abandoned places",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:146",
+      "query": "real stories of extreme weather survival",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:148",
+      "query": "what if you were born in India",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:148",
+      "query": "what if you refuse to go to light after death",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:148",
+      "query": "what if you have cursed energy",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:148",
+      "query": "what if you commit a sin that angers your guardian angel",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:148",
+      "query": "what if men use tarot",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:143",
+      "query": "Armenia travel vlog 5 days",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:143",
+      "query": "Jeju Island lava rock trail vlog",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:143",
+      "query": "Italy solo travel packing 15 nights minimalist",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:143",
+      "query": "one night two day backpack packing review",
+      "review_hint": "полезно?",
+      "flags": []
+    },
+    {
+      "packet_id": "keyword:143",
+      "query": "Russian travel advice before going abroad",
+      "review_hint": "полезно?",
+      "flags": []
+    }
+  ],
+  "api_calls_made": 5,
+  "finished_at_utc": "2026-10-07T15:24:43.460877+00:00",
+  "ok": false
+}

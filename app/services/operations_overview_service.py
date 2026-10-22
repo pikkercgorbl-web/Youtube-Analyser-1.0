@@ -28,7 +28,10 @@ from app.services.discovery_worker_lock import (
 )
 from app.services.monitoring_worker_lock import MONITORING_WORKER_STATE_ROW_ID
 from app.services.discovery_worker_runtime import DEFAULT_DISCOVERY_WORKER_INTERVAL_SECONDS
-from app.services.delayed_outcome_capture_config import DEFAULT_OUTCOME_CAPTURE_INTERVAL_SECONDS
+from app.services.delayed_outcome_capture_config import (
+    DEFAULT_OUTCOME_CAPTURE_INTERVAL_SECONDS,
+    outcome_capture_budget_from_env,
+)
 from app.services.delayed_outcome_capture_planner import plan_delayed_outcome_capture
 from app.services.monitoring_cycle import DEFAULT_MONITORING_WORKER_INTERVAL_SECONDS
 from app.services.outcome_capture_cycle_run_storage import get_latest_outcome_capture_cycle_run
@@ -197,6 +200,13 @@ class OutcomeCaptureOperationsBlock:
     fetch_failed_count_last_cycle: int = 0
     duplicate_snapshot_count_last_cycle: int = 0
     missing_video_count_last_cycle: int = 0
+    priority_selection_enabled: bool = False
+    priority_due_videos: int = 0
+    background_due_videos: int = 0
+    priority_selected_last_cycle: int = 0
+    background_selected_last_cycle: int = 0
+    priority_inserted_last_cycle: int = 0
+    background_inserted_last_cycle: int = 0
 
 
 @dataclass
@@ -444,7 +454,8 @@ def build_snapshot_metrics_sequential(session: Session, *, now: datetime | None 
     since_1h = reference - timedelta(hours=1)
     since_24h = reference - timedelta(hours=24)
 
-    latest = session.scalar(select(func.max(VideoSnapshot.captured_at)))
+    latest_raw = session.scalar(select(func.max(VideoSnapshot.captured_at)))
+    latest = ensure_utc(latest_raw) if latest_raw is not None else None
     count_1h = session.scalar(
         select(func.count())
         .select_from(VideoSnapshot)
@@ -670,6 +681,7 @@ def build_outcome_capture_block(
             session,
             reference=reference,
             attribution_mode=outcome_attribution_mode,
+            budget=outcome_capture_budget_from_env(),
         )
         planner_pending = plan.pending_count
         planner_due = plan.capture_due_count
@@ -677,7 +689,9 @@ def build_outcome_capture_block(
         planner_satisfied = plan.satisfied_count
         planner_expired = plan.expired_count
         unique_due_videos = plan.unique_due_video_count
+        block_selection = plan.selection
     elif latest is not None:
+        block_selection = None
         planner_pending = int(latest.pending_count)
         planner_due = int(latest.capture_due_count)
         planner_overdue = int(latest.capture_overdue_count)
@@ -687,6 +701,7 @@ def build_outcome_capture_block(
     else:
         planner_pending = planner_due = planner_overdue = 0
         planner_satisfied = planner_expired = unique_due_videos = 0
+        block_selection = None
 
     block = OutcomeCaptureOperationsBlock(
         worker=get_outcome_capture_worker_activity(
@@ -722,6 +737,12 @@ def build_outcome_capture_block(
             block.last_cycle_status = latest.cycle_status
         if not block.last_run_id:
             block.last_run_id = latest.run_id
+    if block_selection is not None:
+        block.priority_selection_enabled = block_selection.priority_enabled
+        block.priority_due_videos = block_selection.priority_due
+        block.background_due_videos = block_selection.background_due
+        block.priority_selected_last_cycle = block_selection.priority_selected
+        block.background_selected_last_cycle = block_selection.background_selected
     return block
 
 

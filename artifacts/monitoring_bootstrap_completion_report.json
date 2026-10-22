@@ -1,0 +1,69 @@
+{
+  "generated_at_utc": "2026-10-08T11:00:30+00:00",
+  "scope": "keyword discovery + exploration monitoring bootstrap (no API backfill, no historical snapshot rewrite)",
+  "storage": {
+    "primary": "VideoSnapshot via persist_video_snapshot",
+    "enrichment_source": "format_enrichment",
+    "enrichment_run_id_pattern": "format_enrichment:{video_id}",
+    "discovery_bootstrap": "KeywordDiscoveryHit views_at_discovery + discovered_at via snapshot_measurement.select_discovery_hit_for_measurement",
+    "metadata": "format_enrichment uses raw_metadata.measurement_kind=format_enrichment_api; not monitoring checkpoint fulfilled_late"
+  },
+  "changed_files": [
+    "app/services/monitoring_video_source.py",
+    "app/services/snapshot_measurement.py",
+    "app/services/format_enrichment_snapshot.py",
+    "app/services/video_format_batch_apply.py",
+    "app/services/video_snapshot_storage.py",
+    "app/integrations/youtube/client.py",
+    "app/services/revisit_executor.py",
+    "scripts/compare_monitoring_load_paths_readonly.py"
+  ],
+  "tests_green": [
+    "scripts/test_monitoring_bootstrap_complete.py",
+    "scripts/test_monitoring_bootstrap_discovery_to_capture.py",
+    "scripts/test_snapshot_measurement_regression.py",
+    "scripts/test_monitoring_video_source.py",
+    "scripts/test_format_enrichment_selection_regression.py",
+    "scripts/test_radar_enrichment_stage25.py",
+    "scripts/test_late_checkpoint_fulfillment.py",
+    "scripts/test_monitoring_worker.py"
+  ],
+  "offline_evidence": {
+    "load_path_compare": "artifacts/monitoring_load_path_compare.json",
+    "at_utc": "2026-10-08T11:00:05.536702+00:00",
+    "loaded": 2420,
+    "active": 1497,
+    "missing_vph": 272,
+    "measurement_sources_with_vph": { "snapshot": 413, "discovery": 1735 },
+    "keyword_examples_source": "discovery hit (see examples.keyword_discovery in compare artifact)",
+    "format_enrichment_examples": "empty until new videos.list format passes persist snapshots"
+  },
+  "live_path": {
+    "workers_restarted_utc": "2026-10-08T10:58:48Z",
+    "discovery_pid": 28724,
+    "monitoring_pid": 30268,
+    "discovery_cmd": "python scripts/run_discovery_worker.py --interval-seconds 300 --error-backoff-seconds 300 --batch-size 5",
+    "monitoring_cmd": "python scripts/run_monitoring_worker.py --interval-seconds 900 --error-backoff-seconds 300",
+    "outcome_worker": "left running PID 12544 (not restarted)",
+    "first_post_restart_cycle": {
+      "run_id": "monitoring_20261008T105850Z_6a92a6d7",
+      "started_at_utc": "2026-10-08T10:58:50.803025+00:00",
+      "cycle_status": "ok",
+      "loaded": 2420,
+      "active_eligible": 1497,
+      "due": 116,
+      "overdue": 131,
+      "selected": 247,
+      "inserted": 247,
+      "fetch_failed": 0,
+      "errors": null,
+      "contrast_prior_cycles": "eligible~32, selected=0 before discovery-hit wiring (same loaded pool)"
+    }
+  },
+  "remaining_limitations": [
+    "NULL views_at_discovery on hit and discovered_at <= API published_at still yield missing_vph (no retroactive API views on hit)",
+    "Exploration-only VPH from format_enrichment appears only after format enrichment runs on that video",
+    "272 videos in full load pool still missing_vph under current DB facts",
+    "Read-only compare selected/due counts at fixed now differ from live cycle (policy/budget timing)"
+  ]
+}

@@ -162,7 +162,12 @@ def load_attention_evidence(
 
     for video in videos:
         latest_snap = latest.get(video.id)
-        state = _state_from_video(video, now=end, latest_snapshot=latest_snap)
+        state = _state_from_video(
+            video,
+            now=end,
+            latest_snapshot=latest_snap,
+            discovery_hits=hits_by_video.get(video.id, []),
+        )
         extra_videos_by_channel[video.channel_id].append(video)
         extra_states[video.id] = state
         if latest_snap is not None:

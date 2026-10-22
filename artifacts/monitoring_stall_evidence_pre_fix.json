@@ -1,0 +1,48 @@
+{
+  "captured_at_utc": "2026-10-07T13:20:52Z",
+  "database": {
+    "host": "127.0.0.1",
+    "port": 5433,
+    "database": "youtube_radar_restore_check"
+  },
+  "pg_stat_activity": [
+    {
+      "pid": 76394,
+      "state": "idle in transaction",
+      "wait_event_type": "Client",
+      "wait_event": "ClientRead",
+      "query_start": "2026-10-07T03:42:31.563879+00:00",
+      "query_prefix": "SELECT channels.id, channels.title, channels.subscribers_count, channels.subscribers_api_status, channels.subscribers_api_checked_at, channels.topic, channels.custom_url, channels.created_at, channels.updated_at \nFROM ch",
+      "query_age_s": 34701.246328
+    },
+    {
+      "pid": 76567,
+      "state": "idle in transaction",
+      "wait_event_type": "Client",
+      "wait_event": "ClientRead",
+      "query_start": "2026-10-07T11:35:28.495502+00:00",
+      "query_prefix": "SELECT keyword_discovery_hits.id, keyword_discovery_hits.keyword_id, keyword_discovery_hits.video_id, keyword_discovery_hits.discovery_run_id, keyword_discovery_hits.discovered_at, keyword_discovery_hits.channel_id, keyw",
+      "query_age_s": 6324.314705
+    },
+    {
+      "pid": 78961,
+      "state": "idle in transaction",
+      "wait_event_type": "Client",
+      "wait_event": "ClientRead",
+      "query_start": "2026-10-07T13:20:30.361465+00:00",
+      "query_prefix": "SELECT explosive_channels.channel_id, explosive_channels.channel_name, explosive_channels.avatar_url, explosive_channels.subscribers, explosive_channels.channel_age_days, explosive_channels.total_views, explosive_channel",
+      "query_age_s": 22.448742
+    }
+  ],
+  "blocking": [],
+  "processes": [
+    {
+      "pid": 15900,
+      "cmdline": "C:\\Users\\dayta\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_monitoring_worker.py --interval-seconds 900 --error-backoff-seconds 300"
+    },
+    {
+      "pid": 27308,
+      "cmdline": "C:\\Users\\dayta\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_outcome_capture_worker.py --interval-seconds 3600"
+    }
+  ]
+}

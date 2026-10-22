@@ -82,6 +82,8 @@ class DiscoveryCycleSummary:
     keyword_summaries: tuple[DiscoveryKeywordSummary, ...] = ()
     cycle_video_ids: tuple[str, ...] = ()
     cycle_channel_ids: tuple[str, ...] = ()
+    exploration_summaries: tuple[object, ...] = ()
+    exploration_query_count: int = 0
 
 
 @dataclass
@@ -95,6 +97,7 @@ class DiscoveryCycleConfig:
     max_pages_per_keyword: int = 100
     register_explosive_channels: bool = True
     profile: bool = False
+    topic_exploration_plan: object | None = None
 
 
 def generate_discovery_run_id(*, now: datetime | None = None) -> str:
@@ -189,13 +192,29 @@ async def run_discovery_cycle_async(
     with bootstrap_ctx:
         select_ctx = profiler.phase("keyword_selection") if profiler else nullcontext()
         with select_ctx:
-            keywords = select_discovery_keywords(session, batch_size=cfg.keyword_batch_size)
+            from app.services.topic_exploration_batch_split import split_discovery_batch_slots
+            from app.services.topic_exploration_cycle import queries_for_exploration_slots
+
+            plan = cfg.topic_exploration_plan
+            exploration_enabled = bool(plan and getattr(plan, "enabled", False))
+            seed_slots, exploration_slots = split_discovery_batch_slots(
+                cfg.keyword_batch_size,
+                exploration_enabled=exploration_enabled,
+                exploration_fraction=float(getattr(plan, "batch_fraction", 0.0) if plan else 0.0),
+            )
+            keywords = select_discovery_keywords(session, batch_size=seed_slots)
+            exploration_queries = (
+                queries_for_exploration_slots(plan, exploration_slots)
+                if plan and exploration_enabled
+                else ()
+            )
         upload_period = ExplosiveChannelsService().get_upload_period(session)
 
     summary = DiscoveryCycleSummary(
         run_id=cycle_run_id,
         started_at=started_at,
         selected_keyword_count=len(keywords),
+        exploration_query_count=len(exploration_queries),
     )
 
     cycle_persisted_ids: set[str] = set()
@@ -438,6 +457,114 @@ async def run_discovery_cycle_async(
                 ),
             )
 
+    exploration_summary_rows: list[object] = []
+    if exploration_queries:
+        from dataclasses import replace
+
+        from app.services.topic_exploration_evidence_storage import persist_exploration_pass_evidence
+        from app.services.topic_exploration_mining_config import TopicExplorationMiningConfig
+        from app.services.topic_exploration_pass_fingerprint import single_pass_comparable_key
+        from app.services.topic_exploration_runtime_config import topic_exploration_runtime_settings
+        from app.services.topic_exploration_settings import compute_exploration_settings_version
+        from app.services.topic_exploration_types import TopicExplorationScanSummary, TopicExplorationTitleHit
+
+        max_expl_pages = int(getattr(plan, "max_pages_per_query", cfg.max_pages_per_keyword))
+        mining_cfg = TopicExplorationMiningConfig(
+            min_distinct_videos=topic_exploration_runtime_settings.topic_exploration_min_distinct_videos,
+            min_distinct_channels=topic_exploration_runtime_settings.topic_exploration_min_distinct_channels,
+            observation_window_hours=topic_exploration_runtime_settings.topic_exploration_observation_window_hours,
+        )
+        settings_version = compute_exploration_settings_version(
+            mining_config=mining_cfg,
+            max_pages_per_query=max_expl_pages,
+            exploration_batch_fraction=float(getattr(plan, "batch_fraction", 0.2)),
+            register_explosive_channels=cfg.register_explosive_channels,
+        )
+        for eq in exploration_queries:
+            eq_started = utc_now()
+            eq_started_perf = time.perf_counter()
+            sub_run_id = f"{cycle_run_id}:exploration:{eq.query_id}"
+            title_hits: list[TopicExplorationTitleHit] = []
+            eq_errors: tuple[str, ...] = ()
+            eq_status: Literal["ok", "failed"] = "ok"
+            pages_used = max_expl_pages
+            try:
+                scan = await scan_keyword_for_discovery(
+                    session,
+                    keyword=eq.query_text,
+                    keyword_id=None,
+                    upload_period=upload_period,
+                    register_explosive_channels=cfg.register_explosive_channels,
+                    max_pages=max_expl_pages,
+                )
+                if scan.error:
+                    eq_status = "failed"
+                    eq_errors = (scan.error,)
+                pages_used = scan.pages_scanned or max_expl_pages
+                seen_video: set[str] = set()
+                if not dry_run:
+                    batch_persist_discovered_videos(
+                        session,
+                        scan.unique_videos,
+                        discovery_keyword=eq.query_text,
+                        cycle_persisted_ids=cycle_persisted_ids,
+                    )
+                for video in scan.unique_videos:
+                    if video.video_id in seen_video:
+                        continue
+                    seen_video.add(video.video_id)
+                    title_hits.append(
+                        TopicExplorationTitleHit(
+                            video_id=video.video_id,
+                            channel_id=(video.channel_id or "").strip() or None,
+                            title=(video.title or "").strip(),
+                            exploration_query_id=eq.query_id,
+                            exploration_query_text=eq.query_text,
+                            discovery_run_id=sub_run_id,
+                            discovered_at=eq_started,
+                            video_topic=getattr(video, "topic", None),
+                        ),
+                    )
+                    unique_seen_ids.add(video.video_id)
+            except Exception as exc:
+                eq_status = "failed"
+                eq_errors = (str(exc),)
+                summary.error_count += 1
+            finished = utc_now()
+            pass_fp = single_pass_comparable_key(
+                query_id=eq.query_id,
+                query_text=eq.query_text,
+                pages_requested=max_expl_pages,
+                pages_scanned=pages_used,
+                settings_version=settings_version,
+                status=eq_status,
+            )
+            summary_row = TopicExplorationScanSummary(
+                query_id=eq.query_id,
+                query_text=eq.query_text,
+                discovery_run_id=sub_run_id,
+                started_at=eq_started,
+                finished_at=finished,
+                max_pages=pages_used,
+                title_hits=tuple(title_hits),
+                status=eq_status,
+                errors=eq_errors,
+                pages_requested=max_expl_pages,
+                pages_scanned=pages_used,
+                settings_version=settings_version,
+                pass_fingerprint=pass_fp,
+            )
+            if not dry_run:
+                pass_row = persist_exploration_pass_evidence(
+                    session,
+                    cycle_discovery_run_id=cycle_run_id,
+                    scan_summary=summary_row,
+                    settings_version=settings_version,
+                    pages_requested=max_expl_pages,
+                )
+                summary_row = replace(summary_row, pass_id=pass_row.id)
+            exploration_summary_rows.append(summary_row)
+
     commit_ctx = profiler.phase("db_flush_commit") if profiler else nullcontext()
     with commit_ctx:
         if not dry_run:
@@ -449,6 +576,7 @@ async def run_discovery_cycle_async(
 
     summary.unique_video_count = len(unique_seen_ids)
     summary.keyword_summaries = tuple(keyword_summaries)
+    summary.exploration_summaries = tuple(exploration_summary_rows)
     summary.finished_at = utc_now()
     summary.runtime_seconds = round(time.perf_counter() - started_perf, 3)
     summary.cycle_status = _resolve_cycle_status(

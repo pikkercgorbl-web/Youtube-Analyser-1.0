@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Bookmark, BookmarkCheck, Loader2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { listSavedTopics, saveSavedTopic } from "@/lib/api";
 import { savedTopicAffordance } from "@/lib/saved-topics";
 
@@ -51,12 +51,17 @@ export function SaveTopicButton({ familyKey, runId }: Props) {
     try {
       const response = await saveSavedTopic(familyKey);
       if (response.archived_requires_restore) {
-        setError(response.message ?? "Тема в архиве — восстановите из списка сохранённых");
+        setError(
+          response.message ??
+            "Тема в архиве — восстановите из списка сохранённых",
+        );
         return;
       }
       setSavedTopicId(response.item.id);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Не удалось сохранить тему");
+      setError(
+        err instanceof Error ? err.message : "Не удалось сохранить тему",
+      );
     } finally {
       setLoading(false);
     }
@@ -64,20 +69,27 @@ export function SaveTopicButton({ familyKey, runId }: Props) {
 
   if (checking) {
     return (
-      <Button type="button" variant="outline" size="sm" disabled data-testid="save-pattern">
-        <Loader2 className="h-3.5 w-3.5 animate-spin" />
-        …
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        disabled
+        data-testid="save-pattern"
+      >
+        <Loader2 className="h-3.5 w-3.5 animate-spin" />…
       </Button>
     );
   }
 
   if (savedTopicId !== null) {
     return (
-      <Link href={`/saved-topics/${savedTopicId}`} className="inline-flex">
-        <Button type="button" variant="secondary" size="sm" data-testid="save-pattern-saved">
-          <BookmarkCheck className="h-3.5 w-3.5" />
-          Сохранено
-        </Button>
+      <Link
+        href={`/saved-topics/${savedTopicId}`}
+        className={buttonVariants({ variant: "secondary", size: "sm" })}
+        data-testid="save-pattern-saved"
+      >
+        <BookmarkCheck className="h-3.5 w-3.5" />
+        Сохранено
       </Link>
     );
   }
@@ -93,7 +105,11 @@ export function SaveTopicButton({ familyKey, runId }: Props) {
         onClick={() => void onSave()}
         data-testid="save-pattern"
       >
-        {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Bookmark className="h-3.5 w-3.5" />}
+        {loading ? (
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        ) : (
+          <Bookmark className="h-3.5 w-3.5" />
+        )}
         Сохранить
       </Button>
       {error ? <p className="text-xs text-destructive">{error}</p> : null}

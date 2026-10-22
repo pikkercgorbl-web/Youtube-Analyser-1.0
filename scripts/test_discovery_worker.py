@@ -10,6 +10,7 @@ import threading
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,7 +23,13 @@ from sqlalchemy.orm import sessionmaker
 import app.models.orm  # noqa: F401
 from app.models.db import Base
 from app.models.orm import DiscoveryWorkerState, TargetKeyword
-from app.services.discovery_cycle import DiscoveryCycleOutcome, DiscoveryCycleSummary, generate_discovery_run_id
+from app.services.discovery_cycle import (
+    DiscoveryCycleOutcome,
+    DiscoveryCycleSummary,
+    DiscoveryKeywordSummary,
+    generate_discovery_run_id,
+)
+from app.services.keyword_expansion_discovery_pass import KeywordExpansionDiscoveryPassReport
 from app.services.discovery_worker_lock import (
     DISCOVERY_STATUS_IDLE,
     acquire_discovery_worker_lock,
@@ -355,6 +362,120 @@ def test_frozen_stage110_untouched() -> None:
     assert "stage110" not in text.lower()
 
 
+def _runtime_patches(*, expansion_enabled: bool):
+    return (
+        patch(
+            "app.services.discovery_worker_runtime.radar_enrichment_settings",
+            SimpleNamespace(radar_enrichment_after_discovery=False),
+        ),
+        patch(
+            "app.services.discovery_worker_runtime.keyword_expansion_runtime_settings",
+            SimpleNamespace(keyword_expansion_after_discovery=expansion_enabled),
+        ),
+    )
+
+
+def _outcome_with_ok_keyword(*, run_id: str, keyword_id: int = 7) -> DiscoveryCycleOutcome:
+    kw_started = _now()
+    return DiscoveryCycleOutcome(
+        summary=DiscoveryCycleSummary(
+            run_id=run_id,
+            started_at=kw_started,
+            finished_at=kw_started,
+            cycle_status="ok",
+            keyword_summaries=(
+                DiscoveryKeywordSummary(
+                    keyword_id=keyword_id,
+                    keyword="seed-kw",
+                    started_at=kw_started,
+                    finished_at=kw_started,
+                    runtime_seconds=0.1,
+                    raw_candidates=3,
+                    unique_candidates=2,
+                    persisted_videos=1,
+                    updated_videos=0,
+                    qualification_passed=1,
+                    qualification_rejected=0,
+                    duplicate_candidates=0,
+                    explosive_hits=0,
+                    status="ok",
+                ),
+            ),
+        ),
+    )
+
+
+def test_keyword_expansion_pass_skipped_when_disabled() -> None:
+    make_session, _ = _session_factory()
+    patch_radar, patch_expansion = _runtime_patches(expansion_enabled=False)
+    cycles = {"n": 0}
+    with patch_radar, patch_expansion, patch(
+        "app.services.discovery_worker_runtime.run_discovery_cycle",
+        side_effect=lambda *_a, **_k: (
+            cycles.__setitem__("n", cycles["n"] + 1) or _outcome_with_ok_keyword(run_id="discovery_exp_off")
+        ),
+    ), patch("app.services.discovery_worker_runtime.run_keyword_expansion_discovery_pass") as expansion_pass:
+        run_discovery_worker(
+            make_session,
+            object(),
+            config=DiscoveryWorkerConfig(interval_seconds=999),
+            sleep_fn=lambda _s: None,
+            stop_check=lambda: cycles["n"] >= 1,
+        )
+    expansion_pass.assert_not_called()
+
+
+def test_keyword_expansion_pass_runs_with_cycle_summary_when_enabled() -> None:
+    make_session, _ = _session_factory()
+    patch_radar, patch_expansion = _runtime_patches(expansion_enabled=True)
+    outcome = _outcome_with_ok_keyword(run_id="discovery_exp_on")
+    empty_report = KeywordExpansionDiscoveryPassReport(discovery_run_id=outcome.summary.run_id)
+    cycles = {"n": 0}
+    with patch_radar, patch_expansion, patch(
+        "app.services.discovery_worker_runtime.run_discovery_cycle",
+        side_effect=lambda *_a, **_k: (cycles.__setitem__("n", cycles["n"] + 1) or outcome),
+    ), patch(
+        "app.services.discovery_worker_runtime.run_keyword_expansion_discovery_pass",
+        return_value=empty_report,
+    ) as expansion_pass:
+        run_discovery_worker(
+            make_session,
+            object(),
+            config=DiscoveryWorkerConfig(interval_seconds=999),
+            sleep_fn=lambda _s: None,
+            stop_check=lambda: cycles["n"] >= 1,
+        )
+    expansion_pass.assert_called_once()
+    assert expansion_pass.call_args.kwargs["cycle_summary"].run_id == "discovery_exp_on"
+    assert expansion_pass.call_args.kwargs["dry_run"] is False
+
+
+def test_keyword_expansion_pass_error_does_not_block_next_cycle() -> None:
+    make_session, _ = _session_factory()
+    patch_radar, patch_expansion = _runtime_patches(expansion_enabled=True)
+    cycles = {"n": 0}
+
+    def fake_cycle(*_a, **_k):
+        cycles["n"] += 1
+        return _outcome_with_ok_keyword(run_id=f"discovery_{cycles['n']}")
+
+    with patch_radar, patch_expansion, patch(
+        "app.services.discovery_worker_runtime.run_discovery_cycle",
+        side_effect=fake_cycle,
+    ), patch(
+        "app.services.discovery_worker_runtime.run_keyword_expansion_discovery_pass",
+        side_effect=RuntimeError("expansion failed"),
+    ):
+        run_discovery_worker(
+            make_session,
+            object(),
+            config=DiscoveryWorkerConfig(interval_seconds=0, error_backoff_seconds=0),
+            sleep_fn=lambda _s: None,
+            stop_check=lambda: cycles["n"] >= 2,
+        )
+    assert cycles["n"] >= 2
+
+
 def _run_script(name: str) -> None:
     proc = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / name)],
@@ -389,6 +510,9 @@ def main() -> None:
         test_discovery_cycle_cli_wiring_without_live_infra,
         test_monitoring_worker_not_imported,
         test_frozen_stage110_untouched,
+        test_keyword_expansion_pass_skipped_when_disabled,
+        test_keyword_expansion_pass_runs_with_cycle_summary_when_enabled,
+        test_keyword_expansion_pass_error_does_not_block_next_cycle,
         test_regressions,
     ]
     failed = 0

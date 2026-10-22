@@ -20,7 +20,10 @@ from app.services.delayed_outcome_capture_planner import (
     load_published_at_by_video,
     plan_delayed_outcome_capture,
 )
-from app.services.delayed_outcome_capture_types import OutcomeAttributionMode
+from app.services.delayed_outcome_capture_types import (
+    OutcomeAttributionMode,
+    OutcomeCaptureSelectionInstrumentation,
+)
 from app.services.metrics import ensure_utc, utc_now
 from app.services.revisit_executor import (
     RevisitExecutorConfig,
@@ -62,6 +65,9 @@ class DelayedOutcomeCaptureCycleSummary:
     fetch_failed_count: int = 0
     cycle_status: CycleStatus = "ok"
     errors: tuple[str, ...] = ()
+    selection: OutcomeCaptureSelectionInstrumentation = field(
+        default_factory=OutcomeCaptureSelectionInstrumentation,
+    )
 
 
 def _resolve_status(*, dry_run: bool, fetch_failed: int, inserted: int, selected: int) -> CycleStatus:
@@ -95,6 +101,7 @@ def run_delayed_outcome_capture_cycle(
         session,
         reference=now,
         attribution_mode=attribution_mode,
+        budget=budget_cfg,
     )
 
     summary = DelayedOutcomeCaptureCycleSummary(
@@ -108,12 +115,13 @@ def run_delayed_outcome_capture_cycle(
         capture_overdue_count=plan.capture_overdue_count,
         expired_count=plan.expired_count,
         unique_due_video_count=plan.unique_due_video_count,
+        selection=plan.selection,
     )
 
-    selected = plan.fetch_candidates[: budget_cfg.max_videos_per_cycle]
-    deferred = plan.fetch_candidates[budget_cfg.max_videos_per_cycle :]
+    selected = plan.selected_fetch_candidates
+    deferred_count = max(0, len(plan.fetch_candidates) - len(selected))
     summary.selected_video_count = len(selected)
-    summary.deferred_video_count = len(deferred)
+    summary.deferred_video_count = deferred_count
 
     if dry_run or youtube_client is None:
         summary.cycle_status = "dry_run" if dry_run else summary.cycle_status
@@ -178,6 +186,41 @@ def run_delayed_outcome_capture_cycle(
     summary.duplicate_snapshot_count = exec_summary.duplicate_snapshot_count
     summary.missing_video_count = exec_summary.missing_video_count
     summary.fetch_failed_count = exec_summary.fetch_failed_count
+
+    priority_ids = {row.video_id for row in selected if row.is_di_winner_priority}
+    capture_stats = OutcomeCaptureSelectionInstrumentation(
+        priority_enabled=plan.selection.priority_enabled,
+        priority_due=plan.selection.priority_due,
+        background_due=plan.selection.background_due,
+        priority_selected=plan.selection.priority_selected,
+        background_selected=plan.selection.background_selected,
+        priority_deferred=plan.selection.priority_deferred,
+        background_deferred=plan.selection.background_deferred,
+    )
+    for result in execution.results:
+        tier_pri = result.video_id in priority_ids
+        status = result.status
+        if status == "inserted":
+            if tier_pri:
+                capture_stats.priority_inserted += 1
+            else:
+                capture_stats.background_inserted += 1
+        elif status == "duplicate":
+            if tier_pri:
+                capture_stats.priority_duplicate += 1
+            else:
+                capture_stats.background_duplicate += 1
+        elif status == "missing":
+            if tier_pri:
+                capture_stats.priority_missing_video += 1
+            else:
+                capture_stats.background_missing_video += 1
+        elif status in ("fetch_failed", "validation_failed", "persistence_failed"):
+            if tier_pri:
+                capture_stats.priority_fetch_failed += 1
+            else:
+                capture_stats.background_fetch_failed += 1
+    summary.selection = capture_stats
     summary.cycle_status = _resolve_status(
         dry_run=False,
         fetch_failed=exec_summary.fetch_failed_count,
@@ -192,13 +235,22 @@ def run_delayed_outcome_capture_cycle(
     persist_outcome_capture_cycle_run(session, summary)
     session.commit()
 
+    sel = summary.selection
     logger.info(
-        "Outcome capture cycle run_id=%s due_videos=%s selected=%s deferred=%s inserted=%s status=%s",
+        "Outcome capture cycle run_id=%s due_videos=%s selected=%s deferred=%s inserted=%s status=%s "
+        "priority_enabled=%s pri_sel=%s bg_sel=%s pri_ins=%s bg_ins=%s pri_fail=%s bg_fail=%s",
         summary.run_id,
         summary.unique_due_video_count,
         summary.selected_video_count,
         summary.deferred_video_count,
         summary.inserted_snapshot_count,
         summary.cycle_status,
+        sel.priority_enabled,
+        sel.priority_selected,
+        sel.background_selected,
+        sel.priority_inserted,
+        sel.background_inserted,
+        sel.priority_fetch_failed,
+        sel.background_fetch_failed,
     )
     return summary

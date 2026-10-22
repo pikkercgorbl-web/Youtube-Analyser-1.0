@@ -1,0 +1,16 @@
+{
+  "base": "http://127.0.0.1:3100",
+  "winnerId": "JF2A0GZzezQ",
+  "keywordFamily": "family:kw:1497",
+  "topicFamily": "family:topic:86b8434548938bdc",
+  "checks": [
+    {
+      "viewport": "desktop",
+      "winnerBaseline": 12
+    },
+    {
+      "viewport": "390px",
+      "winnerBaseline": 12
+    }
+  ]
+}

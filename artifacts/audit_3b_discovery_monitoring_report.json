@@ -1,0 +1,176 @@
+{
+  "snapshot_at_utc": "2026-10-13T10:35:45.997181+00:00",
+  "due_overdue_hours_by_source_lifecycle": {
+    "seed|active": {
+      "count": 53,
+      "p50_hours": 11.75,
+      "p90_hours": 14.32,
+      "max_hours": 39.52
+    },
+    "suggestion|probation": {
+      "count": 1592,
+      "p50_hours": 26.83,
+      "p90_hours": 46.76,
+      "max_hours": 51.46
+    },
+    "channel|probation": {
+      "count": 4,
+      "p50_hours": 26.31,
+      "p90_hours": 45.27,
+      "max_hours": 47.43
+    },
+    "related|probation": {
+      "count": 10,
+      "p50_hours": 34.78,
+      "p90_hours": 42.84,
+      "max_hours": 48.22
+    }
+  },
+  "keywords_created_last_24h": {},
+  "keywords_scanned_last_24h_by_source_lifecycle": {
+    "channel|probation": 2,
+    "related|probation": 1,
+    "seed|active": 27,
+    "suggestion|probation": 694
+  },
+  "keywords_created_last_72h": {
+    "suggestion|probation": 8
+  },
+  "keywords_scanned_last_72h_by_source_lifecycle": {
+    "channel|probation": 4,
+    "related|probation": 10,
+    "seed|active": 80,
+    "suggestion|probation": 1767
+  },
+  "example_overdue_seed_keywords": [
+    {
+      "keyword_id": 127,
+      "keyword": "странная история",
+      "source_type": "seed",
+      "lifecycle_status": "active",
+      "overdue_hours": 39.52
+    },
+    {
+      "keyword_id": 128,
+      "keyword": "забытые истории",
+      "source_type": "seed",
+      "lifecycle_status": "active",
+      "overdue_hours": 39.4
+    },
+    {
+      "keyword_id": 129,
+      "keyword": "история России",
+      "source_type": "seed",
+      "lifecycle_status": "active",
+      "overdue_hours": 39.39
+    },
+    {
+      "keyword_id": 130,
+      "keyword": "исторические загадки",
+      "source_type": "seed",
+      "lifecycle_status": "active",
+      "overdue_hours": 39.25
+    },
+    {
+      "keyword_id": 131,
+      "keyword": "древние цивилизации",
+      "source_type": "seed",
+      "lifecycle_status": "active",
+      "overdue_hours": 39.24
+    }
+  ],
+  "last_10_missing_capture_outcomes": [
+    {
+      "monitoring_run_id": "monitoring_20261013T102502Z_22ec5ade",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T10:25:02.540821+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T100950Z_5287cad2",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T10:09:50.626774+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T095438Z_5bf2d3b2",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T09:54:38.520958+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T093924Z_b13fd89e",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T09:39:24.726047+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T092413Z_538ac08d",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T09:24:13.761029+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T090903Z_b62d6ff8",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T09:09:03.585358+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T085351Z_d0949ebb",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T08:53:51.962574+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T083842Z_5987616b",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T08:38:42.331108+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T082330Z_93f55c02",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T08:23:30.968477+00:00"
+    },
+    {
+      "monitoring_run_id": "monitoring_20261013T080819Z_48a7c90c",
+      "video_id": "YXodhWM0RiI",
+      "checkpoint_age_hours": 24,
+      "outcome": "missing",
+      "attempted_at": "2026-10-13T08:08:19.696094+00:00"
+    }
+  ],
+  "top_missing_video_ids_72h": [
+    {
+      "video_id": "unmayvJb-18",
+      "missing_count": 48
+    },
+    {
+      "video_id": "ssYuuEWAFSA",
+      "missing_count": 48
+    },
+    {
+      "video_id": "FYQn6PsdRaE",
+      "missing_count": 48
+    },
+    {
+      "video_id": "NYE0cmUqCUU",
+      "missing_count": 44
+    },
+    {
+      "video_id": "YXodhWM0RiI",
+      "missing_count": 40
+    }
+  ]
+}

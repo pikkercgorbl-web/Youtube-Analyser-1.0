@@ -113,6 +113,19 @@ class PatternCandidate:
 
 
 @dataclass(frozen=True, slots=True)
+class ChannelRepresentativeVideoEvidence:
+    """Frozen age-aligned measurement for a representative video at Attention publish time."""
+
+    video_id: str
+    horizon_vph: float
+    measured_at: datetime
+    actual_age_hours: float
+    vs_previous_median_ratio: float | None
+    meets_improvement_threshold: bool | None
+    snapshot_row_id: int | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class ChannelMomentum:
     channel_id: str
     channel_title: str
@@ -145,6 +158,7 @@ class ChannelMomentum:
     improvement_ratio_threshold: float = 1.5
     previous_baseline_zero: bool = False
     incompleteness_notes: tuple[str, ...] = ()
+    representative_video_evidence: tuple[ChannelRepresentativeVideoEvidence, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -255,6 +269,18 @@ def channel_momentum_to_dict(row: ChannelMomentum) -> dict[str, Any]:
     payload["first_observed_at"] = _dt(row.first_observed_at)
     payload["latest_observed_at"] = _dt(row.latest_observed_at)
     payload["representative_video_ids"] = list(row.representative_video_ids)
+    payload["representative_video_evidence"] = [
+        {
+            "video_id": item.video_id,
+            "horizon_vph": item.horizon_vph,
+            "measured_at": _dt(item.measured_at),
+            "actual_age_hours": item.actual_age_hours,
+            "vs_previous_median_ratio": item.vs_previous_median_ratio,
+            "meets_improvement_threshold": item.meets_improvement_threshold,
+            "snapshot_row_id": item.snapshot_row_id,
+        }
+        for item in row.representative_video_evidence
+    ]
     payload["reason_codes"] = list(row.reason_codes)
     payload["human_reasons"] = list(row.human_reasons)
     payload["incompleteness_notes"] = list(row.incompleteness_notes)

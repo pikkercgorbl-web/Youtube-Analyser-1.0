@@ -26,6 +26,7 @@ from app.services.attention_engine_types import (
     AttentionEngineResult,
     AttentionSummary,
     ChannelMomentum,
+    ChannelRepresentativeVideoEvidence,
     PatternCandidate,
     PatternFamily,
     VideoWinner,
@@ -37,6 +38,7 @@ from app.services.attention_engine_types import (
 )
 from app.services.attention_pattern_families import upsert_family_identity
 from app.services.metrics import ensure_utc, utc_now
+from app.services.saved_research import append_saved_research_observations_for_result
 from app.services.saved_topics import append_saved_topic_observations_for_result
 
 AttentionReadSource = Literal["snapshot", "live_compute", "unavailable"]
@@ -62,6 +64,9 @@ def persist_attention_result(session: Session, result: AttentionEngineResult, *,
     have no relationship() to AttentionRun, so a single mixed flush can INSERT
     patterns before the parent row exists (Postgres FK violation).
     """
+    from app.services.daily_intelligence_capture import capture_daily_intelligence_for_publish
+
+    capture_daily_intelligence_for_publish(session, result, run_id=run_id)
     session.execute(delete(AttentionPatternFamilyVideoRow))
     session.execute(delete(AttentionPatternFamilyMemberRow))
     session.execute(delete(AttentionPatternFamilyRow))
@@ -162,6 +167,7 @@ def persist_attention_result(session: Session, result: AttentionEngineResult, *,
     if mapping:
         upsert_family_identity(session, mapping, now=summary.computed_at)
     append_saved_topic_observations_for_result(session, run_id=run_id, result=result)
+    append_saved_research_observations_for_result(session, run_id=run_id, result=result)
 
 
 def refresh_attention_engine(
@@ -171,6 +177,7 @@ def refresh_attention_engine(
     now: datetime | None = None,
     publishable_winner_video_ids: frozenset[str] | None = None,
     filter_unverified_format_winners: bool = True,
+    publish_token: str | None = None,
 ) -> AttentionEngineResult:
     cfg = config or AttentionEngineConfig()
     computed_at = ensure_utc(now or utc_now())
@@ -204,6 +211,13 @@ def refresh_attention_engine(
             families=result.families,
             channels=result.channels,
         )
+    if publish_token is not None:
+        from app.services.read_model_publish_lock import (
+            PUBLISH_LOCK_ATTENTION,
+            assert_publish_lock_token,
+        )
+
+        assert_publish_lock_token(session, kind=PUBLISH_LOCK_ATTENTION, token=publish_token)
     persist_attention_result(session, result, run_id=run_id)
     return result
 
@@ -361,6 +375,28 @@ def _pattern_from_json(payload: dict) -> PatternCandidate:
     )
 
 
+def _representative_evidence_from_json(raw: list) -> tuple[ChannelRepresentativeVideoEvidence, ...]:
+    items: list[ChannelRepresentativeVideoEvidence] = []
+    for row in raw:
+        if not isinstance(row, dict):
+            continue
+        measured = _parse_dt(row.get("measured_at"))
+        if measured is None:
+            continue
+        items.append(
+            ChannelRepresentativeVideoEvidence(
+                video_id=str(row["video_id"]),
+                horizon_vph=float(row["horizon_vph"]),
+                measured_at=measured,
+                actual_age_hours=float(row["actual_age_hours"]),
+                vs_previous_median_ratio=row.get("vs_previous_median_ratio"),
+                meets_improvement_threshold=row.get("meets_improvement_threshold"),
+                snapshot_row_id=row.get("snapshot_row_id"),
+            ),
+        )
+    return tuple(items)
+
+
 def _channel_from_json(payload: dict) -> ChannelMomentum:
     return ChannelMomentum(
         channel_id=payload["channel_id"],
@@ -380,6 +416,9 @@ def _channel_from_json(payload: dict) -> ChannelMomentum:
         first_observed_at=_parse_dt(payload.get("first_observed_at")),
         latest_observed_at=_parse_dt(payload.get("latest_observed_at")),
         representative_video_ids=tuple(payload.get("representative_video_ids") or ()),
+        representative_video_evidence=_representative_evidence_from_json(
+            payload.get("representative_video_evidence") or [],
+        ),
         reason_codes=tuple(payload.get("reason_codes") or ()),
         human_reasons=tuple(payload.get("human_reasons") or ()),
         recent_window_days=int(payload["recent_window_days"]),

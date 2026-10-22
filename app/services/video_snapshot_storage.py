@@ -262,20 +262,26 @@ _LATEST_SNAPSHOT_CHUNK = 400
 def get_latest_snapshots_for_videos(
     session: Session,
     video_ids: Sequence[str],
+    *,
+    compute_before: datetime | None = None,
 ) -> dict[str, VideoSnapshot]:
     """Latest snapshot per video_id (bounded SQL, not full history scan)."""
     ids = list(dict.fromkeys(video_ids))
     if not ids:
         return {}
+    cutoff = ensure_utc(compute_before) if compute_before is not None else None
     latest: dict[str, VideoSnapshot] = {}
     for start in range(0, len(ids), _LATEST_SNAPSHOT_CHUNK):
         chunk = ids[start : start + _LATEST_SNAPSHOT_CHUNK]
+        max_where = [VideoSnapshot.video_id.in_(chunk)]
+        if cutoff is not None:
+            max_where.append(VideoSnapshot.captured_at <= cutoff)
         max_captured = (
             select(
                 VideoSnapshot.video_id.label("video_id"),
                 func.max(VideoSnapshot.captured_at).label("max_captured_at"),
             )
-            .where(VideoSnapshot.video_id.in_(chunk))
+            .where(*max_where)
             .group_by(VideoSnapshot.video_id)
             .subquery()
         )
@@ -323,15 +329,26 @@ def get_snapshots_for_channel(
 def get_snapshots_for_videos(
     session: Session,
     video_ids: Sequence[str],
+    *,
+    captured_at_lte: datetime | None = None,
 ) -> list[VideoSnapshot]:
     if not video_ids:
         return []
-    stmt = (
-        select(VideoSnapshot)
-        .where(VideoSnapshot.video_id.in_(list(video_ids)))
-        .order_by(VideoSnapshot.video_id.asc(), VideoSnapshot.captured_at.asc())
-    )
-    return list(session.scalars(stmt).all())
+    ids = list(dict.fromkeys(video_ids))
+    cutoff = ensure_utc(captured_at_lte) if captured_at_lte is not None else None
+    rows: list[VideoSnapshot] = []
+    for start in range(0, len(ids), _LATEST_SNAPSHOT_CHUNK):
+        chunk = ids[start : start + _LATEST_SNAPSHOT_CHUNK]
+        where = [VideoSnapshot.video_id.in_(chunk)]
+        if cutoff is not None:
+            where.append(VideoSnapshot.captured_at <= cutoff)
+        stmt = (
+            select(VideoSnapshot)
+            .where(*where)
+            .order_by(VideoSnapshot.video_id.asc(), VideoSnapshot.captured_at.asc())
+        )
+        rows.extend(session.scalars(stmt).all())
+    return rows
 
 
 def get_snapshots_for_videos_planner(

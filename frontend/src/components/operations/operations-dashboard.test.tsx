@@ -1,4 +1,11 @@
-import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { OperationsDashboard } from "@/components/operations/operations-dashboard";
@@ -19,7 +26,8 @@ const worker = {
   activity_state: "active_recently" as const,
   expected_interval_seconds: 300,
   stale_lock_minutes: 90,
-  liveness_note: "Last cycle/lock activity only; true process liveness requires Stage 1.19D heartbeat.",
+  liveness_note:
+    "Last cycle/lock activity only; true process liveness requires Stage 1.19D heartbeat.",
 };
 
 function overviewFixture(
@@ -190,7 +198,9 @@ describe("OperationsDashboard", () => {
   it("renders human Discovery summary", async () => {
     render(<OperationsDashboard />);
     const strip = await screen.findByTestId("operations-discovery-summary");
-    expect(within(strip).getByText(/Discovery давно не запускался/i)).toBeInTheDocument();
+    expect(
+      within(strip).getByText(/Discovery давно не запускался/i),
+    ).toBeInTheDocument();
   });
 
   it("shows loaded>0 and eligible=0 explanatory copy", async () => {
@@ -205,7 +215,9 @@ describe("OperationsDashboard", () => {
       }),
     );
     render(<OperationsDashboard />);
-    expect(await screen.findByTestId("operations-monitoring-no-eligible")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("operations-monitoring-no-eligible"),
+    ).toBeInTheDocument();
     expect(
       within(screen.getByTestId("operations-monitoring-no-eligible")).getByText(
         /нет видео, подходящих под текущие правила мониторинга/i,
@@ -244,7 +256,9 @@ describe("OperationsDashboard", () => {
       }),
     );
     render(<OperationsDashboard />);
-    expect(await screen.findByTestId("operations-snapshot-zero-24h")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("operations-snapshot-zero-24h"),
+    ).toBeInTheDocument();
   });
 
   it("renders zero valid 72h context", async () => {
@@ -257,7 +271,9 @@ describe("OperationsDashboard", () => {
       }),
     );
     render(<OperationsDashboard />);
-    expect(await screen.findByTestId("operations-outcome-zero-valid")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("operations-outcome-zero-valid"),
+    ).toBeInTheDocument();
   });
 
   it("does not style missing outcomes as error", async () => {
@@ -272,7 +288,9 @@ describe("OperationsDashboard", () => {
     render(<OperationsDashboard />);
     await screen.findByTestId("operations-discovery-cycles");
     expect(screen.queryByText("disc-run-1")).not.toBeInTheDocument();
-    const toggles = screen.getAllByRole("button", { name: /Технические детали/i });
+    const toggles = screen.getAllByRole("button", {
+      name: /Технические детали/i,
+    });
     fireEvent.click(toggles[0]);
     expect(await screen.findByText("disc-run-1")).toBeInTheDocument();
   });
@@ -280,7 +298,9 @@ describe("OperationsDashboard", () => {
   it("does not show empty errors section", async () => {
     render(<OperationsDashboard />);
     await screen.findByTestId("operations-summary-layer");
-    expect(screen.queryByTestId("operations-errors-section")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("operations-errors-section"),
+    ).not.toBeInTheDocument();
   });
 
   it("shows errors section when API reports errors", async () => {
@@ -293,7 +313,9 @@ describe("OperationsDashboard", () => {
       }),
     );
     render(<OperationsDashboard />);
-    expect(await screen.findByTestId("operations-errors-section")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("operations-errors-section"),
+    ).toBeInTheDocument();
     expect(screen.getByText(/scan timeout/)).toBeInTheDocument();
   });
 
@@ -307,38 +329,64 @@ describe("OperationsDashboard", () => {
   it("keeps data on refresh failure", async () => {
     render(<OperationsDashboard />);
     await screen.findByTestId("operations-discovery-due-now");
-    vi.mocked(api.getOperationsOverview).mockRejectedValueOnce(new Error("refresh fail"));
+    vi.mocked(api.getOperationsOverview).mockRejectedValueOnce(
+      new Error("refresh fail"),
+    );
     fireEvent.click(screen.getByTestId("operations-refresh"));
-    await waitFor(() => expect(screen.getByText(/Ошибка обновления/i)).toBeInTheDocument());
-    expect(screen.getByTestId("operations-discovery-due-now")).toHaveTextContent("3");
+    await waitFor(() =>
+      expect(screen.getByText(/Ошибка обновления/i)).toBeInTheDocument(),
+    );
+    expect(
+      screen.getByTestId("operations-discovery-due-now"),
+    ).toHaveTextContent("3");
   });
 
   it("uses design-system summary strips", async () => {
     render(<OperationsDashboard />);
-    expect(await screen.findByTestId("operations-monitoring-summary")).toBeInTheDocument();
-    expect(screen.getByTestId("operations-snapshot-summary")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("operations-monitoring-summary"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId("operations-snapshot-summary"),
+    ).toBeInTheDocument();
   });
 
   it("renders discovery due counts and monitoring due/overdue", async () => {
     render(<OperationsDashboard />);
-    expect(await screen.findByTestId("operations-discovery-due-now")).toHaveTextContent("3");
-    expect(screen.getByTestId("operations-monitoring-due")).toHaveTextContent("4");
-    expect(screen.getByTestId("operations-monitoring-overdue")).toHaveTextContent("1");
+    expect(
+      await screen.findByTestId("operations-discovery-due-now"),
+    ).toHaveTextContent("3");
+    expect(screen.getByTestId("operations-monitoring-due")).toHaveTextContent(
+      "4",
+    );
+    expect(
+      screen.getByTestId("operations-monitoring-overdue"),
+    ).toHaveTextContent("1");
   });
 
   it("renders snapshot and maturity counts", async () => {
     render(<OperationsDashboard />);
-    expect(await screen.findByTestId("operations-snapshot-24h")).toHaveTextContent("42");
-    expect(screen.getByTestId("operations-outcome-valid")).toHaveTextContent("30");
-    expect(screen.getByTestId("operations-outcome-missing")).toHaveTextContent("50");
-    expect(screen.getByTestId("operations-upcoming-24h")).toHaveTextContent("5");
+    expect(
+      await screen.findByTestId("operations-snapshot-24h"),
+    ).toHaveTextContent("42");
+    expect(screen.getByTestId("operations-outcome-valid")).toHaveTextContent(
+      "30",
+    );
+    expect(screen.getByTestId("operations-outcome-missing")).toHaveTextContent(
+      "50",
+    );
+    expect(screen.getByTestId("operations-upcoming-24h")).toHaveTextContent(
+      "5",
+    );
   });
 
   it("shows liveness disclaimer in secondary placement", async () => {
     render(<OperationsDashboard />);
     const note = await screen.findByTestId("operations-liveness-note");
     expect(note.textContent).toMatch(/heartbeat|lock/i);
-    expect(screen.queryByRole("heading", { name: /Операции/i })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: /Состояние системы/i }),
+    ).toBeInTheDocument();
   });
 
   it("shows system status badge with Russian label", async () => {
@@ -347,9 +395,13 @@ describe("OperationsDashboard", () => {
   });
 
   it("shows initial error distinct from empty state", async () => {
-    vi.mocked(api.getOperationsOverview).mockRejectedValueOnce(new Error("network down"));
+    vi.mocked(api.getOperationsOverview).mockRejectedValueOnce(
+      new Error("network down"),
+    );
     render(<OperationsDashboard />);
-    expect(await screen.findByText("Не удалось загрузить операции")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Не удалось загрузить операции"),
+    ).toBeInTheDocument();
     expect(screen.queryByText("Данных пока нет")).not.toBeInTheDocument();
   });
 
@@ -364,7 +416,9 @@ describe("OperationsDashboard", () => {
     render(<OperationsDashboard />);
     await screen.findByTestId("operations-discovery-due-now");
     fireEvent.click(screen.getByTestId("operations-refresh"));
-    await waitFor(() => expect(api.getOperationsOverview).toHaveBeenCalledTimes(2));
+    await waitFor(() =>
+      expect(api.getOperationsOverview).toHaveBeenCalledTimes(2),
+    );
   });
 
   it("live planner toggle changes API param", async () => {
@@ -380,7 +434,11 @@ describe("OperationsDashboard", () => {
 
   it("renders recent cycle tables", async () => {
     render(<OperationsDashboard />);
-    expect(await screen.findByTestId("operations-discovery-cycles")).toBeInTheDocument();
-    expect(screen.getByTestId("operations-monitoring-cycles")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("operations-discovery-cycles"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId("operations-monitoring-cycles"),
+    ).toBeInTheDocument();
   });
 });

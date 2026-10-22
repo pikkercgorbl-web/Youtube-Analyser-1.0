@@ -25,6 +25,9 @@ export interface MonitoringLatestCycle {
   fetch_failed_count: number;
   validation_failed_count: number;
   persistence_failed_count: number;
+  execution_error_count?: number;
+  partial_primary_cause?: string;
+  cycle_status_detail?: string | null;
 }
 
 export interface MonitoringOverview {
@@ -170,6 +173,9 @@ export interface MonitoringCycle {
   validation_failed: number;
   persistence_failed: number;
   duplicate_snapshot_count: number;
+  execution_error_count?: number;
+  partial_primary_cause?: string;
+  cycle_status_detail?: string | null;
 }
 
 export interface MonitoringCycleListResponse {

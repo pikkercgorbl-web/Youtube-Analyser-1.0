@@ -1,0 +1,60 @@
+{
+  "saved_family_id": 1,
+  "topic_label": "memes then vs now died",
+  "anchor_label": "memes then vs now died",
+  "verified_queries": [
+    "memes then vs now died",
+    "мемы тогда и сейчас"
+  ],
+  "plan_mode": "auto",
+  "duration_seconds": 4.86,
+  "scan": {
+    "queries_attempted": 2,
+    "queries_failed": 0,
+    "new_findings_count": 0
+  },
+  "unique_findings_matching_verified_queries": 86,
+  "first_10_titles": [
+    {
+      "title": "【一口氣看完】百億資本女老闆偽裝窮孤女回蘇家奔喪，親戚聯手趕她出門；她暗中結清欠款，亮身份送貪親入獄!#女頻爽文 #隱藏身份 #百億女老闆#YouTubeShorts",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "\"The Return of Mersad and Farzaneh’s Surprise; Mother’s Strong Objection!",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "Новый дом: Нам и Са готовят традиционные побеги бамбука с добавлением чили для продажи на рынке",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "Qasim rushed to Umm al-Banin's aid and built a shelter for his love!",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "Linh’s wooden house was built with the help of her father and neighbors.",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "【全集】百億女總裁裝窮回家認親，卻被親戚當成乞丐百般刁難！我當場撤回百萬合作，親戚們哭著求我幫忙，我冷笑：你們也配？#短劇 #打臉",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "Zahra falls ill. She tries to get her husband to go with her to the doctor.",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "💔 Гнев землевладельца разбил Елене сердце! 😢🏠",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "Mehri revealed the truth about Reza, leading the police to come to Farkhondeh’s house.",
+      "query": "мемы тогда и сейчас"
+    },
+    {
+      "title": "The Evil Second Wife Thought She Could Tear Ahmad & Khadija Apart… Until Her Cruel Plan Backfired!",
+      "query": "мемы тогда и сейчас"
+    }
+  ],
+  "note": "Titles are InnerTube hits for verified queries only; thematic fit is manual."
+}

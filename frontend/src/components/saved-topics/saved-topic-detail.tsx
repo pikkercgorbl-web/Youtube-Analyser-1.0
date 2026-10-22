@@ -12,6 +12,7 @@ import {
   PageShell,
   SectionPanel,
 } from "@/components/design-system";
+import { LegacyArchivedBanner } from "@/components/layout/legacy-archived-banner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,8 +26,14 @@ import {
 } from "@/lib/api";
 import { canonicalYoutubeUrl, familyDetailHref } from "@/lib/attention-format";
 import {
+  detailLead,
+  formatObservationTimelineLine,
+  historyEmptyMessage,
+  MILESTONE_LABELS,
+  timelineObservationLabel,
+} from "@/lib/saved-topic-watch";
+import {
   EVENT_TYPE_LABELS,
-  FAMILY_ABSENCE_MESSAGE,
   FINDING_RATING_LABELS,
   OWN_TEST_OUTCOME_LABELS,
   SAVED_TOPIC_STATUS_LABELS,
@@ -40,13 +47,25 @@ import type {
 } from "@/lib/saved-topics-types";
 import { cn } from "@/lib/utils";
 
-const STATUSES: SavedTopicStatus[] = ["WATCHING", "WANT_TO_TEST", "TESTING", "DROPPED"];
+const STATUSES: SavedTopicStatus[] = [
+  "WATCHING",
+  "WANT_TO_TEST",
+  "TESTING",
+  "DROPPED",
+];
 const FINDING_RATINGS: FindingRating[] = ["USEFUL", "NOT_USEFUL", "UNCLEAR"];
-const TEST_OUTCOMES: OwnTestOutcome[] = ["UNKNOWN", "BETTER", "AS_EXPECTED", "WORSE"];
+const TEST_OUTCOMES: OwnTestOutcome[] = [
+  "UNKNOWN",
+  "BETTER",
+  "AS_EXPECTED",
+  "WORSE",
+];
 
 function formatTimelineItem(item: SavedTopicTimelineItem): string {
   if (item.kind === "observation") {
-    return formatCounts(item.payload);
+    const prefix = timelineObservationLabel(item);
+    const body = formatObservationTimelineLine(item.payload);
+    return prefix ? `${prefix}: ${body}` : body;
   }
   const type = item.event_type ?? "event";
   const label = EVENT_TYPE_LABELS[type] ?? type;
@@ -62,39 +81,32 @@ function formatTimelineItem(item: SavedTopicTimelineItem): string {
   return label;
 }
 
-function snapshotFamily(snapshot: Record<string, unknown>): Record<string, unknown> {
+function snapshotFamily(
+  snapshot: Record<string, unknown>,
+): Record<string, unknown> {
   const family = snapshot.family;
-  return family && typeof family === "object" ? (family as Record<string, unknown>) : {};
+  return family && typeof family === "object"
+    ? (family as Record<string, unknown>)
+    : {};
 }
 
-function videoLinks(snapshot: Record<string, unknown>): { video_id: string; title?: string; youtube_url?: string }[] {
+function videoLinks(
+  snapshot: Record<string, unknown>,
+): { video_id: string; title?: string; youtube_url?: string }[] {
   const evidence = snapshot.breakout_video_evidence;
   if (!Array.isArray(evidence)) return [];
   return evidence
-    .filter((row): row is Record<string, unknown> => typeof row === "object" && row !== null && "video_id" in row)
+    .filter(
+      (row): row is Record<string, unknown> =>
+        typeof row === "object" && row !== null && "video_id" in row,
+    )
     .map((row) => ({
       video_id: String(row.video_id),
       title: row.title ? String(row.title) : undefined,
-      youtube_url: row.youtube_url ? String(row.youtube_url) : canonicalYoutubeUrl(String(row.video_id)),
+      youtube_url: row.youtube_url
+        ? String(row.youtube_url)
+        : canonicalYoutubeUrl(String(row.video_id)),
     }));
-}
-
-function formatCounts(payload: Record<string, unknown> | undefined): string {
-  if (!payload) return "—";
-  const counts = payload.counts;
-  if (!counts || typeof counts !== "object") {
-    if (payload.present_in_snapshot === false) {
-      return String(payload.absence_message ?? FAMILY_ABSENCE_MESSAGE);
-    }
-    return "—";
-  }
-  const c = counts as Record<string, number>;
-  return [
-    `видео ${c.video_count ?? "?"}`,
-    `каналы ${c.channel_count ?? "?"}`,
-    `ключи ${c.keyword_count ?? "?"}`,
-    `breakout-eligible ${c.breakout_eligible_count ?? "?"}`,
-  ].join(" · ");
 }
 
 export function SavedTopicDetailView({ topicId }: { topicId: number }) {
@@ -184,14 +196,18 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
           ? {
               views: metricViews ? Number.parseInt(metricViews, 10) : null,
               vph: metricVph ? Number.parseFloat(metricVph) : null,
-              measured_at: metricMeasuredAt ? new Date(metricMeasuredAt).toISOString() : null,
+              measured_at: metricMeasuredAt
+                ? new Date(metricMeasuredAt).toISOString()
+                : null,
             }
           : null;
       await addSavedTopicFeedback(topicId, {
         finding_rating: findingRating,
         reason_comment: feedbackComment,
         own_test_video_url: testUrl.trim() || null,
-        own_test_video_published_at: testPublished ? new Date(testPublished).toISOString() : null,
+        own_test_video_published_at: testPublished
+          ? new Date(testPublished).toISOString()
+          : null,
         own_test_outcome: testOutcome,
         manual_metrics: manual,
       });
@@ -202,14 +218,17 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
       setDetail(topic);
       setTimeline(tl.items);
     } catch (error) {
-      setFeedbackError(error instanceof Error ? error.message : "Не удалось сохранить оценку");
+      setFeedbackError(
+        error instanceof Error ? error.message : "Не удалось сохранить оценку",
+      );
     } finally {
       setFeedbackSaving(false);
     }
   };
 
   if (state === "loading") return <LoadingState title="Загрузка темы…" />;
-  if (state === "error") return <ErrorState title={message} onRetry={() => void load()} />;
+  if (state === "error")
+    return <ErrorState title={message} onRetry={() => void load()} />;
   if (!detail) return null;
 
   const label = String(frozenFamily.label ?? detail.family_key);
@@ -217,28 +236,65 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
 
   return (
     <PageShell>
-      <Link href="/saved-topics" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "w-fit")}>
+      <LegacyArchivedBanner
+        route="saved-topics"
+        primaryHref="/saved"
+        primaryLabel="Новые темы — в «Сохранённое»"
+      />
+      <Link
+        href="/saved-topics"
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "sm" }),
+          "w-fit",
+        )}
+      >
         <ArrowLeft className="mr-1 h-4 w-4" />
         Сохранённые темы
       </Link>
-      <PageHeader title={label} lead={detail.family_key} />
+      <PageHeader title={label} lead={detailLead(detail)} />
+      {detail.watch_summary?.milestones?.length ? (
+        <div
+          className="flex flex-wrap gap-2 text-xs"
+          data-testid="watch-milestones"
+        >
+          {detail.watch_summary.milestones.map((m) => (
+            <span
+              key={`${m.kind}-${m.occurred_at}`}
+              className="rounded-full border border-border/70 bg-muted/40 px-3 py-1"
+            >
+              {MILESTONE_LABELS[m.kind]} ·{" "}
+              {new Date(m.occurred_at).toLocaleString()}
+            </span>
+          ))}
+        </div>
+      ) : null}
       {detail.archived_at ? (
-        <p className="text-sm text-amber-200">В архиве с {new Date(detail.archived_at).toLocaleString()}</p>
+        <p className="text-sm text-amber-200">
+          В архиве с {new Date(detail.archived_at).toLocaleString()}
+        </p>
       ) : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <SectionPanel title="Тогда (frozen snapshot)">
-          <p className="text-xs text-muted-foreground">
-            Run {String(detail.frozen_snapshot.attention_run_id ?? "—")}
+        <SectionPanel title="При сохранении">
+          <p className="text-lg font-medium">
+            {String(frozenFamily.video_count ?? "—")} видео ·{" "}
+            {String(frozenFamily.channel_count ?? "—")} каналов
           </p>
-          <Disclosure summary="Семейство">
-            <pre className="max-h-64 overflow-auto text-xs">{JSON.stringify(frozenFamily, null, 2)}</pre>
+          <Disclosure summary="Исходные данные сохранения">
+            <pre className="max-h-64 overflow-auto text-xs">
+              {JSON.stringify(frozenFamily, null, 2)}
+            </pre>
           </Disclosure>
           {examples.length ? (
             <ul className="mt-3 space-y-1 text-sm">
               {examples.slice(0, 8).map((video) => (
                 <li key={video.video_id}>
-                  <a href={video.youtube_url} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                  <a
+                    href={video.youtube_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-primary hover:underline"
+                  >
                     {video.title ?? video.video_id}
                   </a>
                 </li>
@@ -247,20 +303,36 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
           ) : null}
         </SectionPanel>
 
-        <SectionPanel title="Сейчас (последнее observation)">
+        <SectionPanel title="Последнее наблюдение">
+          {detail.watch_summary?.stale_message ? (
+            <p className="text-sm text-muted-foreground">
+              {detail.watch_summary.stale_message}
+            </p>
+          ) : null}
           {detail.live_observation ? (
             <>
               <p className="text-xs text-muted-foreground">
-                {new Date(detail.live_observation.captured_at).toLocaleString()} · run{" "}
-                {detail.live_observation.attention_run_id}
+                {new Date(detail.live_observation.captured_at).toLocaleString()}
               </p>
-              <p className="mt-2 text-sm">{formatCounts(livePayload)}</p>
+              <p className="mt-2 text-sm">
+                {formatObservationTimelineLine(livePayload)}
+              </p>
+              <Disclosure summary="Технические сведения наблюдения">
+                <p className="text-xs text-muted-foreground">
+                  attention_run_id: {detail.live_observation.attention_run_id}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  family_key: {detail.family_key}
+                </p>
+              </Disclosure>
             </>
           ) : (
-            <p className="text-sm text-muted-foreground">Observation ещё не записано.</p>
+            <p className="text-sm text-muted-foreground">
+              {historyEmptyMessage(detail)}
+            </p>
           )}
           {detail.count_deltas ? (
-            <Disclosure summary="Разница counts (сопоставимые поля)">
+            <Disclosure summary="Изменения показателей">
               <ul className="text-xs">
                 {Object.entries(detail.count_deltas).map(([key, delta]) => (
                   <li key={key}>
@@ -276,11 +348,13 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
 
       <SectionPanel title="Оценка находки и собственный тест">
         <p className="text-xs text-muted-foreground">
-          Новая запись сохраняет предыдущие оценки. Метрики своего видео — ваши ручные данные, не Radar snapshots.
+          Новая запись сохраняет предыдущие оценки. Метрики своего видео — ваши
+          ручные данные, отдельно от измерений Radar.
         </p>
         {detail.latest_feedback ? (
           <p className="mt-2 text-sm">
-            Последняя оценка: {FINDING_RATING_LABELS[detail.latest_feedback.finding_rating]} (
+            Последняя оценка:{" "}
+            {FINDING_RATING_LABELS[detail.latest_feedback.finding_rating]} (
             {new Date(detail.latest_feedback.recorded_at).toLocaleString()})
           </p>
         ) : null}
@@ -290,7 +364,9 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
             <select
               className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={findingRating}
-              onChange={(event) => setFindingRating(event.target.value as FindingRating)}
+              onChange={(event) =>
+                setFindingRating(event.target.value as FindingRating)
+              }
             >
               {FINDING_RATINGS.map((value) => (
                 <option key={value} value={value}>
@@ -310,7 +386,11 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
           </label>
           <label className="text-sm">
             Ссылка на тестовое видео (необязательно)
-            <Input className="mt-1" value={testUrl} onChange={(event) => setTestUrl(event.target.value)} />
+            <Input
+              className="mt-1"
+              value={testUrl}
+              onChange={(event) => setTestUrl(event.target.value)}
+            />
           </label>
           <label className="text-sm">
             Дата публикации тестового видео
@@ -326,7 +406,9 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
             <select
               className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={testOutcome}
-              onChange={(event) => setTestOutcome(event.target.value as OwnTestOutcome)}
+              onChange={(event) =>
+                setTestOutcome(event.target.value as OwnTestOutcome)
+              }
             >
               {TEST_OUTCOMES.map((value) => (
                 <option key={value} value={value}>
@@ -342,7 +424,11 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
                 value={metricViews}
                 onChange={(event) => setMetricViews(event.target.value)}
               />
-              <Input placeholder="VPH" value={metricVph} onChange={(event) => setMetricVph(event.target.value)} />
+              <Input
+                placeholder="VPH"
+                value={metricVph}
+                onChange={(event) => setMetricVph(event.target.value)}
+              />
               <Input
                 type="datetime-local"
                 value={metricMeasuredAt}
@@ -350,8 +436,14 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
               />
             </div>
           </Disclosure>
-          {feedbackError ? <p className="text-xs text-destructive">{feedbackError}</p> : null}
-          <Button type="button" disabled={feedbackSaving} onClick={() => void onSubmitFeedback()}>
+          {feedbackError ? (
+            <p className="text-xs text-destructive">{feedbackError}</p>
+          ) : null}
+          <Button
+            type="button"
+            disabled={feedbackSaving}
+            onClick={() => void onSubmitFeedback()}
+          >
             Добавить оценку
           </Button>
         </div>
@@ -364,7 +456,9 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
             <select
               className="mt-1 flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={status}
-              onChange={(event) => setStatus(event.target.value as SavedTopicStatus)}
+              onChange={(event) =>
+                setStatus(event.target.value as SavedTopicStatus)
+              }
             >
               {STATUSES.map((value) => (
                 <option key={value} value={value}>
@@ -375,21 +469,36 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
           </label>
           <label className="text-sm">
             Заметки
-            <Textarea className="mt-1" value={notes} onChange={(event) => setNotes(event.target.value)} rows={4} />
+            <Textarea
+              className="mt-1"
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              rows={4}
+            />
           </label>
           <label className="text-sm">
             Теги (через запятую)
-            <Input className="mt-1" value={tagsText} onChange={(event) => setTagsText(event.target.value)} />
+            <Input
+              className="mt-1"
+              value={tagsText}
+              onChange={(event) => setTagsText(event.target.value)}
+            />
           </label>
-          <Button type="button" disabled={saving} onClick={() => void onSaveMeta()}>
+          <Button
+            type="button"
+            disabled={saving}
+            onClick={() => void onSaveMeta()}
+          >
             Сохранить изменения
           </Button>
         </div>
       </SectionPanel>
 
-      <SectionPanel title="История: observations и решения">
+      <SectionPanel title="История наблюдений и решений">
         {timeline.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Пусто</p>
+          <p className="text-sm text-muted-foreground">
+            {historyEmptyMessage(detail)}
+          </p>
         ) : (
           <ul className="space-y-2 text-sm">
             {timeline.map((row) => (
@@ -399,8 +508,7 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
               >
                 <p className="text-xs text-muted-foreground">
                   {new Date(row.occurred_at).toLocaleString()}
-                  {row.kind === "observation" && row.attention_run_id ? ` · ${row.attention_run_id}` : ""}
-                  {row.kind === "event" ? ` · ${row.kind}` : ""}
+                  {row.kind === "event" ? ` · решение` : ""}
                 </p>
                 <p>{formatTimelineItem(row)}</p>
               </li>
@@ -410,15 +518,28 @@ export function SavedTopicDetailView({ topicId }: { topicId: number }) {
       </SectionPanel>
 
       <div className="flex flex-wrap gap-2">
-        <Link href={familyDetailHref(detail.family_key)} className={buttonVariants({ variant: "outline", size: "sm" })}>
+        <Link
+          href={familyDetailHref(detail.family_key)}
+          className={buttonVariants({ variant: "outline", size: "sm" })}
+        >
           Открыть семейство (live Attention UI)
         </Link>
         {detail.archived_at ? (
-          <Button type="button" variant="secondary" size="sm" onClick={() => void onRestore()}>
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={() => void onRestore()}
+          >
             Восстановить
           </Button>
         ) : (
-          <Button type="button" variant="outline" size="sm" onClick={() => void onArchive()}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => void onArchive()}
+          >
             В архив
           </Button>
         )}

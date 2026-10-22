@@ -310,7 +310,7 @@ def build_active_monitoring_enriched(
         latest = latest_by_video.get(decision.video_id)
         video = video_rows.get(decision.video_id)
         views = latest.views if latest and latest.views is not None else (video.views_count if video else None)
-        vph = latest.vph if latest and latest.vph is not None else state.raw_vph
+        vph = state.raw_vph
 
         tier_key = decision.tier.value
         if tier_key in tier_counts:

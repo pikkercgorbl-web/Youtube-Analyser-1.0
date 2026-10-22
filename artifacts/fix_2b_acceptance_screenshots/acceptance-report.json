@@ -1,0 +1,59 @@
+{
+  "base": "http://127.0.0.1:3100",
+  "checks": [
+    {
+      "step": "opportunities_load",
+      "ok": true
+    },
+    {
+      "step": "winner_click_from_families",
+      "videoId": "8jW-kBlBEQw",
+      "href": "/opportunities#winner-8jW-kBlBEQw",
+      "videosTabPressed": true
+    },
+    {
+      "step": "direct_hash_entry",
+      "videoId": "8jW-kBlBEQw",
+      "ok": true
+    },
+    {
+      "step": "winner_visible_with_search_filter",
+      "videoId": "8jW-kBlBEQw",
+      "ok": true
+    },
+    {
+      "step": "mobile_winner_focus",
+      "videoId": "8jW-kBlBEQw",
+      "ok": true
+    },
+    {
+      "step": "family_keyword_detail",
+      "family_key": "family:kw:1505",
+      "tierReasonSnippet": "общий поисковый запрос и тема из метаданных. группа объединена поиском или метаданными, без доказанного общего формата"
+    },
+    {
+      "step": "family_topic_detail",
+      "family_key": "family:topic:4ac6a6a26765f407",
+      "tierReasonSnippet": "общий поисковый запрос и тема из метаданных. группа объединена поиском или метаданными, без доказанного общего формата"
+    },
+    {
+      "step": "validation_video_link",
+      "href": "/saved/videos/1",
+      "ok": true
+    },
+    {
+      "step": "validation_family_link",
+      "href": "/saved/families/2",
+      "ok": true
+    }
+  ],
+  "badResponses": [],
+  "screenshots": [
+    "01-opportunities-videos-tab.png",
+    "02-after-winner-link-from-families.png",
+    "03-mobile-winner-focus.png",
+    "04-family-keyword-detail.png",
+    "05-family-topic-detail.png",
+    "06-validation-portfolio.png"
+  ]
+}

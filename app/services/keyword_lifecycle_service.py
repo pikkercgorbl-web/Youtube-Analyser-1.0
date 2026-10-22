@@ -157,8 +157,29 @@ def apply_post_scan_schedule(
     finished = ensure_utc(finished_at)
     if scan_succeeded:
         record.last_checked = finished
-        record.next_scan_at = sched.next_scan_after_success(record.lifecycle_status, finished)
-        record.scan_interval_seconds = sched.interval_seconds_for(record.lifecycle_status)
+        probation_interval_seconds: int | None = None
+        if record.lifecycle_status == LIFECYCLE_PROBATION:
+            from app.services.discovery_queue_policy import (
+                count_probation_due,
+                effective_probation_interval_seconds,
+            )
+
+            from app.services.discovery_queue_policy import (
+                effective_probation_interval_seconds_for_session,
+            )
+
+            probation_interval_seconds, _cap = effective_probation_interval_seconds_for_session(
+                session,
+                now=finished,
+            )
+            record.scan_interval_seconds = probation_interval_seconds
+        else:
+            record.scan_interval_seconds = sched.interval_seconds_for(record.lifecycle_status)
+        record.next_scan_at = sched.next_scan_after_success(
+            record.lifecycle_status,
+            finished,
+            probation_interval_seconds=probation_interval_seconds,
+        )
     else:
         record.next_scan_at = sched.next_scan_after_failure(finished)
     session.flush()

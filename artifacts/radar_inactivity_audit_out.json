@@ -1,0 +1,325 @@
+﻿{
+  "audit_at_utc": "2026-10-07T13:12:58Z",
+  "audit_at_local": "2026-10-07 19:12:58 +0600",
+  "window_hours": 9,
+  "window_start_utc": "2026-10-07T04:12:58Z",
+  "database": {
+    "configured": true,
+    "host": "127.0.0.1",
+    "port": 5433,
+    "database": "youtube_radar_restore_check"
+  },
+  "processes": [
+    {
+      "pid": 6340,
+      "name": "python.exe",
+      "status": "running",
+      "start_utc": "2026-10-06T16:29:30Z",
+      "cmdline": "C:\\Users\\dayta\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_discovery_worker.py --interval-seconds 300 --error-backoff-seconds 300 --batch-size 5"
+    },
+    {
+      "pid": 15900,
+      "name": "python.exe",
+      "status": "running",
+      "start_utc": "2026-10-06T16:29:36Z",
+      "cmdline": "C:\\Users\\dayta\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_monitoring_worker.py --interval-seconds 900 --error-backoff-seconds 300"
+    },
+    {
+      "pid": 27308,
+      "name": "python.exe",
+      "status": "running",
+      "start_utc": "2026-10-06T16:29:41Z",
+      "cmdline": "C:\\Users\\dayta\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_outcome_capture_worker.py --interval-seconds 3600"
+    }
+  ],
+  "worker_state": [
+    {
+      "worker": "discovery",
+      "status": "running",
+      "lock_holder": "LAPTOP-K7VTSODB:discovery",
+      "lock_acquired_at_utc": "2026-10-06T16:29:31Z",
+      "lock_stale_90m": true,
+      "last_cycle_started_utc": "2026-10-07T12:54:23Z",
+      "last_cycle_finished_utc": "2026-10-07T13:03:33Z",
+      "last_run_id": "discovery_20261007T125423Z_0cc4a550",
+      "last_cycle_status": "ok",
+      "last_error": null
+    },
+    {
+      "worker": "monitoring",
+      "status": "running",
+      "lock_holder": "LAPTOP-K7VTSODB:1",
+      "lock_acquired_at_utc": "2026-10-06T16:29:37Z",
+      "lock_stale_90m": true,
+      "last_cycle_started_utc": null,
+      "last_cycle_finished_utc": null,
+      "last_run_id": null,
+      "last_cycle_status": null,
+      "last_error": null
+    }
+  ],
+  "cycle_runs": {
+    "monitoring_last_5": [
+      {
+        "run_id": "monitoring_20261007T032619Z_67ed0297",
+        "started_at": "2026-10-07T03:26:19Z",
+        "finished_at": "2026-10-07T03:26:38Z",
+        "cycle_status": "ok",
+        "loaded_video_count": 1548,
+        "selected_request_count": 0,
+        "inserted_snapshot_count": 0,
+        "fetch_failed_count": 0,
+        "runtime_seconds": 18.411
+      },
+      {
+        "run_id": "monitoring_20261007T031042Z_7d832b34",
+        "started_at": "2026-10-07T03:10:42Z",
+        "finished_at": "2026-10-07T03:11:01Z",
+        "cycle_status": "ok",
+        "loaded_video_count": 1548,
+        "selected_request_count": 0,
+        "inserted_snapshot_count": 0,
+        "fetch_failed_count": 0,
+        "runtime_seconds": 18.577
+      },
+      {
+        "run_id": "monitoring_20261007T025505Z_14bda948",
+        "started_at": "2026-10-07T02:55:05Z",
+        "finished_at": "2026-10-07T02:55:24Z",
+        "cycle_status": "ok",
+        "loaded_video_count": 1548,
+        "selected_request_count": 0,
+        "inserted_snapshot_count": 0,
+        "fetch_failed_count": 0,
+        "runtime_seconds": 18.652
+      },
+      {
+        "run_id": "monitoring_20261007T023927Z_02c1f44a",
+        "started_at": "2026-10-07T02:39:27Z",
+        "finished_at": "2026-10-07T02:39:46Z",
+        "cycle_status": "ok",
+        "loaded_video_count": 1548,
+        "selected_request_count": 0,
+        "inserted_snapshot_count": 0,
+        "fetch_failed_count": 0,
+        "runtime_seconds": 19.219
+      },
+      {
+        "run_id": "monitoring_20261007T022350Z_51efc43c",
+        "started_at": "2026-10-07T02:23:50Z",
+        "finished_at": "2026-10-07T02:24:09Z",
+        "cycle_status": "ok",
+        "loaded_video_count": 1548,
+        "selected_request_count": 0,
+        "inserted_snapshot_count": 0,
+        "fetch_failed_count": 0,
+        "runtime_seconds": 18.377
+      }
+    ],
+    "discovery_runs_in_window": [
+      {
+        "discovery_run_id": "discovery_20261007T125423Z_0cc4a550",
+        "started": "2026-10-07T12:54:24Z",
+        "finished": "2026-10-07T13:03:33Z",
+        "keywords": 5,
+        "ok_n": 5,
+        "persisted": 1727
+      },
+      {
+        "discovery_run_id": "discovery_20261007T124323Z_fb7abe32",
+        "started": "2026-10-07T12:43:23Z",
+        "finished": "2026-10-07T12:49:23Z",
+        "keywords": 5,
+        "ok_n": 5,
+        "persisted": 1637
+      },
+      {
+        "discovery_run_id": "discovery_20261007T122809Z_228c215f",
+        "started": "2026-10-07T12:28:10Z",
+        "finished": "2026-10-07T12:38:23Z",
+        "keywords": 5,
+        "ok_n": 5,
+        "persisted": 2154
+      },
+      {
+        "discovery_run_id": "discovery_20261007T121717Z_a2f91c73",
+        "started": "2026-10-07T12:17:18Z",
+        "finished": "2026-10-07T12:23:09Z",
+        "keywords": 2,
+        "ok_n": 2,
+        "persisted": 877
+      },
+      {
+        "discovery_run_id": "discovery_20261007T120919Z_f04fe4b1",
+        "started": "2026-10-07T12:09:20Z",
+        "finished": "2026-10-07T12:12:17Z",
+        "keywords": 3,
+        "ok_n": 3,
+        "persisted": 649
+      },
+      {
+        "discovery_run_id": "discovery_20261007T120111Z_34de6dc6",
+        "started": "2026-10-07T12:01:11Z",
+        "finished": "2026-10-07T12:04:19Z",
+        "keywords": 5,
+        "ok_n": 5,
+        "persisted": 717
+      },
+      {
+        "discovery_run_id": "discovery_20261007T115258Z_50bc6ff4",
+        "started": "2026-10-07T11:52:59Z",
+        "finished": "2026-10-07T11:56:11Z",
+        "keywords": 5,
+        "ok_n": 5,
+        "persisted": 701
+      },
+      {
+        "discovery_run_id": "discovery_20261007T114542Z_3b40c7c4",
+        "started": "2026-10-07T11:45:43Z",
+        "finished": "2026-10-07T11:47:58Z",
+        "keywords": 4,
+        "ok_n": 4,
+        "persisted": 547
+      }
+    ],
+    "discovery_last_run": {
+      "discovery_run_id": "discovery_20261007T125423Z_0cc4a550",
+      "started": "2026-10-07T12:54:24Z",
+      "finished": "2026-10-07T13:03:33Z",
+      "keywords": 5,
+      "persisted": 1727
+    }
+  },
+  "snapshots_9h_by_source": [
+    {
+      "source": "keyword_outcome_worker",
+      "count": 691,
+      "first_utc": "2026-10-07T04:33:25Z",
+      "last_utc": "2026-10-07T10:35:28Z"
+    }
+  ],
+  "snapshots_9h_total": 691,
+  "discovery_hits_9h": {
+    "hits": 12302,
+    "distinct_videos": 10402,
+    "last_hit_utc": "2026-10-07T13:02:05Z"
+  },
+  "videos_updated_9h": {
+    "count": 10820,
+    "last_updated_utc": "2026-10-07T12:54:23Z"
+  },
+  "enrichment_attempts_9h": {
+    "subscriber": {
+      "count": 0,
+      "last_utc": null
+    },
+    "format": {
+      "count": 0,
+      "last_utc": null
+    }
+  },
+  "budget_utc_day": {
+    "day": "2026-10-07",
+    "rows": [
+      {
+        "budget_kind": "channels_list",
+        "utc_day": "2026-10-07",
+        "id_units_reserved": 1000,
+        "http_requests": 20
+      },
+      {
+        "budget_kind": "videos_list",
+        "utc_day": "2026-10-07",
+        "id_units_reserved": 1000,
+        "http_requests": 20
+      }
+    ],
+    "env_limits": {
+      "subscriber": 1000,
+      "format": 1000
+    }
+  },
+  "read_models": {
+    "attention_last_3": [
+      {
+        "run_id": "attention_20261007T122947Z",
+        "computed_utc": "2026-10-07T12:29:47Z",
+        "winner_count": 50,
+        "candidate_video_count": 21251
+      }
+    ],
+    "kp_global_last_3": [
+      {
+        "run_id": "keyword_performance_20261006T162955Z",
+        "evaluated_utc": "2026-10-06T16:29:55Z",
+        "global_eligible_video_count": 2205
+      }
+    ],
+    "kp_keyword_rows_total": 178
+  },
+  "monitoring_planner_dry_run": {
+    "note": "dry_run=True, no DB writes, no HTTP",
+    "loaded_video_count": 1548,
+    "eligible_video_count": 52,
+    "due_count": 0,
+    "overdue_count": 1,
+    "capture_request_count": 1,
+    "selected_request_count": 1,
+    "deferred_request_count": 0,
+    "tier_counts": {
+      "B": 5,
+      "C": 47
+    },
+    "cycle_status": "dry_run",
+    "enriched_active_count": 52,
+    "unmonitored_count": 1496,
+    "tier_counts_enriched": {
+      "A": 0,
+      "B": 5,
+      "C": 47
+    }
+  },
+  "monitoring_eligibility_breakdown_sample": {
+    "states_loaded": 53,
+    "sample_size": 53,
+    "reasons": {
+      "eligible_load_path": 53
+    }
+  },
+  "log_tail_hints": {
+    "discovery": [
+      "discovery_20261006-215630.log: FROM channels ",
+      "discovery_20261006-215630.log: WHERE channels.id IN (%(id_1_1)s, %(id_1_2)s)",
+      "discovery_20261006-215630.log: 2026-10-06 22:10:18,650 INFO sqlalchemy.engine.Engine [cached since 824.9s ago] {'id_1_1': 'UCeBltwtrlKu3_cB9JteFVPQ', 'id_1_2': 'UCGpsgNbzdF7BECCVbB1COHw'}",
+      "discovery_20261006-215630.log: 2026-10-06 22:10:21,048 INFO sqlalchemy.engine.Engine SELECT explosive_channels.channel_id, explosive_channels.channel_name, explosive_channels.avatar_url, explosive_channels.subscribers, explosive_channels.channel_age_days, explosive_channels.total_views, explosive_channels.viral_coefficient, explosive_channels.representative_video_id, explosive_channels.representative_video_title, explosive_channels.representative_video_thumbnail, explosive_channels.representative_video_views, explosive_channels.vph, explosive_channels.updated_at ",
+      "discovery_20261006-215630.log: FROM explosive_channels ",
+      "discovery_20261006-215630.log: WHERE explosive_channels.channel_id IN (%(channel_id_1_1)s, %(channel_id_1_2)s)",
+      "discovery_20261006-215630.log: 2026-10-06 22:10:21,049 INFO sqlalchemy.engine.Engine [cached since 823.7s ago] {'channel_id_1_1': 'UCeBltwtrlKu3_cB9JteFVPQ', 'channel_id_1_2': 'UCGpsgNbzdF7BECCVbB1COHw'}",
+      "discovery_20261006-215630.log: 2026-10-06 22:10:27,256 INFO sqlalchemy.engine.Engine SELECT channels.id, channels.title, channels.subscribers_count, channels.subscribers_api_status, channels.subscribers_api_checked_at, channels.topic, channels.custom_url, channels.created_at, channels.updated_at ",
+      "discovery_20261006-215630.log: FROM channels ",
+      "discovery_20261006-215630.log: WHERE channels.id IN (%(id_1_1)s)",
+      "discovery_20261006-215630.log: 2026-10-06 22:10:27,256 INFO sqlalchemy.engine.Engine [cached since 833.5s ago] {'id_1_1': 'UCzQ2FFVe7m8yIgzXMZtlSjg'}",
+      "discovery_20261006-215630.log: 2026-10-06 22:10:29,203 INFO sqlalchemy.engine.Engine SELECT explosive_channels.channel_id, explosive_channels.channel_name, explosive_channels.avatar_url, explosive_channels.subscribers, explosive_channels.channel_age_days, explosive_channels.total_views, explosive_channels.viral_coefficient, explosive_channels.representative_video_id, explosive_channels.representative_video_title, explosive_channels.representative_video_thumbnail, explosive_channels.representative_video_views, explosive_channels.vph, explosive_channels.updated_at ",
+      "discovery_20261006-215630.log: FROM explosive_channels ",
+      "discovery_20261006-215630.log: WHERE explosive_channels.channel_id IN (%(channel_id_1_1)s)",
+      "discovery_20261006-215630.log: 2026-10-06 22:10:29,204 INFO sqlalchemy.engine.Engine [cached since 831.9s ago] {'channel_id_1_1': 'UCzQ2FFVe7m8yIgzXMZtlSjg'}"
+    ],
+    "monitoring": [
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,487 INFO sqlalchemy.engine.Engine DELETE FROM monitoring_video_queue WHERE monitoring_video_queue.run_id = %(run_id_1)s",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,487 INFO sqlalchemy.engine.Engine [cached since 1865s ago] {'run_id_1': 'monitoring_20261006T160500Z_627fd203'}",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,491 INFO sqlalchemy.engine.Engine INSERT INTO monitoring_video_queue (run_id, video_id, channel_id, tier, monitoring_status, has_due_checkpoint, has_overdue_checkpoint, has_pending_checkpoint, priority_rank, current_vph, current_views, age_hours, published_at, latest_snapshot_at, nex ... 27969 characters truncated ... ounter) ORDER BY sen_counter RETURNING monitoring_video_queue.id, monitoring_video_queue.id AS id__1",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,491 INFO sqlalchemy.engine.Engine [cached since 1865s ago (insertmanyvalues) 1/1 (ordered)] {'vph_vs_channel_median__0': None, 'priority_rank__0': 0, 'current_vph__0': 431.4189, 'has_due_checkpoint__0': False, 'has_pending_checkpoint__0': True, 'run_id__0': 'monitoring_20261006T160500Z_627fd203', 'overdue_checkpoint_hours_json__0': '[6]', 'has_overdue_checkpoint__0': True, 'latest_snapshot_at__0': datetime.datetime(2026, 10, 6, 16, 5, 16, 562260, tzinfo=datetime.timezone.utc), 'current_views__0': 4779, 'published_at__0': datetime.datetime(2026, 10, 6, 5, 0, 38, tzinfo=datetime.timezone.utc), 'video_id__0': 'yVaPgwNlfLo', 'channel_velocity_baseline_status__0': None, 'tier__0': 'A', 'channel_id__0': 'UCj3G_B6hTIMkYgYDoeIMUZQ', 'next_checkpoint_hours__0': 24, 'due_checkpoint_hours_json__0': '[]', 'monitoring_status__0': 'active', 'content_format__0': 'regular', 'age_hours__0': 11.0774, 'vph_vs_channel_median__1': None, 'priority_rank__1': 1, 'current_vph__1': 190.0269, 'has_due_checkpoint__1': False, 'has_pending_checkpoint__1': True, 'run_id__1': 'monitoring_20261006T160500Z_627fd203', 'overdue_checkpoint_hours_json__1': '[24]', 'has_overdue_checkpoint__1': True, 'latest_snapshot_at__1': datetime.datetime(2026, 10, 6, 16, 5, 16, 493548, tzinfo=datetime.timezone.utc), 'current_views__1': 5797, 'published_at__1': datetime.datetime(2026, 10, 5, 9, 34, 54, tzinfo=datetime.timezone.utc), 'video_id__1': '4iAhXTKrYj4', 'channel_velocity_baseline_status__1': None, 'tier__1': 'B', 'channel_id__1': 'UCK-6eaII1avh0HeSuJEGNCA', 'next_checkpoint_hours__1': 48, 'due_checkpoint_hours_json__1': '[]', 'monitoring_status__1': 'active', 'content_format__1': 'regular', 'age_hours__1': 30.5063, 'vph_vs_channel_median__2': None, 'priority_rank__2': 2, 'current_vph__2': 157.8581, 'has_due_checkpoint__2': False, 'has_pending_checkpoint__2': True, 'run_id__2': 'monitoring_20261006T160500Z_627fd203', 'overdue_checkpoint_hours_json__2': '[24]', 'has_overdue_checkpoint__2': True, 'latest_snapshot_at__2': datetime.datetime(2026, 10, 6, 16, 5, 16, 507480, tzinfo=datetime.timezone.utc), 'current_views__2': 5143 ... 940 parameters truncated ... 'published_at__49': datetime.datetime(2026, 10, 5, 13, 8, 53, tzinfo=datetime.timezone.utc), 'video_id__49': 'YZf4HhiZS7c', 'channel_velocity_baseline_status__49': None, 'tier__49': 'C', 'channel_id__49': 'UCFsTFdf1A-jUa5AFnknAftQ', 'next_checkpoint_hours__49': 72, 'due_checkpoint_hours_json__49': '[]', 'monitoring_status__49': 'active', 'content_format__49': 'regular', 'age_hours__49': 26.9399, 'vph_vs_channel_median__50': None, 'priority_rank__50': 50, 'current_vph__50': 0.0364, 'has_due_checkpoint__50': False, 'has_pending_checkpoint__50': True, 'run_id__50': 'monitoring_20261006T160500Z_627fd203', 'overdue_checkpoint_hours_json__50': '[]', 'has_overdue_checkpoint__50': False, 'latest_snapshot_at__50': datetime.datetime(2026, 10, 6, 13, 23, 33, 68229, tzinfo=datetime.timezone.utc), 'current_views__50': 1, 'published_at__50': datetime.datetime(2026, 10, 5, 9, 55, 55, tzinfo=datetime.timezone.utc), 'video_id__50': 'brlghhXE-dQ', 'channel_velocity_baseline_status__50': None, 'tier__50': 'C', 'channel_id__50': 'UCYuXikoKHdST_TZTNBhkxAA', 'next_checkpoint_hours__50': 72, 'due_checkpoint_hours_json__50': '[]', 'monitoring_status__50': 'active', 'content_format__50': 'regular', 'age_hours__50': 30.156, 'vph_vs_channel_median__51': None, 'priority_rank__51': 51, 'current_vph__51': 0.0, 'has_due_checkpoint__51': False, 'has_pending_checkpoint__51': True, 'run_id__51': 'monitoring_20261006T160500Z_627fd203', 'overdue_checkpoint_hours_json__51': '[]', 'has_overdue_checkpoint__51': False, 'latest_snapshot_at__51': datetime.datetime(2026, 10, 6, 13, 23, 33, 59726, tzinfo=datetime.timezone.utc), 'current_views__51': 0, 'published_at__51': datetime.datetime(2026, 10, 5, 1, 37, 14, tzinfo=datetime.timezone.utc), 'video_id__51': 'bAzI75gUQdg', 'channel_velocity_baseline_status__51': None, 'tier__51': 'C', 'channel_id__51': 'UCVr-soIqyOh-B7Lm7MFQOBg', 'next_checkpoint_hours__51': 72, 'due_checkpoint_hours_json__51': '[]', 'monitoring_status__51': 'active', 'content_format__51': 'regular', 'age_hours__51': 38.4674}",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,500 INFO sqlalchemy.engine.Engine INSERT INTO monitoring_cycle_runs (run_id, started_at, finished_at, runtime_seconds, cycle_status, loaded_video_count, eligible_video_count, tier_a_count, tier_b_count, tier_c_count, due_count, overdue_count, selected_request_count, deferred_request_count, inserted_snapshot_count, duplicate_snapshot_count, missing_count, fetch_failed_count, validation_failed_count, persistence_failed_count, error_summary) VALUES (%(run_id)s, %(started_at)s, %(finished_at)s, %(runtime_seconds)s, %(cycle_status)s, %(loaded_video_count)s, %(eligible_video_count)s, %(tier_a_count)s, %(tier_b_count)s, %(tier_c_count)s, %(due_count)s, %(overdue_count)s, %(selected_request_count)s, %(deferred_request_count)s, %(inserted_snapshot_count)s, %(duplicate_snapshot_count)s, %(missing_count)s, %(fetch_failed_count)s, %(validation_failed_count)s, %(persistence_failed_count)s, %(error_summary)s) RETURNING monitoring_cycle_runs.id",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,500 INFO sqlalchemy.engine.Engine [cached since 1865s ago] {'run_id': 'monitoring_20261006T160500Z_627fd203', 'started_at': datetime.datetime(2026, 10, 6, 16, 5, 0, 155788, tzinfo=datetime.timezone.utc), 'finished_at': datetime.datetime(2026, 10, 6, 16, 5, 16, 574274, tzinfo=datetime.timezone.utc), 'runtime_seconds': 16.419, 'cycle_status': 'ok', 'loaded_video_count': 353, 'eligible_video_count': 52, 'tier_a_count': 2, 'tier_b_count': 25, 'tier_c_count': 25, 'due_count': 0, 'overdue_count': 14, 'selected_request_count': 14, 'deferred_request_count': 0, 'inserted_snapshot_count': 14, 'duplicate_snapshot_count': 0, 'missing_count': 0, 'fetch_failed_count': 0, 'validation_failed_count': 0, 'persistence_failed_count': 0, 'error_summary': None}",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,503 INFO sqlalchemy.engine.Engine COMMIT",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,506 INFO sqlalchemy.engine.Engine BEGIN (implicit)",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,506 INFO sqlalchemy.engine.Engine SELECT monitoring_worker_state.id AS monitoring_worker_state_id, monitoring_worker_state.status AS monitoring_worker_state_status, monitoring_worker_state.lock_holder AS monitoring_worker_state_lock_holder, monitoring_worker_state.lock_acquired_at AS monitoring_worker_state_lock_acquired_at, monitoring_worker_state.updated_at AS monitoring_worker_state_updated_at ",
+      "monitoring_20261006-213348.log: FROM monitoring_worker_state ",
+      "monitoring_20261006-213348.log: WHERE monitoring_worker_state.id = %(pk_1)s",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,506 INFO sqlalchemy.engine.Engine [cached since 1903s ago] {'pk_1': 1}",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,508 INFO sqlalchemy.engine.Engine UPDATE monitoring_worker_state SET updated_at=%(updated_at)s WHERE monitoring_worker_state.id = %(monitoring_worker_state_id)s",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,508 INFO sqlalchemy.engine.Engine [cached since 1865s ago] {'updated_at': datetime.datetime(2026, 10, 6, 16, 5, 16, 574274, tzinfo=datetime.timezone.utc), 'monitoring_worker_state_id': 1}",
+      "monitoring_20261006-213348.log: 2026-10-06 22:05:32,509 INFO sqlalchemy.engine.Engine COMMIT"
+    ]
+  }
+}

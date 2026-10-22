@@ -136,7 +136,11 @@ def _details_to_observation(
     content_format, is_short, is_live = snapshot_format_flags_from_details(details)
     if content_format is None:
         content_format, is_short, is_live = _classify_format(details.duration_seconds)
-    views = details.views_count if details.views_count >= 0 else None
+    views = (
+        details.views_count
+        if details.views_count is not None and details.views_count >= 0
+        else None
+    )
     likes = details.likes_count if details.likes_count >= 0 else None
     comments = details.comments_count if details.comments_count >= 0 else None
     channel_id = (details.channel_id or request.channel_id or "").strip()

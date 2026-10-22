@@ -106,6 +106,7 @@ def refresh_keyword_performance_read_model(
     *,
     evaluated_at: datetime | None = None,
     chunk_size: int = 40,
+    publish_token: str | None = None,
 ) -> tuple[str, int]:
     """Recompute full metrics off-UI; persists global + per-keyword rows for both attribution modes."""
     reference = evaluated_at or utc_now()
@@ -116,6 +117,13 @@ def refresh_keyword_performance_read_model(
         global_eligible_video_count=global_n,
         evaluated_at=reference,
     )
+    if publish_token is not None:
+        from app.services.read_model_publish_lock import (
+            PUBLISH_LOCK_KEYWORD_PERFORMANCE,
+            assert_publish_lock_token,
+        )
+
+        assert_publish_lock_token(session, kind=PUBLISH_LOCK_KEYWORD_PERFORMANCE, token=publish_token)
     session.execute(delete(KeywordPerformanceKeywordSnapshot))
     session.execute(delete(KeywordPerformanceGlobalSnapshot))
     session.add(
@@ -185,7 +193,10 @@ def _keyword_list_stmt(
             (KeywordPerformanceKeywordSnapshot.keyword_id == TargetKeyword.id)
             & (KeywordPerformanceKeywordSnapshot.attribution_mode == attribution_mode),
         )
-        .order_by(TargetKeyword.id.asc())
+        .order_by(
+            TargetKeyword.last_checked.desc().nulls_last(),
+            TargetKeyword.id.desc(),
+        )
     )
     if lifecycle_status:
         stmt = stmt.where(TargetKeyword.lifecycle_status == lifecycle_status.lower())
@@ -307,7 +318,10 @@ def list_keyword_performance_live_page(
     keyword_records = list(
         session.scalars(
             select(TargetKeyword)
-            .order_by(TargetKeyword.id.asc())
+            .order_by(
+                TargetKeyword.last_checked.desc().nulls_last(),
+                TargetKeyword.id.desc(),
+            )
             .offset(max(0, offset))
             .limit(max(1, min(limit, 500))),
         ).all(),

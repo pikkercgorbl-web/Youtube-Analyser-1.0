@@ -239,9 +239,41 @@ def test_run_id_format() -> None:
 
 def test_monitoring_loads_persisted_video() -> None:
     session = _session()
+    now = datetime(2026, 9, 15, 12, 0, tzinfo=UTC)
     persist_discovered_video(session, _video("mon1", views=5000), discovery_keyword="fitness")
+    from scripts.monitoring_test_seed_helpers import ensure_monitoring_eligible_channel
+
+    video = session.get(Video, "mon1")
+    assert video is not None
+    ensure_monitoring_eligible_channel(session, "ch1", published_at=video.published_at)
+    from app.models.orm import VideoFormatEnrichmentAttempt
+    from app.services.historical_video_format_verification import OUTCOME_CONFIRMED_REGULAR
+    from datetime import timedelta
+
+    session.add(
+        VideoFormatEnrichmentAttempt(
+            video_id="mon1",
+            last_attempt_at=now,
+            last_outcome=OUTCOME_CONFIRMED_REGULAR,
+        ),
+    )
+    from app.models.orm import VideoSnapshot
+
+    session.add(
+        VideoSnapshot(
+            video_id="mon1",
+            channel_id="ch1",
+            captured_at=video.published_at + timedelta(hours=6),
+            published_at=video.published_at,
+            age_hours=6.0,
+            views=5000,
+            source="test_seed",
+            run_id="seed",
+            fetch_status="refreshed",
+        ),
+    )
     session.commit()
-    states = load_monitored_video_states(session, now=datetime(2026, 9, 15, 12, 0, tzinfo=UTC))
+    states = load_monitored_video_states(session, now=now)
     assert any(s.video_id == "mon1" for s in states)
 
 

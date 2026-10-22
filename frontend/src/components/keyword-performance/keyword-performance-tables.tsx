@@ -105,7 +105,11 @@ export function DiscoveryPerformanceTable({
         <tr>
           <DataTableTh>Ключ</DataTableTh>
           <DataTableTh>Lifecycle</DataTableTh>
-          <DataTableTh align="right">Найдено видео</DataTableTh>
+          <DataTableTh align="right">
+            <span title="Число video_id, засчитанных выбранной атрибуции (attributed_video_count)">
+              В атрибуции
+            </span>
+          </DataTableTh>
           <DataTableTh align="right">
             <span className="inline-flex items-center gap-1">
               Новых для базы
@@ -134,7 +138,9 @@ export function DiscoveryPerformanceTable({
                 <DataTableTd>
                   <LifecycleBadge status={row.lifecycle_status} title={LIFECYCLE_NOT_QUALITY} />
                 </DataTableTd>
-                <DataTableTd align="right">{formatOptionalNumber(row.unique_video_count)}</DataTableTd>
+                <DataTableTd align="right" data-testid={`attributed-videos-${row.keyword_id}`}>
+                  {formatOptionalNumber(row.attributed_video_count ?? row.unique_video_count)}
+                </DataTableTd>
                 <DataTableTd align="right" emphasis>
                   {formatOptionalNumber(row.new_to_corpus_video_count)}
                 </DataTableTd>

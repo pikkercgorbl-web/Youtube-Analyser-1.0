@@ -34,6 +34,8 @@ from app.services.attention_engine_types import (
 
     ChannelMomentum,
 
+    ChannelRepresentativeVideoEvidence,
+
 )
 
 from app.services.attention_evidence import AttentionEvidenceBundle
@@ -87,6 +89,37 @@ MIN_RECENT_VIDEOS = 2
 MIN_PREVIOUS_VIDEOS = 2
 
 MIN_IMPROVING_RECENT = 2
+
+
+def _freeze_representative_evidence(
+    representative: tuple[str, ...],
+    recent_measurable: list[AgeAlignedVphMeasurement],
+    previous_median: float,
+    ratio_threshold: float,
+) -> tuple[ChannelRepresentativeVideoEvidence, ...]:
+    by_id = {m.video_id: m for m in recent_measurable}
+    frozen: list[ChannelRepresentativeVideoEvidence] = []
+    for video_id in representative:
+        measurement = by_id.get(video_id)
+        if measurement is None:
+            continue
+        ratio: float | None = None
+        meets: bool | None = None
+        if previous_median > 0:
+            ratio = round(measurement.vph / previous_median, 4)
+            meets = measurement.vph >= ratio_threshold * previous_median
+        frozen.append(
+            ChannelRepresentativeVideoEvidence(
+                video_id=video_id,
+                horizon_vph=measurement.vph,
+                measured_at=ensure_utc(measurement.snapshot_captured_at),
+                actual_age_hours=measurement.actual_age_hours,
+                vs_previous_median_ratio=ratio,
+                meets_improvement_threshold=meets,
+                snapshot_row_id=measurement.snapshot_row_id,
+            ),
+        )
+    return tuple(frozen)
 
 MIN_SUBSCRIBER_SNAPSHOTS = 2
 
@@ -925,6 +958,13 @@ def _build_row(
         latest_observed_at=max(seen_times) if seen_times else None,
 
         representative_video_ids=representative,
+
+        representative_video_evidence=_freeze_representative_evidence(
+            representative,
+            recent_measurable,
+            previous_median,
+            ratio_threshold,
+        ),
 
         reason_codes=tuple(dict.fromkeys(codes)),
 

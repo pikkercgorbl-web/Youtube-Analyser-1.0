@@ -40,6 +40,7 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_video_snapshots_table(engine)
     ensure_monitoring_worker_state_table(engine)
     ensure_monitoring_cycle_runs_table(engine)
+    ensure_monitoring_capture_outcomes_table(engine)
     ensure_monitoring_video_queue_table(engine)
     ensure_discovery_worker_state_table(engine)
     ensure_keyword_performance_tables(engine)
@@ -56,6 +57,109 @@ def run_startup_migrations(engine: Engine) -> None:
     ensure_videos_published_at_source_column(engine)
     ensure_saved_topics_tables(engine)
     ensure_saved_topics_1_22d_tables(engine)
+    ensure_saved_research_tables(engine)
+    ensure_saved_research_events_table(engine)
+    ensure_saved_research_feedback_table(engine)
+    ensure_saved_video_manual_refresh_lease_column(engine)
+    ensure_read_model_publish_locks_table(engine)
+    ensure_read_model_publish_lock_token_column(engine)
+    ensure_topic_exploration_evidence_tables(engine)
+    ensure_daily_intelligence_tables(engine)
+    ensure_videos_automatic_monitoring_withheld_column(engine)
+    ensure_saved_video_similar_watch_tables(engine)
+    ensure_saved_video_similar_watch_batch_query_offset_column(engine)
+    ensure_saved_video_similar_finding_feedback_table(engine)
+    ensure_saved_family_topic_watch_tables(engine)
+
+
+def ensure_saved_video_similar_watch_tables(engine: Engine) -> None:
+    """SavedVideo similar-search watch tables (v1)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        SavedVideoSimilarFinding,
+        SavedVideoSimilarScan,
+        SavedVideoSimilarWatch,
+    )
+
+    for model, label in (
+        (SavedVideoSimilarWatch, "saved_video_similar_watches"),
+        (SavedVideoSimilarScan, "saved_video_similar_scans"),
+        (SavedVideoSimilarFinding, "saved_video_similar_findings"),
+    ):
+        if label not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", label)
+
+
+def ensure_saved_video_similar_watch_batch_query_offset_column(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "saved_video_similar_watches" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("saved_video_similar_watches")}
+    if "batch_query_offset" in column_names:
+        return
+    dialect = engine.dialect.name
+    if dialect == "postgresql":
+        ddl = "ALTER TABLE saved_video_similar_watches ADD COLUMN batch_query_offset INTEGER NOT NULL DEFAULT 0"
+    else:
+        ddl = "ALTER TABLE saved_video_similar_watches ADD COLUMN batch_query_offset INTEGER NOT NULL DEFAULT 0"
+    with engine.begin() as connection:
+        connection.execute(text(ddl))
+    logger.info("Added saved_video_similar_watches.batch_query_offset column")
+
+
+def ensure_saved_video_similar_finding_feedback_table(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "saved_video_similar_finding_feedback" in inspector.get_table_names():
+        return
+    from app.models.orm import SavedVideoSimilarFindingFeedback
+
+    SavedVideoSimilarFindingFeedback.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created saved_video_similar_finding_feedback table")
+
+
+def ensure_saved_family_topic_watch_tables(engine: Engine) -> None:
+    """SavedFamily topic video search watch tables (shares similar-watch budget)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        SavedFamilyTopicFinding,
+        SavedFamilyTopicScan,
+        SavedFamilyTopicWatch,
+    )
+
+    for model, label in (
+        (SavedFamilyTopicWatch, "saved_family_topic_watches"),
+        (SavedFamilyTopicScan, "saved_family_topic_scans"),
+        (SavedFamilyTopicFinding, "saved_family_topic_findings"),
+    ):
+        if label not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", label)
+
+
+def ensure_videos_automatic_monitoring_withheld_column(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "videos" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("videos")}
+    if "automatic_monitoring_withheld" in column_names:
+        return
+    dialect = engine.dialect.name
+    if dialect == "postgresql":
+        ddl = (
+            "ALTER TABLE videos ADD COLUMN automatic_monitoring_withheld "
+            "BOOLEAN NOT NULL DEFAULT false"
+        )
+    else:
+        ddl = (
+            "ALTER TABLE videos ADD COLUMN automatic_monitoring_withheld "
+            "BOOLEAN NOT NULL DEFAULT 0"
+        )
+    with engine.begin() as connection:
+        connection.execute(text(ddl))
+    logger.info("Added videos.automatic_monitoring_withheld column")
 
 
 def ensure_videos_published_at_source_column(engine: Engine) -> None:
@@ -159,6 +263,91 @@ def ensure_saved_topics_1_22d_tables(engine: Engine) -> None:
         logger.info("Created saved_topic_feedback table")
 
 
+def ensure_saved_research_tables(engine: Engine) -> None:
+    """Saved Research: saved_videos, saved_families + observations (Stage 1.22C)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        SavedFamily,
+        SavedFamilyObservation,
+        SavedVideo,
+        SavedVideoObservation,
+    )
+
+    for model, label in (
+        (SavedVideo, "saved_videos"),
+        (SavedVideoObservation, "saved_video_observations"),
+        (SavedFamily, "saved_families"),
+        (SavedFamilyObservation, "saved_family_observations"),
+    ):
+        if label not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", label)
+
+
+def ensure_saved_research_events_table(engine: Engine) -> None:
+    """Append-only decision events for SavedVideo / SavedFamily (Stage 1.22D.1)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import SavedResearchEvent
+
+    if "saved_research_events" not in names:
+        SavedResearchEvent.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created saved_research_events table")
+
+
+def ensure_daily_intelligence_tables(engine: Engine) -> None:
+    """Daily intelligence archive (Stage 1.23A)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        DailyIntelligenceReport,
+        DailyIntelligenceReportFamilyFinding,
+        DailyIntelligenceReportWinnerFinding,
+        DailyIntelligenceRunFamilyAppearance,
+        DailyIntelligenceRunSnapshot,
+        DailyIntelligenceRunWinnerAppearance,
+    )
+
+    for table_name, model in (
+        ("daily_intelligence_reports", DailyIntelligenceReport),
+        ("daily_intelligence_run_snapshots", DailyIntelligenceRunSnapshot),
+        ("daily_intelligence_run_winner_appearances", DailyIntelligenceRunWinnerAppearance),
+        ("daily_intelligence_run_family_appearances", DailyIntelligenceRunFamilyAppearance),
+        ("daily_intelligence_report_winner_findings", DailyIntelligenceReportWinnerFinding),
+        ("daily_intelligence_report_family_findings", DailyIntelligenceReportFamilyFinding),
+    ):
+        if table_name not in names:
+            model.__table__.create(bind=engine, checkfirst=True)
+            logger.info("Created %s table", table_name)
+
+
+def ensure_saved_research_feedback_table(engine: Engine) -> None:
+    """Append-only analyst feedback for SavedVideo / SavedFamily (Stage 1.22D.2)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import SavedResearchFeedback
+
+    if "saved_research_feedback" not in names:
+        SavedResearchFeedback.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created saved_research_feedback table")
+
+
+def ensure_saved_video_manual_refresh_lease_column(engine: Engine) -> None:
+    """Lease column for in-flight manual SavedVideo refresh (Stage 1.22C.2)."""
+    inspector = inspect(engine)
+    if "saved_videos" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("saved_videos")}
+    if "manual_refresh_lease_until" in column_names:
+        return
+    with engine.begin() as connection:
+        connection.execute(
+            text("ALTER TABLE saved_videos ADD COLUMN manual_refresh_lease_until TIMESTAMP"),
+        )
+    logger.info("Added saved_videos.manual_refresh_lease_until column")
+
+
 def ensure_attention_engine_tables(engine: Engine) -> None:
     """Create Attention Engine snapshot tables when missing (Stage 1.22A)."""
     inspector = inspect(engine)
@@ -216,6 +405,18 @@ def ensure_monitoring_cycle_runs_table(engine: Engine) -> None:
 
     MonitoringCycleRun.__table__.create(bind=engine, checkfirst=True)
     logger.info("Created monitoring_cycle_runs table")
+
+
+def ensure_monitoring_capture_outcomes_table(engine: Engine) -> None:
+    """Create monitoring_capture_outcomes table when missing."""
+    inspector = inspect(engine)
+    if "monitoring_capture_outcomes" in inspector.get_table_names():
+        return
+
+    from app.models.orm import MonitoringCaptureOutcome
+
+    MonitoringCaptureOutcome.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created monitoring_capture_outcomes table")
 
 
 def ensure_monitoring_video_queue_table(engine: Engine) -> None:
@@ -466,3 +667,50 @@ def ensure_explosive_channels_video_id(engine: Engine) -> None:
             ),
         )
     logger.info("Added explosive_channels.representative_video_id column")
+
+
+def ensure_read_model_publish_locks_table(engine: Engine) -> None:
+    """Create read_model_publish_locks when missing (Stage 3)."""
+    inspector = inspect(engine)
+    if "read_model_publish_locks" in inspector.get_table_names():
+        return
+
+    from app.models.orm import ReadModelPublishLock
+
+    ReadModelPublishLock.__table__.create(bind=engine, checkfirst=True)
+    logger.info("Created read_model_publish_locks table")
+
+
+def ensure_read_model_publish_lock_token_column(engine: Engine) -> None:
+    inspector = inspect(engine)
+    if "read_model_publish_locks" not in inspector.get_table_names():
+        return
+    column_names = {column["name"] for column in inspector.get_columns("read_model_publish_locks")}
+    if "lock_token" in column_names:
+        return
+    with engine.begin() as connection:
+        connection.execute(
+            text("ALTER TABLE read_model_publish_locks ADD COLUMN lock_token VARCHAR(64)"),
+        )
+    logger.info("Added read_model_publish_locks.lock_token column")
+
+
+def ensure_topic_exploration_evidence_tables(engine: Engine) -> None:
+    """Create topic exploration evidence tables when missing (Stage 6)."""
+    inspector = inspect(engine)
+    names = set(inspector.get_table_names())
+    from app.models.orm import (
+        TopicExplorationPass,
+        TopicExplorationPhrasePassStat,
+        TopicExplorationVideoObservation,
+    )
+
+    if "topic_exploration_passes" not in names:
+        TopicExplorationPass.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created topic_exploration_passes table")
+    if "topic_exploration_video_observations" not in names:
+        TopicExplorationVideoObservation.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created topic_exploration_video_observations table")
+    if "topic_exploration_phrase_pass_stats" not in names:
+        TopicExplorationPhrasePassStat.__table__.create(bind=engine, checkfirst=True)
+        logger.info("Created topic_exploration_phrase_pass_stats table")

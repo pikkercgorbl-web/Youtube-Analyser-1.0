@@ -31,6 +31,20 @@ export type PoolSourceFilter = "all" | TargetKeywordSourceType;
 
 export type PoolSortKey = "next_scan_at" | "keyword" | "lifecycle" | "last_checked";
 
+export type KeywordPoolSummary = {
+  snapshot_at: string;
+  due_now: number;
+  due_next_1h: number;
+  due_next_24h: number;
+  not_archived_count: number;
+  unique_keywords_scanned_last_24h: number;
+  keyword_scan_runs_last_24h: number;
+  probation_interval_hours: number;
+  active_interval_hours: number;
+  weak_interval_hours: number;
+  failed_scan_retry_hours: number;
+};
+
 export type PoolMetrics = {
   total: number;
   working: number;

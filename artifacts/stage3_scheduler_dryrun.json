@@ -1,0 +1,25 @@
+﻿{
+    "action":  "DryRun",
+    "python_exe":  "C:\\Users\\dayta\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "project_root":  "C:\\Projects\\Сайт анализ ниш1",
+    "tasks_created_disabled":  false,
+    "attention":  {
+                      "task_name":  "NicheScope-Radar-AttentionRefresh",
+                      "schedule":  "HOURLY every 1 hour(s)",
+                      "wrapper_script":  "C:\\Projects\\Сайт анализ ниш1\\scripts\\scheduled\\run_attention_refresh.ps1",
+                      "log_file_pattern":  "C:\\Projects\\Сайт анализ ниш1\\logs\\scheduled\\attention_refresh_*.log",
+                      "exit_code_in_log":  true
+                  },
+    "keyword_performance":  {
+                                "task_name":  "NicheScope-Radar-KeywordPerformanceRefresh",
+                                "schedule":  "DAILY at 03:15 (local time)",
+                                "wrapper_script":  "C:\\Projects\\Сайт анализ ниш1\\scripts\\scheduled\\run_keyword_performance_refresh.ps1",
+                                "log_file_pattern":  "C:\\Projects\\Сайт анализ ниш1\\logs\\scheduled\\keyword_performance_refresh_*.log",
+                                "exit_code_in_log":  true
+                            },
+    "scheduler_settings_not_in_schtasks_cli":  {
+                                                   "multiple_instances":  "Set in GUI: Do not start a new instance (IgnoreNew)",
+                                                   "missed_start":  "Set in GUI: Run task as soon as possible after scheduled start is missed"
+                                               },
+    "wrapper_exit_code":  "PowerShell wrappers exit with Python exit code (see exit_code= line in log)"
+}

@@ -28,6 +28,7 @@ export type AttentionVideoWinner = {
   reason_codes: string[];
   human_reasons: string[];
   keyword_ids: number[];
+  discovery_keywords?: AttentionRelatedKeyword[];
 };
 
 export type AttentionPattern = {
@@ -51,6 +52,22 @@ export type AttentionPattern = {
   human_reasons: string[];
 };
 
+export type AttentionChannelRepresentativeVideo = {
+  video_id: string;
+  title: string | null;
+  youtube_url: string;
+  horizon_vph: number | null;
+  measured_at: string | null;
+  actual_age_hours: number | null;
+  target_horizon_hours: number | null;
+  vs_previous_median_ratio: number | null;
+  meets_improvement_threshold: boolean | null;
+  snapshot_row_id: number | null;
+  measurement_source: string | null;
+  attention_computed_at: string | null;
+  unavailable_reason: string | null;
+};
+
 export type AttentionChannelMomentum = {
   channel_id: string;
   channel_title: string;
@@ -69,6 +86,7 @@ export type AttentionChannelMomentum = {
   first_observed_at: string | null;
   latest_observed_at: string | null;
   representative_video_ids: string[];
+  representative_videos?: AttentionChannelRepresentativeVideo[];
   reason_codes: string[];
   human_reasons: string[];
   recent_window_days: number;
@@ -121,6 +139,13 @@ export type AttentionVideoListResponse = AttentionListMeta & {
   items: AttentionVideoWinner[];
 };
 
+export type AttentionVideoDetailResponse = {
+  video: AttentionVideoWinner | null;
+  data_source: AttentionDataSource | string;
+  run_id: string | null;
+  computed_at: string | null;
+};
+
 export type AttentionPatternListResponse = AttentionListMeta & {
   items: AttentionPattern[];
 };
@@ -149,7 +174,18 @@ export type AttentionPatternMemberVideo = {
   reason_codes: string[];
   human_reasons: string[];
   keyword_ids: number[];
+  views_measurement_status?: ViewsMeasurementStatus;
+  discovery_keywords?: AttentionRelatedKeyword[];
 };
+
+export type ViewsMeasurementStatus =
+  | "from_winner_snapshot"
+  | "from_snapshot"
+  | "zero_in_winner_snapshot"
+  | "zero_in_snapshot"
+  | "unknown_in_winner_snapshot"
+  | "unknown_in_snapshot"
+  | "missing_snapshot";
 
 export type AttentionRelatedKeyword = {
   keyword_id: number;
@@ -193,6 +229,15 @@ export type AttentionPatternFamily = {
   participating_video_ids: string[];
   participating_channel_ids: string[];
   participating_keyword_ids: number[];
+  opportunity_presentation_tier:
+    | "repeating_idea"
+    | "needs_review"
+    | "search_collection";
+  grouping_basis_kind: string;
+  grouping_basis_label: string;
+  tier_reason: string;
+  feed_winner_video_ids: string[];
+  title_evidence_video_ids: string[];
 };
 
 export type AttentionPatternFamilyListResponse = AttentionListMeta & {

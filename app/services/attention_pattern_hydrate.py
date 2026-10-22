@@ -20,6 +20,7 @@ from app.services.attention_engine_types import (
 )
 from app.services.attention_evidence import resolve_subscribers
 from app.services.metrics import ensure_utc
+from app.services.attention_views_measurement import views_measurement_status
 from app.services.video_snapshot_storage import get_latest_snapshots_for_videos
 
 _IN_CHUNK = 400
@@ -114,6 +115,7 @@ def hydrate_videos_by_ids(
             or (snap.published_at if snap is not None else None)
         )
         if winner is not None:
+            winner_views = winner.views
             items.append(
                 {
                     "video_id": video_id,
@@ -123,7 +125,7 @@ def hydrate_videos_by_ids(
                     "youtube_url": winner.youtube_url or youtube_watch_url(video_id),
                     "published_at": published_at,
                     "age_hours": winner.age_hours,
-                    "views": winner.views,
+                    "views": winner_views,
                     "vph": winner.vph,
                     "subscribers": winner.subscribers,
                     "in_winner_snapshot": True,
@@ -135,6 +137,11 @@ def hydrate_videos_by_ids(
                     "reason_codes": list(winner.reason_codes),
                     "human_reasons": list(winner.human_reasons),
                     "keyword_ids": list(winner.keyword_ids),
+                    "views_measurement_status": views_measurement_status(
+                        in_winner_snapshot=True,
+                        views=winner_views,
+                        has_snapshot=snap is not None,
+                    ),
                 },
             )
             continue
@@ -166,8 +173,25 @@ def hydrate_videos_by_ids(
                 "reason_codes": [],
                 "human_reasons": [],
                 "keyword_ids": [],
+                "views_measurement_status": views_measurement_status(
+                    in_winner_snapshot=False,
+                    views=views,
+                    has_snapshot=snap is not None,
+                ),
             },
         )
+    keyword_ids = list(
+        dict.fromkeys(int(k) for row in items for k in row.get("keyword_ids") or []),
+    )
+    keyword_rows = hydrate_related_keywords(session, keyword_ids)
+    keyword_by_id = {row["keyword_id"]: row["keyword"] for row in keyword_rows}
+    for row in items:
+        ids = row.get("keyword_ids") or []
+        row["discovery_keywords"] = [
+            {"keyword_id": int(kid), "keyword": keyword_by_id[int(kid)]}
+            for kid in ids
+            if int(kid) in keyword_by_id
+        ]
     return items
 
 

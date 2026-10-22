@@ -53,6 +53,95 @@ export interface MassAnalysisResponse {
   }[];
 }
 
+export interface ChannelSingleAnalysisPublication {
+  video_id: string;
+  channel_id?: string | null;
+  title: string;
+  thumbnail_url: string;
+  views_count: number;
+  published_text: string;
+  duration_text: string;
+  url: string;
+  kind: string;
+  published_at: string | null;
+  duration_seconds: number | null;
+  in_feed: boolean;
+}
+
+export interface ChannelSingleAgePeerSample {
+  video_id: string;
+  title: string;
+  thumbnail_url: string;
+  views_count: number;
+  age_hours: number;
+}
+
+export interface ChannelSingleFocusComparison {
+  status: string;
+  multiplier: number | null;
+  peer_count: number;
+  median_views: number | null;
+  focus_views: number | null;
+  focus_age_hours: number | null;
+  peer_age_min_hours: number | null;
+  peer_age_max_hours: number | null;
+  searched_age_low_hours: number | null;
+  searched_age_high_hours: number | null;
+  age_peer_samples: ChannelSingleAgePeerSample[];
+  message: string;
+  disclaimer: string;
+}
+
+export interface ChannelSingleAnalysisShelfMoreResponse {
+  channel_id: string;
+  new_publications: ChannelSingleAnalysisPublication[];
+  feed_loaded_count: number;
+  has_more: boolean;
+  pagination_note: string;
+  fetched_at: string;
+}
+
+export interface ChannelSingleAnalysisShelfResponse {
+  channel_id: string;
+  channel_title: string;
+  subscribers_count: number | null;
+  channel_avatar_url: string;
+  feed_loaded_count: number;
+  publications: ChannelSingleAnalysisPublication[];
+  fetched_at: string;
+}
+
+export interface ChannelSingleAnalysisEnrichResponse {
+  channel_id: string;
+  publications: ChannelSingleAnalysisPublication[];
+  regular_confirmed_count: number;
+  focus: ChannelSingleAnalysisPublication | null;
+  focus_loaded_separately: boolean;
+  comparison: ChannelSingleFocusComparison;
+  enrichment_error: string | null;
+}
+
+export interface ChannelSingleCompareResponse {
+  comparison: ChannelSingleFocusComparison;
+  focus: ChannelSingleAnalysisPublication | null;
+  focus_loaded_separately: boolean;
+  enrichment_error: string | null;
+}
+
+export interface CompetitorChannelPreviewResponse {
+  input_ref: string;
+  channel_id: string;
+  channel_title: string;
+  subscribers_count: number | null;
+  channel_avatar_url: string;
+  feed_loaded_count: number;
+  regular_confirmed_count: number;
+  publications: ChannelSingleAnalysisPublication[];
+  load_status: "ready" | "partial";
+  enrichment_error: string | null;
+  fetched_at: string;
+}
+
 export type CompetitionLevel = "low" | "medium" | "high";
 
 export interface KeywordAnalyzeResponse {
@@ -242,6 +331,7 @@ export interface EnrichedVideoModel {
     thumbnail_url?: string;
     channel_avatar_url?: string;
     is_short?: boolean;
+    subscribers_count?: number;
   };
   channel: {
     subscribers_count?: number;

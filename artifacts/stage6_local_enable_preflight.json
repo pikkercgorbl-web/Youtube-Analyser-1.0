@@ -1,0 +1,30 @@
+{
+  "database": {
+    "host": "127.0.0.1",
+    "port": 5433,
+    "name": "youtube_radar_restore_check"
+  },
+  "keyword_expansion_after_discovery": true,
+  "topic_exploration": {
+    "in_discovery": true,
+    "queries_file": "config/topic_exploration_queries.json",
+    "batch_fraction": 0.2,
+    "max_pages_per_query": 3,
+    "auto_admit": false,
+    "enabled_query_count": 5,
+    "enabled_query_ids": [
+      "explore_cozy_sim_building",
+      "explore_roguelike_deck_new",
+      "explore_factory_automation_sandbox",
+      "explore_miniature_painting_diy",
+      "explore_blender_animation_tutorial"
+    ],
+    "load_error": null
+  },
+  "discovery_batch_plan": {
+    "default_worker_batch_size": 5,
+    "seed_keyword_slots": 4,
+    "exploration_query_slots": 1
+  },
+  "note": "Read-only; secrets not printed."
+}

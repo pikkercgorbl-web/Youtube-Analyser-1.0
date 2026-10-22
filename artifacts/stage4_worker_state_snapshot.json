@@ -1,0 +1,52 @@
+{
+  "captured_at_utc": "2026-10-15T07:05:55.105444+00:00",
+  "discovery_worker_state": {
+    "status": "running",
+    "last_cycle_started_at": "2026-10-15T07:03:40.154767+00:00",
+    "last_cycle_finished_at": "2026-10-15T07:05:50.468827+00:00",
+    "last_run_id": "discovery_20261015T070340Z_e55fce9b",
+    "updated_at": "2026-10-15T07:05:50.510151+00:00",
+    "lock_holder": "LAPTOP-K7VTSODB:discovery",
+    "id": 1,
+    "lock_acquired_at": "2026-10-15T06:20:50.551595+00:00",
+    "last_cycle_status": "ok",
+    "last_error": null
+  },
+  "monitoring_worker_state": {
+    "lock_acquired_at": null,
+    "lock_holder": null,
+    "updated_at": "2026-10-15T06:16:20.704025+00:00",
+    "id": 1,
+    "status": "idle"
+  },
+  "outcome_worker_state": {
+    "lock_holder": "LAPTOP-K7VTSODB:1",
+    "lock_acquired_at": "2026-10-15T07:03:40.057971+00:00",
+    "id": 1,
+    "last_cycle_status": "ok",
+    "last_error": null,
+    "status": "running",
+    "last_cycle_started_at": "2026-10-15T06:20:50.847491+00:00",
+    "last_cycle_finished_at": "2026-10-15T06:21:51.157848+00:00",
+    "last_run_id": "outcome_20261015T062050Z_3f5d39c3",
+    "updated_at": "2026-10-15T07:03:40.057971+00:00"
+  },
+  "enrichment_budget_summary": {
+    "utc_day": "2026-10-15",
+    "http_requests_semantics": "batch_api_calls_not_youtube_quota_units",
+    "channels_list": {
+      "daily_limit": 1000,
+      "pass_limit": 50,
+      "id_units_reserved": 1000,
+      "http_requests": 20,
+      "remaining_id_units": 0
+    },
+    "videos_list": {
+      "daily_limit": 1000,
+      "pass_limit": 50,
+      "id_units_reserved": 1000,
+      "http_requests": 20,
+      "remaining_id_units": 0
+    }
+  }
+}

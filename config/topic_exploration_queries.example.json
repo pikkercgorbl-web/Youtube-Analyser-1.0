@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "description": "Широкие exploration-запросы (не импортируются в БД автоматически). kind=exploration.",
+  "defaults": {
+    "kind": "exploration",
+    "schedule": "every_discovery_cycle",
+    "enabled": false
+  },
+  "queries": [
+    {
+      "id": "explore_indie_horror_rooms",
+      "direction": "gaming / horror rooms",
+      "query": "indie horror game secret rooms gameplay",
+      "enabled": true,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration",
+      "notes": "Пример широкого запроса вне веток seed keywords."
+    },
+    {
+      "id": "explore_coop_survival_trends",
+      "direction": "gaming / co-op survival",
+      "query": "new co op survival game 2025 walkthrough",
+      "enabled": true,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    },
+    {
+      "id": "explore_craft_building_minecraft_like",
+      "direction": "gaming / building",
+      "query": "minecraft like building survival no mods",
+      "enabled": false,
+      "schedule": "every_discovery_cycle",
+      "kind": "exploration"
+    }
+  ]
+}

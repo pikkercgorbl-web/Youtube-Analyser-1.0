@@ -8,12 +8,36 @@ from sqlalchemy.orm import Session
 
 from app.models.db import get_db
 from app.models.orm import TargetKeyword
-from app.models.schemas import KeywordLifecyclePatch, KeywordLifecycleResponse, TargetKeywordItem
+from app.models.schemas import (
+    KeywordLifecyclePatch,
+    KeywordLifecycleResponse,
+    KeywordPoolSummaryResponse,
+    TargetKeywordItem,
+)
+from app.services.keyword_pool_read_model import build_keyword_pool_summary
 from app.services.keyword_lifecycle_service import set_keyword_lifecycle
 from app.services.keyword_schedule_state import get_keyword_schedule_state, is_keyword_due
 from app.services.metrics import utc_now
 
 router = APIRouter()
+
+
+@router.get("/pool-summary", response_model=KeywordPoolSummaryResponse)
+def keyword_pool_summary(db: Session = Depends(get_db)) -> KeywordPoolSummaryResponse:
+    summary = build_keyword_pool_summary(db)
+    return KeywordPoolSummaryResponse(
+        snapshot_at=summary.snapshot_at,
+        due_now=summary.due_now,
+        due_next_1h=summary.due_next_1h,
+        due_next_24h=summary.due_next_24h,
+        not_archived_count=summary.not_archived_count,
+        unique_keywords_scanned_last_24h=summary.unique_keywords_scanned_last_24h,
+        keyword_scan_runs_last_24h=summary.keyword_scan_runs_last_24h,
+        probation_interval_hours=summary.probation_interval_hours,
+        active_interval_hours=summary.active_interval_hours,
+        weak_interval_hours=summary.weak_interval_hours,
+        failed_scan_retry_hours=summary.failed_scan_retry_hours,
+    )
 
 
 def _lifecycle_response(session: Session, record: TargetKeyword) -> KeywordLifecycleResponse:

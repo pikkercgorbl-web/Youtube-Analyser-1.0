@@ -94,27 +94,15 @@ def _seed_video(
     views: int = 5000,
     title: str = "Test video",
 ) -> None:
-    if session.get(Channel, "ch1") is None:
-        session.add(
-            Channel(
-                id="ch1",
-                title="Channel One",
-                subscribers_count=1000,
-                created_at=published_at,
-            ),
-        )
-    session.add(
-        Video(
-            id=video_id,
-            title=title,
-            views_count=views,
-            likes_count=0,
-            comments_count=0,
-            published_at=published_at,
-            duration_seconds=600,
-            content_format=VideoFormat.MEDIUM,
-            channel_id="ch1",
-        ),
+    from scripts.monitoring_test_seed_helpers import ensure_monitoring_eligible_video
+
+    ensure_monitoring_eligible_video(
+        session,
+        video_id,
+        channel_id="ch1",
+        published_at=published_at,
+        views=views,
+        title=title,
     )
     session.commit()
 
@@ -413,34 +401,23 @@ def test_breakout_v1_sort_metadata() -> None:
     session = factory()
     pub = NOW - timedelta(hours=12)
     _seed_video(session, "bv2", published_at=pub, views=2000, title="Lower VPH")
-    _seed_video(session, "bv1", published_at=pub, views=5000, title="Higher VPH")
-    session.add(
-        VideoSnapshot(
-            video_id="bv1",
-            channel_id="ch1",
-            captured_at=NOW,
-            published_at=pub,
-            age_hours=12.0,
-            views=5000,
-            vph=120.0,
-            source="test",
-            run_id="b1",
-        ),
-    )
-    session.add(
-        VideoSnapshot(
-            video_id="bv2",
-            channel_id="ch1",
-            captured_at=NOW,
-            published_at=pub,
-            age_hours=12.0,
-            views=2000,
-            vph=80.0,
-            source="test",
-            run_id="b2",
-        ),
-    )
+    _seed_video(session, "bv1", published_at=pub, views=6000, title="Higher VPH")
+    for video_id, views in (("bv1", 6000), ("bv2", 2000)):
+        session.add(
+            VideoSnapshot(
+                video_id=video_id,
+                channel_id="ch1",
+                captured_at=NOW,
+                published_at=pub,
+                age_hours=12.0,
+                views=views,
+                source="test",
+                run_id=f"rank_{video_id}",
+                fetch_status="refreshed",
+            ),
+        )
     session.commit()
+    expected_top_vph = round(6000 / 12.0, 4)
     with patch("app.services.monitoring_api_service.utc_now", return_value=NOW):
         body = client.get("/api/monitoring/videos?sort=breakout_v1").json()
     assert body["items"]
@@ -449,7 +426,7 @@ def test_breakout_v1_sort_metadata() -> None:
     assert top["breakout_rank"] == 1
     assert top["breakout_rank_version"] == "breakout_v1"
     assert top["breakout_ranking_signal"] == "vph"
-    assert top["breakout_ranking_value"] == 120.0
+    assert top["breakout_ranking_value"] == expected_top_vph
     assert top["in_active_capture_pool"] is True
 
 

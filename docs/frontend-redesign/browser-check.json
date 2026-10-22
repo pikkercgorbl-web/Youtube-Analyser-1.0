@@ -1,0 +1,17 @@
+{
+  "source": "isolated browser API fixtures; no working database",
+  "checks": [
+    "search",
+    "sort",
+    "sections",
+    "topic classification",
+    "save and open topic",
+    "archive and restore",
+    "validation empty",
+    "mobile overflow",
+    "menu Escape",
+    "unavailable",
+    "API error retry"
+  ],
+  "pageErrors": []
+}

@@ -41,8 +41,21 @@ from app.services.monitoring_api_service import (
     list_video_monitoring_snapshots,
 )
 from app.services.monitoring_video_queue import MonitoringQueuePageRow
+from app.services.monitoring_cycle_presentation import (
+    monitoring_cycle_status_detail,
+    monitoring_execution_error_count,
+    monitoring_partial_primary_cause,
+)
 
 router = APIRouter()
+
+
+def _monitoring_cycle_presentation_fields(row) -> dict:
+    return {
+        "execution_error_count": monitoring_execution_error_count(row),
+        "partial_primary_cause": monitoring_partial_primary_cause(row),
+        "cycle_status_detail": monitoring_cycle_status_detail(row),
+    }
 
 _VALID_TIERS = {"A", "B", "C"}
 _VALID_STATUSES = {"due", "overdue", "pending", "active", "stopped"}
@@ -154,6 +167,7 @@ def monitoring_overview(
             fetch_failed_count=cycle.fetch_failed_count,
             validation_failed_count=cycle.validation_failed_count,
             persistence_failed_count=cycle.persistence_failed_count,
+            **_monitoring_cycle_presentation_fields(cycle),
         )
     return MonitoringOverviewResponse(
         active_monitored_count=data.active_monitored_count,
@@ -346,6 +360,7 @@ def monitoring_cycles(
             validation_failed=row.validation_failed_count,
             persistence_failed=row.persistence_failed_count,
             duplicate_snapshot_count=row.duplicate_snapshot_count,
+            **_monitoring_cycle_presentation_fields(row),
         )
         for row in rows
     ]

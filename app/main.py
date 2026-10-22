@@ -37,18 +37,19 @@ from app.api.routes import (
     radar,
     radar_stats,
     saved_keywords,
+    saved_research,
     saved_topics,
     validation,
+    daily_intelligence,
+    manual_search,
     search,
     target_keywords,
     videos,
 )
 from app.core.config import settings
 from app.integrations.youtube.client import (
-    EnrichedVideoModel,
     YouTubeApiError,
     analyze_channel_from_url,
-    get_enriched_search_results,
     get_search_suggestions,
 )
 from app.models.db import Base, SessionLocal, engine
@@ -61,15 +62,14 @@ from app.models.schemas import (
     ChannelAnalysisVideoItem,
     KeywordResearchResponse,
     ForceRadarScanResponse,
-    SearchFiltersModel,
     SearchRequest,
+    SearchEnrichRequest,
+    ManualSearchResponse,
 )
+from app.services.manual_search_http import run_manual_search, run_manual_search_enrich
 from app.services.explosive_channels_radar_worker import get_shared_worker, stop_radar
 from app.services.explosive_channels_service import ExplosiveChannelsService
 from app.services.keyword_research_service import KeywordResearchService
-from app.services.video_filter_service import VideoFilterService
-
-
 logger = logging.getLogger(__name__)
 
 # Number of videos requested from InnerTube for a user-facing search.
@@ -137,6 +137,8 @@ class _EnsureCorsOnErrorsMiddleware(BaseHTTPMiddleware):
         return response
 
 
+app.add_middleware(_EnsureCorsOnErrorsMiddleware)
+
 # 3. Роуты и подключение router-ов
 @app.get("/health", tags=["system"])
 def health_check() -> dict[str, str]:
@@ -163,7 +165,10 @@ app.include_router(monitoring.router, prefix="/api/monitoring", tags=["monitorin
 app.include_router(operations.router, prefix="/api/operations", tags=["operations"])
 app.include_router(attention.router, prefix="/api/attention", tags=["attention"])
 app.include_router(saved_topics.router, prefix="/api/saved-topics", tags=["saved-topics"])
+app.include_router(saved_research.router, prefix="/api", tags=["saved-research"])
 app.include_router(validation.router, prefix="/api/validation", tags=["validation"])
+app.include_router(daily_intelligence.router, prefix="/api/daily-intelligence", tags=["daily-intelligence"])
+app.include_router(manual_search.router, prefix="/api/manual-search", tags=["manual-search"])
 
 
 @app.post("/api/force-radar-scan", response_model=ForceRadarScanResponse, tags=["analysis"])
@@ -185,33 +190,16 @@ async def force_radar_scan() -> ForceRadarScanResponse:
     )
 
 
-@app.post("/api/search", response_model=list[EnrichedVideoModel], tags=["search"])
-async def search_videos(request: SearchRequest) -> list[EnrichedVideoModel]:
-    """InnerTube search enriched with channel metadata, optional local filtering."""
-    sort_by_upload_date = request.sort_by.strip().lower() == "date"
-    try:
-        enriched = await get_enriched_search_results(
-            request.query,
-            max_results=SEARCH_MAX_RESULTS,
-            sort_by_upload_date=sort_by_upload_date,
-            save_to_db=False,
-        )
-    except YouTubeApiError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=str(exc),
-        ) from exc
+@app.post("/api/search", response_model=ManualSearchResponse, tags=["search"])
+async def search_videos(request: SearchRequest) -> ManualSearchResponse:
+    """InnerTube search with optional phased enrichment (manual search UI)."""
+    return await run_manual_search(request)
 
-    filters_config = (request.filters or SearchFiltersModel()).model_dump()
-    filter_service = VideoFilterService()
-    filtered = filter_service.apply_filters(enriched, filters_config)
-    try:
-        return filter_service.sort_results(filtered, request.sort_by)
-    except ValueError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=str(exc),
-        ) from exc
+
+@app.post("/api/search/enrich", response_model=ManualSearchResponse, tags=["search"])
+async def search_videos_enrich(request: SearchEnrichRequest) -> ManualSearchResponse:
+    """Channel browse enrichment for a basic manual search result set."""
+    return await run_manual_search_enrich(request)
 
 
 @app.post("/api/analyze-channel", response_model=AnalyzeChannelResponse, tags=["analysis"])

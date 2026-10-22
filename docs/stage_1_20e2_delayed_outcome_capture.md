@@ -65,8 +65,9 @@ Observations already **expired** without an in-window snapshot stay **missing** 
 
 ## H. Worker operation
 
-- One-shot: `python scripts/run_outcome_capture_cycle.py` (`--dry-run` for plan-only)
-- Loop: `python scripts/run_outcome_capture_worker.py` (default interval **3600s** — justified by ±12h tolerance)
+- One-shot: `python scripts/run_outcome_capture_cycle.py` (`--dry-run` for plan-only, `--max-videos N`)
+- Loop: `python scripts/run_outcome_capture_worker.py` (default interval **3600s** after each completed cycle; optional `--max-videos N`, default **100**)
+- PowerShell: `.\scripts\start-outcome.ps1` (optional `-MaxVideos N`, `-IntervalSeconds N`; logs effective config before start)
 - Singleton lock: `outcome_capture_worker_state`
 - Cycle history: `outcome_capture_cycle_runs`
 - Operations API: `outcome_capture` block on `/api/operations/overview` (separate from `monitoring`)

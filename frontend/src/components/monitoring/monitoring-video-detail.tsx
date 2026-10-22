@@ -18,6 +18,8 @@ import {
   formatMonitoringVph,
 } from "@/lib/monitoring-format";
 import type { MonitoringSnapshot, MonitoringVideoDetail } from "@/lib/monitoring-types";
+import { ChannelBaselinePanel } from "@/components/opportunities/channel-baseline-panel";
+import type { ChannelRelativeView } from "@/lib/saved-research-format";
 import { formatNumber } from "@/lib/utils";
 
 export function MonitoringVideoDetailView({ videoId }: { videoId: string }) {
@@ -74,6 +76,19 @@ export function MonitoringVideoDetailView({ videoId }: { videoId: string }) {
   }
 
   const baseline = detail.channel_baseline;
+  const baselineRel: ChannelRelativeView | null = baseline
+    ? {
+        status:
+          baseline.baseline_status === "unavailable" ||
+          baseline.baseline_status === "none"
+            ? "unavailable"
+            : "production_ready",
+        baseline_quality: baseline.baseline_status ?? "none",
+        comparable_video_count: baseline.comparable_video_count ?? 0,
+        vph_vs_channel_median: baseline.vph_vs_channel_median ?? null,
+        notes: [],
+      }
+    : null;
 
   return (
     <div className="space-y-8 pb-10">
@@ -162,21 +177,25 @@ export function MonitoringVideoDetailView({ videoId }: { videoId: string }) {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-medium">Базовая линия канала</h2>
-        {baseline ? (
-          <div className="grid gap-2 rounded-xl border border-border/70 p-4 text-sm sm:grid-cols-2 lg:grid-cols-3">
-            <div>
-              Status: <CycleStatusBadge status={baseline.baseline_status} />
-            </div>
-            <div>Comparable videos: {baseline.comparable_video_count ?? "—"}</div>
-            <div>Median VPH: {formatMonitoringVph(baseline.median_vph)}</div>
-            <div>P75 VPH: {formatMonitoringVph(baseline.p75_vph)}</div>
-            <div>vs median: {baseline.vph_vs_channel_median?.toFixed(2) ?? "—"}×</div>
-            <div>vs P75: {baseline.vph_vs_channel_p75?.toFixed(2) ?? "—"}×</div>
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">Baseline недоступен для этого видео.</p>
-        )}
+        <h2 className="text-lg font-medium">Сравнение с каналом</h2>
+        <div className="rounded-xl border border-border/70 p-4">
+          <ChannelBaselinePanel rel={baselineRel} />
+          {baseline ? (
+            <details className="mt-3 text-xs text-muted-foreground">
+              <summary>Числа мониторинга</summary>
+              <div className="mt-2 grid gap-1 sm:grid-cols-2">
+                <div>
+                  Статус: <CycleStatusBadge status={baseline.baseline_status} />
+                </div>
+                <div>Медиана VPH: {formatMonitoringVph(baseline.median_vph)}</div>
+                <div>P75 VPH: {formatMonitoringVph(baseline.p75_vph)}</div>
+                <div>
+                  vs P75: {baseline.vph_vs_channel_p75?.toFixed(2) ?? "—"}×
+                </div>
+              </div>
+            </details>
+          ) : null}
+        </div>
       </section>
 
       <section className="space-y-3">

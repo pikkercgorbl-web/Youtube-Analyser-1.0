@@ -78,6 +78,7 @@ class MonitoringCycleSummary:
     capture_request_count: int = 0
     selected_request_count: int = 0
     deferred_request_count: int = 0
+    missing_retry_suppressed_count: int = 0
     inserted_snapshot_count: int = 0
     duplicate_snapshot_count: int = 0
     missing_count: int = 0
@@ -214,6 +215,7 @@ def log_monitoring_cycle_summary(summary: MonitoringCycleSummary) -> None:
         f"due={summary.due_count} overdue={summary.overdue_count} "
         f"selected={summary.selected_request_count} "
         f"deferred={summary.deferred_request_count} "
+        f"missing_retry_suppressed={summary.missing_retry_suppressed_count} "
         f"inserted={summary.inserted_snapshot_count} "
         f"missing={summary.missing_count} "
         f"fetch_failed={summary.fetch_failed_count} "
@@ -306,6 +308,17 @@ def run_monitoring_cycle(
 
     summary.due_count = due_total
     summary.overdue_count = overdue_total
+
+    from app.services.monitoring_missing_retry import filter_capture_requests_by_missing_cooldown
+
+    all_requests, contexts, missing_retry_suppressed = filter_capture_requests_by_missing_cooldown(
+        session,
+        requests=all_requests,
+        contexts=contexts,
+        now=now,
+        tier_policy=tier_cfg,
+    )
+    summary.missing_retry_suppressed_count = missing_retry_suppressed
     summary.capture_request_count = len(all_requests)
 
     budget = allocate_capture_budget(contexts, budget_cfg)
@@ -320,6 +333,15 @@ def run_monitoring_cycle(
             session,
         )
         session.commit()
+        from app.services.monitoring_capture_outcome_storage import (
+            persist_monitoring_capture_outcomes_safe,
+        )
+
+        persist_monitoring_capture_outcomes_safe(
+            session,
+            monitoring_run_id=cycle_run_id,
+            results=execution.results,
+        )
         exec_summary = execution.summary
         summary.inserted_snapshot_count = exec_summary.inserted_snapshot_count
         summary.duplicate_snapshot_count = exec_summary.duplicate_snapshot_count

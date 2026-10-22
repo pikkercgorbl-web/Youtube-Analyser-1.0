@@ -1,0 +1,70 @@
+{
+  "$comment": "Additive extension to GET /api/validation/report (Product Fix 1A). Legacy top-level fields unchanged.",
+  "research_portfolio": {
+    "temporal_contracts": {
+      "saved_in_period": "string",
+      "decisions_in_period": "string",
+      "current_status": "string",
+      "observations": "string",
+      "legacy_topics_saved_in_period": "string"
+    },
+    "saved_in_period": {
+      "videos": "integer",
+      "families": "integer",
+      "legacy_topics": "integer",
+      "research_combined": "integer",
+      "combined_total": "integer"
+    },
+    "current_status_counts": { "WATCHING": "integer", "ARCHIVED": "integer" },
+    "decisions_in_period": {
+      "status_transition_events": {
+        "to_WANT_TO_TEST": "integer",
+        "to_TESTING": "integer",
+        "to_DROPPED": "integer",
+        "to_WATCHING": "integer"
+      },
+      "status_changed_events": "integer",
+      "events_by_type": { "status_changed": "integer" },
+      "total_events": "integer"
+    },
+    "latest_feedback": {
+      "research_verdict_distribution": { "USEFUL": "integer" },
+      "cohort_with_latest_feedback": "integer",
+      "cohort_without_latest_feedback": "integer"
+    },
+    "observations": {
+      "cohort_with_any_observation": "integer",
+      "cohort_with_multiple_observations": "integer",
+      "evidence_state_distribution": {
+        "validated": "integer",
+        "pending": "integer",
+        "insufficient": "integer"
+      }
+    },
+    "pending_signals": {
+      "cohort_still_watching": "integer",
+      "cohort_want_to_test": "integer",
+      "cohort_in_testing": "integer",
+      "cohort_dropped": "integer",
+      "cohort_without_feedback": "integer",
+      "cohort_single_observation_only": "integer"
+    },
+    "saved_in_period_items": [
+      {
+        "kind": "video | family",
+        "id": "integer",
+        "title": "string",
+        "saved_at": "ISO-8601",
+        "current_status": "string",
+        "has_latest_feedback": "boolean",
+        "observation_count": "integer"
+      }
+    ],
+    "portfolio_hints": {
+      "has_saved_research": "boolean",
+      "has_decisions_in_period": "boolean",
+      "saved_without_decisions_message": "string | null"
+    },
+    "interpretation_notes": ["string"]
+  }
+}

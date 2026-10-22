@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from migrate import load_dotenv
+
 from app.db.migrations import run_startup_migrations
 from app.models.db import SessionLocal, engine
 from app.services.attention_engine_service import compute_attention_engine
@@ -57,6 +59,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="Compute and print; do not persist.")
     parser.add_argument("--json", action="store_true", help="Print JSON instead of a human summary.")
     args = parser.parse_args(argv)
+    load_dotenv(ROOT / ".env")
 
     config = AttentionEngineConfig(
         window_hours=args.window_hours,
@@ -71,15 +74,47 @@ def main(argv: list[str] | None = None) -> int:
         if args.dry_run:
             result = compute_attention_engine(session, config=config, source="live_compute")
         else:
-            result = refresh_attention_engine(session, config=config)
+            from app.services.read_model_publish_lock import (
+                PUBLISH_LOCK_ATTENTION,
+                ReadModelPublishBusyError,
+                acquire_read_model_publish_lock,
+                release_read_model_publish_lock,
+            )
+
+            lock = acquire_read_model_publish_lock(session, kind=PUBLISH_LOCK_ATTENTION)
+            if not lock.acquired:
+                raise ReadModelPublishBusyError(
+                    kind=PUBLISH_LOCK_ATTENTION,
+                    holder=lock.holder,
+                    reason=lock.reason,
+                )
             session.commit()
+            assert lock.token is not None
+            publish_token = lock.token
+            try:
+                result = refresh_attention_engine(session, config=config, publish_token=publish_token)
+                session.commit()
+            except Exception:
+                session.rollback()
+                raise
+            finally:
+                release_read_model_publish_lock(session, kind=PUBLISH_LOCK_ATTENTION, token=publish_token)
+                session.commit()
         if args.json:
             sys.stdout.reconfigure(encoding="utf-8")
             print(json.dumps(attention_result_to_dict(result), indent=2, default=str))
         else:
             _print_human(result)
-    except Exception:
+    except Exception as exc:
         session.rollback()
+        from app.services.read_model_publish_lock import (
+            ReadModelPublishBusyError,
+            ReadModelPublishNotAuthorizedError,
+        )
+
+        if isinstance(exc, (ReadModelPublishBusyError, ReadModelPublishNotAuthorizedError)):
+            print(str(exc), file=sys.stderr)
+            return 2
         raise
     finally:
         session.close()

@@ -1,0 +1,596 @@
+{
+  "frozen_at_utc": "2026-10-07T15:23:26.690277+00:00",
+  "source_note": "no_exploration_observations; using keyword_discovery_hit",
+  "packets": [
+    {
+      "packet_id": "keyword:1",
+      "direction": "AI tools",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "AI tools",
+      "meta": {
+        "keyword_id": 1,
+        "distinct_videos_in_keyword": 2973,
+        "distinct_channels_in_keyword": 2537
+      },
+      "rows": [
+        {
+          "video_id": "02Ow34-s1rA",
+          "channel_id": "UCNcrPfF6KHJ3xPvYXNGC61w",
+          "title": "02Ow34-s1rA",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 0.06
+        },
+        {
+          "video_id": "03Fc936si_c",
+          "channel_id": "UCOJ1udd-7iKLDoc-rusENEQ",
+          "title": "03Fc936si_c",
+          "views_at_discovery": 8513,
+          "vph_at_discovery": 8513.0
+        },
+        {
+          "video_id": "03jG4nMFEl4",
+          "channel_id": "UCmCAY_mStg1POKUWgMg-aGQ",
+          "title": "03jG4nMFEl4",
+          "views_at_discovery": 4612,
+          "vph_at_discovery": 192.17
+        },
+        {
+          "video_id": "03ptRLlEHl4",
+          "channel_id": "UCNye-wNBqNL5ZzHSJj3l8Bg",
+          "title": "03ptRLlEHl4",
+          "views_at_discovery": 28329,
+          "vph_at_discovery": 28329.0
+        },
+        {
+          "video_id": "052uvIpX4MY",
+          "channel_id": "UCbiZE63kbERrOKQ7evVW9VA",
+          "title": "052uvIpX4MY",
+          "views_at_discovery": 7,
+          "vph_at_discovery": 7.0
+        },
+        {
+          "video_id": "06GfED7aI-c",
+          "channel_id": "UC6uGYezl7-dtRlaXohwo5ew",
+          "title": "06GfED7aI-c",
+          "views_at_discovery": 5003,
+          "vph_at_discovery": 5003.0
+        },
+        {
+          "video_id": "0-6PqrOv-4s",
+          "channel_id": "UCh7_CRwbYE1oHvWj9jzEMFg",
+          "title": "0-6PqrOv-4s",
+          "views_at_discovery": 28,
+          "vph_at_discovery": 28.0
+        },
+        {
+          "video_id": "084IvH5k0E8",
+          "channel_id": "UClnFtyUEaxQOCd1s5NKYGFA",
+          "title": "084IvH5k0E8",
+          "views_at_discovery": 5287,
+          "vph_at_discovery": 220.29
+        },
+        {
+          "video_id": "0aqzqNk0Cns",
+          "channel_id": "UCTrUsfr99R8NIJQGtLx8W2Q",
+          "title": "0aqzqNk0Cns",
+          "views_at_discovery": 129,
+          "vph_at_discovery": 129.0
+        },
+        {
+          "video_id": "0blN3M_MNg8",
+          "channel_id": "UCZd2tMd0OKe4-GK5pPF3_PQ",
+          "title": "0blN3M_MNg8",
+          "views_at_discovery": 3165,
+          "vph_at_discovery": 3165.0
+        },
+        {
+          "video_id": "0CDxSHdWrDo",
+          "channel_id": "UCUm4PwofyXgFFxXUGVSS-Bg",
+          "title": "0CDxSHdWrDo",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "0DXbQ6Voao4",
+          "channel_id": "UCpLEtz3H0jSfEneSdf1YKnw",
+          "title": "0DXbQ6Voao4",
+          "views_at_discovery": 12199,
+          "vph_at_discovery": 12199.0
+        },
+        {
+          "video_id": "0F7fGYpqOZg",
+          "channel_id": "UC4JX40jDee_tINbkjycV4Sg",
+          "title": "0F7fGYpqOZg",
+          "views_at_discovery": 14646,
+          "vph_at_discovery": 14646.0
+        },
+        {
+          "video_id": "0FWMPr41zg8",
+          "channel_id": "UCfojhce-y1vrvY4Q0_fvnhQ",
+          "title": "0FWMPr41zg8",
+          "views_at_discovery": 806,
+          "vph_at_discovery": 806.0
+        },
+        {
+          "video_id": "0GEEzTs0rvQ",
+          "channel_id": "UCE2TVqh0J64-7EKXafkBU4w",
+          "title": "0GEEzTs0rvQ",
+          "views_at_discovery": 8,
+          "vph_at_discovery": 0.62
+        }
+      ]
+    },
+    {
+      "packet_id": "keyword:2",
+      "direction": "gaming",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "gaming",
+      "meta": {
+        "keyword_id": 2,
+        "distinct_videos_in_keyword": 3076,
+        "distinct_channels_in_keyword": 1845
+      },
+      "rows": [
+        {
+          "video_id": "00MmZRidjfA",
+          "channel_id": "UCI5v_5raq04101jhRTQkzcQ",
+          "title": "00MmZRidjfA",
+          "views_at_discovery": 71062,
+          "vph_at_discovery": 5466.31
+        },
+        {
+          "video_id": "02HLygCthuE",
+          "channel_id": "UCx3u1O4-ZpWO5vUooXYt18w",
+          "title": "02HLygCthuE",
+          "views_at_discovery": 1020190,
+          "vph_at_discovery": 1020190.0
+        },
+        {
+          "video_id": "0477hdNDwYQ",
+          "channel_id": "UChopdX9t_h136QeufZSEtAQ",
+          "title": "0477hdNDwYQ",
+          "views_at_discovery": 127905,
+          "vph_at_discovery": 127905.0
+        },
+        {
+          "video_id": "04_m81GmXGI",
+          "channel_id": "UCmyS84e6wPq29p_7iAPmNHQ",
+          "title": "04_m81GmXGI",
+          "views_at_discovery": 28834,
+          "vph_at_discovery": 28834.0
+        },
+        {
+          "video_id": "05474ZEuj48",
+          "channel_id": "UCqWy_bVUWjZ_nVJJ0FMmaLQ",
+          "title": "05474ZEuj48",
+          "views_at_discovery": 103256,
+          "vph_at_discovery": 103256.0
+        },
+        {
+          "video_id": "06dyvNMKAvo",
+          "channel_id": "UCPzp2k1LSr1ctDEsOhg4-aw",
+          "title": "06dyvNMKAvo",
+          "views_at_discovery": 8409,
+          "vph_at_discovery": 8409.0
+        },
+        {
+          "video_id": "06_mA3C4ahA",
+          "channel_id": "UCuqQjehPyIkgksOSn2eK4cw",
+          "title": "06_mA3C4ahA",
+          "views_at_discovery": 146738,
+          "vph_at_discovery": 146738.0
+        },
+        {
+          "video_id": "070Gii-VQBA",
+          "channel_id": "UC3W2so7sUFhhYqr_-N8xmhw",
+          "title": "070Gii-VQBA",
+          "views_at_discovery": 162042,
+          "vph_at_discovery": 162042.0
+        },
+        {
+          "video_id": "0_7kHG8Hpx8",
+          "channel_id": "UC-2Y8dQb0S6DtpxNgAKoJKA",
+          "title": "0_7kHG8Hpx8",
+          "views_at_discovery": 109468,
+          "vph_at_discovery": 109468.0
+        },
+        {
+          "video_id": "09Kix7riVT0",
+          "channel_id": "UCy5I271nFOs25-i0ISwzuAg",
+          "title": "09Kix7riVT0",
+          "views_at_discovery": 44043,
+          "vph_at_discovery": 44043.0
+        },
+        {
+          "video_id": "09XsGL5Czv8",
+          "channel_id": "UC-eLbSHfelrsQgPd0Ri6ZiA",
+          "title": "09XsGL5Czv8",
+          "views_at_discovery": 42683,
+          "vph_at_discovery": 42683.0
+        },
+        {
+          "video_id": "0aFmyyX4Yds",
+          "channel_id": "UCMU4jQFCQxOaVnnNRn7z6dA",
+          "title": "0aFmyyX4Yds",
+          "views_at_discovery": 6130,
+          "vph_at_discovery": 6130.0
+        },
+        {
+          "video_id": "0aRvAqR8H2k",
+          "channel_id": "UCY0xFFEc7viwKoPAAdZ6U3Q",
+          "title": "0aRvAqR8H2k",
+          "views_at_discovery": 163643,
+          "vph_at_discovery": 8182.15
+        },
+        {
+          "video_id": "0DIzHiXeCbs",
+          "channel_id": "UCT1K_KXprSKRTQKiXOBYpOg",
+          "title": "0DIzHiXeCbs",
+          "views_at_discovery": 18938,
+          "vph_at_discovery": 18938.0
+        },
+        {
+          "video_id": "0falv6in1gA",
+          "channel_id": "UCeI3Y4IEPK6gs4bPZq9ct6Q",
+          "title": "0falv6in1gA",
+          "views_at_discovery": 1243417,
+          "vph_at_discovery": 1243417.0
+        }
+      ]
+    },
+    {
+      "packet_id": "keyword:3",
+      "direction": "history",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "history",
+      "meta": {
+        "keyword_id": 3,
+        "distinct_videos_in_keyword": 2898,
+        "distinct_channels_in_keyword": 2459
+      },
+      "rows": [
+        {
+          "video_id": "004djofhMc4",
+          "channel_id": "UC7_an-iSFGwnMleMw9s4oJw",
+          "title": "004djofhMc4",
+          "views_at_discovery": 349,
+          "vph_at_discovery": 349.0
+        },
+        {
+          "video_id": "02PPFHE7O7s",
+          "channel_id": "UCDprfXdFcG12I_Tr21RiuHA",
+          "title": "02PPFHE7O7s",
+          "views_at_discovery": 51,
+          "vph_at_discovery": 51.0
+        },
+        {
+          "video_id": "05jmarxPn-g",
+          "channel_id": "UCVBmhZPjBx0DsvQKQYYDGxw",
+          "title": "05jmarxPn-g",
+          "views_at_discovery": 2290,
+          "vph_at_discovery": 2290.0
+        },
+        {
+          "video_id": "05yflnVy0tM",
+          "channel_id": "UCiJy3FiIjPhYZe5Swngx47Q",
+          "title": "05yflnVy0tM",
+          "views_at_discovery": 239,
+          "vph_at_discovery": 9.96
+        },
+        {
+          "video_id": "0761bdJY0Oc",
+          "channel_id": "UC6RwG5hJ0Ovem0K-T-OLsVw",
+          "title": "0761bdJY0Oc",
+          "views_at_discovery": 57,
+          "vph_at_discovery": 57.0
+        },
+        {
+          "video_id": "08UP9-leuw8",
+          "channel_id": "UC9oWqr7lyVwfccKhgXLvUXw",
+          "title": "08UP9-leuw8",
+          "views_at_discovery": 62,
+          "vph_at_discovery": 5.17
+        },
+        {
+          "video_id": "09N74WRRO6k",
+          "channel_id": "UCIxhzCK1yyjQGRT6Huuaf3w",
+          "title": "09N74WRRO6k",
+          "views_at_discovery": 3112,
+          "vph_at_discovery": 155.6
+        },
+        {
+          "video_id": "0A5gq8Fc2No",
+          "channel_id": "UCOFROOARUlWN-TJLTIZeVMw",
+          "title": "0A5gq8Fc2No",
+          "views_at_discovery": 235,
+          "vph_at_discovery": 9.79
+        },
+        {
+          "video_id": "0Alfe7YzJd8",
+          "channel_id": "UCwwO0O1utqZvbTeMQb82_sg",
+          "title": "0Alfe7YzJd8",
+          "views_at_discovery": 6193,
+          "vph_at_discovery": 6193.0
+        },
+        {
+          "video_id": "0AUamvUmQro",
+          "channel_id": "UC4DgNb05EO8oom2NZsmAQXg",
+          "title": "0AUamvUmQro",
+          "views_at_discovery": 5597,
+          "vph_at_discovery": 5597.0
+        },
+        {
+          "video_id": "0BbnUNiKrhI",
+          "channel_id": "UC7HTIO4rxnsLeLwyxB8A4UA",
+          "title": "0BbnUNiKrhI",
+          "views_at_discovery": 2750,
+          "vph_at_discovery": 2750.0
+        },
+        {
+          "video_id": "0BiCh2ccZyY",
+          "channel_id": "UC1OpbJ4Q7bez1G0nbx2uZYw",
+          "title": "0BiCh2ccZyY",
+          "views_at_discovery": 4656,
+          "vph_at_discovery": 4656.0
+        },
+        {
+          "video_id": "0c0lB2LrBG8",
+          "channel_id": "UC-_59quinLYucNSbxx4mTXw",
+          "title": "0c0lB2LrBG8",
+          "views_at_discovery": 5,
+          "vph_at_discovery": 0.21
+        },
+        {
+          "video_id": "_0DGPeamEHQ",
+          "channel_id": "UCTbI6jAPhNdpRSEOHTAvppg",
+          "title": "_0DGPeamEHQ",
+          "views_at_discovery": 486,
+          "vph_at_discovery": 24.3
+        },
+        {
+          "video_id": "0FkAxhXwdSg",
+          "channel_id": "UChbQpxORq06uf2Wnj6yqKiQ",
+          "title": "0FkAxhXwdSg",
+          "views_at_discovery": 50214,
+          "vph_at_discovery": 2092.25
+        }
+      ]
+    },
+    {
+      "packet_id": "keyword:4",
+      "direction": "technology",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "technology",
+      "meta": {
+        "keyword_id": 4,
+        "distinct_videos_in_keyword": 3086,
+        "distinct_channels_in_keyword": 2641
+      },
+      "rows": [
+        {
+          "video_id": "01sxJjQhroE",
+          "channel_id": "UC345dKAXdx12FpFm1YWnh5w",
+          "title": "01sxJjQhroE",
+          "views_at_discovery": 11,
+          "vph_at_discovery": 11.0
+        },
+        {
+          "video_id": "03ptRLlEHl4",
+          "channel_id": "UCNye-wNBqNL5ZzHSJj3l8Bg",
+          "title": "03ptRLlEHl4",
+          "views_at_discovery": 28351,
+          "vph_at_discovery": 28351.0
+        },
+        {
+          "video_id": "05LGzhZ8Qms",
+          "channel_id": "UCx0WJ8L-2pLcK4YuNs_5HfA",
+          "title": "05LGzhZ8Qms",
+          "views_at_discovery": 314,
+          "vph_at_discovery": 314.0
+        },
+        {
+          "video_id": "05vVByyWI2o",
+          "channel_id": "UCwAHX7Bu4g0mvcQ8cs0_9tg",
+          "title": "05vVByyWI2o",
+          "views_at_discovery": 496,
+          "vph_at_discovery": 20.67
+        },
+        {
+          "video_id": "0675aL2kZd4",
+          "channel_id": "UC6VrPKAZLpMa1V4zVdgsNYw",
+          "title": "0675aL2kZd4",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 1.0
+        },
+        {
+          "video_id": "085mu7Rhi90",
+          "channel_id": "UCcBJvf2f5cps5N4GykEuc-w",
+          "title": "085mu7Rhi90",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 1.0
+        },
+        {
+          "video_id": "0-9o2Wtab-U",
+          "channel_id": "UCQQKtEiEgUAEfOZpkzYuBiA",
+          "title": "0-9o2Wtab-U",
+          "views_at_discovery": 8053,
+          "vph_at_discovery": 8053.0
+        },
+        {
+          "video_id": "0-aBZHCtAvo",
+          "channel_id": "UCHk-0kfxpDpZmgElMqJ42Kg",
+          "title": "0-aBZHCtAvo",
+          "views_at_discovery": 92,
+          "vph_at_discovery": 3.83
+        },
+        {
+          "video_id": "0-BIMatDqms",
+          "channel_id": "UCpAG_iCjKJ8BK8YHgn9cxCQ",
+          "title": "0-BIMatDqms",
+          "views_at_discovery": 1366,
+          "vph_at_discovery": 1366.0
+        },
+        {
+          "video_id": "0BIwLrDcZ3w",
+          "channel_id": "UC7W5LTUy7DJYpx0cpVKJe0g",
+          "title": "0BIwLrDcZ3w",
+          "views_at_discovery": 17110,
+          "vph_at_discovery": 17110.0
+        },
+        {
+          "video_id": "0bYmSDR-4Xc",
+          "channel_id": "UCFyKx9aWlliIDITf_8_ShRg",
+          "title": "0bYmSDR-4Xc",
+          "views_at_discovery": 16,
+          "vph_at_discovery": 16.0
+        },
+        {
+          "video_id": "0C9-pC2kwYc",
+          "channel_id": "UCLuoCihzD4Rwu4qlpAqqqjQ",
+          "title": "0C9-pC2kwYc",
+          "views_at_discovery": 108,
+          "vph_at_discovery": 4.5
+        },
+        {
+          "video_id": "0CDFzU4_ETE",
+          "channel_id": "UCC0lkq3Na-0cNXvBlnHXGWA",
+          "title": "0CDFzU4_ETE",
+          "views_at_discovery": 2107,
+          "vph_at_discovery": 87.79
+        },
+        {
+          "video_id": "0d-5f8-NOLw",
+          "channel_id": "UCdCxZbfBx7oE50a1-7ojteA",
+          "title": "0d-5f8-NOLw",
+          "views_at_discovery": 7,
+          "vph_at_discovery": 7.0
+        },
+        {
+          "video_id": "0e3mWFuZHfg",
+          "channel_id": "UCRkgbI4qVTC-lZyI9g-1jmQ",
+          "title": "0e3mWFuZHfg",
+          "views_at_discovery": 2,
+          "vph_at_discovery": 2.0
+        }
+      ]
+    },
+    {
+      "packet_id": "keyword:5",
+      "direction": "self improvement",
+      "provenance_type": "keyword_discovery_hit",
+      "provenance_label": "self improvement",
+      "meta": {
+        "keyword_id": 5,
+        "distinct_videos_in_keyword": 2498,
+        "distinct_channels_in_keyword": 2094
+      },
+      "rows": [
+        {
+          "video_id": "005gel59JMo",
+          "channel_id": "UCaYeh-3EZyM1dxQOj72byRQ",
+          "title": "005gel59JMo",
+          "views_at_discovery": 27,
+          "vph_at_discovery": 2.08
+        },
+        {
+          "video_id": "02TaUyPEGdU",
+          "channel_id": "UC6iDcFpiRr13or3XVVhPzPg",
+          "title": "02TaUyPEGdU",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 1.0
+        },
+        {
+          "video_id": "03ER0AfbFaY",
+          "channel_id": "UCtOnPLdI-Nw5Qmy783W2iaA",
+          "title": "03ER0AfbFaY",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 0.04
+        },
+        {
+          "video_id": "0_4BuqO0x1U",
+          "channel_id": "UC8zLcvRDH_PdciKM5foZtEw",
+          "title": "0_4BuqO0x1U",
+          "views_at_discovery": 13,
+          "vph_at_discovery": 0.59
+        },
+        {
+          "video_id": "06fI-WRGVBo",
+          "channel_id": "UCz3zabbjIOSqesjBUMehTmA",
+          "title": "06fI-WRGVBo",
+          "views_at_discovery": null,
+          "vph_at_discovery": 0.0
+        },
+        {
+          "video_id": "081oXde8FBA",
+          "channel_id": "UCtsAxu43DhmQI_U9zf8-PTg",
+          "title": "081oXde8FBA",
+          "views_at_discovery": 1,
+          "vph_at_discovery": 1.0
+        },
+        {
+          "video_id": "09TTTVc7b_s",
+          "channel_id": "UC3mlcPyOVRm38BcrZSbS0JA",
+          "title": "09TTTVc7b_s",
+          "views_at_discovery": 8,
+          "vph_at_discovery": 8.0
+        },
+        {
+          "video_id": "0AHJ_co27Zw",
+          "channel_id": "UC8B2DQh7pOkHB5WEUKY1cKA",
+          "title": "0AHJ_co27Zw",
+          "views_at_discovery": 2787,
+          "vph_at_discovery": 2787.0
+        },
+        {
+          "video_id": "0AirIWaZV1M",
+          "channel_id": "UCE9HoEd_XJEMxNTMHu1LZ9w",
+          "title": "0AirIWaZV1M",
+          "views_at_discovery": 27,
+          "vph_at_discovery": 1.17
+        },
+        {
+          "video_id": "0AjlFyc8nb0",
+          "channel_id": "UCaX9z16YIx_rJUZ72005SSA",
+          "title": "0AjlFyc8nb0",
+          "views_at_discovery": 258,
+          "vph_at_discovery": 258.0
+        },
+        {
+          "video_id": "0BbKKrp4168",
+          "channel_id": "UCcHmxDgSuxEwrBta6_BO8Vw",
+          "title": "0BbKKrp4168",
+          "views_at_discovery": 85,
+          "vph_at_discovery": 85.0
+        },
+        {
+          "video_id": "0C_QD1fxdnY",
+          "channel_id": "UCkWNtZoFf2uiXgTj2jyQ64A",
+          "title": "0C_QD1fxdnY",
+          "views_at_discovery": 2508,
+          "vph_at_discovery": 2508.0
+        },
+        {
+          "video_id": "0CtY5XtiyFI",
+          "channel_id": "UC77136HpQPE1rx3ACfxx47g",
+          "title": "0CtY5XtiyFI",
+          "views_at_discovery": 135,
+          "vph_at_discovery": 135.0
+        },
+        {
+          "video_id": "0D3hT9CT7Tk",
+          "channel_id": "UCAAc_qAUawF2pz7KXDoIobA",
+          "title": "0D3hT9CT7Tk",
+          "views_at_discovery": 458,
+          "vph_at_discovery": 458.0
+        },
+        {
+          "video_id": "0DUHT8vArqo",
+          "channel_id": "UCgKhO3YKmDIroyULgZyEqFw",
+          "title": "0DUHT8vArqo",
+          "views_at_discovery": 873,
+          "vph_at_discovery": 36.38
+        }
+      ]
+    }
+  ]
+}
