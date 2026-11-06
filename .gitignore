@@ -28,3 +28,11 @@ yarn-error.log*
 # Системные файлы
 .DS_Store
 Thumbs.db
+
+# Local data and debug dumps
+database.db
+data/*.db
+debug_yt_response.json
+artifacts.zip
+calibration_out/
+artifacts/
