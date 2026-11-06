@@ -34,5 +34,3 @@ database.db
 data/*.db
 debug_yt_response.json
 artifacts.zip
-calibration_out/
-artifacts/
