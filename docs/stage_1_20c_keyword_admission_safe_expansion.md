@@ -132,9 +132,9 @@ Orchestrator/admission/persistence: **flush only**, no commit/rollback. Callers:
 
 ## J. Tests
 
-`scripts/test_keyword_admission_orchestration.py` — seed rules, admission, budgets, depth, dry-run, same-run recursion, deferred events, batch query budget.
+`tests/test_keyword_admission_orchestration.py` — seed rules, admission, budgets, depth, dry-run, same-run recursion, deferred events, batch query budget.
 
-Regression: `scripts/test_keyword_expansion.py`.
+Regression: `tests/test_keyword_expansion.py`.
 
 ---
 

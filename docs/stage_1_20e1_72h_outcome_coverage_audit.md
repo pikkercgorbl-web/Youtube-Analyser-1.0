@@ -102,7 +102,7 @@ Interpretation: stored snapshots cluster near **discovery** (≈0.3h after disco
 
 ## G. Tests
 
-`scripts/test_72h_outcome_coverage.py` (12 scenarios): pending vs missing, valid/missing paths, tolerance, nearest snap, SQL invariant, attribution timestamps, timezone, case review filter, diagnostics partition, tally helper.
+`tests/test_72h_outcome_coverage.py` (12 scenarios): pending vs missing, valid/missing paths, tolerance, nearest snap, SQL invariant, attribution timestamps, timezone, case review filter, diagnostics partition, tally helper.
 
 Included in `scripts/run_fast_regressions.py`.
 

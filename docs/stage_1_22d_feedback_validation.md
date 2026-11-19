@@ -11,7 +11,7 @@
 
 ## PostgreSQL 1.22C regression
 
-`scripts/test_saved_topics_1_22c_postgres_regression.py` on `SAVED_TOPICS_POSTGRES_TEST_URL` (default DB name `youtube_radar_saved_topics_test`). Refuses production `DATABASE_URL`.
+`tests/test_saved_topics_1_22c_postgres_regression.py` on `SAVED_TOPICS_POSTGRES_TEST_URL` (default DB name `youtube_radar_saved_topics_test`). Refuses production `DATABASE_URL`.
 
 ## Tests
 

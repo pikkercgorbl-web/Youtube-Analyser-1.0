@@ -66,7 +66,7 @@ python scripts/analyze_keyword_lifecycle_calibration.py --no-breakout --no-delay
 
 ## L. Tests
 
-`scripts/test_keyword_lifecycle_calibration.py`
+`tests/test_keyword_lifecycle_calibration.py`
 
 ## M. Explicit non-goals
 

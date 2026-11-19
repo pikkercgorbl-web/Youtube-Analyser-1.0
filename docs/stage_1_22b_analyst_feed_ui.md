@@ -69,7 +69,7 @@ Default APIs read the persisted Attention snapshot. The UI never passes `live=tr
 ## L. Tests
 
 - Frontend: `attention-format.test.ts`, `opportunities-dashboard.test.tsx`, sidebar IA
-- Backend: `scripts/test_attention_feed_1_22b.py` (detail hydrate, no live compute)
+- Backend: `tests/test_attention_feed_1_22b.py` (detail hydrate, no live compute)
 
 ## M. Production observations
 

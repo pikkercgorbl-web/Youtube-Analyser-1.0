@@ -524,7 +524,7 @@ Do not poll keyword performance or monitoring overview from this page.
 5. **`GET /api/operations/overview`** + Pydantic schemas in `schemas.py`  
 6. **Optional migration:** `discovery_cycle_runs` table — **defer** unless aggregation proves fragile; document reconstruction from scan runs  
 7. **Benchmark script:** `scripts/benchmark_operations_overview.py`  
-8. **Tests:** `scripts/test_operations_overview.py`  
+8. **Tests:** `tests/test_operations_overview.py`  
 
 **1.19C:** `/operations` page + poll + recent cycles tables  
 

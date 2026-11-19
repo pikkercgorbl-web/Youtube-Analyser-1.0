@@ -273,7 +273,7 @@ def test_no_channel_api_per_video() -> None:
 
 def _run(script: str) -> None:
     proc = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / script)],
+        [sys.executable, str(ROOT / ("tests" if script.startswith("test_") else "scripts") / script)],
         cwd=str(ROOT),
         capture_output=True,
         text=True,

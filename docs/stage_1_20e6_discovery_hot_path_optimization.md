@@ -72,7 +72,7 @@ Expected wins: fewer settings SQL round trips, fewer homepage calls when `Channe
 
 ## K. Tests
 
-`scripts/test_discovery_hot_path_1_20e6.py` covers settings-once, DB prefill vs homepage, channel dedupe, cheap reject without fetch, batch video SELECT, rejected qual still persists in cycle, candidate-level qual counts.
+`tests/test_discovery_hot_path_1_20e6.py` covers settings-once, DB prefill vs homepage, channel dedupe, cheap reject without fetch, batch video SELECT, rejected qual still persists in cycle, candidate-level qual counts.
 
 ## Files touched
 

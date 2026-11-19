@@ -329,7 +329,7 @@ def test_keyword_rotation_last_checked() -> None:
 
 
 def _load_cli_wiring_tests():
-    path = ROOT / "scripts" / "test_discovery_cli_wiring.py"
+    path = ROOT / "tests" / "test_discovery_cli_wiring.py"
     spec = importlib.util.spec_from_file_location("test_discovery_cli_wiring", path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
@@ -357,7 +357,7 @@ def test_frozen_stage110_untouched() -> None:
 
 def _run_script(name: str) -> None:
     proc = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / name)],
+        [sys.executable, str(ROOT / ("tests" if name.startswith("test_") else "scripts") / name)],
         cwd=str(ROOT),
         capture_output=True,
         text=True,

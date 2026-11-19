@@ -104,7 +104,7 @@ Router: `app/api/routes/keyword_evidence.py`.
 
 ## H. Tests
 
-`scripts/test_keyword_evidence.py` — scan success/failure, zero yield, duplicates, VPH missing, breakout eligible zero, 72h valid/missing, attribution modes, division by zero, delayed disabled, manual lifecycle, SQL round-trip guard.
+`tests/test_keyword_evidence.py` — scan success/failure, zero yield, duplicates, VPH missing, breakout eligible zero, 72h valid/missing, attribution modes, division by zero, delayed disabled, manual lifecycle, SQL round-trip guard.
 
 ---
 

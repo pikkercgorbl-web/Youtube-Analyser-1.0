@@ -63,7 +63,7 @@ Target: default overview **&lt; ~2s** on a low-latency DB when query round-trips
 
 Benchmark: `python scripts/benchmark_operations_overview.py`  
 Profile (legacy phases + EXPLAIN): `python scripts/profile_operations_maturity.py`  
-Parity tests: `python scripts/test_operations_maturity_performance_1_19b1.py`
+Parity tests: `python tests/test_operations_maturity_performance_1_19b1.py`
 
 **Baseline tie-break (`all_hits`):** same `discovered_at` → lowest hit `id`.  
 **First discovery tie:** same `discovered_at` → lowest `keyword_id`.
@@ -76,7 +76,7 @@ Default path avoids:
 
 Benchmark: `python scripts/benchmark_operations_overview.py`
 
-Tests: `python scripts/test_operations_overview.py`
+Tests: `python tests/test_operations_overview.py`
 
 ## Frontend
 

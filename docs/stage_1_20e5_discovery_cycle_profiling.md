@@ -52,4 +52,4 @@ Changing these metrics would break Stage 1.16A/1.18 reporting; profiling documen
 
 ## Tests
 
-`scripts/test_discovery_cycle_profiling.py`
+`tests/test_discovery_cycle_profiling.py`

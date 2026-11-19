@@ -23,8 +23,8 @@ When a family is missing from a new snapshot, observation records `present_in_sn
 
 ## Tests
 
-- `scripts/test_saved_topics_1_22c.py` (isolated SQLite, not production DB).
-- `scripts/test_saved_topics_1_22c_postgres_regression.py` (dedicated Postgres test DB only).
+- `tests/test_saved_topics_1_22c.py` (isolated SQLite, not production DB).
+- `tests/test_saved_topics_1_22c_postgres_regression.py` (dedicated Postgres test DB only).
 
 ## Verification
 
