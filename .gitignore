@@ -34,3 +34,6 @@ database.db
 data/*.db
 debug_yt_response.json
 artifacts.zip
+
+# Build caches
+*.tsbuildinfo

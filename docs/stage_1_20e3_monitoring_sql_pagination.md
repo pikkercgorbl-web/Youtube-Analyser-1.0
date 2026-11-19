@@ -82,8 +82,8 @@ Remote target: **&lt;3s** for `page_size=50` on cycle snapshot path (after at le
 
 ## I. Tests
 
-- `scripts/test_monitoring_sql_pagination.py`
-- `scripts/test_monitoring_api.py` (queue seed helper + unavailable/live_planner)
+- `tests/test_monitoring_sql_pagination.py`
+- `tests/test_monitoring_api.py` (queue seed helper + unavailable/live_planner)
 
 ## J. Remaining limitations
 

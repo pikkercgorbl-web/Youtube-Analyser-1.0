@@ -81,7 +81,7 @@ Bookmark hook uses `family_key`. No persistence yet.
 
 ## M. Tests
 
-`scripts/test_attention_pattern_families_1_22b1.py` plus frontend feed tests.
+`tests/test_attention_pattern_families_1_22b1.py` plus frontend feed tests.
 
 ## N. Production findings
 

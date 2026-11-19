@@ -73,7 +73,7 @@ Observations already **expired** without an in-window snapshot stay **missing** 
 
 ## I. Tests
 
-`scripts/test_delayed_outcome_capture.py` — states, dedupe, budget, source, evaluator acceptance, batch ≤50, idempotency, monitoring unchanged.
+`tests/test_delayed_outcome_capture.py` — states, dedupe, budget, source, evaluator acceptance, batch ≤50, idempotency, monitoring unchanged.
 
 ## J. Expected production ramp-up
 

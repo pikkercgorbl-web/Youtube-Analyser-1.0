@@ -19,7 +19,7 @@ from app.api.routes import attention as attention_routes
 from app.models.db import get_db
 from app.services.attention_engine_types import AttentionEngineConfig
 from app.services.attention_read_model import refresh_attention_engine
-from scripts.test_attention_engine_1_22a import NOW, _engine, _seed_pair
+from tests.test_attention_engine_1_22a import NOW, _engine, _seed_pair
 
 
 def test_pattern_detail_hydrates_members_without_recompute() -> None:

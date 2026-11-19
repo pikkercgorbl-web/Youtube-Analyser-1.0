@@ -3,7 +3,7 @@
 Requires configured DATABASE_URL, network, and YouTube/InnerTube availability.
 NOT part of fast regression — run manually or in a dedicated CI job.
 
-  python scripts/test_discovery_cli_live.py
+  python tests/test_discovery_cli_live.py
 """
 
 from __future__ import annotations

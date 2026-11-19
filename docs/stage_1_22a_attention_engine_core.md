@@ -161,7 +161,7 @@ Prefix `/api/attention`. Default reads the snapshot (`data_source=snapshot`). Em
 
 ## L. Tests
 
-`scripts/test_attention_engine_1_22a.py` (also in `run_fast_regressions.py`).
+`tests/test_attention_engine_1_22a.py` (also in `run_fast_regressions.py`).
 
 ## M. Production findings
 

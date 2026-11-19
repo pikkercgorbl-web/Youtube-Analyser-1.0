@@ -217,7 +217,7 @@ def test_discovery_worker_rotation_still_works() -> None:
 
 def _run_script(name: str) -> None:
     proc = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / name)],
+        [sys.executable, str(ROOT / ("tests" if name.startswith("test_") else "scripts") / name)],
         cwd=str(ROOT),
         capture_output=True,
         text=True,

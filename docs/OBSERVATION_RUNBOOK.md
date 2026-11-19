@@ -116,8 +116,8 @@ python scripts/verify_backup_restore_counts.py
 
 ```powershell
 $env:SAVED_TOPICS_POSTGRES_TEST_URL = "postgresql://USER:PASS@127.0.0.1:5433/youtube_radar_saved_topics_test"
-python scripts/test_observation_readiness_e2e.py
-python scripts/test_saved_topics_1_22c_postgres_regression.py
+python tests/test_observation_readiness_e2e.py
+python tests/test_saved_topics_1_22c_postgres_regression.py
 ```
 
 Пароль подставить из `.env.docker` (не коммитить). После проверки **не менять** рабочий `.env`.

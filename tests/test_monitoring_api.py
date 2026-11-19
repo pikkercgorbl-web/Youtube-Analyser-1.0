@@ -475,7 +475,7 @@ def test_worker_status_running() -> None:
 
 def _run_script(name: str) -> None:
     result = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / name)],
+        [sys.executable, str(ROOT / ("tests" if name.startswith("test_") else "scripts") / name)],
         cwd=str(ROOT),
         capture_output=True,
         text=True,

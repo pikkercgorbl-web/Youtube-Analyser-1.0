@@ -1,4 +1,4 @@
-"""Quick verification of advanced video search (run: python -m scripts.test_video_search)."""
+"""Quick verification of advanced video search (run: python -m tests.test_video_search)."""
 
 from __future__ import annotations
 

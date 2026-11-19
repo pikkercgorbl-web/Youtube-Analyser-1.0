@@ -56,7 +56,7 @@ Target default snapshot list: **&lt;3s**, **&lt;10 SQL** statements, independent
 
 ## E. Tests
 
-`scripts/test_keyword_performance_read_1_20e4.py` — snapshot path, unavailable state, live page bounds, no full-table hit load.
+`tests/test_keyword_performance_read_1_20e4.py` — snapshot path, unavailable state, live page bounds, no full-table hit load.
 
 Existing 1.18D1 tests use `live_evaluation=true` where full eval is intentional.
 

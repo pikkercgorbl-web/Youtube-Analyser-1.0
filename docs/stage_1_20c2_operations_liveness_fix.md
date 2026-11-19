@@ -53,7 +53,7 @@ Lock recovery still uses **`DEFAULT_STALE_LOCK_MINUTES = 90`** on **`lock_acquir
 
 ## H. Tests
 
-`scripts/test_operations_liveness.py` — old lock + recent cycle, genuinely stale activity, failed cycle, lock recovery.
+`tests/test_operations_liveness.py` — old lock + recent cycle, genuinely stale activity, failed cycle, lock recovery.
 
 ## I. UI behavior
 

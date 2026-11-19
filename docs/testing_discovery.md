@@ -13,9 +13,9 @@ Includes `test_operations_liveness.py` (worker activity vs lock age).
 Individual slices:
 
 ```powershell
-python scripts/test_discovery_worker.py
-python scripts/test_discovery_cli_wiring.py
-python scripts/test_discovery_cycle.py
+python tests/test_discovery_worker.py
+python tests/test_discovery_cli_wiring.py
+python tests/test_discovery_cycle.py
 ```
 
 These must **not** call live PostgreSQL, the public network, or InnerTube.
@@ -27,7 +27,7 @@ Uses real `SessionLocal`, `get_youtube_client()`, and `run_discovery_cycle` via 
 Requires configured `DATABASE_URL`, network, and YouTube/InnerTube.
 
 ```powershell
-python scripts/test_discovery_cli_live.py
+python tests/test_discovery_cli_live.py
 ```
 
 Failures here usually indicate environment or integration issues, not a broken unit test.

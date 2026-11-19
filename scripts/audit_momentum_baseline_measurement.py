@@ -855,7 +855,7 @@ def main() -> int:
                 "checkpoint expiry, tier, checkpoint_age, vph (monitoring_tier_budget_policy.py)"
             ),
             "momentum_deadline_hours_from_publish": MOMENTUM_MAX_AGE,
-            "test": "scripts/test_monitoring_tier_budget_policy.py::test_momentum_cp24_deadline_before_tier",
+            "test": "tests/test_monitoring_tier_budget_policy.py::test_momentum_cp24_deadline_before_tier",
         },
         "section_5_baseline_summary": {
             "measurement_start_utc": (

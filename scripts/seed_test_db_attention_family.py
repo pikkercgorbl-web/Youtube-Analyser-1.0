@@ -18,7 +18,7 @@ from sqlalchemy.orm import sessionmaker
 import app.models.orm  # noqa: F401
 from app.models.db import Base
 from app.services.attention_read_model import persist_attention_result
-from scripts.test_observation_readiness_e2e import FAMILY_KEY, _reset, _result
+from tests.test_observation_readiness_e2e import FAMILY_KEY, _reset, _result
 
 UTC = timezone.utc
 
