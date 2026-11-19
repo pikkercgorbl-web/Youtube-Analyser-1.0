@@ -1,43 +1,68 @@
-# NicheScope — инструкция для нового пользователя
+# YouTube Analyser
 
-**NicheScope** (YouTube Analytics) — локальный сервис для поиска видео на YouTube, анализа ключевых слов, массового разбора каналов и **радара взрывных каналов** (каналы с виральными роликами).
+> Local YouTube niche-research tool: video search with channel metrics, keyword research and a background "radar" that finds fast-growing channels. FastAPI + Next.js. Pet project, built with AI-assisted development.
 
-Состоит из двух частей:
-- **Бэкенд** (Python / FastAPI) — порт `8000`
-- **Фронтенд** (Next.js) — порт `3000`
+**YouTube Analyser** — локальный сервис для анализа ниш на YouTube. Помогает найти темы и каналы, которые сейчас набирают просмотры, до того как они станут очевидны всем.
 
-> Подробный краткий гайд по запуску также есть в файле `ЗАПУСК.md`.
+## Что умеет
 
----
+- **Поиск видео** с фильтрами и метриками каналов.
+- **Разбор ключевых слов**: анализ запроса и похожих ключей, сохранение идей с заметками.
+- **Массовый анализ каналов**: сравнение 3+ каналов по ключевым метрикам.
+- **Радар «взрывных» каналов**: фоновый воркер по расписанию сканирует список ключевых слов и находит каналы, у которых видео набирают непропорционально много просмотров относительно подписчиков (коэффициент виральности).
+- **Мониторинг**: повторные замеры найденных видео во времени, чтобы отличать устойчивый рост от случайного всплеска.
+- **Attention / паттерны**: группировка «выстреливших» видео по похожим темам и форматам, watchlist тем.
+- **Operations**: страница со статусом воркеров и состоянием данных.
 
-## 1. Что нужно установить (один раз)
+## Стек
 
-| Программа | Зачем | Ссылка |
-|-----------|--------|--------|
-| **Python 3.11+** | бэкенд | https://www.python.org/downloads/ |
-| **Node.js LTS** | фронтенд | https://nodejs.org/ |
+| Часть | Технологии |
+|---|---|
+| Бэкенд | Python 3.11+, FastAPI, SQLAlchemy 2, Pydantic, Alembic |
+| База данных | SQLite (по умолчанию) или PostgreSQL 17 (Docker Compose) |
+| Данные YouTube | YouTube InnerTube, YouTube Data API v3 (ротация нескольких ключей) |
+| LLM | Google Gemini API (генерация идей) |
+| Фронтенд | Next.js 14, React 18, TypeScript, Tailwind CSS, Vitest |
+| Деплой (заготовка) | Render Blueprint (`render.yaml`) |
 
-При установке Node.js включите опцию **«Add to PATH»**, затем **перезапустите терминал**.
+## Архитектура
 
-Проверка в PowerShell:
-
-```powershell
-python --version
-node -v
-npm -v
+```
+Next.js (порт 3000)
+      │  REST /api/...
+      ▼
+FastAPI (порт 8000) ── services/ ── integrations/youtube (InnerTube, Data API)
+      │                              └─ Gemini API
+      ▼
+SQLite / PostgreSQL  ◄── фоновые воркеры: discovery, monitoring, outcome capture
 ```
 
----
+- `app/api/routes/` — REST-эндпоинты (поиск, ключевые слова, радар, мониторинг, attention).
+- `app/services/` — бизнес-логика: расчёт метрик, радар, ранжирование, воркеры.
+- `app/integrations/youtube/` — клиент YouTube и менеджер API-ключей.
+- `scripts/` — запуск воркеров, сиды, аудиты данных и тесты.
+- `docs/` — ТЗ и дизайн-документы по этапам разработки.
 
-## 2. Первоначальная настройка
+## Как сделан проект
 
-Откройте терминал в **корне проекта** (папка с `app`, `frontend`, `requirements.txt`).
+Проект разработан с помощью AI-инструментов (Claude Code, Cursor). Моя роль:
 
-### 2.1. Файл `.env` (бэкенд)
+- придумал продукт и написал техническое задание и спецификации по этапам (`docs/`);
+- декомпозировал задачи и ставил их AI-ассистенту;
+- проверял и отлаживал сгенерированный код, интегрировал части между собой;
+- настраивал окружение: `.env`, API-ключи, локальную БД, запуск воркеров.
 
-Если файла `.env` нет — скрипт запуска создаст его из `.env.example`.
+## Быстрый старт
 
-Минимальная конфигурация (SQLite, работает сразу):
+Нужны **Python 3.11+** и **Node.js LTS**.
+
+### 1. Настройка
+
+```powershell
+copy .env.example .env
+```
+
+Минимальный `.env` (SQLite, работает сразу):
 
 ```env
 DATABASE_URL=sqlite:///./database.db
@@ -46,57 +71,24 @@ DEBUG=true
 YOUTUBE_API_KEYS=
 ```
 
-- **База данных** создаётся автоматически в файле `database.db` в корне проекта.
-- **YOUTUBE_API_KEYS** — опционально. Основной поиск и радар используют InnerTube и часто работают **без** ключей Google. Ключи нужны для отдельных функций YouTube Data API.
+`YOUTUBE_API_KEYS` необязательны: поиск и радар в основном работают через InnerTube. Ключи нужны для отдельных функций YouTube Data API. Ключи и пароли хранятся только в `.env` и не попадают в репозиторий.
 
-### 2.2. Файл `frontend/.env.local` (фронтенд)
-
-При первом запуске фронтенда создаётся из `frontend/.env.local.example`:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
-
-Не меняйте URL, если бэкенд запущен локально на порту 8000.
-
-### 2.3. Ключевые слова для радара (опционально)
-
-Рadar сканирует слова из таблицы `target_keywords` в базе. Чтобы загрузить слова из `data/target_keywords.json`:
+Загрузить ключевые слова для радара (иначе он запустится с пустой базой ключей):
 
 ```powershell
 python -m scripts.seed_target_keywords
 ```
 
-Без ключевых слов радар запустится, но в логе будет: **«БАЗА КЛЮЧЕЙ ПУСТА»**.
+### 2. Запуск
 
----
-
-## 3. Запуск (каждый раз)
-
-Нужны **два терминала**: сначала бэкенд, затем фронтенд.
-
-### Терминал 1 — бэкенд
-
-```powershell
-.\scripts\start-backend.ps1
-```
-
-Или вручную:
+Терминал 1 — бэкенд:
 
 ```powershell
 pip install -r requirements.txt
 python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Проверка: откройте http://127.0.0.1:8000/docs — должна открыться документация Swagger API.
-
-### Терминал 2 — фронтенд
-
-```powershell
-.\scripts\start-frontend.ps1
-```
-
-Или вручную:
+Терминал 2 — фронтенд:
 
 ```powershell
 cd frontend
@@ -105,123 +97,42 @@ copy .env.local.example .env.local
 npm run dev
 ```
 
-Откройте в браузере: **http://localhost:3000**
+Открыть: http://localhost:3000. Документация API (Swagger): http://127.0.0.1:8000/docs
 
-> Сначала всегда запускайте бэкенд, потом фронтенд. Иначе на сайте будут ошибки «не удалось загрузить данные».
+Фоновые воркеры (по желанию, каждый в своём терминале):
 
----
+```powershell
+python scripts/run_discovery_worker.py
+python scripts/run_monitoring_worker.py
+python scripts/run_outcome_capture_worker.py
+```
 
-## 3.1. Roadmap Attention / Radar (локально)
+На Windows есть готовые скрипты: `scripts/start-backend.ps1`, `scripts/start-frontend.ps1`. Подробная шпаргалка — в [ЗАПУСК.md](ЗАПУСК.md).
 
-| Этап | Статус |
-|------|--------|
-| 1.22A Attention Engine | ✅ |
-| 1.22B Analyst feed UI | ✅ |
-| 1.22B.1 Pattern Families | ✅ |
-| 1.22C Saved Topics | ✅ |
-| 1.22D Feedback + Validation | ✅ |
-| **Наблюдение** (read-only, 24h контроль) | ▶ следующий |
-| **LLM keyword expansion** | запланирован |
+## Разделы интерфейса
 
-Runbook наблюдения: [docs/OBSERVATION_RUNBOOK.md](docs/OBSERVATION_RUNBOOK.md)
+| Раздел | Адрес |
+|---|---|
+| Поиск видео | `/` |
+| Ключевые слова | `/keyword-research` |
+| Взрывные каналы (радар) | `/explosive-channels` |
+| Сохранённые идеи | `/saved-keywords` |
+| Массовый анализ | `/mass-analysis` |
+| Возможности (Attention) | `/opportunities` |
+| Сохранённые темы | `/saved-topics` |
+| Мониторинг | `/monitoring` |
+| Validation | `/validation` |
 
----
-
-## 4. Разделы интерфейса
-
-| Раздел | Адрес | Назначение |
-|--------|--------|------------|
-| **Поиск видео** | `/` | Поиск роликов на YouTube с фильтрами и метриками каналов |
-| **Ключевые слова** | `/keyword-research` | SEO-разбор запроса и похожих ключей |
-| **Взрывные каналы** | `/explosive-channels` | Рadar + список найденных «взрывных» каналов |
-| **Сохранённые идеи** | `/saved-keywords` | Ваши сохранённые ключи с заметками |
-| **Массовый анализ** | `/mass-analysis` | Сравнение нескольких каналов (от 3 шт.) |
-| **Возможности (Attention)** | `/opportunities` | Snapshot winners, pattern families |
-| **Сохранённые темы** | `/saved-topics` | Watchlist по `family_key` |
-| **Validation** | `/validation` | Read-only сводка feedback и observations |
-
----
-
-## 5. Как пользоваться радаром взрывных каналов
-
-1. Перейдите в **«Взрывные каналы»**.
-2. Настройте пороги:
-   - **Мин. просмотров на видео**
-   - **Мин. коэффициент виральности** (просмотры ÷ подписчики)
-   - **Период загрузки видео** (за всё время / месяц / 3 месяца и т.д.)
-3. Настройки **сохраняются в браузере** (localStorage) — при переходе между вкладками не сбрасываются.
-4. Нажмите **«▶ Запустить радар»** — фоновое сканирование ключевых слов начнётся.
-5. Найденные каналы появятся в списке ниже. Клик по превью/названию открывает видео на YouTube, по аватару/имени — канал.
-6. **«⏹ Остановить радар»** — остановка после текущего цикла.
-7. **«Очистить базу»** — удалить все сохранённые каналы из SQLite.
-
-Логи радара выводятся в **терминал бэкенда** (отказы, найденные каналы, паузы между циклами).
-
----
-
-## 6. Остановка
-
-- В каждом терминале нажмите **Ctrl+C**.
-- Сначала можно остановить фронтенд, затем бэкенд (или наоборот).
-
----
-
-## 7. Частые проблемы
+## Частые проблемы
 
 | Симптом | Решение |
-|---------|---------|
-| `npm не распознано` | Установите Node.js LTS, перезапустите терминал |
-| `python не распознано` | Установите Python и отметьте «Add to PATH» |
-| Сайт не грузит данные | Запущен ли бэкенд на порту 8000? |
-| `Connection refused` / ошибки API | Проверьте `NEXT_PUBLIC_API_URL` в `frontend/.env.local` |
-| Рadar: «БАЗА КЛЮЧЕЙ ПУСТА» | Выполните `python -m scripts.seed_target_keywords` |
-| Изменения на бэкенде не видны | Перезапустите uvicorn (или дождитесь `--reload`) |
-| Старые пороги на странице радара | Очистите localStorage браузера для localhost:3000 |
-| `/opportunities` 500 в `npm run dev` | Удалите `frontend/.next`, выполните `npm run build`, перезапустите dev |
+|---|---|
+| Сайт не грузит данные | Проверьте, что бэкенд запущен на порту 8000 |
+| Ошибки API / `Connection refused` | Проверьте `NEXT_PUBLIC_API_URL` в `frontend/.env.local` |
+| Радар: «БАЗА КЛЮЧЕЙ ПУСТА» | `python -m scripts.seed_target_keywords` |
+| Старые пороги на странице радара | Очистите localStorage для localhost:3000 |
+| `/opportunities` отдаёт 500 в dev | Удалите `frontend/.next`, выполните `npm run build`, перезапустите |
 
----
+## Статус
 
-## 8. Полезные ссылки
-
-| Что | URL |
-|-----|-----|
-| Сайт | http://localhost:3000 |
-| API | http://127.0.0.1:8000 |
-| Swagger (документация API) | http://127.0.0.1:8000/docs |
-
----
-
-## 9. Структура проекта (кратко)
-
-```
-├── app/                 # бэкенд FastAPI
-├── frontend/            # фронтенд Next.js
-├── data/                # JSON с ключевыми словами для радара
-├── scripts/             # start-backend.ps1, start-frontend.ps1, seed
-├── database.db          # SQLite (создаётся автоматически)
-├── .env                 # настройки бэкенда
-├── requirements.txt     # зависимости Python
-└── ЗАПУСК.md            # краткая шпаргалка по запуску
-```
-
-Удачной работы с NicheScope.
-
-
-Бэк 
-pip install -r requirements.txt
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-
-ngrok
-# Терминал 3
-ngrok http 3000
-
-frontend
-cd frontend
-npm install
-npm run dev
-
-python scripts/run_discovery_worker.py
-
-python scripts/run_monitoring_worker.py         
-
-python scripts/run_outcome_capture_worker.py
+Пет-проект в активной разработке. Готово: поиск, ключевые слова, радар, мониторинг, attention engine, сохранённые темы, validation. В планах: разделение на админ-панель и пользовательскую часть, авторизация и несколько профилей, расширение ключевых слов через LLM.
